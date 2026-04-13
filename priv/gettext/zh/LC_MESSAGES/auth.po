@@ -1,0 +1,94 @@
+## "auth" domain translations for zh locale.
+msgid ""
+msgstr ""
+"Language: zh\n"
+
+#: lib/astra_auto_ex_web/live/user_live/login.ex:13
+#, elixir-autogen
+msgid "Welcome Back"
+msgstr "欢迎回来"
+
+#: lib/astra_auto_ex_web/live/user_live/login.ex:16
+#, elixir-autogen
+msgid "Sign in to AstraAutoEx"
+msgstr "登录到 AstraAutoEx"
+
+#: lib/astra_auto_ex_web/live/user_live/registration.ex:14
+#, elixir-autogen
+msgid "Create Account"
+msgstr "创建账户"
+
+#: lib/astra_auto_ex_web/live/user_live/registration.ex:17
+#, elixir-autogen
+msgid "Join AstraAutoEx"
+msgstr "加入 AstraAutoEx"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:98
+#: lib/astra_auto_ex_web/live/user_live/registration.ex:22
+#, elixir-autogen
+msgid "Username"
+msgstr "用户名"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:121
+#: lib/astra_auto_ex_web/live/user_live/login.ex:41
+#: lib/astra_auto_ex_web/live/user_live/registration.ex:48
+#, elixir-autogen
+msgid "Password"
+msgstr "密码"
+
+msgid "Confirm Password"
+msgstr "确认密码"
+
+#: lib/astra_auto_ex_web/live/user_live/registration.ex:28
+#, elixir-autogen
+msgid "Enter your username"
+msgstr "请输入用户名"
+
+#: lib/astra_auto_ex_web/live/user_live/login.ex:46
+#: lib/astra_auto_ex_web/live/user_live/registration.ex:54
+#, elixir-autogen
+msgid "Enter your password"
+msgstr "请输入密码"
+
+#: lib/astra_auto_ex_web/components/layouts/root.html.heex:115
+#: lib/astra_auto_ex_web/live/user_live/login.ex:56
+#, elixir-autogen
+msgid "Sign In"
+msgstr "登录"
+
+#: lib/astra_auto_ex_web/components/layouts/root.html.heex:121
+#: lib/astra_auto_ex_web/live/user_live/registration.ex:66
+#, elixir-autogen
+msgid "Sign Up"
+msgstr "注册"
+
+#: lib/astra_auto_ex_web/live/user_live/login.ex:61
+#, elixir-autogen
+msgid "Don't have an account?"
+msgstr "还没有账户？"
+
+#: lib/astra_auto_ex_web/live/user_live/registration.ex:71
+#, elixir-autogen
+msgid "Already have an account?"
+msgstr "已有账户？"
+
+#: lib/astra_auto_ex_web/live/user_live/login.ex:66
+#, elixir-autogen
+msgid "Sign Up Now"
+msgstr "立即注册"
+
+#: lib/astra_auto_ex_web/live/user_live/registration.ex:76
+#, elixir-autogen
+msgid "Sign In Now"
+msgstr "立即登录"
+
+msgid "Back to Home"
+msgstr "返回首页"
+
+#: lib/astra_auto_ex_web/live/user_live/registration.ex:112
+#, elixir-autogen
+msgid "Registration successful!"
+msgstr "注册成功！"
+
+msgid "Too many requests, please try again later"
+msgstr "请求过于频繁，请稍后再试"

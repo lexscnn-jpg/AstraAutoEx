@@ -1,0 +1,97 @@
+defmodule AstraAutoExWeb.Router do
+  use AstraAutoExWeb, :router
+
+  import AstraAutoExWeb.UserAuth
+
+  pipeline :browser do
+    plug :accepts, ["html"]
+    plug :fetch_session
+    plug :fetch_live_flash
+    plug :put_root_layout, html: {AstraAutoExWeb.Layouts, :root}
+    plug :protect_from_forgery
+    plug :put_secure_browser_headers
+    plug :fetch_current_scope_for_user
+    plug AstraAutoExWeb.Plugs.LocalePlug
+    plug AstraAutoExWeb.Plugs.SetupRedirect
+  end
+
+  pipeline :api do
+    plug :accepts, ["json"]
+  end
+
+  scope "/api", AstraAutoExWeb do
+    pipe_through :api
+    get "/files/*path", FileController, :serve
+    post "/upload", FileController, :upload
+  end
+
+  scope "/", AstraAutoExWeb do
+    pipe_through :browser
+
+    get "/", PageController, :home
+    live "/setup", SetupLive
+  end
+
+  scope "/", AstraAutoExWeb do
+    pipe_through [:browser, :require_authenticated_user]
+
+    live_session :authenticated_app,
+      on_mount: [{AstraAutoExWeb.UserAuth, :require_authenticated}] do
+      live "/home", HomeLive
+      live "/projects/:id", WorkspaceLive.Show
+      live "/profile", ProfileLive.Index
+      live "/asset-hub", AssetHubLive.Index
+      live "/assistant", AssistantLive.Standalone
+    end
+  end
+
+  # Other scopes may use custom stacks.
+  # scope "/api", AstraAutoExWeb do
+  #   pipe_through :api
+  # end
+
+  # Enable LiveDashboard and Swoosh mailbox preview in development
+  if Application.compile_env(:astra_auto_ex, :dev_routes) do
+    # If you want to use the LiveDashboard in production, you should put
+    # it behind authentication and allow only admins to access it.
+    # If your application does not have an admins-only section yet,
+    # you can use Plug.BasicAuth to set up some basic authentication
+    # as long as you are also using SSL (which you should anyway).
+    import Phoenix.LiveDashboard.Router
+
+    scope "/dev" do
+      pipe_through :browser
+
+      live_dashboard "/dashboard", metrics: AstraAutoExWeb.Telemetry
+      forward "/mailbox", Plug.Swoosh.MailboxPreview
+    end
+  end
+
+  ## Authentication routes
+
+  scope "/", AstraAutoExWeb do
+    pipe_through [:browser, :require_authenticated_user]
+
+    live_session :require_authenticated_user,
+      on_mount: [{AstraAutoExWeb.UserAuth, :require_authenticated}] do
+      live "/users/settings", UserLive.Settings, :edit
+      live "/users/settings/confirm-email/:token", UserLive.Settings, :confirm_email
+    end
+
+    post "/users/update-password", UserSessionController, :update_password
+  end
+
+  scope "/", AstraAutoExWeb do
+    pipe_through [:browser]
+
+    live_session :current_user,
+      on_mount: [{AstraAutoExWeb.UserAuth, :mount_current_scope}] do
+      live "/users/register", UserLive.Registration, :new
+      live "/users/log-in", UserLive.Login, :new
+      live "/users/log-in/:token", UserLive.Confirmation, :new
+    end
+
+    post "/users/log-in", UserSessionController, :create
+    delete "/users/log-out", UserSessionController, :delete
+  end
+end

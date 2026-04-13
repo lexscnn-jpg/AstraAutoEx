@@ -1,0 +1,325 @@
+## "default" domain translations for en locale.
+msgid ""
+msgstr ""
+"Language: en\n"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:719
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1164
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1547
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1576
+#: lib/astra_auto_ex_web/live/workspace_live/character_modal.ex:123
+#: lib/astra_auto_ex_web/live/workspace_live/location_modal.ex:75
+#, elixir-autogen
+msgid "Save"
+msgstr "Save"
+
+#: lib/astra_auto_ex_web/live/home_live.ex:351
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:712
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1157
+#: lib/astra_auto_ex_web/live/workspace_live/character_modal.ex:118
+#: lib/astra_auto_ex_web/live/workspace_live/location_modal.ex:70
+#: lib/astra_auto_ex_web/live/workspace_live/voice_picker.ex:142
+#, elixir-autogen
+msgid "Cancel"
+msgstr "Cancel"
+
+msgid "Confirm"
+msgstr "Confirm"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1092
+#, elixir-autogen
+msgid "Delete"
+msgstr "Delete"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:728
+#, elixir-autogen
+msgid "Edit"
+msgstr "Edit"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:202
+#: lib/astra_auto_ex_web/live/setup_live.ex:321
+#, elixir-autogen
+msgid "Back"
+msgstr "Back"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:134
+#: lib/astra_auto_ex_web/live/setup_live.ex:209
+#: lib/astra_auto_ex_web/live/setup_live.ex:324
+#, elixir-autogen
+msgid "Next"
+msgstr "Next"
+
+msgid "Loading..."
+msgstr "Loading..."
+
+msgid "Search"
+msgstr "Search"
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:230
+#, elixir-autogen
+msgid "Close"
+msgstr "Close"
+
+msgid "Submit"
+msgstr "Submit"
+
+msgid "Add"
+msgstr "Add"
+
+msgid "Remove"
+msgstr "Remove"
+
+#: lib/astra_auto_ex_web/controllers/page_html/home.html.heex:70
+#, elixir-autogen
+msgid "Success"
+msgstr "Success"
+
+#: lib/astra_auto_ex_web/live/home_live.ex:512
+#: lib/astra_auto_ex_web/live/home_live.ex:571
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1550
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1579
+#, elixir-autogen
+msgid "Error"
+msgstr "Error"
+
+msgid "Warning"
+msgstr "Warning"
+
+#: lib/astra_auto_ex_web/components/core_components.ex:392
+#, elixir-autogen, elixir-format
+msgid "Actions"
+msgstr ""
+
+#: lib/astra_auto_ex_web/components/layouts.ex:69
+#: lib/astra_auto_ex_web/components/layouts.ex:81
+#, elixir-autogen, elixir-format
+msgid "Attempting to reconnect"
+msgstr ""
+
+#: lib/astra_auto_ex_web/components/layouts/root.html.heex:82
+#: lib/astra_auto_ex_web/live/asset_hub_live/index.ex:52
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:578
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:588
+#, elixir-autogen, elixir-format
+msgid "Settings"
+msgstr "Settings"
+
+#: lib/astra_auto_ex_web/components/layouts.ex:76
+#, elixir-autogen, elixir-format
+msgid "Something went wrong!"
+msgstr ""
+
+#: lib/astra_auto_ex_web/components/layouts.ex:64
+#, elixir-autogen, elixir-format
+msgid "We can't find the internet"
+msgstr ""
+
+#: lib/astra_auto_ex_web/components/core_components.ex:98
+#, elixir-autogen, elixir-format, fuzzy
+msgid "close"
+msgstr "Close"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:596
+#, elixir-autogen, elixir-format
+msgid "AI Providers"
+msgstr ""
+
+#: lib/astra_auto_ex_web/components/layouts/root.html.heex:67
+#, elixir-autogen, elixir-format
+msgid "Asset Hub"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:599
+#, elixir-autogen, elixir-format
+msgid "Billing"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1067
+#, elixir-autogen, elixir-format
+msgid "Custom"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1140
+#, elixir-autogen, elixir-format
+msgid "Custom Prompt"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1129
+#, elixir-autogen, elixir-format
+msgid "Default Template (read-only)"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1089
+#, elixir-autogen, elixir-format
+msgid "Delete this custom prompt?"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:597
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:842
+#, elixir-autogen, elixir-format
+msgid "Models"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:598
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1011
+#, elixir-autogen, elixir-format
+msgid "Prompt Tuning"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1083
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Save As"
+msgstr "Save"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1076
+#, elixir-autogen, elixir-format
+msgid "View"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1014
+#, elixir-autogen, elixir-format
+msgid "View and customize system prompts for each pipeline step. Defaults are read-only — use Save As to create your own version."
+msgstr ""
+
+#: lib/astra_auto_ex_web/components/layouts/root.html.heex:51
+#, elixir-autogen, elixir-format
+msgid "Workspace"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1021
+#, elixir-autogen, elixir-format
+msgid "customized"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:752
+#, elixir-autogen, elixir-format
+msgid "API Key"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1247
+#, elixir-autogen, elixir-format
+msgid "API Key cannot be empty."
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:971
+#, elixir-autogen, elixir-format
+msgid "Available"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:966
+#, elixir-autogen, elixir-format
+msgid "Balance"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:764
+#, elixir-autogen, elixir-format
+msgid "Base URL"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:729
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Configure"
+msgstr "Confirm"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:702
+#, elixir-autogen, elixir-format
+msgid "Connected"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:832
+#, elixir-autogen, elixir-format
+msgid "Connection failed"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:830
+#, elixir-autogen, elixir-format
+msgid "Connection successful"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:778
+#, elixir-autogen, elixir-format
+msgid "Current key:"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:758
+#, elixir-autogen, elixir-format
+msgid "Enter API Key..."
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1283
+#, elixir-autogen, elixir-format
+msgid "Enter an API key first."
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1342
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1375
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1427
+#, elixir-autogen, elixir-format
+msgid "Failed to save model selection"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:976
+#, elixir-autogen, elixir-format
+msgid "Frozen"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1338
+#, elixir-autogen, elixir-format
+msgid "Model cleared"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1371
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1423
+#, elixir-autogen, elixir-format
+msgid "Model updated"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1393
+#, elixir-autogen, elixir-format
+msgid "No model selected"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:989
+#, elixir-autogen, elixir-format
+msgid "Recent Usage"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:735
+#, elixir-autogen, elixir-format
+msgid "Remove this provider?"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:933
+#, elixir-autogen, elixir-format
+msgid "Select"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:909
+#, elixir-autogen, elixir-format
+msgid "Select default models for each pipeline step. Only enabled models from configured providers are shown."
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:949
+#, elixir-autogen, elixir-format
+msgid "Test"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:818
+#, elixir-autogen, elixir-format
+msgid "Test Connection"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1386
+#, elixir-autogen, elixir-format
+msgid "Testing %{provider} / %{model}..."
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:816
+#, elixir-autogen, elixir-format
+msgid "Testing..."
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:981
+#, elixir-autogen, elixir-format
+msgid "Total Spent"
+msgstr ""

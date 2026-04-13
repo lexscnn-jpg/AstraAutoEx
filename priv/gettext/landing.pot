@@ -1,0 +1,52 @@
+msgid ""
+msgstr ""
+
+#: lib/astra_auto_ex_web/controllers/page_html/home.html.heex:19
+#, elixir-autogen
+msgid "Describe your story and let AI generate cinematic short dramas. From script to storyboard to final video — fully automated."
+msgstr ""
+
+#: lib/astra_auto_ex_web/controllers/page_html/home.html.heex:29
+#, elixir-autogen
+msgid "Get Started"
+msgstr ""
+
+#: lib/astra_auto_ex_web/controllers/page_html/home.html.heex:90
+#, elixir-autogen
+msgid "Story to Script"
+msgstr ""
+
+#: lib/astra_auto_ex_web/controllers/page_html/home.html.heex:92
+#, elixir-autogen
+msgid "Input a story idea or novel text. AI analyzes and generates a professional screenplay."
+msgstr ""
+
+#: lib/astra_auto_ex_web/controllers/page_html/home.html.heex:102
+#, elixir-autogen
+msgid "Auto Production"
+msgstr ""
+
+#: lib/astra_auto_ex_web/controllers/page_html/home.html.heex:104
+#, elixir-autogen
+msgid "Characters, scenes, storyboards, voices, and videos — all generated automatically."
+msgstr ""
+
+#: lib/astra_auto_ex_web/controllers/page_html/home.html.heex:114
+#, elixir-autogen
+msgid "Export & Publish"
+msgstr ""
+
+#: lib/astra_auto_ex_web/controllers/page_html/home.html.heex:116
+#, elixir-autogen
+msgid "Compose final videos with lip-sync, subtitles, and BGM. Ready for any platform."
+msgstr ""
+
+#: lib/astra_auto_ex_web/controllers/page_html/home.html.heex:15
+#, elixir-autogen, elixir-format
+msgid "AI Studio"
+msgstr ""
+
+#: lib/astra_auto_ex_web/controllers/page_html/home.html.heex:13
+#, elixir-autogen, elixir-format
+msgid "AstrAuto Drama"
+msgstr ""

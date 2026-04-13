@@ -1,0 +1,2 @@
+Please modify the image according to the following instructions, keeping the character's core features consistent:
+{modify_instruction}

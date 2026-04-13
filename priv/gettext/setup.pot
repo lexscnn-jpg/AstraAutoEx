@@ -1,0 +1,163 @@
+## This file is a PO Template file.
+## Translations for the Setup Wizard.
+msgid ""
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:40
+#: lib/astra_auto_ex_web/live/setup_live.ex:50
+#, elixir-autogen
+msgid "AstraAutoEx Setup"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:55
+#, elixir-autogen
+msgid "Admin"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:55
+#, elixir-autogen
+msgid "Providers"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:55
+#: lib/astra_auto_ex_web/live/setup_live.ex:352
+#, elixir-autogen
+msgid "Storage"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:55
+#, elixir-autogen
+msgid "Done"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:95
+#, elixir-autogen
+msgid "Create Admin Account"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:110
+#, elixir-autogen
+msgid "Email"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:145
+#, elixir-autogen
+msgid "Configure AI Providers"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:147
+#, elixir-autogen
+msgid "Add at least one AI provider to get started."
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:178
+#, elixir-autogen
+msgid "Select provider..."
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:188
+#, elixir-autogen
+msgid "API Key"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:195
+#, elixir-autogen
+msgid "Add Provider"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:219
+#, elixir-autogen
+msgid "Storage Configuration"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:221
+#, elixir-autogen
+msgid "Choose where to store generated media files."
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:240
+#: lib/astra_auto_ex_web/live/setup_live.ex:353
+#, elixir-autogen
+msgid "Local Storage"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:242
+#, elixir-autogen
+msgid "Files stored on the server. Zero configuration needed."
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:255
+#: lib/astra_auto_ex_web/live/setup_live.ex:354
+#, elixir-autogen
+msgid "S3 / MinIO"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:257
+#, elixir-autogen
+msgid "Compatible with AWS S3 or self-hosted MinIO."
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:266
+#, elixir-autogen
+msgid "Endpoint"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:277
+#, elixir-autogen
+msgid "Bucket"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:286
+#, elixir-autogen
+msgid "Region"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:298
+#, elixir-autogen
+msgid "Access Key"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:307
+#, elixir-autogen
+msgid "Secret Key"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:335
+#, elixir-autogen
+msgid "Setup Complete!"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:339
+#, elixir-autogen
+msgid "Admin account created"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:344
+#, elixir-autogen
+msgid "%{count} AI provider(s) configured"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:360
+#, elixir-autogen
+msgid "Start Using AstraAutoEx"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:484
+#, elixir-autogen
+msgid "Welcome to AstraAutoEx!"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:429
+#, elixir-autogen
+msgid "Please select a provider and enter an API key."
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:494
+#, elixir-autogen
+msgid "Failed to create admin account. Please check the form."
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:499
+#, elixir-autogen
+msgid "Setup failed. Please try again."
+msgstr ""

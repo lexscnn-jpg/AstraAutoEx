@@ -1,0 +1,32 @@
+# Build artifacts
+_build/
+deps/
+
+# Generated on deploy
+priv/static/assets/
+
+# Version control
+.git/
+
+# IDE
+.elixir_ls/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+docker-compose*.yml
+
+# Dev/test
+.env
+*.secret.exs
+cover/
+doc/
+
+# Node (if any)
+node_modules/
+
+# Local dev toolchain
+tools/

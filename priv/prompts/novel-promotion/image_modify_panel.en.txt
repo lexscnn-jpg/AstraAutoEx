@@ -1,0 +1,2 @@
+Please modify the storyboard image according to the following instructions, keeping the camera language and subject consistent:
+{modify_instruction}

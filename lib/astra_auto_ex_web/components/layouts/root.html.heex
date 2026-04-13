@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="csrf-token" content={get_csrf_token()} />
+    <.live_title default="AstraAutoEx">
+      {assigns[:page_title]}
+    </.live_title>
+    <link rel="icon" type="image/svg+xml" href={~p"/favicon.svg"} />
+    <link phx-track-static rel="stylesheet" href={~p"/assets/css/app.css"} />
+    <script defer phx-track-static type="text/javascript" src={~p"/assets/js/app.js"}>
+    </script>
+  </head>
+  <body class="glass-page">
+    <nav class="glass-nav sticky top-0 z-50 px-6 py-3">
+      <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <a href="/" class="flex items-center gap-2 no-underline">
+            <img src={~p"/images/logo.svg"} alt="AstraAuto" class="h-7" />
+          </a>
+          <span class="hidden sm:inline-flex items-center gap-1.5 text-xs text-[var(--glass-text-tertiary)] border border-[var(--glass-stroke-base)] rounded-full px-3 py-1">
+            <svg
+              class="w-3.5 h-3.5"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" />
+            </svg>
+            Beta v0.5.0
+          </span>
+        </div>
+
+        <div class="flex items-center gap-1">
+          <%= if @current_scope do %>
+            <a
+              href={~p"/home"}
+              class="nav-link flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm text-[var(--glass-text-secondary)] hover:text-[var(--glass-text-primary)] hover:bg-[var(--glass-bg-muted)] transition-all"
+            >
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                viewBox="0 0 24 24"
+              >
+                <rect x="2" y="3" width="20" height="14" rx="2" /><path d="M8 21h8" /><path d="M12 17v4" />
+              </svg>
+              {dgettext("default", "Workspace")}
+            </a>
+            <a
+              href={~p"/asset-hub"}
+              class="nav-link flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm text-[var(--glass-text-secondary)] hover:text-[var(--glass-text-primary)] hover:bg-[var(--glass-bg-muted)] transition-all"
+            >
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                viewBox="0 0 24 24"
+              >
+                <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z" />
+                <path d="M12 11v6" /><path d="M9 14h6" />
+              </svg>
+              {dgettext("default", "Asset Hub")}
+            </a>
+            <a
+              href={~p"/profile"}
+              class="nav-link flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm text-[var(--glass-text-secondary)] hover:text-[var(--glass-text-primary)] hover:bg-[var(--glass-bg-muted)] transition-all"
+            >
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                viewBox="0 0 24 24"
+              >
+                <circle cx="12" cy="8" r="4" /><path d="M20 21a8 8 0 00-16 0" />
+              </svg>
+              {dgettext("default", "Settings")}
+            </a>
+
+            <span class="mx-1 h-4 w-px bg-[var(--glass-stroke-base)]"></span>
+
+            <span class="text-xs text-[var(--glass-text-tertiary)] hidden lg:inline">
+              {@current_scope.user.email}
+            </span>
+            <.link
+              href={~p"/users/log-out"}
+              method="delete"
+              class="flex items-center gap-1 px-2 py-2 rounded-lg text-sm text-[var(--glass-text-tertiary)] hover:text-[var(--glass-text-primary)] hover:bg-[var(--glass-bg-muted)] transition-all"
+            >
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                viewBox="0 0 24 24"
+              >
+                <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" /><polyline points="16 17 21 12 16 7" /><line
+                  x1="21"
+                  y1="12"
+                  x2="9"
+                  y2="12"
+                />
+              </svg>
+            </.link>
+          <% else %>
+            <a
+              href={~p"/users/log-in"}
+              class="text-sm text-[var(--glass-text-secondary)] hover:text-[var(--glass-text-primary)] transition-colors px-3 py-1.5"
+            >
+              {dgettext("auth", "Sign In")}
+            </a>
+            <a
+              href={~p"/users/register"}
+              class="glass-btn glass-btn-primary text-sm py-1.5 px-4"
+            >
+              {dgettext("auth", "Sign Up")}
+            </a>
+          <% end %>
+          <div class="flex items-center gap-1 text-[var(--glass-text-tertiary)] ml-1">
+            <a
+              href="?locale=en"
+              class="hover:text-[var(--glass-text-primary)] transition-colors text-xs px-1"
+            >
+              EN
+            </a>
+            <span class="opacity-30 text-xs">|</span>
+            <a
+              href="?locale=zh"
+              class="hover:text-[var(--glass-text-primary)] transition-colors text-xs px-1"
+            >
+              中文
+            </a>
+          </div>
+        </div>
+      </div>
+    </nav>
+    {@inner_content}
+  </body>
+</html>

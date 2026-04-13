@@ -1,0 +1,163 @@
+## "setup" domain translations for zh locale.
+msgid ""
+msgstr ""
+"Language: zh\n"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:40
+#: lib/astra_auto_ex_web/live/setup_live.ex:50
+#, elixir-autogen
+msgid "AstraAutoEx Setup"
+msgstr "AstraAutoEx 初始设置"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:55
+#, elixir-autogen
+msgid "Admin"
+msgstr "管理员"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:55
+#, elixir-autogen
+msgid "Providers"
+msgstr "AI 提供商"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:55
+#: lib/astra_auto_ex_web/live/setup_live.ex:352
+#, elixir-autogen
+msgid "Storage"
+msgstr "存储"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:55
+#, elixir-autogen
+msgid "Done"
+msgstr "完成"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:95
+#, elixir-autogen
+msgid "Create Admin Account"
+msgstr "创建管理员账号"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:110
+#, elixir-autogen
+msgid "Email"
+msgstr "邮箱"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:145
+#, elixir-autogen
+msgid "Configure AI Providers"
+msgstr "配置 AI 提供商"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:147
+#, elixir-autogen
+msgid "Add at least one AI provider to get started."
+msgstr "至少配置一个 AI 提供商以开始使用。"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:178
+#, elixir-autogen
+msgid "Select provider..."
+msgstr "选择提供商..."
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:188
+#, elixir-autogen
+msgid "API Key"
+msgstr "API 密钥"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:195
+#, elixir-autogen
+msgid "Add Provider"
+msgstr "添加提供商"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:219
+#, elixir-autogen
+msgid "Storage Configuration"
+msgstr "存储配置"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:221
+#, elixir-autogen
+msgid "Choose where to store generated media files."
+msgstr "选择生成的媒体文件存储位置。"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:240
+#: lib/astra_auto_ex_web/live/setup_live.ex:353
+#, elixir-autogen
+msgid "Local Storage"
+msgstr "本地存储"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:242
+#, elixir-autogen
+msgid "Files stored on the server. Zero configuration needed."
+msgstr "文件存储在服务器本地，无需额外配置。"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:255
+#: lib/astra_auto_ex_web/live/setup_live.ex:354
+#, elixir-autogen
+msgid "S3 / MinIO"
+msgstr "S3 / MinIO"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:257
+#, elixir-autogen
+msgid "Compatible with AWS S3 or self-hosted MinIO."
+msgstr "兼容 AWS S3 或自托管 MinIO。"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:266
+#, elixir-autogen
+msgid "Endpoint"
+msgstr "端点地址"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:277
+#, elixir-autogen
+msgid "Bucket"
+msgstr "存储桶"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:286
+#, elixir-autogen
+msgid "Region"
+msgstr "区域"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:298
+#, elixir-autogen
+msgid "Access Key"
+msgstr "访问密钥"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:307
+#, elixir-autogen
+msgid "Secret Key"
+msgstr "私有密钥"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:335
+#, elixir-autogen
+msgid "Setup Complete!"
+msgstr "设置完成！"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:339
+#, elixir-autogen
+msgid "Admin account created"
+msgstr "管理员账号已创建"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:344
+#, elixir-autogen
+msgid "%{count} AI provider(s) configured"
+msgstr "已配置 %{count} 个 AI 提供商"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:360
+#, elixir-autogen
+msgid "Start Using AstraAutoEx"
+msgstr "开始使用 AstraAutoEx"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:484
+#, elixir-autogen
+msgid "Welcome to AstraAutoEx!"
+msgstr "欢迎使用 AstraAutoEx！"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:429
+#, elixir-autogen
+msgid "Please select a provider and enter an API key."
+msgstr "请选择提供商并输入 API 密钥。"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:494
+#, elixir-autogen
+msgid "Failed to create admin account. Please check the form."
+msgstr "管理员账号创建失败，请检查表单内容。"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:499
+#, elixir-autogen
+msgid "Setup failed. Please try again."
+msgstr "设置失败，请重试。"

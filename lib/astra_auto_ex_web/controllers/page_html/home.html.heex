@@ -1,0 +1,124 @@
+<div class="glass-page h-[calc(100vh-52px)] flex flex-col overflow-hidden">
+  <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+    <div class="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] rounded-full bg-[rgba(138,170,255,0.08)] animate-float">
+    </div>
+    <div class="absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full bg-[rgba(148,163,184,0.10)] animate-float-delayed">
+    </div>
+  </div>
+
+  <div class="max-w-6xl mx-auto px-6 flex-1 flex flex-col justify-center w-full">
+    <div class="grid lg:grid-cols-2 gap-10 items-center">
+      <div class="animate-slide-up">
+        <h1 class="text-4xl lg:text-[3.5rem] font-extrabold tracking-tight leading-[1.15] text-[var(--glass-text-primary)]">
+          {dgettext("landing", "AstrAuto Drama")}<br />
+          <span class="bg-gradient-to-r from-[var(--glass-accent-from)] to-[var(--glass-accent-to)] bg-clip-text text-transparent">
+            {dgettext("landing", "AI Studio")}
+          </span>
+        </h1>
+        <p class="mt-5 text-base text-[var(--glass-text-tertiary)] max-w-md leading-relaxed">
+          {dgettext(
+            "landing",
+            "Describe your story and let AI generate cinematic short dramas. From script to storyboard to final video — fully automated."
+          )}
+        </p>
+        <div class="mt-8">
+          <a
+            href={~p"/setup"}
+            class="glass-btn glass-btn-primary text-base py-3 px-8 inline-flex items-center gap-2"
+          >
+            {dgettext("landing", "Get Started")}
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="relative hidden lg:block animate-fade-in" style="animation-delay: 0.4s">
+        <%!-- Main card --%>
+        <div class="glass-surface-elevated p-6 w-80 ml-auto rounded-2xl rotate-1 animate-float shadow-xl">
+          <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[var(--glass-accent-from)] to-[var(--glass-accent-to)]">
+            </div>
+            <div class="flex-1">
+              <div class="h-2.5 w-24 rounded bg-[var(--glass-stroke-base)]"></div>
+              <div class="h-2 w-16 rounded bg-[var(--glass-stroke-soft)] mt-2"></div>
+            </div>
+          </div>
+          <div class="space-y-2.5">
+            <div class="h-2 w-full rounded bg-[var(--glass-stroke-base)]"></div>
+            <div class="h-2 w-4/5 rounded bg-[var(--glass-stroke-soft)]"></div>
+            <div class="h-2 w-full rounded bg-[var(--glass-stroke-base)]"></div>
+            <div class="h-2 w-3/5 rounded bg-[var(--glass-stroke-soft)]"></div>
+          </div>
+          <div class="flex items-center gap-2 mt-5">
+            <div class="h-8 flex-1 rounded-lg bg-[var(--glass-stroke-soft)]"></div>
+            <div class="h-8 w-24 rounded-lg bg-[var(--glass-stroke-base)]"></div>
+          </div>
+        </div>
+        <%!-- Floating badge card --%>
+        <div class="glass-surface p-3 w-48 absolute bottom-4 left-8 -rotate-2 animate-float-delayed rounded-xl shadow-lg">
+          <div class="flex items-center gap-2">
+            <span class="glass-chip glass-chip-info text-xs">AI</span>
+            <span class="glass-chip glass-chip-success text-xs">
+              {dgettext("default", "Success")}
+            </span>
+          </div>
+          <div class="grid grid-cols-3 gap-1.5 mt-2.5">
+            <div class="aspect-square rounded-md bg-gradient-to-br from-blue-200 to-blue-300">
+            </div>
+            <div class="aspect-square rounded-md bg-gradient-to-br from-purple-200 to-purple-300">
+            </div>
+            <div class="aspect-square rounded-md bg-gradient-to-br from-pink-200 to-pink-300">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid sm:grid-cols-3 gap-5 mt-10">
+      <div class="glass-card p-5">
+        <div class="w-9 h-9 rounded-xl bg-[var(--glass-tone-info-bg)] flex items-center justify-center mb-3">
+          <span class="text-[var(--glass-tone-info-fg)] text-base">&#9998;</span>
+        </div>
+        <h3 class="font-semibold text-base mb-1">{dgettext("landing", "Story to Script")}</h3>
+        <p class="text-sm text-[var(--glass-text-tertiary)] leading-relaxed">
+          {dgettext(
+            "landing",
+            "Input a story idea or novel text. AI analyzes and generates a professional screenplay."
+          )}
+        </p>
+      </div>
+      <div class="glass-card p-5">
+        <div class="w-9 h-9 rounded-xl bg-[var(--glass-tone-success-bg)] flex items-center justify-center mb-3">
+          <span class="text-[var(--glass-tone-success-fg)] text-base">&#9881;</span>
+        </div>
+        <h3 class="font-semibold text-base mb-1">{dgettext("landing", "Auto Production")}</h3>
+        <p class="text-sm text-[var(--glass-text-tertiary)] leading-relaxed">
+          {dgettext(
+            "landing",
+            "Characters, scenes, storyboards, voices, and videos — all generated automatically."
+          )}
+        </p>
+      </div>
+      <div class="glass-card p-5">
+        <div class="w-9 h-9 rounded-xl bg-[var(--glass-tone-warning-bg)] flex items-center justify-center mb-3">
+          <span class="text-[var(--glass-tone-warning-fg)] text-base">&#9654;</span>
+        </div>
+        <h3 class="font-semibold text-base mb-1">{dgettext("landing", "Export & Publish")}</h3>
+        <p class="text-sm text-[var(--glass-text-tertiary)] leading-relaxed">
+          {dgettext(
+            "landing",
+            "Compose final videos with lip-sync, subtitles, and BGM. Ready for any platform."
+          )}
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

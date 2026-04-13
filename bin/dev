@@ -1,0 +1,8 @@
+#!/bin/bash
+# AstraAutoEx dev runner
+# Usage: bin/dev mix phx.server
+#        bin/dev mix test
+#        bin/dev iex -S mix
+DIR="$(cd "$(dirname "$0")/.." && pwd)"
+source "$DIR/env.sh" > /dev/null 2>&1
+exec "$@"

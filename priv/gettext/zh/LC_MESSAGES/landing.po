@@ -1,0 +1,53 @@
+msgid ""
+msgstr ""
+"Language: zh\n"
+
+#: lib/astra_auto_ex_web/controllers/page_html/home.html.heex:19
+#, elixir-autogen
+msgid "Describe your story and let AI generate cinematic short dramas. From script to storyboard to final video — fully automated."
+msgstr "描述你想要创作的故事，AI 为你智能生成影视短剧。从剧本到分镜到成片，全流程自动化。"
+
+#: lib/astra_auto_ex_web/controllers/page_html/home.html.heex:29
+#, elixir-autogen
+msgid "Get Started"
+msgstr "立即体验"
+
+#: lib/astra_auto_ex_web/controllers/page_html/home.html.heex:90
+#, elixir-autogen
+msgid "Story to Script"
+msgstr "故事到剧本"
+
+#: lib/astra_auto_ex_web/controllers/page_html/home.html.heex:92
+#, elixir-autogen
+msgid "Input a story idea or novel text. AI analyzes and generates a professional screenplay."
+msgstr "输入故事创意或小说文本，AI 自动分析并生成专业剧本。"
+
+#: lib/astra_auto_ex_web/controllers/page_html/home.html.heex:102
+#, elixir-autogen
+msgid "Auto Production"
+msgstr "自动化制作"
+
+#: lib/astra_auto_ex_web/controllers/page_html/home.html.heex:104
+#, elixir-autogen
+msgid "Characters, scenes, storyboards, voices, and videos — all generated automatically."
+msgstr "角色、场景、分镜、配音、视频——全部自动生成。"
+
+#: lib/astra_auto_ex_web/controllers/page_html/home.html.heex:114
+#, elixir-autogen
+msgid "Export & Publish"
+msgstr "导出发布"
+
+#: lib/astra_auto_ex_web/controllers/page_html/home.html.heex:116
+#, elixir-autogen
+msgid "Compose final videos with lip-sync, subtitles, and BGM. Ready for any platform."
+msgstr "合成带唇形同步、字幕和背景音乐的成片，适配各大平台。"
+
+#: lib/astra_auto_ex_web/controllers/page_html/home.html.heex:15
+#, elixir-autogen, elixir-format
+msgid "AI Studio"
+msgstr "AI影视Studio"
+
+#: lib/astra_auto_ex_web/controllers/page_html/home.html.heex:13
+#, elixir-autogen, elixir-format
+msgid "AstrAuto Drama"
+msgstr "星辰自动漫剧"

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 50" aria-label="AstraAuto" role="img">
+  <defs>
+    <linearGradient id="astra-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#60A5FA"/>
+      <stop offset="50%" stop-color="#818CF8"/>
+      <stop offset="100%" stop-color="#A78BFA"/>
+    </linearGradient>
+    <linearGradient id="orbit-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#60A5FA" stop-opacity="0.9"/>
+      <stop offset="100%" stop-color="#A78BFA" stop-opacity="0.4"/>
+    </linearGradient>
+  </defs>
+  <ellipse cx="18" cy="25" rx="16" ry="7" fill="none" stroke="url(#orbit-gradient)" stroke-width="1.4" transform="rotate(-25 18 25)" opacity="0.7"/>
+  <circle cx="18" cy="25" r="3.2" fill="url(#astra-gradient)"/>
+  <circle cx="18" cy="25" r="1.6" fill="white" opacity="0.9"/>
+  <text x="40" y="32" font-family="Inter, SF Pro Display, -apple-system, system-ui, sans-serif" font-weight="800" font-size="26" letter-spacing="3" fill="#0a0a0a">ASTRA</text>
+  <text x="162" y="32" font-family="Inter, SF Pro Display, -apple-system, system-ui, sans-serif" font-weight="400" font-size="26" letter-spacing="3" fill="url(#astra-gradient)">AUTO</text>
+  <rect x="158" y="14" width="1" height="22" rx="0.5" fill="#0a0a0a" opacity="0.2"/>
+</svg>

@@ -1,0 +1,163 @@
+## "setup" domain translations for en locale.
+msgid ""
+msgstr ""
+"Language: en\n"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:40
+#: lib/astra_auto_ex_web/live/setup_live.ex:50
+#, elixir-autogen
+msgid "AstraAutoEx Setup"
+msgstr "AstraAutoEx Setup"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:55
+#, elixir-autogen
+msgid "Admin"
+msgstr "Admin"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:55
+#, elixir-autogen
+msgid "Providers"
+msgstr "Providers"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:55
+#: lib/astra_auto_ex_web/live/setup_live.ex:352
+#, elixir-autogen
+msgid "Storage"
+msgstr "Storage"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:55
+#, elixir-autogen
+msgid "Done"
+msgstr "Done"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:95
+#, elixir-autogen
+msgid "Create Admin Account"
+msgstr "Create Admin Account"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:110
+#, elixir-autogen
+msgid "Email"
+msgstr "Email"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:145
+#, elixir-autogen
+msgid "Configure AI Providers"
+msgstr "Configure AI Providers"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:147
+#, elixir-autogen
+msgid "Add at least one AI provider to get started."
+msgstr "Add at least one AI provider to get started."
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:178
+#, elixir-autogen
+msgid "Select provider..."
+msgstr "Select provider..."
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:188
+#, elixir-autogen
+msgid "API Key"
+msgstr "API Key"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:195
+#, elixir-autogen
+msgid "Add Provider"
+msgstr "Add Provider"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:219
+#, elixir-autogen
+msgid "Storage Configuration"
+msgstr "Storage Configuration"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:221
+#, elixir-autogen
+msgid "Choose where to store generated media files."
+msgstr "Choose where to store generated media files."
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:240
+#: lib/astra_auto_ex_web/live/setup_live.ex:353
+#, elixir-autogen
+msgid "Local Storage"
+msgstr "Local Storage"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:242
+#, elixir-autogen
+msgid "Files stored on the server. Zero configuration needed."
+msgstr "Files stored on the server. Zero configuration needed."
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:255
+#: lib/astra_auto_ex_web/live/setup_live.ex:354
+#, elixir-autogen
+msgid "S3 / MinIO"
+msgstr "S3 / MinIO"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:257
+#, elixir-autogen
+msgid "Compatible with AWS S3 or self-hosted MinIO."
+msgstr "Compatible with AWS S3 or self-hosted MinIO."
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:266
+#, elixir-autogen
+msgid "Endpoint"
+msgstr "Endpoint"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:277
+#, elixir-autogen
+msgid "Bucket"
+msgstr "Bucket"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:286
+#, elixir-autogen
+msgid "Region"
+msgstr "Region"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:298
+#, elixir-autogen
+msgid "Access Key"
+msgstr "Access Key"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:307
+#, elixir-autogen
+msgid "Secret Key"
+msgstr "Secret Key"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:335
+#, elixir-autogen
+msgid "Setup Complete!"
+msgstr "Setup Complete!"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:339
+#, elixir-autogen
+msgid "Admin account created"
+msgstr "Admin account created"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:344
+#, elixir-autogen
+msgid "%{count} AI provider(s) configured"
+msgstr "%{count} AI provider(s) configured"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:360
+#, elixir-autogen
+msgid "Start Using AstraAutoEx"
+msgstr "Start Using AstraAutoEx"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:484
+#, elixir-autogen
+msgid "Welcome to AstraAutoEx!"
+msgstr "Welcome to AstraAutoEx!"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:429
+#, elixir-autogen
+msgid "Please select a provider and enter an API key."
+msgstr "Please select a provider and enter an API key."
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:494
+#, elixir-autogen
+msgid "Failed to create admin account. Please check the form."
+msgstr "Failed to create admin account. Please check the form."
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:499
+#, elixir-autogen
+msgid "Setup failed. Please try again."
+msgstr "Setup failed. Please try again."

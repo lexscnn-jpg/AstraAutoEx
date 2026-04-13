@@ -1,0 +1,605 @@
+## "projects" domain translations for en locale.
+msgid ""
+msgstr ""
+"Language: en\n"
+
+msgid "From Inspiration to Screen"
+msgstr "From Inspiration to Screen"
+
+#: lib/astra_auto_ex_web/live/home_live.ex:247
+#, elixir-autogen
+msgid "Describe your story and let AI generate cinematic short dramas"
+msgstr "Describe your story and let AI generate cinematic short dramas"
+
+msgid "Enter your story idea, novel excerpt, or script outline..."
+msgstr "Enter your story idea, novel excerpt, or script outline..."
+
+#: lib/astra_auto_ex_web/live/home_live.ex:175
+#, elixir-autogen
+msgid "Start Creating"
+msgstr "Start Creating"
+
+#: lib/astra_auto_ex_web/live/home_live.ex:186
+#, elixir-autogen
+msgid "Recent Projects"
+msgstr "Recent Projects"
+
+msgid "View All Projects"
+msgstr "View All Projects"
+
+#: lib/astra_auto_ex_web/live/home_live.ex:244
+#, elixir-autogen
+msgid "No projects yet. Start your first creation!"
+msgstr "No projects yet. Start your first creation!"
+
+#: lib/astra_auto_ex_web/live/home_live.ex:235
+#, elixir-autogen
+msgid "New Project"
+msgstr "New Project"
+
+#: lib/astra_auto_ex_web/live/home_live.ex:45
+#, elixir-autogen
+msgid "My Projects"
+msgstr "My Projects"
+
+#: lib/astra_auto_ex_web/live/home_live.ex:257
+#: lib/astra_auto_ex_web/live/home_live.ex:296
+#: lib/astra_auto_ex_web/live/home_live.ex:354
+#, elixir-autogen
+msgid "Create Project"
+msgstr "Create Project"
+
+#: lib/astra_auto_ex_web/live/home_live.ex:302
+#, elixir-autogen
+msgid "Project Name"
+msgstr "Project Name"
+
+#: lib/astra_auto_ex_web/live/home_live.ex:315
+#: lib/astra_auto_ex_web/live/workspace_live/character_modal.ex:92
+#: lib/astra_auto_ex_web/live/workspace_live/location_modal.ex:55
+#, elixir-autogen
+msgid "Description"
+msgstr "Description"
+
+#: lib/astra_auto_ex_web/live/home_live.ex:137
+#: lib/astra_auto_ex_web/live/home_live.ex:334
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:261
+#, elixir-autogen
+msgid "Aspect Ratio"
+msgstr "Aspect Ratio"
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:266
+#, elixir-autogen
+msgid "Status"
+msgstr "Status"
+
+msgid "Created"
+msgstr "Created"
+
+msgid "Active"
+msgstr "Active"
+
+msgid "Archived"
+msgstr "Archived"
+
+msgid "Draft"
+msgstr "Draft"
+
+#: lib/astra_auto_ex_web/live/assistant_live/panel.ex:31
+#: lib/astra_auto_ex_web/live/assistant_live/panel.ex:131
+#: lib/astra_auto_ex_web/live/assistant_live/panel.ex:140
+#, elixir-autogen, elixir-format
+msgid "AI Assistant"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:102
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Active Tasks"
+msgstr "Active"
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:356
+#, elixir-autogen, elixir-format
+msgid "Add Character"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/assistant_live/panel.ex:45
+#, elixir-autogen, elixir-format
+msgid "Ask me anything about your project..."
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/asset_hub_live/index.ex:23
+#: lib/astra_auto_ex_web/live/asset_hub_live/index.ex:34
+#, elixir-autogen, elixir-format
+msgid "Asset Hub"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/asset_hub_live/index.ex:274
+#, elixir-autogen, elixir-format
+msgid "Asset creation dialog coming soon."
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:115
+#, elixir-autogen, elixir-format
+msgid "Assistant"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/asset_hub_live/index.ex:280
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:339
+#, elixir-autogen, elixir-format
+msgid "Characters"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:381
+#, elixir-autogen, elixir-format
+msgid "Clips"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:728
+#, elixir-autogen, elixir-format
+msgid "Complete video and voice generation before composing."
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:647
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:1143
+#, elixir-autogen, elixir-format
+msgid "Compose"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:654
+#, elixir-autogen, elixir-format
+msgid "Compose Final Video"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:822
+#, elixir-autogen, elixir-format
+msgid "Compose task queued."
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:1138
+#, elixir-autogen, elixir-format
+msgid "Config"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:297
+#, elixir-autogen, elixir-format
+msgid "Episodes"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:678
+#, elixir-autogen, elixir-format
+msgid "Final Composition"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:406
+#, elixir-autogen, elixir-format
+msgid "Generate All Images"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:563
+#, elixir-autogen, elixir-format
+msgid "Generate All Videos"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:497
+#, elixir-autogen, elixir-format
+msgid "Generate All Voices"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:330
+#, elixir-autogen, elixir-format
+msgid "Generate Script"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:604
+#, elixir-autogen, elixir-format
+msgid "Generate storyboard images first."
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/asset_hub_live/index.ex:281
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:364
+#, elixir-autogen, elixir-format
+msgid "Locations"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/character_modal.ex:52
+#: lib/astra_auto_ex_web/live/workspace_live/location_modal.ex:41
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:252
+#, elixir-autogen, elixir-format
+msgid "Name"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:586
+#, elixir-autogen, elixir-format
+msgid "No image"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:466
+#, elixir-autogen, elixir-format
+msgid "No storyboards yet. Generate a script first."
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:581
+#, elixir-autogen, elixir-format
+msgid "No video"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:683
+#, elixir-autogen, elixir-format
+msgid "Panel Videos"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:281
+#, elixir-autogen, elixir-format
+msgid "Paste your story or novel text here..."
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:786
+#, elixir-autogen, elixir-format
+msgid "Pipeline started. Processing your story..."
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:246
+#, elixir-autogen, elixir-format
+msgid "Project Config"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:385
+#, elixir-autogen, elixir-format
+msgid "Run 'Generate Script' to create clips from story text."
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:1139
+#, elixir-autogen, elixir-format
+msgid "Script"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:321
+#, elixir-autogen, elixir-format
+msgid "Script Editor"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/asset_hub_live/index.ex:157
+#, elixir-autogen, elixir-format
+msgid "Search assets..."
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:824
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:1127
+#, elixir-autogen, elixir-format
+msgid "Select an episode first."
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:547
+#, elixir-autogen, elixir-format
+msgid "Select an episode to manage voice lines."
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/assistant_live/panel.ex:89
+#: lib/astra_auto_ex_web/live/assistant_live/panel.ex:193
+#, elixir-autogen, elixir-format
+msgid "Send"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:286
+#, elixir-autogen, elixir-format
+msgid "Start Pipeline"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/assistant_live/panel.ex:149
+#, elixir-autogen, elixir-format
+msgid "Start a conversation with AI."
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/home_live.ex:64
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:275
+#, elixir-autogen, elixir-format
+msgid "Story Input"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:397
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:1140
+#, elixir-autogen, elixir-format
+msgid "Storyboard"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/home_live.ex:325
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:256
+#, elixir-autogen, elixir-format
+msgid "Type"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/assistant_live/panel.ex:79
+#: lib/astra_auto_ex_web/live/assistant_live/panel.ex:183
+#, elixir-autogen, elixir-format
+msgid "Type a message..."
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:791
+#, elixir-autogen, elixir-format
+msgid "Use Config stage to input story text first."
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:1142
+#, elixir-autogen, elixir-format
+msgid "Video"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:560
+#, elixir-autogen, elixir-format
+msgid "Video Generation"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:489
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:1141
+#, elixir-autogen, elixir-format
+msgid "Voice"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:700
+#, elixir-autogen, elixir-format
+msgid "Voice Lines"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:542
+#, elixir-autogen, elixir-format
+msgid "Voice lines will appear here after storyboard generation."
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/asset_hub_live/index.ex:283
+#, elixir-autogen, elixir-format
+msgid "Voices"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:105
+#, elixir-autogen, elixir-format
+msgid "running"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/character_modal.ex:78
+#, elixir-autogen, elixir-format
+msgid "Age"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/voice_picker.ex:149
+#, elixir-autogen, elixir-format
+msgid "Apply"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/character_modal.ex:122
+#: lib/astra_auto_ex_web/live/workspace_live/location_modal.ex:74
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Create"
+msgstr "Created"
+
+#: lib/astra_auto_ex_web/live/workspace_live/character_modal.ex:45
+#, elixir-autogen, elixir-format
+msgid "Create Character"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/location_modal.ex:34
+#, elixir-autogen, elixir-format
+msgid "Create Location"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/character_modal.ex:46
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Edit Character"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/location_modal.ex:35
+#, elixir-autogen, elixir-format
+msgid "Edit Location"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/voice_picker.ex:117
+#, elixir-autogen, elixir-format
+msgid "Emotion"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/character_modal.ex:67
+#, elixir-autogen, elixir-format
+msgid "Gender"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/character_modal.ex:103
+#, elixir-autogen, elixir-format
+msgid "Personality"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/voice_picker.ex:41
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Voice Settings"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/home_live.ex:446
+#, elixir-autogen, elixir-format
+msgid "%{count} episodes"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/home_live.ex:168
+#: lib/astra_auto_ex_web/live/home_live.ex:369
+#, elixir-autogen, elixir-format
+msgid "AI Write"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/home_live.ex:695
+#, elixir-autogen, elixir-format
+msgid "AI generation failed: %{reason}"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/home_live.ex:218
+#, elixir-autogen, elixir-format, fuzzy
+msgid "All Projects"
+msgstr "My Projects"
+
+#: lib/astra_auto_ex_web/live/home_live.ex:795
+#, elixir-autogen, elixir-format
+msgid "Almost done..."
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/home_live.ex:793
+#, elixir-autogen, elixir-format
+msgid "Creating..."
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/home_live.ex:384
+#, elixir-autogen, elixir-format
+msgid "Describe your creative idea"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/home_live.ex:104
+#, elixir-autogen, elixir-format
+msgid "Drop .txt/.md file"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/home_live.ex:394
+#, elixir-autogen, elixir-format
+msgid "E.g. A modern urban revenge story about a woman who..."
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/home_live.ex:779
+#, elixir-autogen, elixir-format
+msgid "File too large (max 2MB)"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/home_live.ex:405
+#, elixir-autogen, elixir-format
+msgid "Generate Outline"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/home_live.ex:443
+#, elixir-autogen, elixir-format
+msgid "Generated Outline"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/home_live.ex:782
+#, elixir-autogen, elixir-format
+msgid "Only .txt and .md files accepted"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/home_live.ex:785
+#, elixir-autogen, elixir-format
+msgid "Only one file at a time"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/home_live.ex:76
+#, elixir-autogen, elixir-format
+msgid "Paste or type your story here, or drag a .txt/.md file..."
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/home_live.ex:546
+#, elixir-autogen, elixir-format
+msgid "Please enter a story first"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/home_live.ex:794
+#, elixir-autogen, elixir-format
+msgid "Polishing..."
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/home_live.ex:791
+#, elixir-autogen, elixir-format
+msgid "Preparing..."
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:197
+#, elixir-autogen, elixir-format
+msgid "Prompt"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/home_live.ex:56
+#, elixir-autogen, elixir-format
+msgid "Quick Create"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/home_live.ex:463
+#, elixir-autogen, elixir-format
+msgid "Regenerate"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/home_live.ex:227
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Search projects..."
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:221
+#, elixir-autogen, elixir-format
+msgid "System Prompt Template"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/home_live.ex:792
+#, elixir-autogen, elixir-format
+msgid "Thinking..."
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/home_live.ex:470
+#, elixir-autogen, elixir-format
+msgid "Use This Outline"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/asset_hub_live/index.ex:93
+#: lib/astra_auto_ex_web/live/asset_hub_live/index.ex:279
+#, elixir-autogen, elixir-format
+msgid "All Assets"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/asset_hub_live/index.ex:49
+#, elixir-autogen, elixir-format
+msgid "Assets use default models. To change, go to"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/asset_hub_live/index.ex:285
+#, elixir-autogen, elixir-format
+msgid "BGM"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/asset_hub_live/index.ex:195
+#, elixir-autogen, elixir-format
+msgid "Click the button above to add characters or scenes."
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/asset_hub_live/index.ex:175
+#, elixir-autogen, elixir-format
+msgid "Export"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/asset_hub_live/index.ex:63
+#, elixir-autogen, elixir-format
+msgid "Folders"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/asset_hub_live/index.ex:37
+#, elixir-autogen, elixir-format
+msgid "Manage your global characters, locations, and media assets."
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/asset_hub_live/index.ex:181
+#: lib/astra_auto_ex_web/live/asset_hub_live/index.ex:201
+#, elixir-autogen, elixir-format
+msgid "New Asset"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/asset_hub_live/index.ex:192
+#, elixir-autogen, elixir-format
+msgid "No assets yet"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/asset_hub_live/index.ex:122
+#, elixir-autogen, elixir-format
+msgid "No folders yet"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/asset_hub_live/index.ex:117
+#, elixir-autogen, elixir-format
+msgid "Project Assets"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/asset_hub_live/index.ex:282
+#, elixir-autogen, elixir-format, fuzzy
+msgid "Props"
+msgstr ""
+
+#: lib/astra_auto_ex_web/live/asset_hub_live/index.ex:284
+#, elixir-autogen, elixir-format
+msgid "SFX"
+msgstr ""

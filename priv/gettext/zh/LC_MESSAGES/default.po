@@ -1,0 +1,325 @@
+## "default" domain translations for zh locale.
+msgid ""
+msgstr ""
+"Language: zh\n"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:719
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1164
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1547
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1576
+#: lib/astra_auto_ex_web/live/workspace_live/character_modal.ex:123
+#: lib/astra_auto_ex_web/live/workspace_live/location_modal.ex:75
+#, elixir-autogen
+msgid "Save"
+msgstr "保存"
+
+#: lib/astra_auto_ex_web/live/home_live.ex:351
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:712
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1157
+#: lib/astra_auto_ex_web/live/workspace_live/character_modal.ex:118
+#: lib/astra_auto_ex_web/live/workspace_live/location_modal.ex:70
+#: lib/astra_auto_ex_web/live/workspace_live/voice_picker.ex:142
+#, elixir-autogen
+msgid "Cancel"
+msgstr "取消"
+
+msgid "Confirm"
+msgstr "确认"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1092
+#, elixir-autogen
+msgid "Delete"
+msgstr "删除"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:728
+#, elixir-autogen
+msgid "Edit"
+msgstr "编辑"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:202
+#: lib/astra_auto_ex_web/live/setup_live.ex:321
+#, elixir-autogen
+msgid "Back"
+msgstr "返回"
+
+#: lib/astra_auto_ex_web/live/setup_live.ex:134
+#: lib/astra_auto_ex_web/live/setup_live.ex:209
+#: lib/astra_auto_ex_web/live/setup_live.ex:324
+#, elixir-autogen
+msgid "Next"
+msgstr "下一步"
+
+msgid "Loading..."
+msgstr "加载中..."
+
+msgid "Search"
+msgstr "搜索"
+
+#: lib/astra_auto_ex_web/live/workspace_live/show.ex:230
+#, elixir-autogen
+msgid "Close"
+msgstr "关闭"
+
+msgid "Submit"
+msgstr "提交"
+
+msgid "Add"
+msgstr "添加"
+
+msgid "Remove"
+msgstr "移除"
+
+#: lib/astra_auto_ex_web/controllers/page_html/home.html.heex:70
+#, elixir-autogen
+msgid "Success"
+msgstr "成功"
+
+#: lib/astra_auto_ex_web/live/home_live.ex:512
+#: lib/astra_auto_ex_web/live/home_live.ex:571
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1550
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1579
+#, elixir-autogen
+msgid "Error"
+msgstr "错误"
+
+msgid "Warning"
+msgstr "警告"
+
+#: lib/astra_auto_ex_web/components/core_components.ex:392
+#, elixir-autogen, elixir-format
+msgid "Actions"
+msgstr "操作"
+
+#: lib/astra_auto_ex_web/components/layouts.ex:69
+#: lib/astra_auto_ex_web/components/layouts.ex:81
+#, elixir-autogen, elixir-format
+msgid "Attempting to reconnect"
+msgstr "正在重新连接"
+
+#: lib/astra_auto_ex_web/components/layouts/root.html.heex:82
+#: lib/astra_auto_ex_web/live/asset_hub_live/index.ex:52
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:578
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:588
+#, elixir-autogen, elixir-format
+msgid "Settings"
+msgstr "设置"
+
+#: lib/astra_auto_ex_web/components/layouts.ex:76
+#, elixir-autogen, elixir-format
+msgid "Something went wrong!"
+msgstr "出错了！"
+
+#: lib/astra_auto_ex_web/components/layouts.ex:64
+#, elixir-autogen, elixir-format
+msgid "We can't find the internet"
+msgstr "无法连接网络"
+
+#: lib/astra_auto_ex_web/components/core_components.ex:98
+#, elixir-autogen, elixir-format, fuzzy
+msgid "close"
+msgstr "关闭"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:596
+#, elixir-autogen, elixir-format
+msgid "AI Providers"
+msgstr "AI 厂商"
+
+#: lib/astra_auto_ex_web/components/layouts/root.html.heex:67
+#, elixir-autogen, elixir-format
+msgid "Asset Hub"
+msgstr "资产中心"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:599
+#, elixir-autogen, elixir-format
+msgid "Billing"
+msgstr "计费记录"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1067
+#, elixir-autogen, elixir-format
+msgid "Custom"
+msgstr "自定义"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1140
+#, elixir-autogen, elixir-format
+msgid "Custom Prompt"
+msgstr "自定义提示词"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1129
+#, elixir-autogen, elixir-format
+msgid "Default Template (read-only)"
+msgstr "默认模板（只读）"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1089
+#, elixir-autogen, elixir-format
+msgid "Delete this custom prompt?"
+msgstr "删除此自定义提示词？"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:597
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:842
+#, elixir-autogen, elixir-format
+msgid "Models"
+msgstr "模型配置"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:598
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1011
+#, elixir-autogen, elixir-format
+msgid "Prompt Tuning"
+msgstr "提示词调优"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1083
+#, elixir-autogen, elixir-format
+msgid "Save As"
+msgstr "另存为"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1076
+#, elixir-autogen, elixir-format
+msgid "View"
+msgstr "查看"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1014
+#, elixir-autogen, elixir-format
+msgid "View and customize system prompts for each pipeline step. Defaults are read-only — use Save As to create your own version."
+msgstr "查看和自定义管线各步骤的系统提示词。默认模板只读——使用「另存为」创建你自己的版本。"
+
+#: lib/astra_auto_ex_web/components/layouts/root.html.heex:51
+#, elixir-autogen, elixir-format
+msgid "Workspace"
+msgstr "工作空间"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1021
+#, elixir-autogen, elixir-format
+msgid "customized"
+msgstr "条已自定义"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:752
+#, elixir-autogen, elixir-format
+msgid "API Key"
+msgstr "API Key"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1247
+#, elixir-autogen, elixir-format
+msgid "API Key cannot be empty."
+msgstr "API Key 不能为空。"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:971
+#, elixir-autogen, elixir-format
+msgid "Available"
+msgstr "可用"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:966
+#, elixir-autogen, elixir-format
+msgid "Balance"
+msgstr "余额"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:764
+#, elixir-autogen, elixir-format
+msgid "Base URL"
+msgstr "Base URL"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:729
+#, elixir-autogen, elixir-format
+msgid "Configure"
+msgstr "配置"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:702
+#, elixir-autogen, elixir-format
+msgid "Connected"
+msgstr "已连接"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:832
+#, elixir-autogen, elixir-format
+msgid "Connection failed"
+msgstr "连接失败"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:830
+#, elixir-autogen, elixir-format
+msgid "Connection successful"
+msgstr "连接成功"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:778
+#, elixir-autogen, elixir-format
+msgid "Current key:"
+msgstr "当前密钥："
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:758
+#, elixir-autogen, elixir-format
+msgid "Enter API Key..."
+msgstr "输入 API Key..."
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1283
+#, elixir-autogen, elixir-format
+msgid "Enter an API key first."
+msgstr "请先输入 API Key。"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1342
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1375
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1427
+#, elixir-autogen, elixir-format
+msgid "Failed to save model selection"
+msgstr "保存模型选择失败"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:976
+#, elixir-autogen, elixir-format
+msgid "Frozen"
+msgstr "冻结"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1338
+#, elixir-autogen, elixir-format
+msgid "Model cleared"
+msgstr "模型已清除"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1371
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1423
+#, elixir-autogen, elixir-format
+msgid "Model updated"
+msgstr "模型已更新"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1393
+#, elixir-autogen, elixir-format
+msgid "No model selected"
+msgstr "未选择模型"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:989
+#, elixir-autogen, elixir-format
+msgid "Recent Usage"
+msgstr "近期用量"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:735
+#, elixir-autogen, elixir-format
+msgid "Remove this provider?"
+msgstr "移除此厂商？"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:933
+#, elixir-autogen, elixir-format
+msgid "Select"
+msgstr "选择"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:909
+#, elixir-autogen, elixir-format
+msgid "Select default models for each pipeline step. Only enabled models from configured providers are shown."
+msgstr "为每个管线步骤选择默认模型。仅显示已配置厂商中已启用的模型。"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:949
+#, elixir-autogen, elixir-format
+msgid "Test"
+msgstr "测试"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:818
+#, elixir-autogen, elixir-format
+msgid "Test Connection"
+msgstr "测试连接"
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:1386
+#, elixir-autogen, elixir-format
+msgid "Testing %{provider} / %{model}..."
+msgstr "正在测试 %{provider} / %{model}..."
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:816
+#, elixir-autogen, elixir-format
+msgid "Testing..."
+msgstr "测试中..."
+
+#: lib/astra_auto_ex_web/live/profile_live/index.ex:981
+#, elixir-autogen, elixir-format
+msgid "Total Spent"
+msgstr "总消费"
