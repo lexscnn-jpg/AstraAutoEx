@@ -138,22 +138,43 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
               </button>
             </div>
           </div>
-          <%!-- Center: Stage tabs --%>
+          <%!-- Center: Stage tabs with step indicator --%>
           <div class="flex items-center gap-0.5 p-1 rounded-xl bg-[var(--glass-bg-muted)]">
-            <%= for stage <- @stages do %>
+            <%= for {stage, idx} <- Enum.with_index(@stages) do %>
+              <% current_idx = Enum.find_index(@stages, &(&1 == @stage)) || 0 %>
               <button
                 phx-click="switch_stage"
                 phx-value-stage={stage}
                 class={[
-                  "relative px-4 py-1.5 rounded-lg text-sm font-medium transition-all",
+                  "relative px-4 py-1.5 rounded-lg text-sm font-medium transition-all duration-300",
                   if(@stage == stage,
-                    do:
-                      "text-[var(--glass-accent-from)] after:absolute after:bottom-0 after:left-1/2 after:-translate-x-1/2 after:w-5 after:h-0.5 after:bg-[var(--glass-accent-from)] after:rounded-full",
-                    else: "text-[var(--glass-text-tertiary)] hover:text-[var(--glass-text-primary)]"
+                    do: "bg-white/80 dark:bg-white/10 text-[var(--glass-accent-from)] shadow-sm",
+                    else:
+                      if(idx < current_idx,
+                        do: "text-[var(--glass-accent-from)]/60",
+                        else:
+                          "text-[var(--glass-text-tertiary)] hover:text-[var(--glass-text-primary)]"
+                      )
                   )
                 ]}
               >
-                {stage_label(stage)}
+                <span class="flex items-center gap-1.5">
+                  <span
+                    :if={idx < current_idx}
+                    class="w-3.5 h-3.5 rounded-full bg-[var(--glass-accent-from)]/20 text-[var(--glass-accent-from)] flex items-center justify-center"
+                  >
+                    <svg
+                      class="w-2.5 h-2.5"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="3"
+                      viewBox="0 0 24 24"
+                    >
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                    </svg>
+                  </span>
+                  {stage_label(stage)}
+                </span>
               </button>
             <% end %>
           </div>
@@ -240,6 +261,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                   auto_chain={@auto_chain}
                   full_auto_chain={@full_auto_chain}
                   pipeline_state={@pipeline_state}
+                  active_tasks={@active_tasks}
                 />
               <% "script" -> %>
                 <.script_stage
