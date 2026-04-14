@@ -578,6 +578,9 @@ defmodule AstraAutoExWeb.ProfileLive.Index do
      )
      |> assign(:expanded_group, nil)
      |> assign(:editing_prompt, nil)
+     |> assign(:testing_model_step, nil)
+     |> assign(:model_test_result, nil)
+     |> assign(:billing_summary, AstraAutoEx.Billing.Statistics.summary(user.id))
      |> assign(:page_title, dgettext("default", "Settings"))}
   end
 
@@ -589,7 +592,7 @@ defmodule AstraAutoExWeb.ProfileLive.Index do
     <Layouts.app flash={@flash} current_scope={@current_scope}>
       <div class="max-w-4xl mx-auto px-6 py-8">
         <h1 class="text-2xl font-bold mb-6">{dgettext("default", "Settings")}</h1>
-         <%!-- Tabs --%>
+        <%!-- Tabs --%>
         <div class="flex gap-1 mb-8 p-1 rounded-2xl bg-[var(--glass-bg-muted)] w-fit">
           <button
             :for={
@@ -613,7 +616,7 @@ defmodule AstraAutoExWeb.ProfileLive.Index do
             {elem(tab, 1)}
           </button>
         </div>
-         <%!-- Tab content --%>
+        <%!-- Tab content --%>
         <%= case @tab do %>
           <% "providers" -> %>
             <.providers_tab
@@ -640,7 +643,10 @@ defmodule AstraAutoExWeb.ProfileLive.Index do
               editing_prompt={@editing_prompt}
             />
           <% "billing" -> %>
-            <.billing_tab />
+            <.billing_tab
+              current_scope={@current_scope}
+              billing_summary={@billing_summary}
+            />
         <% end %>
       </div>
     </Layouts.app>
@@ -690,7 +696,7 @@ defmodule AstraAutoExWeb.ProfileLive.Index do
                 <circle cx="9" cy="20" r="1.5" /><circle cx="15" cy="20" r="1.5" />
               </svg>
             </div>
-            
+
             <div class={[
               "w-10 h-10 rounded-xl flex items-center justify-center font-bold text-sm",
               (provider_configured?(@provider_configs, provider.id) &&
@@ -699,7 +705,7 @@ defmodule AstraAutoExWeb.ProfileLive.Index do
             ]}>
               {String.first(provider.name)}
             </div>
-            
+
             <div>
               <div class="flex items-center gap-2">
                 <span class="font-semibold text-[var(--glass-text-primary)]">{provider.name}</span>
@@ -710,10 +716,10 @@ defmodule AstraAutoExWeb.ProfileLive.Index do
                   {dgettext("default", "Connected")}
                 </span>
               </div>
-               <span class="text-xs text-[var(--glass-text-tertiary)]">{provider.desc}</span>
+              <span class="text-xs text-[var(--glass-text-tertiary)]">{provider.desc}</span>
             </div>
           </div>
-          
+
           <div class="flex items-center gap-2">
             <%= if @editing == provider.id do %>
               <button phx-click="cancel_edit" class="glass-btn glass-btn-ghost text-sm py-1.5 px-3">
@@ -748,7 +754,7 @@ defmodule AstraAutoExWeb.ProfileLive.Index do
             <% end %>
           </div>
         </div>
-         <%!-- Expanded edit form --%>
+        <%!-- Expanded edit form --%>
         <div
           :if={@editing == provider.id}
           class="mt-4 pt-4 border-t border-[var(--glass-stroke-base)]"
@@ -766,7 +772,7 @@ defmodule AstraAutoExWeb.ProfileLive.Index do
                 autocomplete="off"
               />
             </div>
-             <%!-- Base URL (conditional) --%>
+            <%!-- Base URL (conditional) --%>
             <div :if={provider.has_base_url}>
               <label class="glass-label">{dgettext("default", "Base URL")}</label>
               <input
@@ -777,7 +783,7 @@ defmodule AstraAutoExWeb.ProfileLive.Index do
                 placeholder={provider.default_base_url || "https://api.example.com"}
               />
             </div>
-             <%!-- Current key mask --%>
+            <%!-- Current key mask --%>
             <p
               :if={provider_configured?(@provider_configs, provider.id)}
               class="text-xs text-[var(--glass-text-tertiary)]"
@@ -786,7 +792,7 @@ defmodule AstraAutoExWeb.ProfileLive.Index do
                 get_in(@provider_configs, [provider.id, "api_key"])
               )}
             </p>
-             <%!-- Test Connection --%>
+            <%!-- Test Connection --%>
             <div class="flex items-center gap-3">
               <button
                 phx-click="test_connection"
@@ -813,14 +819,15 @@ defmodule AstraAutoExWeb.ProfileLive.Index do
                       stroke-width="4"
                     >
                     </circle>
-                    
+
                     <path
                       class="opacity-75"
                       fill="currentColor"
                       d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
                     >
                     </path>
-                  </svg> {dgettext("default", "Testing...")}
+                  </svg>
+                  {dgettext("default", "Testing...")}
                 <% else %>
                   {dgettext("default", "Test Connection")}
                 <% end %>
@@ -841,13 +848,13 @@ defmodule AstraAutoExWeb.ProfileLive.Index do
               </span>
             </div>
           </div>
-           <%!-- Model tabs (enable/disable models) --%>
+          <%!-- Model tabs (enable/disable models) --%>
           <%= if map_size(provider.models) > 0 do %>
             <div class="mt-5 pt-4 border-t border-[var(--glass-stroke-base)]">
               <h4 class="text-sm font-semibold text-[var(--glass-text-primary)] mb-3">
                 {dgettext("default", "Models")}
               </h4>
-               <%!-- Type tabs --%>
+              <%!-- Type tabs --%>
               <div class="flex gap-1 mb-3 p-0.5 rounded-xl bg-[var(--glass-bg-muted)] w-fit">
                 <button
                   :for={type <- Map.keys(provider.models) |> Enum.sort()}
@@ -863,7 +870,7 @@ defmodule AstraAutoExWeb.ProfileLive.Index do
                   {model_type_label(type)}
                 </button>
               </div>
-               <%!-- Model list for current type tab --%>
+              <%!-- Model list for current type tab --%>
               <div class="space-y-2">
                 <%= for model <- Map.get(provider.models, @edit_model_tab, []) do %>
                   <div class="flex items-center justify-between py-1.5 px-3 rounded-lg hover:bg-[var(--glass-bg-muted)] transition-colors">
@@ -873,7 +880,7 @@ defmodule AstraAutoExWeb.ProfileLive.Index do
                         {model.id}
                       </code>
                     </div>
-                    
+
                     <label class="relative inline-flex items-center cursor-pointer">
                       <input
                         type="checkbox"
@@ -918,7 +925,7 @@ defmodule AstraAutoExWeb.ProfileLive.Index do
           "Select default models for each pipeline step. Only enabled models from configured providers are shown."
         )}
       </p>
-      
+
       <div :for={step <- @steps} class="glass-surface px-4 py-3 rounded-xl">
         <div class="flex items-center gap-3">
           <div class="flex items-center gap-2 w-36 flex-shrink-0">
@@ -932,7 +939,7 @@ defmodule AstraAutoExWeb.ProfileLive.Index do
               </span>
             </div>
           </div>
-          
+
           <form phx-change="set_pipeline_model" class="flex-1">
             <input type="hidden" name="step" value={step.id} />
             <select
@@ -940,7 +947,7 @@ defmodule AstraAutoExWeb.ProfileLive.Index do
               class="glass-input w-full text-sm py-1.5"
             >
               <option value="">-- {dgettext("default", "Select")} --</option>
-              
+
               <%= for {provider_name, model_id, model_name, provider_id} <- Map.get(@available_models, step.type, []) do %>
                 <option
                   value={"#{provider_id}/#{model_id}"}
@@ -953,15 +960,154 @@ defmodule AstraAutoExWeb.ProfileLive.Index do
               <% end %>
             </select>
           </form>
-          
+
           <button
             phx-click="test_pipeline_model"
             phx-value-step={step.id}
             class="glass-btn glass-btn-ghost text-xs py-1.5 px-3 flex-shrink-0 whitespace-nowrap"
             disabled={!Map.has_key?(@model_selections, step.id)}
           >
-            {dgettext("default", "Test")}
+            <%= if @testing_model_step == step.id do %>
+              <svg class="w-3.5 h-3.5 animate-spin inline mr-1" fill="none" viewBox="0 0 24 24">
+                <circle
+                  class="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  stroke-width="4"
+                />
+                <path
+                  class="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                />
+              </svg>
+              测试中...
+            <% else %>
+              {dgettext("default", "Test")}
+            <% end %>
           </button>
+        </div>
+      </div>
+      <%!-- Model test result modal --%>
+      <div
+        :if={@model_test_result}
+        class="fixed inset-0 z-[100] flex items-center justify-center animate-fade-in"
+      >
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" phx-click="clear_test_result">
+        </div>
+
+        <div
+          class={[
+            "relative bg-[var(--glass-bg-surface)] border rounded-2xl shadow-2xl max-w-lg w-full mx-4 overflow-hidden animate-scale-in",
+            if(@model_test_result.success,
+              do: "border-green-500/30",
+              else: "border-red-500/30"
+            )
+          ]}
+          style="backdrop-filter: blur(20px)"
+        >
+          <%!-- Header --%>
+          <div class="flex items-center justify-between px-5 py-3 border-b border-[var(--glass-stroke-soft)]">
+            <div class="flex items-center gap-2">
+              <span class={[
+                "text-sm font-bold",
+                if(@model_test_result.success, do: "text-green-400", else: "text-red-400")
+              ]}>
+                {if @model_test_result.success, do: "测试成功", else: "测试失败"}
+              </span>
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-medium bg-[var(--glass-bg-muted)] text-[var(--glass-text-secondary)]">
+                {@model_test_result.provider}/{@model_test_result.model}
+              </span>
+            </div>
+            <button
+              phx-click="clear_test_result"
+              class="text-[var(--glass-text-tertiary)] hover:text-[var(--glass-text-primary)] text-xl leading-none"
+            >
+              &times;
+            </button>
+          </div>
+          <%!-- Body --%>
+          <div class="px-5 py-4 space-y-4 max-h-[60vh] overflow-y-auto">
+            <%!-- Duration badge --%>
+            <div class="flex items-center gap-3">
+              <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[var(--glass-bg-muted)]">
+                <svg
+                  class="w-3.5 h-3.5 text-[var(--glass-text-tertiary)]"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <circle cx="12" cy="12" r="10" /><path d="M12 6v6l4 2" />
+                </svg>
+                <span class="text-xs font-mono text-[var(--glass-text-primary)]">
+                  {@model_test_result.duration}ms
+                </span>
+              </div>
+              <span class="text-[10px] text-[var(--glass-text-tertiary)]">返回时间</span>
+            </div>
+            <%!-- Input --%>
+            <div>
+              <label class="flex items-center gap-1.5 text-[10px] text-[var(--glass-text-tertiary)] uppercase tracking-wider mb-1.5">
+                <svg
+                  class="w-3 h-3"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M12 19V5m-7 7l7-7 7 7" />
+                </svg>
+                输入 (Request)
+              </label>
+              <div class="text-xs text-[var(--glass-text-secondary)] bg-[var(--glass-bg-muted)] rounded-lg p-3 font-mono border border-[var(--glass-stroke-soft)]">
+                你好，请回复一句话确认连接正常。
+              </div>
+            </div>
+            <%!-- Output --%>
+            <%= if @model_test_result.success do %>
+              <div>
+                <label class="flex items-center gap-1.5 text-[10px] text-[var(--glass-text-tertiary)] uppercase tracking-wider mb-1.5">
+                  <svg
+                    class="w-3 h-3"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M12 5v14m7-7l-7 7-7-7" />
+                  </svg>
+                  输出 (Response)
+                </label>
+                <div class="text-xs text-[var(--glass-text-primary)] bg-[var(--glass-bg-muted)] rounded-lg p-3 border border-[var(--glass-stroke-soft)] leading-relaxed">
+                  {@model_test_result.response}
+                </div>
+              </div>
+            <% else %>
+              <div>
+                <label class="flex items-center gap-1.5 text-[10px] text-red-400 uppercase tracking-wider mb-1.5">
+                  <svg
+                    class="w-3 h-3"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle cx="12" cy="12" r="10" /><line x1="15" y1="9" x2="9" y2="15" /><line
+                      x1="9"
+                      y1="9"
+                      x2="15"
+                      y2="15"
+                    />
+                  </svg>
+                  错误详情
+                </label>
+                <pre class="text-xs text-red-400 bg-[var(--glass-bg-muted)] rounded-lg p-3 font-mono whitespace-pre-wrap border border-red-500/20"><%= @model_test_result[:error] %></pre>
+              </div>
+            <% end %>
+          </div>
         </div>
       </div>
     </div>
@@ -977,34 +1123,47 @@ defmodule AstraAutoExWeb.ProfileLive.Index do
     <div class="space-y-4">
       <div class="glass-surface p-6">
         <h3 class="font-semibold text-[var(--glass-text-primary)] mb-4">
-          {dgettext("default", "Balance")}
+          {dgettext("default", "Usage Summary")}
         </h3>
-        
+
         <div class="grid grid-cols-3 gap-4">
           <div class="text-center">
             <p class="text-xs text-[var(--glass-text-tertiary)]">
-              {dgettext("default", "Available")}
+              {dgettext("default", "Total Calls")}
             </p>
-            
-            <p class="text-2xl font-bold text-[var(--glass-text-primary)]">$0.00</p>
+            <p class="text-2xl font-bold text-[var(--glass-text-primary)]">
+              {@billing_summary.total_calls}
+            </p>
           </div>
-          
-          <div class="text-center">
-            <p class="text-xs text-[var(--glass-text-tertiary)]">{dgettext("default", "Frozen")}</p>
-            
-            <p class="text-2xl font-bold text-[var(--glass-text-tertiary)]">$0.00</p>
-          </div>
-          
+
           <div class="text-center">
             <p class="text-xs text-[var(--glass-text-tertiary)]">
               {dgettext("default", "Total Spent")}
             </p>
-            
-            <p class="text-2xl font-bold text-[var(--glass-text-tertiary)]">$0.00</p>
+            <p class="text-2xl font-bold text-[var(--glass-accent-from)]">
+              ¥{Decimal.round(@billing_summary.total_cost, 2)}
+            </p>
+          </div>
+
+          <div class="text-center">
+            <p class="text-xs text-[var(--glass-text-tertiary)]">
+              {dgettext("default", "Status")}
+            </p>
+            <p class="text-2xl font-bold text-green-400">
+              {if @billing_summary.total_calls > 0, do: "活跃", else: "待使用"}
+            </p>
           </div>
         </div>
+
+        <%= if @billing_summary.total_calls == 0 do %>
+          <div class="mt-4 p-3 rounded-lg bg-[var(--glass-bg-muted)] text-center">
+            <p class="text-xs text-[var(--glass-text-tertiary)]">
+              调用 AI 生成功能后，使用记录将自动出现在此处
+            </p>
+          </div>
+        <% end %>
       </div>
-       <%!-- Detailed Stats Panel --%>
+      <%!-- Detailed Stats Panel --%>
       <.live_component
         module={AstraAutoExWeb.ProfileLive.BillingStats}
         id="billing-stats"
@@ -1028,7 +1187,7 @@ defmodule AstraAutoExWeb.ProfileLive.Index do
           <h2 class="text-lg font-semibold text-[var(--glass-text-primary)]">
             {dgettext("default", "Prompt Tuning")}
           </h2>
-          
+
           <p class="text-xs text-[var(--glass-text-tertiary)] mt-1">
             {dgettext(
               "default",
@@ -1036,12 +1195,12 @@ defmodule AstraAutoExWeb.ProfileLive.Index do
             )}
           </p>
         </div>
-        
+
         <div :if={map_size(@prompt_overrides) > 0} class="glass-chip glass-chip-warning text-xs">
           {map_size(@prompt_overrides)} {dgettext("default", "customized")}
         </div>
       </div>
-      
+
       <div :for={group <- @groups} class="glass-surface rounded-xl overflow-hidden">
         <button
           phx-click="toggle_prompt_group"
@@ -1051,9 +1210,10 @@ defmodule AstraAutoExWeb.ProfileLive.Index do
           <div class="flex items-center gap-3">
             <span class="text-sm font-semibold text-[var(--glass-text-primary)]">
               {group.label_zh} — {group.label_en}
-            </span> <span class="glass-chip text-[10px]">{length(group.prompts)}</span>
+            </span>
+            <span class="glass-chip text-[10px]">{length(group.prompts)}</span>
           </div>
-          
+
           <svg
             class={"w-4 h-4 text-[var(--glass-text-tertiary)] transition-transform #{if @expanded_group == group.id, do: "rotate-180"}"}
             fill="none"
@@ -1082,7 +1242,7 @@ defmodule AstraAutoExWeb.ProfileLive.Index do
                   {dgettext("default", "Custom")}
                 </span>
               </div>
-              
+
               <div class="flex items-center gap-1">
                 <button
                   phx-click="view_prompt"
@@ -1109,14 +1269,14 @@ defmodule AstraAutoExWeb.ProfileLive.Index do
                 </button>
               </div>
             </div>
-            
+
             <code class="text-[10px] text-[var(--glass-text-tertiary)] opacity-60 mt-0.5 block">
               {prompt.id}
             </code>
           </div>
         </div>
       </div>
-       <%!-- Prompt View/Edit Modal --%>
+      <%!-- Prompt View/Edit Modal --%>
       <%= if @editing_prompt do %>
         <div class="fixed inset-0 z-50 flex items-center justify-center">
           <div class="absolute inset-0 bg-black/60" phx-click="close_prompt_modal" />
@@ -1126,9 +1286,9 @@ defmodule AstraAutoExWeb.ProfileLive.Index do
                 <h3 class="text-lg font-bold text-[var(--glass-text-primary)]">
                   {@editing_prompt.label}
                 </h3>
-                 <code class="text-xs text-[var(--glass-text-tertiary)]">{@editing_prompt.id}</code>
+                <code class="text-xs text-[var(--glass-text-tertiary)]">{@editing_prompt.id}</code>
               </div>
-              
+
               <button
                 phx-click="close_prompt_modal"
                 class="text-[var(--glass-text-tertiary)] hover:text-[var(--glass-text-primary)] text-xl"
@@ -1136,22 +1296,24 @@ defmodule AstraAutoExWeb.ProfileLive.Index do
                 &times;
               </button>
             </div>
-            
+
             <div class="flex-1 overflow-y-auto space-y-4">
               <%!-- Default (read-only) --%>
               <div>
                 <label class="text-xs text-[var(--glass-text-tertiary)] mb-1 block">
                   {dgettext("default", "Default Template (read-only)")}
-                </label> <textarea
+                </label>
+                <textarea
                   class="glass-input w-full h-48 resize-none text-xs font-mono"
                   readonly
                 ><%= @editing_prompt.default_text %></textarea>
               </div>
-               <%!-- Custom override --%>
+              <%!-- Custom override --%>
               <div :if={@editing_prompt.mode == :edit}>
                 <label class="text-xs text-[var(--glass-text-tertiary)] mb-1 block">
                   {dgettext("default", "Custom Prompt")}
-                </label> <textarea
+                </label>
+                <textarea
                   id="prompt-override-textarea"
                   phx-hook="AutoResize"
                   name="custom_text"
@@ -1160,7 +1322,7 @@ defmodule AstraAutoExWeb.ProfileLive.Index do
                 ><%= @editing_prompt.custom_text %></textarea>
               </div>
             </div>
-            
+
             <div class="flex justify-end gap-2 mt-4 pt-3 border-t border-[var(--glass-stroke-base)]">
               <button
                 phx-click="close_prompt_modal"
@@ -1388,6 +1550,10 @@ defmodule AstraAutoExWeb.ProfileLive.Index do
     end
   end
 
+  def handle_event("clear_test_result", _, socket) do
+    {:noreply, assign(socket, :model_test_result, nil)}
+  end
+
   def handle_event("test_pipeline_model", %{"step" => step_id}, socket) do
     case Map.get(socket.assigns.model_selections, step_id) do
       %{"provider" => provider, "model" => model} ->
@@ -1525,19 +1691,37 @@ defmodule AstraAutoExWeb.ProfileLive.Index do
 
   @impl true
   def handle_info({:test_model_result, _step_id, provider, model, result, duration}, socket) do
-    msg =
+    test_result =
       case result do
         {:ok, text} ->
-          "✅ #{provider}/#{model} 测试成功（#{duration}ms）\n\n请求：你好，请回复一句话确认连接正常。\n响应：#{String.slice(to_string(text), 0..200)}"
+          %{
+            success: true,
+            provider: provider,
+            model: model,
+            duration: duration,
+            response: String.slice(to_string(text), 0..500)
+          }
 
         {:error, reason} ->
-          "❌ #{provider}/#{model} 测试失败（#{duration}ms）\n\n错误：#{inspect(reason)}"
+          %{
+            success: false,
+            provider: provider,
+            model: model,
+            duration: duration,
+            error: inspect(reason)
+          }
       end
+
+    flash_msg =
+      if test_result.success,
+        do: "✅ #{provider}/#{model} 测试成功（#{duration}ms）",
+        else: "❌ #{provider}/#{model} 测试失败（#{duration}ms）"
 
     {:noreply,
      socket
      |> assign(:testing_model_step, nil)
-     |> put_flash(if(match?({:ok, _}, result), do: :info, else: :error), msg)}
+     |> assign(:model_test_result, test_result)
+     |> put_flash(if(test_result.success, do: :info, else: :error), flash_msg)}
   end
 
   def handle_info({:test_connection_result, provider_id, result}, socket) do

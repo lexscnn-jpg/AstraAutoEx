@@ -66,7 +66,8 @@ defmodule AstraAutoEx.AssetHub.Generator do
     model_config = Helpers.get_model_config(user_id, nil, :image)
     provider = model_config["provider"]
 
-    prompt = "场景参考图：#{location.name}。#{location.summary || location.description || ""}。画面要有环境氛围感，展示场景的整体布局与特征。"
+    prompt =
+      "场景参考图：#{location.name}。#{location.summary || location.description || ""}。画面要有环境氛围感，展示场景的整体布局与特征。"
 
     request = %{
       prompt: prompt,
@@ -162,7 +163,9 @@ defmodule AstraAutoEx.AssetHub.Generator do
 
     with {:ok, config} <- Helpers.get_provider_config(user_id, "minimax") do
       request = %{
-        prompt: bgm.description || bgm.prompt || "#{bgm.name} - #{bgm.category || "cinematic"} style background music",
+        prompt:
+          bgm.description || bgm.prompt ||
+            "#{bgm.name} - #{bgm.category || "cinematic"} style background music",
         model: "music-2.6",
         lyrics: bgm.lyrics,
         is_instrumental: bgm.is_instrumental || true

@@ -56,8 +56,12 @@ defmodule AstraAutoEx.Workers.Handlers.VideoPanel do
                 payload["custom_prompt"]
               else
                 case AstraAutoEx.AI.FlPromptRewriter.rewrite(
-                  task.user_id, panel, next_panel, prompt, "default"
-                ) do
+                       task.user_id,
+                       panel,
+                       next_panel,
+                       prompt,
+                       "default"
+                     ) do
                   {:ok, rewritten} -> rewritten
                   _ -> prompt
                 end
@@ -134,24 +138,78 @@ defmodule AstraAutoEx.Workers.Handlers.VideoPanel do
 end
 
 defmodule AstraAutoEx.Workers.Handlers.LipSync do
-  @moduledoc "Lip-sync video generation — overlays voice audio onto video."
+  @moduledoc """
+  Lip sync handler — overlays voice audio onto panel video.
+
+  Loads panel video_url + voice_line audio_url → submits to lip sync provider
+  (FAL Kling / Vidu / Bailian) → stores result as lip_sync_video_url on panel.
+  """
+  require Logger
   alias AstraAutoEx.Workers.Handlers.Helpers
+  alias AstraAutoEx.{Production, Tasks}
+  alias AstraAutoEx.AI.LipSync, as: LipSyncAI
 
   def execute(task) do
     payload = task.payload || %{}
-    _model_config = Helpers.get_model_config(task.user_id, task.project_id, :video)
+    panel_id = payload["panel_id"] || task.target_id
 
-    request = %{
-      video_url: payload["video_url"],
-      audio_url: payload["audio_url"],
-      model: "fal-sync",
-      model_id: "fal-sync"
+    Helpers.update_progress(task, 5)
+
+    panel = Production.get_panel!(panel_id)
+
+    # Resolve video and audio URLs
+    video_url = payload["video_url"] || panel.video_url
+    audio_url = payload["audio_url"] || panel.audio_url
+
+    unless video_url && video_url != "" do
+      {:error, "Panel has no video. Generate video first."}
+    end
+
+    unless audio_url && audio_url != "" do
+      {:error, "No audio available. Generate voice first."}
+    end
+
+    Helpers.update_progress(task, 20)
+
+    # Resolve lip sync model from user preferences or payload
+    model_key =
+      payload["lip_sync_model"] ||
+        get_lip_sync_model(task.user_id, task.project_id)
+
+    params = %{
+      video_url: video_url,
+      audio_url: audio_url,
+      model_key: model_key
     }
 
-    # FAL lip-sync endpoint
-    case Helpers.generate_video(task.user_id, "fal", request) do
-      {:ok, result} -> {:ok, result}
-      {:error, reason} -> {:error, reason}
+    Helpers.update_progress(task, 40)
+
+    case LipSyncAI.submit(task.user_id, params) do
+      {:ok, %{external_id: ext_id} = result} ->
+        # Async task — store external_id for polling
+        Tasks.update_task(task, %{external_id: ext_id, status: "processing"})
+        Logger.info("[LipSync] Task submitted: #{ext_id} for panel #{panel_id}")
+        {:ok, result}
+
+      {:ok, %{video_url: url}} ->
+        # Synchronous result (unlikely but handle it)
+        Production.update_panel(panel, %{lip_sync_video_url: url})
+        Helpers.update_progress(task, 95)
+        {:ok, %{video_url: url, lip_synced: true}}
+
+      {:error, reason} ->
+        {:error, reason}
+    end
+  end
+
+  defp get_lip_sync_model(user_id, _project_id) do
+    case AstraAutoEx.Accounts.get_user_preference(user_id) do
+      %{model_selections: selections} when is_map(selections) ->
+        Map.get(selections, "lipsync") ||
+          "fal::fal-ai/kling-video/lipsync/audio-to-video"
+
+      _ ->
+        "fal::fal-ai/kling-video/lipsync/audio-to-video"
     end
   end
 end
@@ -252,7 +310,9 @@ defmodule AstraAutoEx.Workers.Handlers.VideoCompose do
 
           {:error, reason} ->
             # FFmpeg not available or failed — store metadata only
-            Logger.warning("[VideoCompose] FFmpeg unavailable: #{inspect(reason)}, storing metadata")
+            Logger.warning(
+              "[VideoCompose] FFmpeg unavailable: #{inspect(reason)}, storing metadata"
+            )
 
             %{
               episode_id: episode_id,

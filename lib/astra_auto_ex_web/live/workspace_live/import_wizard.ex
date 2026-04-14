@@ -32,7 +32,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.ImportWizard do
     <div class="glass-card p-6">
       <div class="flex items-center justify-between mb-6">
         <h3 class="text-lg font-semibold text-[var(--glass-text-primary)]">智能导入向导</h3>
-        
+
         <button
           type="button"
           phx-click="close_wizard"
@@ -66,7 +66,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.ImportWizard do
                 {num}
               <% end %>
             </div>
-            
+
             <span class={"text-xs " <> if(num == @step, do: "text-[var(--glass-text-primary)]", else: "text-[var(--glass-text-tertiary)]")}>
               {label}
             </span>
@@ -95,7 +95,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.ImportWizard do
     ~H"""
     <div class="space-y-4">
       <p class="text-sm text-[var(--glass-text-secondary)]">选择你的故事来源方式：</p>
-      
+
       <div class="grid grid-cols-2 gap-3">
         <button
           type="button"
@@ -106,9 +106,9 @@ defmodule AstraAutoExWeb.WorkspaceLive.ImportWizard do
             if(@source_type == "text", do: "ring-2 ring-[var(--glass-accent-from)]", else: "hover:ring-1 hover:ring-[var(--glass-stroke-base)]")}
         >
           <div class="text-2xl mb-2">📝</div>
-          
+
           <div class="text-sm font-medium text-[var(--glass-text-primary)]">粘贴文本</div>
-          
+
           <div class="text-xs text-[var(--glass-text-tertiary)] mt-1">直接输入故事内容</div>
         </button>
         <button
@@ -120,13 +120,13 @@ defmodule AstraAutoExWeb.WorkspaceLive.ImportWizard do
             if(@source_type == "file", do: "ring-2 ring-[var(--glass-accent-from)]", else: "hover:ring-1 hover:ring-[var(--glass-stroke-base)]")}
         >
           <div class="text-2xl mb-2">📄</div>
-          
+
           <div class="text-sm font-medium text-[var(--glass-text-primary)]">上传文件</div>
-          
+
           <div class="text-xs text-[var(--glass-text-tertiary)] mt-1">.txt / .md 文件</div>
         </button>
       </div>
-       <textarea
+      <textarea
         phx-change="update_raw_text"
         phx-target={@myself}
         name="raw_text"
@@ -163,14 +163,14 @@ defmodule AstraAutoExWeb.WorkspaceLive.ImportWizard do
             />
           </svg>
         </div>
-        
+
         <p class="text-[var(--glass-text-primary)] font-medium mb-2">AI 正在分析你的故事...</p>
-        
+
         <p class="text-sm text-[var(--glass-text-tertiary)]">自动识别剧集分割点、角色和场景</p>
       <% else %>
         <%= if @error do %>
           <div class="text-red-400 mb-4">{@error}</div>
-          
+
           <button
             type="button"
             phx-click="retry_parse"
@@ -181,7 +181,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.ImportWizard do
           </button>
         <% else %>
           <p class="text-[var(--glass-text-secondary)]">解析完成</p>
-          
+
           <button
             type="button"
             phx-click="next_step"
@@ -202,7 +202,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.ImportWizard do
       <p class="text-sm text-[var(--glass-text-secondary)]">
         AI 已将故事拆分为 {length(@parsed_episodes)} 集。你可以调整顺序和内容：
       </p>
-      
+
       <div class="space-y-3 max-h-[400px] overflow-y-auto">
         <%= for {ep, idx} <- Enum.with_index(@parsed_episodes) do %>
           <div class="glass-card p-4">
@@ -214,7 +214,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.ImportWizard do
                 <div class="text-sm font-medium text-[var(--glass-text-primary)] truncate">
                   {Map.get(ep, :title, "第 #{idx + 1} 集")}
                 </div>
-                
+
                 <div class="text-xs text-[var(--glass-text-tertiary)] line-clamp-2 mt-1">
                   {String.slice(Map.get(ep, :content, ""), 0..120)}...
                 </div>
@@ -223,11 +223,11 @@ defmodule AstraAutoExWeb.WorkspaceLive.ImportWizard do
           </div>
         <% end %>
       </div>
-      
+
       <%= if @parsed_episodes == [] do %>
         <div class="text-center py-8 text-[var(--glass-text-tertiary)]">未检测到剧集分割。将整段文本作为单集处理。</div>
       <% end %>
-      
+
       <div class="flex justify-between">
         <button
           type="button"
@@ -264,14 +264,14 @@ defmodule AstraAutoExWeb.WorkspaceLive.ImportWizard do
           </svg>
           <div>
             <div class="text-sm font-medium text-green-400">准备就绪</div>
-            
+
             <div class="text-xs text-[var(--glass-text-tertiary)]">
               共 {length(@parsed_episodes)} 集，{String.length(@raw_text)} 字
             </div>
           </div>
         </div>
       </div>
-      
+
       <div class="flex justify-between">
         <button
           type="button"

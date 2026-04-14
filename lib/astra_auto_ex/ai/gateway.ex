@@ -3,7 +3,7 @@ defmodule AstraAutoEx.AI.Gateway do
   Routes AI requests to the appropriate provider based on model name.
   """
 
-  alias AstraAutoEx.AI.Providers.{Fal, Ark, Google, Minimax, Apiyi, RunningHub}
+  alias AstraAutoEx.AI.Providers.{Fal, Ark, Google, Minimax, Apiyi, RunningHub, Vidu, Bailian}
 
   @provider_map %{
     "fal" => Fal,
@@ -11,7 +11,9 @@ defmodule AstraAutoEx.AI.Gateway do
     "google" => Google,
     "minimax" => Minimax,
     "apiyi" => Apiyi,
-    "runninghub" => RunningHub
+    "runninghub" => RunningHub,
+    "vidu" => Vidu,
+    "bailian" => Bailian
   }
 
   def get_provider(provider_key) do

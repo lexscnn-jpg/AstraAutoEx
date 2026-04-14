@@ -295,6 +295,23 @@ const Hooks = {
     destroyed() {
       document.removeEventListener("click", this.handler, true)
     }
+  },
+
+  // AutoDismissFlash — auto-dismiss flash/toast after 4s with exit animation
+  AutoDismissFlash: {
+    mounted() {
+      this._timer = setTimeout(() => {
+        this.el.classList.remove("animate-toast-in")
+        this.el.classList.add("animate-toast-out")
+        this.el.addEventListener("animationend", () => {
+          this.el.style.display = "none"
+          this.pushEvent("lv:clear-flash", {key: this.el.id.replace("flash-", "")})
+        }, {once: true})
+      }, 4000)
+    },
+    destroyed() {
+      if (this._timer) clearTimeout(this._timer)
+    }
   }
 }
 

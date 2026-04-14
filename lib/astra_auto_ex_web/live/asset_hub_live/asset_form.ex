@@ -64,6 +64,7 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetForm do
           <h3 class="text-lg font-semibold text-[var(--glass-text-primary)]">
             {form_title(@asset_type, @editing)}
           </h3>
+
           <button
             type="button"
             phx-click="close_asset_form"
@@ -83,7 +84,6 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetForm do
 
         <form phx-submit="save_asset" phx-target={@myself} class="space-y-4">
           <input type="hidden" name="asset_type" value={@asset_type} />
-
           <%!-- Type selector (only in create mode) --%>
           <%= if !@editing do %>
             <div class="flex flex-wrap gap-1.5 pb-2 border-b border-[var(--glass-stroke-base)]">
@@ -96,8 +96,10 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetForm do
                   class={[
                     "px-2.5 py-1 rounded text-xs font-medium transition-all",
                     if(@asset_type == type,
-                      do: "bg-[var(--glass-accent-from)]/20 text-[var(--glass-accent-from)] ring-1 ring-[var(--glass-accent-from)]/30",
-                      else: "bg-[var(--glass-bg-muted)] text-[var(--glass-text-secondary)] hover:text-[var(--glass-text-primary)]"
+                      do:
+                        "bg-[var(--glass-accent-from)]/20 text-[var(--glass-accent-from)] ring-1 ring-[var(--glass-accent-from)]/30",
+                      else:
+                        "bg-[var(--glass-bg-muted)] text-[var(--glass-text-secondary)] hover:text-[var(--glass-text-primary)]"
                     )
                   ]}
                 >
@@ -106,7 +108,6 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetForm do
               <% end %>
             </div>
           <% end %>
-
           <%!-- Name (all types) --%>
           <div>
             <label class="block text-xs text-[var(--glass-text-tertiary)] mb-1">名称 *</label>
@@ -121,7 +122,6 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetForm do
               placeholder="输入名称..."
             />
           </div>
-
           <%!-- Character-specific fields --%>
           <%= if @asset_type == "character" do %>
             <div>
@@ -136,6 +136,7 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetForm do
                 placeholder="别名1, 别名2..."
               />
             </div>
+
             <div class="grid grid-cols-2 gap-3">
               <div>
                 <label class="block text-xs text-[var(--glass-text-tertiary)] mb-1">性别</label>
@@ -146,10 +147,13 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetForm do
                   phx-target={@myself}
                 >
                   <option value="">未指定</option>
+
                   <option value="male" selected={@gender == "male"}>男</option>
+
                   <option value="female" selected={@gender == "female"}>女</option>
                 </select>
               </div>
+
               <div>
                 <label class="block text-xs text-[var(--glass-text-tertiary)] mb-1">候选数量（抽卡）</label>
                 <select
@@ -165,7 +169,6 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetForm do
               </div>
             </div>
           <% end %>
-
           <%!-- Prop-specific --%>
           <%= if @asset_type == "prop" do %>
             <div>
@@ -177,15 +180,19 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetForm do
                 phx-target={@myself}
               >
                 <option value="">通用</option>
+
                 <option value="weapon" selected={@prop_type == "weapon"}>武器</option>
+
                 <option value="tool" selected={@prop_type == "tool"}>工具</option>
+
                 <option value="accessory" selected={@prop_type == "accessory"}>配饰</option>
+
                 <option value="vehicle" selected={@prop_type == "vehicle"}>载具</option>
+
                 <option value="food" selected={@prop_type == "food"}>食物</option>
               </select>
             </div>
           <% end %>
-
           <%!-- Voice-specific --%>
           <%= if @asset_type == "voice" do %>
             <div class="grid grid-cols-2 gap-3">
@@ -198,9 +205,11 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetForm do
                   phx-target={@myself}
                 >
                   <option value="male" selected={@gender == "male"}>男</option>
+
                   <option value="female" selected={@gender == "female"}>女</option>
                 </select>
               </div>
+
               <div>
                 <label class="block text-xs text-[var(--glass-text-tertiary)] mb-1">语言</label>
                 <select
@@ -210,13 +219,14 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetForm do
                   phx-target={@myself}
                 >
                   <option value="zh" selected={@language == "zh"}>中文</option>
+
                   <option value="en" selected={@language == "en"}>English</option>
+
                   <option value="ja" selected={@language == "ja"}>日本語</option>
                 </select>
               </div>
             </div>
           <% end %>
-
           <%!-- BGM-specific --%>
           <%= if @asset_type == "bgm" do %>
             <div>
@@ -228,24 +238,29 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetForm do
                 phx-target={@myself}
               >
                 <option value="">通用</option>
+
                 <option value="epic">史诗</option>
+
                 <option value="romantic">浪漫</option>
+
                 <option value="suspense">悬疑</option>
+
                 <option value="comedy">喜剧</option>
+
                 <option value="sad">悲伤</option>
+
                 <option value="action">动作</option>
               </select>
             </div>
+
             <div class="flex items-center gap-2">
               <input type="checkbox" name="is_instrumental" value="true" class="glass-input" />
               <label class="text-xs text-[var(--glass-text-secondary)]">纯音乐（无人声）</label>
             </div>
           <% end %>
-
           <%!-- Description (all types) --%>
           <div>
-            <label class="block text-xs text-[var(--glass-text-tertiary)] mb-1">描述</label>
-            <textarea
+            <label class="block text-xs text-[var(--glass-text-tertiary)] mb-1">描述</label> <textarea
               name="description"
               rows="3"
               phx-change="update_field"
@@ -254,10 +269,8 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetForm do
               placeholder={desc_placeholder(@asset_type)}
             ><%= @description %></textarea>
           </div>
-
           <%!-- Error --%>
           <div :if={@error} class="text-xs text-red-400">{@error}</div>
-
           <%!-- Actions --%>
           <div class="flex items-center justify-between pt-2">
             <div class="text-xs text-[var(--glass-text-tertiary)]">
@@ -265,6 +278,7 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetForm do
                 保存后可生成参考图
               <% end %>
             </div>
+
             <div class="flex gap-2">
               <button type="button" phx-click="close_asset_form" class="glass-btn px-4 py-2 text-sm">
                 取消

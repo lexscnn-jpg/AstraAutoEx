@@ -45,7 +45,8 @@ defmodule AstraAutoEx.Media.SubtitleGenerator do
   """
   @spec calculate_timestamps([map()]) :: [map()]
   def calculate_timestamps(voice_lines) do
-    gap = 0.3  # 300ms gap between lines
+    # 300ms gap between lines
+    gap = 0.3
 
     {lines, _} =
       Enum.map_reduce(voice_lines, 0.0, fn vl, current_time ->

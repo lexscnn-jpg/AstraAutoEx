@@ -47,6 +47,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.PanelEditor do
           <h2 class="text-lg font-bold text-[var(--glass-text-primary)]">
             Panel #{@panel.panel_index + 1}
           </h2>
+
           <button
             phx-click="close_panel_editor"
             class="text-[var(--glass-text-tertiary)] hover:text-[var(--glass-text-primary)] text-xl"
@@ -97,7 +98,6 @@ defmodule AstraAutoExWeb.WorkspaceLive.PanelEditor do
                 {if @panel.video_url, do: "Regenerate Video", else: "Generate Video"}
               </button>
             </div>
-
             <%!-- Upload custom image --%>
             <div class="mt-3">
               <form phx-change="validate_image" phx-submit="upload_image" phx-target={@myself}>
@@ -110,6 +110,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.PanelEditor do
                     Drop image to replace, or click to browse
                   </p>
                 </div>
+
                 <%= for entry <- @uploads.panel_image.entries do %>
                   <div class="flex items-center gap-2 mt-2 text-xs">
                     <div class="flex-1">
@@ -121,6 +122,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.PanelEditor do
                         />
                       </div>
                     </div>
+
                     <button type="submit" class="glass-btn glass-btn-primary px-2 py-1 text-[10px]">
                       Upload
                     </button>
@@ -128,23 +130,21 @@ defmodule AstraAutoExWeb.WorkspaceLive.PanelEditor do
                 <% end %>
               </form>
             </div>
-
             <%!-- Metadata --%>
             <div class="mt-3 space-y-1 text-xs text-[var(--glass-text-tertiary)] opacity-60">
               <div :if={@panel.image_url}>
                 Image: {String.slice(@panel.image_url || "", -30..-1//1)}
               </div>
+
               <div :if={@panel.video_url}>
                 Video: {String.slice(@panel.video_url || "", -30..-1//1)}
               </div>
             </div>
           </div>
-
           <%!-- Right: Edit fields --%>
           <div class="w-1/2 p-4 overflow-y-auto">
             <.form for={@form} phx-submit="save_panel" phx-target={@myself} class="space-y-4">
               <input type="hidden" name="panel_id" value={@panel.id} />
-
               <div>
                 <label class="text-xs text-[var(--glass-text-tertiary)] mb-1 block">
                   Description
@@ -169,10 +169,12 @@ defmodule AstraAutoExWeb.WorkspaceLive.PanelEditor do
                     <% end %>
                   </select>
                 </div>
+
                 <div>
                   <label class="text-xs text-[var(--glass-text-tertiary)] mb-1 block">Camera</label>
                   <select name="panel[camera_move]" class="glass-input w-full text-sm">
                     <option value="">None</option>
+
                     <%= for cm <- @camera_moves do %>
                       <option value={cm} selected={@form[:camera_move].value == cm}>
                         {format_camera(cm)}
@@ -183,8 +185,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.PanelEditor do
               </div>
 
               <div>
-                <label class="text-xs text-[var(--glass-text-tertiary)] mb-1 block">Dialogue</label>
-                <textarea
+                <label class="text-xs text-[var(--glass-text-tertiary)] mb-1 block">Dialogue</label> <textarea
                   name="panel[dialogue]"
                   class="glass-input w-full h-16 resize-none text-sm"
                   placeholder="Character dialogue in this panel..."
@@ -203,9 +204,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.PanelEditor do
               </div>
 
               <div>
-                <label class="text-xs text-[var(--glass-text-tertiary)] mb-1 block">
-                  Characters
-                </label>
+                <label class="text-xs text-[var(--glass-text-tertiary)] mb-1 block">Characters</label>
                 <input
                   type="text"
                   name="panel[characters]"

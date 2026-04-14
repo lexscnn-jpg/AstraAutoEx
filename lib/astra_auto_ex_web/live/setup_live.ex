@@ -49,8 +49,7 @@ defmodule AstraAutoExWeb.SetupLive do
         <h2 class="text-2xl font-bold mb-2 text-[var(--glass-text-primary)]">
           {dgettext("setup", "AstraAutoEx Setup")}
         </h2>
-        
-    <!-- Step indicator -->
+        <!-- Step indicator -->
         <div class="flex gap-2 mb-8">
           <%= for {step_atom, label} <- [{:admin, dgettext("setup", "Admin")}, {:providers, dgettext("setup", "Providers")}, {:storage, dgettext("setup", "Storage")}, {:summary, dgettext("setup", "Done")}] do %>
             <div class={[
@@ -63,8 +62,7 @@ defmodule AstraAutoExWeb.SetupLive do
             </div>
           <% end %>
         </div>
-        
-    <!-- Step content -->
+        <!-- Step content -->
         <%= case @step do %>
           <% :admin -> %>
             <.admin_step form={@admin_form} />
@@ -93,6 +91,7 @@ defmodule AstraAutoExWeb.SetupLive do
     ~H"""
     <div>
       <h3 class="text-lg font-semibold mb-4">{dgettext("setup", "Create Admin Account")}</h3>
+
       <.form for={@form} id="admin-form" phx-submit="save_admin" phx-change="validate_admin">
         <div class="form-control mb-3">
           <label class="glass-label mb-1"><span>{dgettext("auth", "Username")}</span></label>
@@ -103,9 +102,9 @@ defmodule AstraAutoExWeb.SetupLive do
             class={["glass-input", @form[:username].errors != [] && "input-error"]}
             required
             autofocus
-          />
-          <.field_errors field={@form[:username]} />
+          /> <.field_errors field={@form[:username]} />
         </div>
+
         <div class="form-control mb-3">
           <label class="glass-label mb-1"><span>{dgettext("setup", "Email")}</span></label>
           <input
@@ -114,9 +113,9 @@ defmodule AstraAutoExWeb.SetupLive do
             value={@form[:email].value}
             class={["glass-input", @form[:email].errors != [] && "input-error"]}
             required
-          />
-          <.field_errors field={@form[:email]} />
+          /> <.field_errors field={@form[:email]} />
         </div>
+
         <div class="form-control mb-4">
           <label class="glass-label mb-1"><span>{dgettext("auth", "Password")}</span></label>
           <input
@@ -126,9 +125,9 @@ defmodule AstraAutoExWeb.SetupLive do
             class={["glass-input", @form[:password].errors != [] && "input-error"]}
             required
             minlength="6"
-          />
-          <.field_errors field={@form[:password]} />
+          /> <.field_errors field={@form[:password]} />
         </div>
+
         <div class="card-actions justify-end">
           <button type="submit" class="glass-btn glass-btn-primary">
             {dgettext("default", "Next")} →
@@ -143,11 +142,11 @@ defmodule AstraAutoExWeb.SetupLive do
     ~H"""
     <div>
       <h3 class="text-lg font-semibold mb-2">{dgettext("setup", "Configure AI Providers")}</h3>
+
       <p class="text-sm text-base-content/60 mb-4">
         {dgettext("setup", "Add at least one AI provider to get started.")}
       </p>
-      
-    <!-- Configured providers -->
+      <!-- Configured providers -->
       <%= if map_size(@provider_configs) > 0 do %>
         <div class="mb-4 space-y-2">
           <%= for {name, _config} <- @provider_configs do %>
@@ -165,8 +164,7 @@ defmodule AstraAutoExWeb.SetupLive do
           <% end %>
         </div>
       <% end %>
-      
-    <!-- Add provider form -->
+      <!-- Add provider form -->
       <.form
         for={@provider_form}
         id="provider-form"
@@ -176,11 +174,13 @@ defmodule AstraAutoExWeb.SetupLive do
         <div class="flex gap-2 mb-3">
           <select name="provider[provider]" class="glass-select flex-1">
             <option value="">{dgettext("setup", "Select provider...")}</option>
+
             <%= for p <- available_providers(@selected_providers) do %>
               <option value={p.id}>{p.label}</option>
             <% end %>
           </select>
         </div>
+
         <div class="form-control mb-3">
           <input
             type="password"
@@ -190,6 +190,7 @@ defmodule AstraAutoExWeb.SetupLive do
             autocomplete="off"
           />
         </div>
+
         <div class="flex gap-2">
           <button type="submit" class="glass-btn glass-btn-secondary text-sm py-1.5">
             {dgettext("setup", "Add Provider")}
@@ -217,6 +218,7 @@ defmodule AstraAutoExWeb.SetupLive do
     ~H"""
     <div>
       <h3 class="text-lg font-semibold mb-2">{dgettext("setup", "Storage Configuration")}</h3>
+
       <p class="text-sm text-base-content/60 mb-4">
         {dgettext("setup", "Choose where to store generated media files.")}
       </p>
@@ -272,6 +274,7 @@ defmodule AstraAutoExWeb.SetupLive do
                 placeholder="https://s3.amazonaws.com"
               />
             </div>
+
             <div class="grid grid-cols-2 gap-3">
               <div class="form-control">
                 <label class="glass-label mb-1"><span>{dgettext("setup", "Bucket")}</span></label>
@@ -282,6 +285,7 @@ defmodule AstraAutoExWeb.SetupLive do
                   class="glass-input input-sm"
                 />
               </div>
+
               <div class="form-control">
                 <label class="glass-label mb-1"><span>{dgettext("setup", "Region")}</span></label>
                 <input
@@ -293,6 +297,7 @@ defmodule AstraAutoExWeb.SetupLive do
                 />
               </div>
             </div>
+
             <div class="grid grid-cols-2 gap-3">
               <div class="form-control">
                 <label class="glass-label mb-1"><span>{dgettext("setup", "Access Key")}</span></label>
@@ -303,6 +308,7 @@ defmodule AstraAutoExWeb.SetupLive do
                   class="glass-input input-sm"
                 />
               </div>
+
               <div class="form-control">
                 <label class="glass-label mb-1"><span>{dgettext("setup", "Secret Key")}</span></label>
                 <input
@@ -333,11 +339,13 @@ defmodule AstraAutoExWeb.SetupLive do
     ~H"""
     <div>
       <h3 class="text-lg font-semibold mb-4">{dgettext("setup", "Setup Complete!")}</h3>
+
       <div class="space-y-3">
         <div class="flex items-center gap-2">
           <span class="badge badge-success">✓</span>
           <span>{dgettext("setup", "Admin account created")}</span>
         </div>
+
         <div class="flex items-center gap-2">
           <span class="badge badge-success">✓</span>
           <span>
@@ -346,6 +354,7 @@ defmodule AstraAutoExWeb.SetupLive do
             )}
           </span>
         </div>
+
         <div class="flex items-center gap-2">
           <span class="badge badge-success">✓</span>
           <span>
@@ -355,6 +364,7 @@ defmodule AstraAutoExWeb.SetupLive do
           </span>
         </div>
       </div>
+
       <div class="card-actions justify-end mt-6">
         <button type="button" phx-click="finish_setup" class="btn btn-primary btn-lg">
           {dgettext("setup", "Start Using AstraAutoEx")} →

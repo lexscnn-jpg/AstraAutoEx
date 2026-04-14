@@ -28,16 +28,30 @@ defmodule AstraAutoExWeb.WorkspaceLive.ArtStyleModal do
         <div class="flex items-center justify-between mb-5">
           <div>
             <h3 class="text-lg font-bold text-[var(--glass-text-primary)]">自定义画风</h3>
+
             <p class="text-xs text-[var(--glass-text-tertiary)]">选择预置模板并修改核心描述</p>
           </div>
-          <button phx-click="close_art_style_modal" class="text-[var(--glass-text-tertiary)] hover:text-[var(--glass-text-primary)]">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" /></svg>
+
+          <button
+            phx-click="close_art_style_modal"
+            class="text-[var(--glass-text-tertiary)] hover:text-[var(--glass-text-primary)]"
+          >
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <path d="M6 18L18 6M6 6l12 12" />
+            </svg>
           </button>
         </div>
-
         <%!-- Template grid --%>
         <div class="mb-4">
-          <label class="text-xs text-[var(--glass-text-tertiary)] mb-2 block">选择模板（点击自动填入提示词，你只需修改核心内容）</label>
+          <label class="text-xs text-[var(--glass-text-tertiary)] mb-2 block">
+            选择模板（点击自动填入提示词，你只需修改核心内容）
+          </label>
           <div class="grid grid-cols-3 gap-2">
             <%= for style <- ArtStyles.all_styles() do %>
               <button
@@ -51,16 +65,17 @@ defmodule AstraAutoExWeb.WorkspaceLive.ArtStyleModal do
                     else: "bg-[var(--glass-bg-muted)] text-[var(--glass-text-secondary)] hover:bg-[var(--glass-bg-muted)]/80")}
               >
                 <div class="font-medium">{style.label}</div>
-                <div class="text-[10px] text-[var(--glass-text-tertiary)] mt-0.5 line-clamp-1">{String.slice(style.prompt_zh, 0..30)}...</div>
+
+                <div class="text-[10px] text-[var(--glass-text-tertiary)] mt-0.5 line-clamp-1">
+                  {String.slice(style.prompt_zh, 0..30)}...
+                </div>
               </button>
             <% end %>
           </div>
         </div>
-
         <%!-- Custom prompt editor --%>
         <div class="mb-4">
-          <label class="text-xs text-[var(--glass-text-tertiary)] mb-1 block">画风提示词（修改核心描述即可）</label>
-          <textarea
+          <label class="text-xs text-[var(--glass-text-tertiary)] mb-1 block">画风提示词（修改核心描述即可）</label> <textarea
             name="custom_prompt"
             rows="6"
             phx-change="update_custom_prompt"
@@ -72,7 +87,6 @@ defmodule AstraAutoExWeb.WorkspaceLive.ArtStyleModal do
             提示词将应用于所有图像生成（角色参考图、场景图、分镜图）
           </p>
         </div>
-
         <%!-- Actions --%>
         <div class="flex justify-end gap-3">
           <button phx-click="close_art_style_modal" class="glass-btn px-4 py-2 text-sm">取消</button>

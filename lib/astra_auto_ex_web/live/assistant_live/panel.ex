@@ -30,9 +30,9 @@ defmodule AstraAutoExWeb.AssistantLive.Panel do
         <h3 class="text-sm font-semibold text-[var(--glass-text-primary)]">
           {dgettext("projects", "AI Assistant")}
         </h3>
+
         <p class="text-xs text-[var(--glass-text-tertiary)]">{@project.name}</p>
       </div>
-
       <%!-- Messages --%>
       <div
         class="flex-1 overflow-y-auto p-4 space-y-3"
@@ -68,7 +68,6 @@ defmodule AstraAutoExWeb.AssistantLive.Panel do
           </div>
         <% end %>
       </div>
-
       <%!-- Input --%>
       <div class="p-3 border-t border-[var(--glass-stroke-base)]">
         <form phx-submit="assistant_send" phx-target={@myself} class="flex gap-2">
@@ -172,7 +171,6 @@ defmodule AstraAutoExWeb.AssistantLive.Standalone do
               </div>
             <% end %>
           </div>
-
           <%!-- Input --%>
           <div class="p-4 border-t border-[var(--glass-stroke-base)]">
             <form phx-submit="send" class="flex gap-2">

@@ -15,7 +15,8 @@ defmodule AstraAutoEx.Workers.Supervisor do
     children = [
       AstraAutoEx.Workers.ConcurrencyLimiter,
       {DynamicSupervisor, name: AstraAutoEx.Workers.TaskRunnerSupervisor, strategy: :one_for_one},
-      AstraAutoEx.Workers.TaskScheduler
+      AstraAutoEx.Workers.TaskScheduler,
+      AstraAutoEx.Workers.AsyncPollWorker
     ]
 
     Supervisor.init(children, strategy: :rest_for_one)

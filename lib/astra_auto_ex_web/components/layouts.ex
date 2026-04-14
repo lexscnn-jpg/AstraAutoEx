@@ -35,9 +35,7 @@ defmodule AstraAutoExWeb.Layouts do
 
   def app(assigns) do
     ~H"""
-    <main class="min-h-[calc(100vh-60px)]">
-      {render_slot(@inner_block)}
-    </main>
+    <main class="min-h-[calc(100vh-60px)]">{render_slot(@inner_block)}</main>
     <.flash_group flash={@flash} />
     """
   end
@@ -55,9 +53,7 @@ defmodule AstraAutoExWeb.Layouts do
   def flash_group(assigns) do
     ~H"""
     <div id={@id} aria-live="polite">
-      <.flash kind={:info} flash={@flash} />
-      <.flash kind={:error} flash={@flash} />
-
+      <.flash kind={:info} flash={@flash} /> <.flash kind={:error} flash={@flash} />
       <.flash
         id="client-error"
         kind={:error}
@@ -94,7 +90,6 @@ defmodule AstraAutoExWeb.Layouts do
     ~H"""
     <div class="card relative flex flex-row items-center border-2 border-base-300 bg-base-300 rounded-full">
       <div class="absolute w-1/3 h-full rounded-full border-1 border-base-200 bg-base-100 brightness-200 left-0 [[data-theme=light]_&]:left-1/3 [[data-theme=dark]_&]:left-2/3 transition-[left]" />
-
       <button
         class="flex p-2 cursor-pointer w-1/3"
         phx-click={JS.dispatch("phx:set-theme")}
@@ -102,7 +97,6 @@ defmodule AstraAutoExWeb.Layouts do
       >
         <.icon name="hero-computer-desktop-micro" class="size-4 opacity-75 hover:opacity-100" />
       </button>
-
       <button
         class="flex p-2 cursor-pointer w-1/3"
         phx-click={JS.dispatch("phx:set-theme")}
@@ -110,7 +104,6 @@ defmodule AstraAutoExWeb.Layouts do
       >
         <.icon name="hero-sun-micro" class="size-4 opacity-75 hover:opacity-100" />
       </button>
-
       <button
         class="flex p-2 cursor-pointer w-1/3"
         phx-click={JS.dispatch("phx:set-theme")}

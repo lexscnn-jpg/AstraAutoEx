@@ -47,7 +47,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.CharacterModal do
             do: dgettext("projects", "Create Character"),
             else: dgettext("projects", "Edit Character")}
         </h2>
-        
+
         <.form for={@form} phx-submit="save_character" phx-target={@myself} class="space-y-4">
           <div>
             <label class="text-xs text-[var(--glass-text-tertiary)] mb-1 block">
@@ -62,7 +62,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.CharacterModal do
               autofocus
             />
           </div>
-          
+
           <div class="grid grid-cols-2 gap-3">
             <div>
               <label class="text-xs text-[var(--glass-text-tertiary)] mb-1 block">
@@ -70,15 +70,15 @@ defmodule AstraAutoExWeb.WorkspaceLive.CharacterModal do
               </label>
               <select name="character[gender]" class="glass-input w-full">
                 <option value="">—</option>
-                
+
                 <option value="male" selected={@form[:gender].value == "male"}>Male</option>
-                
+
                 <option value="female" selected={@form[:gender].value == "female"}>Female</option>
-                
+
                 <option value="other" selected={@form[:gender].value == "other"}>Other</option>
               </select>
             </div>
-            
+
             <div>
               <label class="text-xs text-[var(--glass-text-tertiary)] mb-1 block">
                 {dgettext("projects", "Age")}
@@ -92,27 +92,29 @@ defmodule AstraAutoExWeb.WorkspaceLive.CharacterModal do
               />
             </div>
           </div>
-          
+
           <div>
             <label class="text-xs text-[var(--glass-text-tertiary)] mb-1 block">
               {dgettext("projects", "Description")}
-            </label> <textarea
+            </label>
+            <textarea
               name="character[description]"
               class="glass-input w-full h-20 resize-none"
               placeholder="Physical appearance, clothing, distinctive features..."
             ><%= @form[:description].value %></textarea>
           </div>
-          
+
           <div>
             <label class="text-xs text-[var(--glass-text-tertiary)] mb-1 block">
               {dgettext("projects", "Personality")}
-            </label> <textarea
+            </label>
+            <textarea
               name="character[personality]"
               class="glass-input w-full h-16 resize-none"
               placeholder="Personality traits, motivations, background..."
             ><%= @form[:personality].value %></textarea>
           </div>
-          
+
           <div class="flex justify-end gap-2 pt-2">
             <button
               type="button"

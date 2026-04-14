@@ -40,22 +40,26 @@ defmodule AstraAutoExWeb.ProfileLive.BillingStats do
       <div class="grid grid-cols-3 gap-4">
         <div class="glass-card p-4 text-center">
           <div class="text-2xl font-bold text-[var(--glass-text-primary)]">{@total_calls}</div>
+
           <div class="text-xs text-[var(--glass-text-tertiary)]">总调用次数</div>
         </div>
+
         <div class="glass-card p-4 text-center">
           <div class="text-2xl font-bold text-[var(--glass-accent-from)]">
             ¥{Decimal.round(@total_cost, 2)}
           </div>
+
           <div class="text-xs text-[var(--glass-text-tertiary)]">预估总费用</div>
         </div>
+
         <div class="glass-card p-4 text-center">
           <div class="text-2xl font-bold text-[var(--glass-text-primary)]">
             {length(@stats_by_model)}
           </div>
+
           <div class="text-xs text-[var(--glass-text-tertiary)]">使用模型数</div>
         </div>
       </div>
-
       <%!-- Tab switch --%>
       <div class="flex gap-2 border-b border-[var(--glass-stroke-base)] pb-1">
         <%= for {tab, label} <- [{"model", "按模型"}, {"project", "按项目"}, {"date", "按日期"}, {"recent", "最近调用"}] do %>
@@ -71,7 +75,6 @@ defmodule AstraAutoExWeb.ProfileLive.BillingStats do
           </button>
         <% end %>
       </div>
-
       <%!-- Tab content --%>
       <%= case @active_tab do %>
         <% "model" -> %>
@@ -82,15 +85,18 @@ defmodule AstraAutoExWeb.ProfileLive.BillingStats do
                   <div class="text-sm font-medium text-[var(--glass-text-primary)]">
                     {stat.model_key}
                   </div>
+
                   <div class="text-xs text-[var(--glass-text-tertiary)]">
                     {stat.model_type} · {stat.total_calls} 次调用 · 成功率 {success_rate(stat)}%
                   </div>
                 </div>
+
                 <div class="text-sm font-medium text-[var(--glass-accent-from)]">
                   ¥{format_cost(stat.total_cost)}
                 </div>
               </div>
             <% end %>
+
             <%= if @stats_by_model == [] do %>
               <div class="text-center py-8 text-[var(--glass-text-tertiary)]">暂无调用记录</div>
             <% end %>
@@ -103,13 +109,16 @@ defmodule AstraAutoExWeb.ProfileLive.BillingStats do
                   <div class="text-sm font-medium text-[var(--glass-text-primary)]">
                     {stat.project_name || "项目 ##{stat.project_id}"}
                   </div>
+
                   <div class="text-xs text-[var(--glass-text-tertiary)]">{stat.total_calls} 次调用</div>
                 </div>
+
                 <div class="text-sm font-medium text-[var(--glass-accent-from)]">
                   ¥{format_cost(stat.total_cost)}
                 </div>
               </div>
             <% end %>
+
             <%= if @stats_by_project == [] do %>
               <div class="text-center py-8 text-[var(--glass-text-tertiary)]">暂无项目记录</div>
             <% end %>
@@ -125,6 +134,7 @@ defmodule AstraAutoExWeb.ProfileLive.BillingStats do
                     style={"width: #{bar_width(stat.total_calls, @stats_by_date)}%"}
                   />
                 </div>
+
                 <span class="w-12 text-right text-[var(--glass-text-secondary)]">
                   {stat.total_calls}
                 </span>
@@ -133,6 +143,7 @@ defmodule AstraAutoExWeb.ProfileLive.BillingStats do
                 </span>
               </div>
             <% end %>
+
             <%= if @stats_by_date == [] do %>
               <div class="text-center py-8 text-[var(--glass-text-tertiary)]">暂无日期记录</div>
             <% end %>
@@ -150,6 +161,7 @@ defmodule AstraAutoExWeb.ProfileLive.BillingStats do
                 </span>
               </div>
             <% end %>
+
             <%= if @recent == [] do %>
               <div class="text-center py-8 text-[var(--glass-text-tertiary)]">暂无记录</div>
             <% end %>

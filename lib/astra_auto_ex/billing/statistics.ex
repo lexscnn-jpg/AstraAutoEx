@@ -55,6 +55,23 @@ defmodule AstraAutoEx.Billing.Statistics do
     |> Repo.all()
   end
 
+  @doc "Get summary totals for a user: total calls and total cost."
+  def summary(user_id) do
+    result =
+      ApiCallLog
+      |> where(user_id: ^user_id)
+      |> select([l], %{
+        total_calls: count(l.id),
+        total_cost: sum(l.cost_estimate)
+      })
+      |> Repo.one()
+
+    %{
+      total_calls: result.total_calls || 0,
+      total_cost: result.total_cost || Decimal.new(0)
+    }
+  end
+
   def recent_calls(user_id, limit \\ 50) do
     ApiCallLog
     |> where(user_id: ^user_id)

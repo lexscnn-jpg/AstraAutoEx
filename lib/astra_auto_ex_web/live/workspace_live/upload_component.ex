@@ -35,11 +35,11 @@ defmodule AstraAutoExWeb.WorkspaceLive.UploadComponent do
           <p class="text-[var(--glass-text-tertiary)] text-sm mb-2">
             Drag & drop files here, or click to browse
           </p>
+
           <p class="text-[var(--glass-text-tertiary)] opacity-40 text-xs">
             Supports: PNG, JPG, WebP, MP4, MP3, WAV (max 100MB)
           </p>
         </div>
-
         <%!-- Upload previews --%>
         <div :if={length(@uploads.media.entries) > 0} class="space-y-2 mt-3">
           <%= for entry <- @uploads.media.entries do %>
@@ -47,8 +47,10 @@ defmodule AstraAutoExWeb.WorkspaceLive.UploadComponent do
               <div class="w-10 h-10 rounded bg-[var(--glass-bg-muted)] flex items-center justify-center text-xs text-[var(--glass-text-tertiary)]">
                 {entry_icon(entry)}
               </div>
+
               <div class="flex-1 min-w-0">
                 <p class="text-sm text-[var(--glass-text-primary)] truncate">{entry.client_name}</p>
+
                 <div class="h-1 bg-[var(--glass-bg-muted)] rounded-full mt-1">
                   <div
                     class="h-full bg-gradient-to-r from-blue-500 to-purple-500 rounded-full transition-all"
@@ -56,6 +58,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.UploadComponent do
                   />
                 </div>
               </div>
+
               <button
                 type="button"
                 phx-click="cancel_upload"
@@ -72,14 +75,13 @@ defmodule AstraAutoExWeb.WorkspaceLive.UploadComponent do
             Upload {length(@uploads.media.entries)} file(s)
           </button>
         </div>
-
         <%!-- Uploaded files --%>
         <div :if={length(@uploaded_files) > 0} class="space-y-1 mt-3">
           <p class="text-xs text-[var(--glass-text-tertiary)]">Uploaded:</p>
+
           <%= for file <- @uploaded_files do %>
             <div class="flex items-center gap-2 text-xs text-[var(--glass-text-secondary)]">
-              <span class="text-green-500">OK</span>
-              <span class="truncate">{file.name}</span>
+              <span class="text-green-500">OK</span> <span class="truncate">{file.name}</span>
             </div>
           <% end %>
         </div>

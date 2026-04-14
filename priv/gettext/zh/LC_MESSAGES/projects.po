@@ -801,3 +801,50 @@ msgstr "道具"
 
 msgid "Click generate to create promotional copy for your video..."
 msgstr "点击生成按钮，为你的视频创建引流文案..."
+
+#: v0.7.2 — Sprint 6+7
+
+msgid "episodes"
+msgstr "集"
+
+msgid "Add Episode"
+msgstr "添加集数"
+
+msgid "Episode %{num} created"
+msgstr "第%{num}集已创建"
+
+msgid "Reference Images (Image-to-Image)"
+msgstr "参考图（图生图）"
+
+msgid "Upload reference images (max 5) to guide AI image generation style and composition."
+msgstr "上传参考图（最多5张）引导AI生成图片的风格和构图。"
+
+msgid "Upload"
+msgstr "上传"
+
+msgid "Style prompt (optional)"
+msgstr "风格提示词（可选）"
+
+msgid "e.g., match the color palette and composition style"
+msgstr "例如：匹配色彩风格和构图方式"
+
+msgid "Scope"
+msgstr "范围"
+
+msgid "Global Assets"
+msgstr "全局素材"
+
+msgid "No projects yet. Create one from the workspace."
+msgstr "暂无项目，请在工作台创建。"
+
+msgid "Lip Sync"
+msgstr "口型同步"
+
+msgid "Requires video + voice for each panel"
+msgstr "每个面板需要视频+配音"
+
+msgid "No panels with both video and voice."
+msgstr "没有同时拥有视频和配音的面板。"
+
+msgid "Lip sync queued for %{count} panels."
+msgstr "已为 %{count} 个面板排队口型同步。"

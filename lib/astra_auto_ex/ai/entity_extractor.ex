@@ -49,7 +49,11 @@ defmodule AstraAutoEx.AI.EntityExtractor do
   Assign extracted entities to panels based on description matching.
   Updates panel.characters, panel.location, panel.props fields.
   """
-  def assign_entities_to_panels(panels, %{characters: characters, locations: locations, props: props}) do
+  def assign_entities_to_panels(panels, %{
+        characters: characters,
+        locations: locations,
+        props: props
+      }) do
     Enum.map(panels, fn panel ->
       desc = (panel.description || "") |> String.downcase()
 
@@ -179,10 +183,17 @@ defmodule AstraAutoEx.AI.EntityExtractor do
       |> String.trim()
 
     case Jason.decode(json_text) do
-      {:ok, list} when is_list(list) -> list
-      {:ok, %{^key => list}} when is_list(list) -> list
+      {:ok, list} when is_list(list) ->
+        list
+
+      {:ok, %{^key => list}} when is_list(list) ->
+        list
+
       _ ->
-        Logger.warning("[EntityExtractor] Failed to parse #{key} from: #{String.slice(json_text, 0, 200)}")
+        Logger.warning(
+          "[EntityExtractor] Failed to parse #{key} from: #{String.slice(json_text, 0, 200)}"
+        )
+
         []
     end
   end

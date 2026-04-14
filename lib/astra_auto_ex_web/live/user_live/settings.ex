@@ -24,12 +24,9 @@ defmodule AstraAutoExWeb.UserLive.Settings do
           autocomplete="username"
           spellcheck="false"
           required
-        />
-        <.button variant="primary" phx-disable-with="Changing...">Change Email</.button>
+        /> <.button variant="primary" phx-disable-with="Changing...">Change Email</.button>
       </.form>
-
       <div class="divider" />
-
       <.form
         for={@password_form}
         id="password_form"
@@ -60,10 +57,7 @@ defmodule AstraAutoExWeb.UserLive.Settings do
           label="Confirm new password"
           autocomplete="new-password"
           spellcheck="false"
-        />
-        <.button variant="primary" phx-disable-with="Saving...">
-          Save Password
-        </.button>
+        /> <.button variant="primary" phx-disable-with="Saving...">Save Password</.button>
       </.form>
     </Layouts.app>
     """

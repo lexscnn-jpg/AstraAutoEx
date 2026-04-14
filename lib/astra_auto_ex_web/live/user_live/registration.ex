@@ -13,6 +13,7 @@ defmodule AstraAutoExWeb.UserLive.Registration do
           <h2 class="text-2xl font-bold text-center mb-2 text-[var(--glass-text-primary)]">
             {dgettext("auth", "Create Account")}
           </h2>
+
           <p class="text-sm text-center text-[var(--glass-text-tertiary)] mb-6">
             {dgettext("auth", "Join AstraAutoEx")}
           </p>
@@ -29,9 +30,9 @@ defmodule AstraAutoExWeb.UserLive.Registration do
                 autocomplete="username"
                 required
                 autofocus
-              />
-              <.field_errors field={@form[:username]} />
+              /> <.field_errors field={@form[:username]} />
             </div>
+
             <div class="mb-4">
               <label class="glass-label">Email</label>
               <input
@@ -41,9 +42,9 @@ defmodule AstraAutoExWeb.UserLive.Registration do
                 class="glass-input"
                 autocomplete="email"
                 required
-              />
-              <.field_errors field={@form[:email]} />
+              /> <.field_errors field={@form[:email]} />
             </div>
+
             <div class="mb-6">
               <label class="glass-label">{dgettext("auth", "Password")}</label>
               <input
@@ -55,9 +56,9 @@ defmodule AstraAutoExWeb.UserLive.Registration do
                 autocomplete="new-password"
                 required
                 minlength="6"
-              />
-              <.field_errors field={@form[:password]} />
+              /> <.field_errors field={@form[:password]} />
             </div>
+
             <button
               type="submit"
               phx-disable-with="..."

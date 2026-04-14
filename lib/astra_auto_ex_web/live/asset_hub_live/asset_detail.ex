@@ -29,10 +29,9 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetDetail do
             <span class={"px-2 py-0.5 rounded text-[10px] font-medium #{type_badge_color(@asset_type)}"}>
               {type_label(@asset_type)}
             </span>
-            <h3 class="text-lg font-semibold text-[var(--glass-text-primary)]">
-              {@asset.name}
-            </h3>
+            <h3 class="text-lg font-semibold text-[var(--glass-text-primary)]">{@asset.name}</h3>
           </div>
+
           <div class="flex items-center gap-2">
             <button
               phx-click="edit_asset"
@@ -40,7 +39,13 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetDetail do
               phx-value-type={@asset_type}
               class="glass-btn glass-btn-ghost text-xs py-1.5 px-3"
             >
-              <svg class="w-3.5 h-3.5 inline mr-1" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <svg
+                class="w-3.5 h-3.5 inline mr-1"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                viewBox="0 0 24 24"
+              >
                 <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
                 <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
               </svg>
@@ -50,13 +55,18 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetDetail do
               phx-click="close_detail"
               class="text-[var(--glass-text-tertiary)] hover:text-[var(--glass-text-primary)] p-1"
             >
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
                 <path d="M6 18L18 6M6 6l12 12" />
               </svg>
             </button>
           </div>
         </div>
-
         <%!-- Body --%>
         <div class="flex-1 overflow-y-auto">
           <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
@@ -75,20 +85,22 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetDetail do
                     <div class="text-5xl text-[var(--glass-text-tertiary)] opacity-20 mb-3">
                       {String.first(@asset.name || "?")}
                     </div>
+
                     <p class="text-xs text-[var(--glass-text-tertiary)]">暂无参考图</p>
                   </div>
                 <% end %>
               <% end %>
-
               <%!-- Generating overlay --%>
-              <div :if={@generating} class="absolute inset-0 bg-black/60 flex items-center justify-center">
+              <div
+                :if={@generating}
+                class="absolute inset-0 bg-black/60 flex items-center justify-center"
+              >
                 <div class="text-center">
                   <div class="w-8 h-8 border-2 border-[var(--glass-accent-from)] border-t-transparent rounded-full animate-spin mx-auto mb-2" />
                   <p class="text-xs text-white/80">正在生成...</p>
                 </div>
               </div>
             </div>
-
             <%!-- Right: Info + Actions --%>
             <div class="p-5 space-y-4">
               <%!-- Description --%>
@@ -100,15 +112,11 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetDetail do
                   {get_description(@asset_type, @asset) || "暂无描述"}
                 </p>
               </div>
-
-              <%!-- Type-specific info --%>
-              <.type_info asset={@asset} asset_type={@asset_type} />
-
+              <%!-- Type-specific info --%> <.type_info asset={@asset} asset_type={@asset_type} />
               <%!-- Error display --%>
               <div :if={@gen_error} class="text-xs text-red-400 bg-red-500/10 rounded-lg px-3 py-2">
                 {@gen_error}
               </div>
-
               <%!-- Generation actions for visual assets --%>
               <%= if @asset_type in ["character", "location", "prop"] do %>
                 <div class="space-y-2 pt-2 border-t border-[var(--glass-stroke-base)]">
@@ -122,7 +130,13 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetDetail do
                       disabled={@generating}
                       class="glass-btn glass-btn-primary text-xs py-1.5 px-3 flex items-center gap-1"
                     >
-                      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                      <svg
+                        class="w-3.5 h-3.5"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        viewBox="0 0 24 24"
+                      >
                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                       </svg>
                       {if image_url(@asset_type, @asset), do: "重新生成", else: "生成参考图"}
@@ -137,7 +151,6 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetDetail do
                       </button>
                     <% end %>
                   </div>
-
                   <%!-- Refinement (精调) --%>
                   <%= if image_url(@asset_type, @asset) do %>
                     <div class="mt-3">
@@ -163,6 +176,7 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetDetail do
                           {if @refining, do: "修改中...", else: "精调"}
                         </button>
                       </div>
+
                       <%= if @asset_type == "prop" && @asset.previous_image_url do %>
                         <button
                           phx-click="undo_refine"
@@ -176,7 +190,6 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetDetail do
                   <% end %>
                 </div>
               <% end %>
-
               <%!-- Music generation for BGM --%>
               <%= if @asset_type == "bgm" do %>
                 <div class="space-y-2 pt-2 border-t border-[var(--glass-stroke-base)]">
@@ -189,17 +202,28 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetDetail do
                     disabled={@music_generating}
                     class="glass-btn glass-btn-primary text-xs py-1.5 px-3 flex items-center gap-1"
                   >
-                    <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
-                      <path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" />
+                    <svg
+                      class="w-3.5 h-3.5"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="1.5"
+                      viewBox="0 0 24 24"
+                    >
+                      <path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle
+                        cx="18"
+                        cy="16"
+                        r="3"
+                      />
                     </svg>
-                    {if @music_generating, do: "生成中...", else: if(@asset.audio_url, do: "重新生成", else: "AI 生成音乐")}
+                    {if @music_generating,
+                      do: "生成中...",
+                      else: if(@asset.audio_url, do: "重新生成", else: "AI 生成音乐")}
                   </button>
                   <%= if @asset.audio_url do %>
                     <audio controls class="w-full mt-2 h-8" src={@asset.audio_url} />
                   <% end %>
                 </div>
               <% end %>
-
               <%!-- Audio player for SFX --%>
               <%= if @asset_type == "sfx" && @asset.audio_url do %>
                 <div class="pt-2 border-t border-[var(--glass-stroke-base)]">
@@ -209,7 +233,6 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetDetail do
                   <audio controls class="w-full h-8" src={@asset.audio_url} />
                 </div>
               <% end %>
-
               <%!-- Audio player for Voice --%>
               <%= if @asset_type == "voice" && @asset.custom_voice_url do %>
                 <div class="pt-2 border-t border-[var(--glass-stroke-base)]">
@@ -299,7 +322,9 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetDetail do
     parent = self()
 
     Task.start(fn ->
-      result = AstraAutoEx.AssetHub.Generator.refine_image(user_id, asset_type, asset, instruction)
+      result =
+        AstraAutoEx.AssetHub.Generator.refine_image(user_id, asset_type, asset, instruction)
+
       send(parent, {:refine_complete, asset.id, result})
     end)
 
@@ -341,7 +366,13 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetDetail do
   defp audio_placeholder(assigns) do
     ~H"""
     <div class="text-center py-12">
-      <svg class="w-16 h-16 mx-auto text-[var(--glass-text-tertiary)] opacity-30 mb-3" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24">
+      <svg
+        class="w-16 h-16 mx-auto text-[var(--glass-text-tertiary)] opacity-30 mb-3"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1"
+        viewBox="0 0 24 24"
+      >
         <path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" />
       </svg>
       <%= if @asset.audio_url do %>
@@ -362,6 +393,7 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetDetail do
         <span class="text-[var(--glass-text-tertiary)]">别名</span>
         <p class="text-[var(--glass-text-secondary)]">{@asset.aliases || "无"}</p>
       </div>
+
       <div>
         <span class="text-[var(--glass-text-tertiary)]">音色</span>
         <p class="text-[var(--glass-text-secondary)]">{@asset.voice_id || "未分配"}</p>
@@ -386,6 +418,7 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetDetail do
         <span class="text-[var(--glass-text-tertiary)]">性别</span>
         <p class="text-[var(--glass-text-secondary)]">{gender_label(@asset.gender)}</p>
       </div>
+
       <div>
         <span class="text-[var(--glass-text-tertiary)]">语言</span>
         <p class="text-[var(--glass-text-secondary)]">{lang_label(@asset.language)}</p>
@@ -401,9 +434,12 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetDetail do
         <span class="text-[var(--glass-text-tertiary)]">类别</span>
         <p class="text-[var(--glass-text-secondary)]">{bgm_category(@asset.category)}</p>
       </div>
+
       <div>
         <span class="text-[var(--glass-text-tertiary)]">类型</span>
-        <p class="text-[var(--glass-text-secondary)]">{if @asset.is_instrumental, do: "纯音乐", else: "含人声"}</p>
+        <p class="text-[var(--glass-text-secondary)]">
+          {if @asset.is_instrumental, do: "纯音乐", else: "含人声"}
+        </p>
       </div>
     </div>
     """
@@ -431,7 +467,9 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetDetail do
     end
   end
 
-  defp image_url("prop", asset), do: if(asset.image_url && asset.image_url != "", do: asset.image_url)
+  defp image_url("prop", asset),
+    do: if(asset.image_url && asset.image_url != "", do: asset.image_url)
+
   defp image_url(_, _), do: nil
 
   defp get_description("character", a), do: a.introduction

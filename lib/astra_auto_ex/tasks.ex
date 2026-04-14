@@ -171,6 +171,15 @@ defmodule AstraAutoEx.Tasks do
     Repo.all(query)
   end
 
+  def list_polling_tasks(limit \\ 50) do
+    from(t in Task,
+      where: t.status == "processing" and not is_nil(t.external_id),
+      order_by: [asc: t.updated_at],
+      limit: ^limit
+    )
+    |> Repo.all()
+  end
+
   def list_stale_processing(stale_threshold_seconds \\ 300) do
     cutoff = DateTime.add(DateTime.utc_now(:second), -stale_threshold_seconds, :second)
 

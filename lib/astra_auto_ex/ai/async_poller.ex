@@ -42,5 +42,7 @@ defmodule AstraAutoEx.AI.AsyncPoller do
   defp provider_key_from_prefix("minimax"), do: "minimax"
   defp provider_key_from_prefix("openai"), do: "apiyi"
   defp provider_key_from_prefix("runninghub"), do: "runninghub"
+  defp provider_key_from_prefix("vidu"), do: "vidu"
+  defp provider_key_from_prefix("bailian"), do: "bailian"
   defp provider_key_from_prefix(other), do: other
 end

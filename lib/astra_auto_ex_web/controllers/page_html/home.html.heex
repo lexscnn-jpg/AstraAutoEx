@@ -2,6 +2,7 @@
   <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10">
     <div class="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] rounded-full bg-[rgba(138,170,255,0.08)] animate-float">
     </div>
+
     <div class="absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] rounded-full bg-[rgba(148,163,184,0.10)] animate-float-delayed">
     </div>
   </div>
@@ -15,12 +16,14 @@
             {dgettext("landing", "AI Studio")}
           </span>
         </h1>
+
         <p class="mt-5 text-base text-[var(--glass-text-tertiary)] max-w-md leading-relaxed">
           {dgettext(
             "landing",
             "Describe your story and let AI generate cinematic short dramas. From script to storyboard to final video — fully automated."
           )}
         </p>
+
         <div class="mt-8">
           <a
             href={~p"/setup"}
@@ -46,19 +49,27 @@
           <div class="flex items-center gap-3 mb-4">
             <div class="w-10 h-10 rounded-full bg-gradient-to-br from-[var(--glass-accent-from)] to-[var(--glass-accent-to)]">
             </div>
+
             <div class="flex-1">
               <div class="h-2.5 w-24 rounded bg-[var(--glass-stroke-base)]"></div>
+
               <div class="h-2 w-16 rounded bg-[var(--glass-stroke-soft)] mt-2"></div>
             </div>
           </div>
+
           <div class="space-y-2.5">
             <div class="h-2 w-full rounded bg-[var(--glass-stroke-base)]"></div>
+
             <div class="h-2 w-4/5 rounded bg-[var(--glass-stroke-soft)]"></div>
+
             <div class="h-2 w-full rounded bg-[var(--glass-stroke-base)]"></div>
+
             <div class="h-2 w-3/5 rounded bg-[var(--glass-stroke-soft)]"></div>
           </div>
+
           <div class="flex items-center gap-2 mt-5">
             <div class="h-8 flex-1 rounded-lg bg-[var(--glass-stroke-soft)]"></div>
+
             <div class="h-8 w-24 rounded-lg bg-[var(--glass-stroke-base)]"></div>
           </div>
         </div>
@@ -70,11 +81,14 @@
               {dgettext("default", "Success")}
             </span>
           </div>
+
           <div class="grid grid-cols-3 gap-1.5 mt-2.5">
             <div class="aspect-square rounded-md bg-gradient-to-br from-blue-200 to-blue-300">
             </div>
+
             <div class="aspect-square rounded-md bg-gradient-to-br from-purple-200 to-purple-300">
             </div>
+
             <div class="aspect-square rounded-md bg-gradient-to-br from-pink-200 to-pink-300">
             </div>
           </div>
@@ -87,7 +101,9 @@
         <div class="w-9 h-9 rounded-xl bg-[var(--glass-tone-info-bg)] flex items-center justify-center mb-3">
           <span class="text-[var(--glass-tone-info-fg)] text-base">&#9998;</span>
         </div>
+
         <h3 class="font-semibold text-base mb-1">{dgettext("landing", "Story to Script")}</h3>
+
         <p class="text-sm text-[var(--glass-text-tertiary)] leading-relaxed">
           {dgettext(
             "landing",
@@ -95,11 +111,14 @@
           )}
         </p>
       </div>
+
       <div class="glass-card p-5">
         <div class="w-9 h-9 rounded-xl bg-[var(--glass-tone-success-bg)] flex items-center justify-center mb-3">
           <span class="text-[var(--glass-tone-success-fg)] text-base">&#9881;</span>
         </div>
+
         <h3 class="font-semibold text-base mb-1">{dgettext("landing", "Auto Production")}</h3>
+
         <p class="text-sm text-[var(--glass-text-tertiary)] leading-relaxed">
           {dgettext(
             "landing",
@@ -107,11 +126,14 @@
           )}
         </p>
       </div>
+
       <div class="glass-card p-5">
         <div class="w-9 h-9 rounded-xl bg-[var(--glass-tone-warning-bg)] flex items-center justify-center mb-3">
           <span class="text-[var(--glass-tone-warning-fg)] text-base">&#9654;</span>
         </div>
+
         <h3 class="font-semibold text-base mb-1">{dgettext("landing", "Export & Publish")}</h3>
+
         <p class="text-sm text-[var(--glass-text-tertiary)] leading-relaxed">
           {dgettext(
             "landing",

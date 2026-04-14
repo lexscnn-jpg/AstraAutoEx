@@ -329,3 +329,12 @@ msgstr "使用手册"
 
 msgid "User Guide"
 msgstr "使用手册"
+
+msgid "Usage Summary"
+msgstr "使用概览"
+
+msgid "Total Calls"
+msgstr "总调用次数"
+
+msgid "Status"
+msgstr "状态"

@@ -156,21 +156,47 @@ defmodule AstraAutoEx.Media.FFmpeg do
       case mode do
         :replace ->
           # Replace video's audio with voice audio
-          ["-y", "-i", video_path, "-i", audio_path,
-           "-map", "0:v", "-map", "1:a",
-           "-c:v", "copy", "-c:a", "aac", "-shortest",
-           output_path]
+          [
+            "-y",
+            "-i",
+            video_path,
+            "-i",
+            audio_path,
+            "-map",
+            "0:v",
+            "-map",
+            "1:a",
+            "-c:v",
+            "copy",
+            "-c:a",
+            "aac",
+            "-shortest",
+            output_path
+          ]
 
         :mix ->
           # Mix voice audio with existing video audio
           voice_vol = Keyword.get(opts, :voice_volume, 1.0)
           video_vol = Keyword.get(opts, :video_volume, 0.3)
-          ["-y", "-i", video_path, "-i", audio_path,
-           "-filter_complex",
-           "[0:a]volume=#{video_vol}[va];[1:a]volume=#{voice_vol}[voice];[va][voice]amix=inputs=2:duration=first[out]",
-           "-map", "0:v", "-map", "[out]",
-           "-c:v", "copy", "-c:a", "aac",
-           output_path]
+
+          [
+            "-y",
+            "-i",
+            video_path,
+            "-i",
+            audio_path,
+            "-filter_complex",
+            "[0:a]volume=#{video_vol}[va];[1:a]volume=#{voice_vol}[voice];[va][voice]amix=inputs=2:duration=first[out]",
+            "-map",
+            "0:v",
+            "-map",
+            "[out]",
+            "-c:v",
+            "copy",
+            "-c:a",
+            "aac",
+            output_path
+          ]
       end
 
     run_ffmpeg(args)
@@ -197,7 +223,10 @@ defmodule AstraAutoEx.Media.FFmpeg do
       mix_inputs = Enum.map_join(0..(length(segments) - 1), "", fn i -> "[a#{i}]" end)
       filter = "#{delays};#{mix_inputs}amix=inputs=#{length(segments)}:normalize=0[out]"
 
-      args = ["-y"] ++ input_args ++ ["-filter_complex", filter, "-map", "[out]", "-c:a", "aac", output_path]
+      args =
+        ["-y"] ++
+          input_args ++ ["-filter_complex", filter, "-map", "[out]", "-c:a", "aac", output_path]
+
       run_ffmpeg(args)
     end
   end

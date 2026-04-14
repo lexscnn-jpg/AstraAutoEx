@@ -1,7 +1,7 @@
 defmodule AstraAutoExWeb.AssetHubLive.Index do
   @moduledoc "Asset Hub — manage characters, locations, props, voices, SFX, BGM across projects."
   use AstraAutoExWeb, :live_view
-  alias AstraAutoEx.AssetHub
+  alias AstraAutoEx.{AssetHub, Projects, Characters, Locations}
 
   @tabs ~w(all characters locations props voices sfx bgm)
 
@@ -13,6 +13,10 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
      socket
      |> assign(:tab, "all")
      |> assign(:scope, "global")
+     |> assign(:user_projects, Projects.list_projects(user.id))
+     |> assign(:selected_project_id, nil)
+     |> assign(:project_characters, [])
+     |> assign(:project_locations, [])
      |> assign(:characters, AssetHub.list_global_characters(user.id))
      |> assign(:locations, AssetHub.list_global_locations(user.id))
      |> assign(:voices, AssetHub.list_global_voices(user.id))
@@ -55,7 +59,8 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
               viewBox="0 0 24 24"
             >
               <circle cx="12" cy="12" r="10" /><path d="M12 16v-4" /><path d="M12 8h.01" />
-            </svg> {dgettext(
+            </svg>
+            {dgettext(
               "projects",
               "Assets use default models. To change, go to"
             )}
@@ -66,12 +71,12 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
         </div>
 
         <div class="flex gap-5">
-          <%!-- Left sidebar: Folders --%>
-          <aside class="w-52 flex-shrink-0 hidden lg:block">
+          <%!-- Left sidebar: Scope + Projects --%>
+          <aside class="w-52 flex-shrink-0 hidden lg:block space-y-3">
             <div class="glass-surface rounded-xl p-4">
               <div class="flex items-center justify-between mb-3">
                 <span class="text-sm font-semibold text-[var(--glass-text-primary)]">
-                  {dgettext("projects", "Folders")}
+                  {dgettext("projects", "Scope")}
                 </span>
               </div>
 
@@ -96,7 +101,8 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
                     viewBox="0 0 24 24"
                   >
                     <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z" />
-                  </svg> {dgettext("projects", "All Assets")}
+                  </svg>
+                  {dgettext("projects", "Global Assets")}
                 </button>
                 <button
                   phx-click="set_scope"
@@ -118,16 +124,59 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
                     viewBox="0 0 24 24"
                   >
                     <rect x="2" y="3" width="20" height="14" rx="2" /><path d="M8 21h8" /><path d="M12 17v4" />
-                  </svg> {dgettext("projects", "Project Assets")}
+                  </svg>
+                  {dgettext("projects", "Project Assets")}
                 </button>
               </div>
+            </div>
 
-              <p class="text-[10px] text-[var(--glass-text-tertiary)] mt-3 opacity-60">
-                {dgettext("projects", "No folders yet")}
-              </p>
+            <%!-- Project list (shown when scope=project) --%>
+            <div :if={@scope == "project"} class="glass-surface rounded-xl p-4">
+              <div class="flex items-center justify-between mb-3">
+                <span class="text-xs font-semibold text-[var(--glass-text-primary)]">
+                  {dgettext("projects", "My Projects")}
+                </span>
+                <span class="text-[10px] text-[var(--glass-text-tertiary)]">
+                  {length(@user_projects)}
+                </span>
+              </div>
+
+              <%= if @user_projects == [] do %>
+                <p class="text-[10px] text-[var(--glass-text-tertiary)] opacity-60">
+                  {dgettext("projects", "No projects yet. Create one from the workspace.")}
+                </p>
+              <% else %>
+                <div class="space-y-0.5 max-h-[320px] overflow-y-auto">
+                  <%= for project <- @user_projects do %>
+                    <button
+                      phx-click="select_project"
+                      phx-value-id={project.id}
+                      class={[
+                        "w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-xs transition-all text-left",
+                        if(to_string(@selected_project_id) == to_string(project.id),
+                          do:
+                            "bg-[var(--glass-accent-from)]/10 text-[var(--glass-accent-from)] font-medium",
+                          else: "text-[var(--glass-text-secondary)] hover:bg-[var(--glass-bg-muted)]"
+                        )
+                      ]}
+                    >
+                      <svg
+                        class="w-3.5 h-3.5 flex-shrink-0"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+                      </svg>
+                      <span class="truncate">{project.name}</span>
+                    </button>
+                  <% end %>
+                </div>
+              <% end %>
             </div>
           </aside>
-           <%!-- Main content --%>
+          <%!-- Main content --%>
           <div class="flex-1 min-w-0">
             <%!-- Top bar: tabs + actions --%>
             <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
@@ -166,7 +215,13 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
                   class="glass-btn glass-btn-ghost text-xs py-1.5 px-3 flex items-center gap-1"
                   title="为当前标签页所有无图资产批量生成"
                 >
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                  <svg
+                    class="w-3.5 h-3.5"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    viewBox="0 0 24 24"
+                  >
                     <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                   </svg>
                   全部生成
@@ -179,7 +234,7 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
                 </button>
               </div>
             </div>
-             <%!-- Asset grid --%>
+            <%!-- Asset grid --%>
             <div class="glass-surface rounded-xl p-6 min-h-[400px]">
               <%= if all_items_for_tab(@tab, assigns) == [] do %>
                 <div class="text-center py-16">
@@ -214,7 +269,7 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
           </div>
         </div>
       </div>
-       <%!-- Asset Form Modal --%>
+      <%!-- Asset Form Modal --%>
       <.live_component
         :if={@show_asset_form}
         module={AstraAutoExWeb.AssetHubLive.AssetForm}
@@ -222,9 +277,7 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
         asset_type={@asset_form_type}
         editing={@editing_asset}
         user_id={@current_scope.user.id}
-      />
-
-      <%!-- Asset Detail Panel --%>
+      /> <%!-- Asset Detail Panel --%>
       <.live_component
         :if={@detail_asset != nil}
         module={AstraAutoExWeb.AssetHubLive.AssetDetail}
@@ -232,9 +285,7 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
         asset={@detail_asset}
         asset_type={@detail_type}
         user_id={@current_scope.user.id}
-      />
-
-      <%!-- Delete Confirmation --%>
+      /> <%!-- Delete Confirmation --%>
       <%= if @confirm_delete_id do %>
         <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
           <div class="glass-card p-6 max-w-sm mx-4">
@@ -281,10 +332,16 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
                 stroke-width="1.5"
                 viewBox="0 0 24 24"
               >
-                <path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" />
+                <path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle
+                  cx="18"
+                  cy="16"
+                  r="3"
+                />
               </svg>
               <%= if Map.get(@item, :audio_url) do %>
-                <span class="text-[9px] text-green-400 bg-green-500/20 px-1.5 py-0.5 rounded">已生成</span>
+                <span class="text-[9px] text-green-400 bg-green-500/20 px-1.5 py-0.5 rounded">
+                  已生成
+                </span>
               <% end %>
             </div>
           <% @item.type == "voice" -> %>
@@ -295,24 +352,26 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
               stroke-width="1.5"
               viewBox="0 0 24 24"
             >
-              <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z" /><path d="M19 10v2a7 7 0 01-14 0v-2" /><line x1="12" y1="19" x2="12" y2="23" /><line x1="8" y1="23" x2="16" y2="23" />
+              <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z" /><path d="M19 10v2a7 7 0 01-14 0v-2" /><line
+                x1="12"
+                y1="19"
+                x2="12"
+                y2="23"
+              /><line x1="8" y1="23" x2="16" y2="23" />
             </svg>
           <% true -> %>
             <span class="text-3xl text-[var(--glass-text-tertiary)] opacity-30">
               {String.first(Map.get(@item, :name, "?") || "?")}
             </span>
         <% end %>
-
         <%!-- Type badge --%>
         <span class={"absolute top-2 left-2 text-[10px] px-1.5 py-0.5 rounded font-medium #{type_badge(@item.type)}"}>
           {type_label_short(@item.type)}
         </span>
-
         <%!-- Generating spinner overlay --%>
         <div :if={@generating} class="absolute inset-0 bg-black/50 flex items-center justify-center">
           <div class="w-6 h-6 border-2 border-[var(--glass-accent-from)] border-t-transparent rounded-full animate-spin" />
         </div>
-
         <%!-- Hover action overlay --%>
         <div class="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all flex items-end justify-center pb-2 opacity-0 group-hover:opacity-100">
           <div class="flex gap-1" phx-click-away="noop">
@@ -324,11 +383,18 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
                 class="bg-white/90 text-gray-800 text-[10px] px-2 py-1 rounded hover:bg-white transition-colors"
                 title={if has_image?(@item), do: "重新生成", else: "生成参考图"}
               >
-                <svg class="w-3 h-3 inline" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <svg
+                  class="w-3 h-3 inline"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
                   <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
                 </svg>
               </button>
             <% end %>
+
             <button
               phx-click="edit_from_card"
               phx-value-id={@item.id}
@@ -336,7 +402,13 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
               class="bg-white/90 text-gray-800 text-[10px] px-2 py-1 rounded hover:bg-white transition-colors"
               title="编辑"
             >
-              <svg class="w-3 h-3 inline" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <svg
+                class="w-3 h-3 inline"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
                 <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
                 <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
               </svg>
@@ -348,7 +420,13 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
               class="bg-red-500/80 text-white text-[10px] px-2 py-1 rounded hover:bg-red-500 transition-colors"
               title="删除"
             >
-              <svg class="w-3 h-3 inline" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <svg
+                class="w-3 h-3 inline"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
                 <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
               </svg>
             </button>
@@ -362,7 +440,8 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
         </h3>
 
         <p class="text-xs text-[var(--glass-text-tertiary)] mt-0.5 line-clamp-1">
-          {Map.get(@item, :description, "") || Map.get(@item, :introduction, "") || Map.get(@item, :summary, "") || ""}
+          {Map.get(@item, :description, "") || Map.get(@item, :introduction, "") ||
+            Map.get(@item, :summary, "") || ""}
         </p>
       </div>
     </div>
@@ -376,8 +455,29 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
     {:noreply, assign(socket, :tab, tab)}
   end
 
-  def handle_event("set_scope", %{"scope" => scope}, socket) when scope in ~w(global project) do
-    {:noreply, assign(socket, :scope, scope)}
+  def handle_event("set_scope", %{"scope" => "global"}, socket) do
+    {:noreply,
+     socket
+     |> assign(:scope, "global")
+     |> assign(:selected_project_id, nil)
+     |> assign(:project_characters, [])
+     |> assign(:project_locations, [])}
+  end
+
+  def handle_event("set_scope", %{"scope" => "project"}, socket) do
+    {:noreply, assign(socket, :scope, "project")}
+  end
+
+  def handle_event("select_project", %{"id" => id}, socket) do
+    project_id = String.to_integer(id)
+    chars = Characters.list_characters(project_id)
+    locs = Locations.list_locations(project_id)
+
+    {:noreply,
+     socket
+     |> assign(:selected_project_id, project_id)
+     |> assign(:project_characters, chars)
+     |> assign(:project_locations, locs)}
   end
 
   def handle_event("search", %{"search" => search}, socket) do
@@ -474,7 +574,7 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
         send(parent, {:generation_complete, id, result})
       end)
 
-      {:noreply, socket}
+      {:noreply, put_flash(socket, :info, "正在生成参考图，请稍候...")}
     else
       {:noreply, socket}
     end
@@ -670,35 +770,57 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
   defp tab_label("sfx"), do: dgettext("projects", "SFX")
   defp tab_label("bgm"), do: dgettext("projects", "BGM")
 
-  defp tab_count("all", assigns) do
-    length(assigns.characters) + length(assigns.locations) + length(assigns.props) +
-      length(assigns.voices) + length(assigns.sfx) + length(assigns.bgm)
+  defp tab_count(tab, assigns) do
+    length(all_items_for_tab(tab, assigns))
   end
-
-  defp tab_count("characters", assigns), do: length(assigns.characters)
-  defp tab_count("locations", assigns), do: length(assigns.locations)
-  defp tab_count("props", assigns), do: length(assigns.props)
-  defp tab_count("voices", assigns), do: length(assigns.voices)
-  defp tab_count("sfx", assigns), do: length(assigns.sfx)
-  defp tab_count("bgm", assigns), do: length(assigns.bgm)
 
   defp all_items_for_tab(tab, assigns) do
     items =
-      case tab do
-        "all" ->
-          tag_items(assigns.characters, "character") ++
-            tag_items(assigns.locations, "location") ++
-            tag_items(assigns.props, "prop") ++
-            tag_items(assigns.voices, "voice") ++
-            tag_items(assigns.sfx, "sfx") ++
-            tag_items(assigns.bgm, "bgm")
+      if assigns.scope == "project" && assigns.selected_project_id do
+        # Project-scoped: show project characters + locations only
+        case tab do
+          "all" ->
+            tag_items(assigns.project_characters, "character") ++
+              tag_items(assigns.project_locations, "location")
 
-        "characters" -> tag_items(assigns.characters, "character")
-        "locations" -> tag_items(assigns.locations, "location")
-        "props" -> tag_items(assigns.props, "prop")
-        "voices" -> tag_items(assigns.voices, "voice")
-        "sfx" -> tag_items(assigns.sfx, "sfx")
-        "bgm" -> tag_items(assigns.bgm, "bgm")
+          "characters" ->
+            tag_items(assigns.project_characters, "character")
+
+          "locations" ->
+            tag_items(assigns.project_locations, "location")
+
+          _ ->
+            []
+        end
+      else
+        # Global scope: show all global assets
+        case tab do
+          "all" ->
+            tag_items(assigns.characters, "character") ++
+              tag_items(assigns.locations, "location") ++
+              tag_items(assigns.props, "prop") ++
+              tag_items(assigns.voices, "voice") ++
+              tag_items(assigns.sfx, "sfx") ++
+              tag_items(assigns.bgm, "bgm")
+
+          "characters" ->
+            tag_items(assigns.characters, "character")
+
+          "locations" ->
+            tag_items(assigns.locations, "location")
+
+          "props" ->
+            tag_items(assigns.props, "prop")
+
+          "voices" ->
+            tag_items(assigns.voices, "voice")
+
+          "sfx" ->
+            tag_items(assigns.sfx, "sfx")
+
+          "bgm" ->
+            tag_items(assigns.bgm, "bgm")
+        end
       end
 
     filter_items(items, assigns.search)
@@ -715,7 +837,10 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
 
     Enum.filter(items, fn item ->
       name = Map.get(item, :name, "") || ""
-      desc = Map.get(item, :description, "") || Map.get(item, :introduction, "") || Map.get(item, :summary, "") || ""
+
+      desc =
+        Map.get(item, :description, "") || Map.get(item, :introduction, "") ||
+          Map.get(item, :summary, "") || ""
 
       String.contains?(String.downcase(name), term) or
         String.contains?(String.downcase(desc), term)
@@ -724,14 +849,22 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
 
   defp find_asset(assigns, id, type) do
     list =
-      case type do
-        "character" -> assigns.characters
-        "location" -> assigns.locations
-        "prop" -> assigns.props
-        "voice" -> assigns.voices
-        "sfx" -> assigns.sfx
-        "bgm" -> assigns.bgm
-        _ -> []
+      if assigns.scope == "project" && assigns.selected_project_id do
+        case type do
+          "character" -> assigns.project_characters
+          "location" -> assigns.project_locations
+          _ -> []
+        end
+      else
+        case type do
+          "character" -> assigns.characters
+          "location" -> assigns.locations
+          "prop" -> assigns.props
+          "voice" -> assigns.voices
+          "sfx" -> assigns.sfx
+          "bgm" -> assigns.bgm
+          _ -> []
+        end
       end
 
     Enum.find(list, fn item -> to_string(item.id) == to_string(id) end)

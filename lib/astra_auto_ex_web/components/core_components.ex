@@ -55,8 +55,9 @@ defmodule AstraAutoExWeb.CoreComponents do
       :if={msg = render_slot(@inner_block) || Phoenix.Flash.get(@flash, @kind)}
       id={@id}
       phx-click={JS.push("lv:clear-flash", value: %{key: @kind}) |> hide("##{@id}")}
+      phx-hook="AutoDismissFlash"
       role="alert"
-      class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 animate-slide-up"
+      class="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 animate-toast-in"
       {@rest}
     >
       <div class={[
@@ -87,6 +88,7 @@ defmodule AstraAutoExWeb.CoreComponents do
           >
             {@title}
           </p>
+
           <p class={[
             "text-sm",
             @kind == :info && "text-[var(--glass-tone-info-fg)]",
@@ -95,6 +97,7 @@ defmodule AstraAutoExWeb.CoreComponents do
             {msg}
           </p>
         </div>
+
         <button type="button" class="group shrink-0 cursor-pointer" aria-label={gettext("close")}>
           <.icon name="hero-x-mark" class="size-4 opacity-50 group-hover:opacity-80" />
         </button>
@@ -127,15 +130,11 @@ defmodule AstraAutoExWeb.CoreComponents do
 
     if rest[:href] || rest[:navigate] || rest[:patch] do
       ~H"""
-      <.link class={@class} {@rest}>
-        {render_slot(@inner_block)}
-      </.link>
+      <.link class={@class} {@rest}>{render_slot(@inner_block)}</.link>
       """
     else
       ~H"""
-      <button class={@class} {@rest}>
-        {render_slot(@inner_block)}
-      </button>
+      <button class={@class} {@rest}>{render_slot(@inner_block)}</button>
       """
     end
   end
@@ -280,8 +279,7 @@ defmodule AstraAutoExWeb.CoreComponents do
     ~H"""
     <div class="fieldset mb-2">
       <label for={@id}>
-        <span :if={@label} class="label mb-1">{@label}</span>
-        <textarea
+        <span :if={@label} class="label mb-1">{@label}</span> <textarea
           id={@id}
           name={@name}
           class={[
@@ -323,8 +321,7 @@ defmodule AstraAutoExWeb.CoreComponents do
   defp error(assigns) do
     ~H"""
     <p class="mt-1.5 flex gap-2 items-center text-sm text-error">
-      <.icon name="hero-exclamation-circle" class="size-5" />
-      {render_slot(@inner_block)}
+      <.icon name="hero-exclamation-circle" class="size-5" /> {render_slot(@inner_block)}
     </p>
     """
   end
@@ -340,13 +337,11 @@ defmodule AstraAutoExWeb.CoreComponents do
     ~H"""
     <header class={[@actions != [] && "flex items-center justify-between gap-6", "pb-4"]}>
       <div>
-        <h1 class="text-lg font-semibold leading-8">
-          {render_slot(@inner_block)}
-        </h1>
-        <p :if={@subtitle != []} class="text-sm text-base-content/70">
-          {render_slot(@subtitle)}
-        </p>
+        <h1 class="text-lg font-semibold leading-8">{render_slot(@inner_block)}</h1>
+
+        <p :if={@subtitle != []} class="text-sm text-base-content/70">{render_slot(@subtitle)}</p>
       </div>
+
       <div class="flex-none">{render_slot(@actions)}</div>
     </header>
     """
@@ -388,11 +383,11 @@ defmodule AstraAutoExWeb.CoreComponents do
       <thead>
         <tr>
           <th :for={col <- @col}>{col[:label]}</th>
-          <th :if={@action != []}>
-            <span class="sr-only">{gettext("Actions")}</span>
-          </th>
+
+          <th :if={@action != []}><span class="sr-only">{gettext("Actions")}</span></th>
         </tr>
       </thead>
+
       <tbody id={@id} phx-update={is_struct(@rows, Phoenix.LiveView.LiveStream) && "stream"}>
         <tr :for={row <- @rows} id={@row_id && @row_id.(row)}>
           <td
@@ -402,6 +397,7 @@ defmodule AstraAutoExWeb.CoreComponents do
           >
             {render_slot(col, @row_item.(row))}
           </td>
+
           <td :if={@action != []} class="w-0 font-semibold">
             <div class="flex gap-4">
               <%= for action <- @action do %>
@@ -435,6 +431,7 @@ defmodule AstraAutoExWeb.CoreComponents do
       <li :for={item <- @item} class="list-row">
         <div class="list-col-grow">
           <div class="font-bold">{item.title}</div>
+
           <div>{render_slot(item)}</div>
         </div>
       </li>

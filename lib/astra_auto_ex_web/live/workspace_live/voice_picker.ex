@@ -40,7 +40,6 @@ defmodule AstraAutoExWeb.WorkspaceLive.VoicePicker do
         <h2 class="text-lg font-bold text-[var(--glass-text-primary)] mb-4">
           {dgettext("projects", "Voice Settings")}
         </h2>
-
         <%!-- Gender filter --%>
         <div class="flex gap-2 mb-4">
           <button
@@ -80,7 +79,6 @@ defmodule AstraAutoExWeb.WorkspaceLive.VoicePicker do
             Male
           </button>
         </div>
-
         <%!-- Voice list --%>
         <div class="space-y-1 max-h-48 overflow-y-auto mb-4">
           <%= for preset <- filtered_presets(@presets, @filter_gender) do %>
@@ -99,6 +97,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.VoicePicker do
               <div class="w-8 h-8 rounded-full bg-[var(--glass-bg-muted)] flex items-center justify-center text-xs text-[var(--glass-text-secondary)]">
                 {String.first(preset.name)}
               </div>
+
               <div class="flex-1">
                 <span class="text-sm text-[var(--glass-text-primary)]">{preset.name}</span>
                 <div class="flex gap-1 mt-0.5">
@@ -110,7 +109,6 @@ defmodule AstraAutoExWeb.WorkspaceLive.VoicePicker do
             </button>
           <% end %>
         </div>
-
         <%!-- Emotion --%>
         <div class="mb-4">
           <label class="text-xs text-[var(--glass-text-tertiary)] mb-2 block">

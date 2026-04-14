@@ -93,7 +93,8 @@ defmodule AstraAutoEx.AssetHub do
   def get_global_sfx!(id), do: Repo.get!(GlobalSfx, id)
   def get_global_bgm!(id), do: Repo.get!(GlobalBgm, id)
 
-  def update_global_location(gl, attrs), do: gl |> GlobalLocation.changeset(attrs) |> Repo.update()
+  def update_global_location(gl, attrs),
+    do: gl |> GlobalLocation.changeset(attrs) |> Repo.update()
 
   # ── Appearance helpers ──
 

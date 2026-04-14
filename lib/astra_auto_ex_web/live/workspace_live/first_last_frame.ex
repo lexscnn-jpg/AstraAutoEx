@@ -26,12 +26,12 @@ defmodule AstraAutoExWeb.WorkspaceLive.FirstLastFrame do
         <h4 class="text-sm font-semibold text-[var(--glass-text-primary)]">首尾帧过渡</h4>
         <span class="glass-chip text-[10px]">面板 {@panel_index + 1} → {@panel_index + 2}</span>
       </div>
-
       <%!-- Side-by-side frame preview --%>
       <div class="flex items-center gap-3">
         <%!-- First frame (current panel) --%>
         <div class="flex-1">
           <div class="text-[10px] text-[var(--glass-text-tertiary)] mb-1">第一帧</div>
+
           <div class="aspect-video bg-[var(--glass-bg-muted)] rounded-lg overflow-hidden">
             <%= if @current_panel.image_url do %>
               <img src={@current_panel.image_url} class="w-full h-full object-cover" />
@@ -42,17 +42,16 @@ defmodule AstraAutoExWeb.WorkspaceLive.FirstLastFrame do
             <% end %>
           </div>
         </div>
-
         <%!-- Arrow --%>
         <div class="flex-shrink-0 text-[var(--glass-accent-from)]">
           <svg class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
           </svg>
         </div>
-
         <%!-- Last frame (next panel) --%>
         <div class="flex-1">
           <div class="text-[10px] text-[var(--glass-text-tertiary)] mb-1">末帧</div>
+
           <div class="aspect-video bg-[var(--glass-bg-muted)] rounded-lg overflow-hidden">
             <%= if @next_panel.image_url do %>
               <img src={@next_panel.image_url} class="w-full h-full object-cover" />
@@ -64,11 +63,9 @@ defmodule AstraAutoExWeb.WorkspaceLive.FirstLastFrame do
           </div>
         </div>
       </div>
-
       <%!-- Transition prompt --%>
       <div>
-        <label class="text-xs text-[var(--glass-text-tertiary)] mb-1 block">过渡描述（留空自动生成）</label>
-        <textarea
+        <label class="text-xs text-[var(--glass-text-tertiary)] mb-1 block">过渡描述（留空自动生成）</label> <textarea
           name="fl_prompt"
           rows="2"
           phx-change="update_fl_prompt"
@@ -77,17 +74,13 @@ defmodule AstraAutoExWeb.WorkspaceLive.FirstLastFrame do
           placeholder="描述从第一帧到末帧的镜头运动和过渡方式..."
         ><%= @custom_prompt %></textarea>
       </div>
-
       <%!-- Auto-generated hint --%>
       <div class="text-xs text-[var(--glass-text-tertiary)] bg-[var(--glass-bg-muted)] rounded-lg p-2 opacity-60">
         自动描述：{auto_prompt(@current_panel, @next_panel)}
       </div>
-
       <%!-- Generate button --%>
       <div class="flex items-center justify-between">
-        <span class="text-xs text-[var(--glass-text-tertiary)]">
-          模型需支持 firstlastframe 能力
-        </span>
+        <span class="text-xs text-[var(--glass-text-tertiary)]">模型需支持 firstlastframe 能力</span>
         <button
           type="button"
           phx-click="generate_fl_video"
@@ -117,11 +110,11 @@ defmodule AstraAutoExWeb.WorkspaceLive.FirstLastFrame do
           <% end %>
         </button>
       </div>
-
       <%!-- FL video result --%>
       <%= if @current_panel.fl_video_url do %>
         <div class="mt-2">
           <div class="text-xs text-green-400 mb-1">过渡视频已生成</div>
+
           <video
             src={@current_panel.fl_video_url}
             controls

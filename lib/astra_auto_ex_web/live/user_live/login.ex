@@ -12,6 +12,7 @@ defmodule AstraAutoExWeb.UserLive.Login do
           <h2 class="text-2xl font-bold text-center mb-2 text-[var(--glass-text-primary)]">
             {dgettext("auth", "Welcome Back")}
           </h2>
+
           <p class="text-sm text-center text-[var(--glass-text-tertiary)] mb-6">
             {dgettext("auth", "Sign in to AstraAutoEx")}
           </p>
@@ -37,6 +38,7 @@ defmodule AstraAutoExWeb.UserLive.Login do
                 autofocus
               />
             </div>
+
             <div class="mb-6">
               <label class="glass-label">{dgettext("auth", "Password")}</label>
               <input
@@ -47,6 +49,7 @@ defmodule AstraAutoExWeb.UserLive.Login do
                 autocomplete="current-password"
               />
             </div>
+
             <button
               type="submit"
               name={@form[:remember_me].name}

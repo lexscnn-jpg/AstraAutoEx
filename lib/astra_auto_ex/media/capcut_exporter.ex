@@ -64,7 +64,8 @@ defmodule AstraAutoEx.Media.CapcutExporter do
       panels
       |> Enum.filter(&(&1.video_url && &1.video_url != ""))
       |> Enum.map_reduce(0, fn panel, offset ->
-        duration = 5_000_000  # Default 5s in microseconds
+        # Default 5s in microseconds
+        duration = 5_000_000
 
         segment = %{
           "material_id" => panel.id,

@@ -34,16 +34,28 @@ defmodule AstraAutoEx.Workers.Handlers.ImagePanel do
     provider = model_config["provider"]
     model = model_config["model"]
 
-    # Collect reference images (character + location appearances)
+    # Collect reference images (character + location appearances + user uploads)
     reference_images = collect_reference_images(panel, characters, task.project_id)
+
+    # Merge user-uploaded reference images from payload
+    user_refs = payload["user_ref_images"] || []
+    all_refs = (reference_images ++ user_refs) |> Enum.take(5)
+
+    # Append user ref prompt if provided
+    ref_prompt_suffix = payload["ref_prompt"] || ""
+
+    final_prompt =
+      if ref_prompt_suffix != "",
+        do: prompt <> "\n[Reference Style] #{ref_prompt_suffix}",
+        else: prompt
 
     candidate_count = payload["candidate_count"] || 1
 
     request = %{
-      prompt: prompt,
+      prompt: final_prompt,
       model: model,
       aspect_ratio: payload["aspect_ratio"] || "16:9",
-      reference_images: reference_images
+      reference_images: all_refs
     }
 
     Helpers.update_progress(task, 40)
