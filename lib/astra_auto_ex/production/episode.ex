@@ -9,7 +9,9 @@ defmodule AstraAutoEx.Production.Episode do
     field :project_id, :integer
     field :user_id, :integer
     field :episode_number, :integer
+    field :title, :string
     field :name, :string
+    field :status, :string, default: "draft"
     field :novel_text, :string
     field :audio_url, :string
     field :audio_media_id, :binary_id
@@ -31,7 +33,9 @@ defmodule AstraAutoEx.Production.Episode do
       :project_id,
       :user_id,
       :episode_number,
+      :title,
       :name,
+      :status,
       :novel_text,
       :audio_url,
       :audio_media_id,

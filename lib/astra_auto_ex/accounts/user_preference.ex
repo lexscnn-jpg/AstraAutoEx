@@ -18,6 +18,7 @@ defmodule AstraAutoEx.Accounts.UserPreference do
   def changeset(preference, attrs) do
     preference
     |> cast(attrs, [
+      :user_id,
       :provider_configs,
       :model_selections,
       :storage_config,
