@@ -2223,7 +2223,9 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
   end
 
   def handle_event("toggle_auto_chain", _, socket) do
-    {:noreply, assign(socket, :auto_chain, !socket.assigns.auto_chain)}
+    new_val = !socket.assigns.auto_chain
+    save_novel_setting(socket.assigns.project.id, :auto_chain_enabled, new_val)
+    {:noreply, assign(socket, :auto_chain, new_val)}
   end
 
   def handle_event("toggle_skip_voice", _, socket) do
@@ -2232,8 +2234,18 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
 
   def handle_event("toggle_full_auto_chain", _, socket) do
     new_val = !socket.assigns.full_auto_chain
-    socket = if new_val, do: assign(socket, :auto_chain, true), else: socket
-    {:noreply, assign(socket, :full_auto_chain, new_val)}
+    save_novel_setting(socket.assigns.project.id, :full_auto_chain_enabled, new_val)
+
+    socket =
+      socket
+      |> assign(:full_auto_chain, new_val)
+      |> then(fn s -> if new_val, do: assign(s, :auto_chain, true), else: s end)
+
+    if new_val do
+      save_novel_setting(socket.assigns.project.id, :auto_chain_enabled, true)
+    end
+
+    {:noreply, socket}
   end
 
   def handle_event("pause_pipeline", _, socket) do
@@ -3279,6 +3291,13 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
     end
   rescue
     _ -> default
+  end
+
+  defp save_novel_setting(project_id, field, value) do
+    attrs = Map.put(%{project_id: project_id}, field, value)
+    Production.upsert_novel_project(attrs)
+  rescue
+    _ -> :ok
   end
 
   defp pipeline_step_label("story_to_script_run"), do: "故事→剧本"
