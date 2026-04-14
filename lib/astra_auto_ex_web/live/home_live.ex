@@ -1,7 +1,7 @@
 defmodule AstraAutoExWeb.HomeLive do
   use AstraAutoExWeb, :live_view
 
-  alias AstraAutoEx.Projects
+  alias AstraAutoEx.{Projects, Production}
   alias AstraAutoEx.Workers.Handlers.Helpers
 
   @impl true
@@ -111,21 +111,26 @@ defmodule AstraAutoExWeb.HomeLive do
                     }
                     phx-debounce="300"
                   />
-                  <.live_file_input upload={@uploads.story_file} class="hidden" />
+                  <.live_file_input upload={@uploads.story_file} class="hidden" id="story-file-input" />
                   <div
                     :if={@story_input == ""}
-                    class="absolute bottom-2 right-2 flex items-center gap-1 text-xs text-[var(--glass-text-tertiary)] opacity-50 pointer-events-none"
+                    class="absolute bottom-2 right-2 flex items-center gap-1 text-xs text-[var(--glass-text-tertiary)]"
                   >
-                    <svg
-                      class="w-3.5 h-3.5"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="1.5"
-                      viewBox="0 0 24 24"
+                    <label
+                      for="story-file-input"
+                      class="flex items-center gap-1 cursor-pointer hover:text-[var(--glass-text-secondary)] transition-colors opacity-70 hover:opacity-100"
                     >
-                      <path d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
-                    </svg>
-                    {dgettext("projects", "Drop .txt/.md file")}
+                      <svg
+                        class="w-3.5 h-3.5"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="1.5"
+                        viewBox="0 0 24 24"
+                      >
+                        <path d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                      </svg>
+                      {dgettext("projects", "Drop .txt/.md file")}
+                    </label>
                   </div>
                 </div>
 
@@ -352,7 +357,17 @@ defmodule AstraAutoExWeb.HomeLive do
                   dgettext("projects", "E.g. A modern urban revenge story about a woman who...")
                 }
               />
-              <div class="flex justify-end">
+              <div class="flex items-center justify-between">
+                <button
+                  type="button"
+                  phx-click="view_prompt_template"
+                  class="text-xs text-[var(--glass-text-tertiary)] hover:text-[var(--glass-accent-from)] transition-colors flex items-center gap-1"
+                >
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                  </svg>
+                  {dgettext("projects", "Prompt")}
+                </button>
                 <button
                   type="button"
                   phx-click="generate_ai_outline"
@@ -518,6 +533,15 @@ defmodule AstraAutoExWeb.HomeLive do
 
       case Projects.create_project(user.id, params) do
         {:ok, project} ->
+          # Create first episode with story text preserved
+          Production.create_episode(%{
+            project_id: project.id,
+            user_id: user.id,
+            episode_number: 1,
+            title: "#{name} 第1集",
+            novel_text: story
+          })
+
           {:noreply,
            socket
            |> assign(:projects, Projects.list_projects(user.id))
@@ -527,6 +551,18 @@ defmodule AstraAutoExWeb.HomeLive do
           {:noreply, put_flash(socket, :error, dgettext("default", "Error"))}
       end
     end
+  end
+
+  def handle_event("view_prompt_template", _params, socket) do
+    alias AstraAutoEx.AI.PromptCatalog
+
+    preview =
+      case PromptCatalog.get_template("np_ai_story_outline", "zh") do
+        {:ok, text} -> String.slice(text, 0..200) <> "..."
+        _ -> "Prompt template not found"
+      end
+
+    {:noreply, put_flash(socket, :info, preview)}
   end
 
   # ── AI Write Modal events ──────────────────────────────────────────────

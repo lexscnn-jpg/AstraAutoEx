@@ -28,7 +28,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
      |> assign(:current_episode, current_episode)
      |> assign(:storyboards, load_storyboards(current_episode))
      |> assign(:active_tasks, Tasks.list_project_tasks(project_id, status: "processing"))
-     |> assign(:novel_text, "")
+     |> assign(:novel_text, (current_episode && current_episode.novel_text) || "")
      |> assign(:show_assistant, false)
      |> assign(:editing_panel, nil)
      |> assign(:show_character_modal, false)
@@ -319,10 +319,9 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
           class="glass-input w-full resize-none text-base leading-relaxed border-none bg-transparent focus:ring-0 p-0"
           style="min-height: 40vh"
           placeholder={dgettext("projects", "Paste your story or novel text here...")}
-          value={@novel_text}
           phx-change="update_novel_text"
           phx-debounce="500"
-        />
+        ><%= @novel_text %></textarea>
 
         <%!-- Bottom toolbar --%>
         <div class="flex items-center justify-between pt-4 mt-4 border-t border-[var(--glass-stroke-soft)]">
@@ -366,18 +365,11 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                 name="style"
                 class="glass-input text-xs py-1 pl-2 pr-6 border-[var(--glass-stroke-soft)]"
               >
-                <option value="realistic" selected={@art_style == "realistic"}>
-                  {dgettext("projects", "Realistic")}
-                </option>
-                <option value="anime" selected={@art_style == "anime"}>
-                  {dgettext("projects", "Anime")}
-                </option>
-                <option value="oil_painting" selected={@art_style == "oil_painting"}>
-                  {dgettext("projects", "Oil Painting")}
-                </option>
-                <option value="custom" selected={@art_style == "custom"}>
-                  {dgettext("projects", "Custom")}
-                </option>
+                <%= for preset <- AstraAutoEx.AI.ArtStyles.list_presets() do %>
+                  <option value={preset.value} selected={@art_style == preset.value}>
+                    {preset.label_zh}
+                  </option>
+                <% end %>
               </select>
             </div>
           </div>
@@ -594,6 +586,16 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
               <path d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.41a2.25 2.25 0 013.182 0l2.909 2.91m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
             </svg>
             {dgettext("projects", "Generate All Images")}
+          </button>
+          <button
+            phx-click="retry_failed_images"
+            class="glass-btn glass-btn-secondary px-3 py-2 text-xs flex items-center gap-1"
+            title={dgettext("projects", "Retry failed image tasks")}
+          >
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182" />
+            </svg>
+            {dgettext("projects", "Retry")}
           </button>
         </div>
       </div>
@@ -990,243 +992,192 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
       |> Map.put(:selected_count, selected_count)
 
     ~H"""
-    <div class="max-w-4xl mx-auto space-y-6 animate-slide-up">
-      <%!-- Title centered --%>
-      <div class="text-center py-4">
-        <h1 class="text-2xl font-bold text-[var(--glass-text-primary)]">
-          {dgettext("projects", "AI Edit")}
-        </h1>
-        <p class="text-sm text-[var(--glass-text-tertiary)] mt-1">
-          {dgettext(
-            "projects",
-            "Select panels, configure effects, and compose the final video with one click."
-          )}
-        </p>
-      </div>
-
-      <%!-- Panel checklist --%>
-      <div class="glass-surface rounded-xl overflow-hidden">
-        <div class="flex items-center justify-between px-5 py-3 border-b border-[var(--glass-stroke-soft)]">
-          <div class="flex items-center gap-2">
-            <h3 class="text-sm font-semibold text-[var(--glass-text-primary)]">
-              {dgettext("projects", "Panel Clips")}
-            </h3>
-            <span class="text-xs text-[var(--glass-text-tertiary)]">
-              ({@video_count}/{@total} {dgettext("projects", "ready")})
-            </span>
+    <div class="max-w-6xl mx-auto animate-slide-up">
+      <div class="grid grid-cols-12 gap-6">
+        <%!-- ═══ LEFT COLUMN: Workspace ═══ --%>
+        <div class="col-span-7 space-y-5">
+          <%!-- Panel checklist --%>
+          <div class="glass-surface rounded-xl overflow-hidden">
+            <div class="flex items-center justify-between px-5 py-3 border-b border-[var(--glass-stroke-soft)]">
+              <div class="flex items-center gap-2">
+                <h3 class="text-sm font-semibold text-[var(--glass-text-primary)]">
+                  {dgettext("projects", "Panel Clips")}
+                </h3>
+                <span class="text-xs text-[var(--glass-text-tertiary)]">
+                  ({@video_count}/{@total} {dgettext("projects", "ready")})
+                </span>
+              </div>
+              <button
+                phx-click="select_all_panels"
+                class="text-xs text-[var(--glass-accent-from)] hover:text-[var(--glass-accent-to)] transition-colors"
+              >
+                {dgettext("projects", "Select All")}
+              </button>
+            </div>
+            <div class="divide-y divide-[var(--glass-stroke-soft)] max-h-[50vh] overflow-y-auto">
+              <%= for {panel, idx} <- Enum.with_index(@all_panels) do %>
+                <div
+                  class="flex items-center gap-3 px-5 py-2.5 hover:bg-[var(--glass-bg-muted)] transition-colors cursor-pointer"
+                  phx-click="toggle_panel_select"
+                  phx-value-panel-id={panel.id}
+                >
+                  <div class={[
+                    "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0 transition-colors",
+                    if(MapSet.member?(@selected_panels, panel.id),
+                      do: "bg-[var(--glass-accent-from)] border-[var(--glass-accent-from)]",
+                      else: "border-[var(--glass-stroke-base)]"
+                    )
+                  ]}>
+                    <svg
+                      :if={MapSet.member?(@selected_panels, panel.id)}
+                      class="w-3 h-3 text-[var(--glass-text-on-accent)]"
+                      fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"
+                    >
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <span class="text-xs text-[var(--glass-text-tertiary)] w-6 text-center">{idx + 1}</span>
+                  <div class="w-12 h-8 rounded bg-[var(--glass-bg-muted)] flex-shrink-0 overflow-hidden">
+                    <img :if={panel.image_url && panel.image_url != ""} src={panel.image_url} class="w-full h-full object-cover" />
+                  </div>
+                  <%= if panel.video_url && panel.video_url != "" do %>
+                    <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-green-500/10 text-green-500 flex-shrink-0">
+                      {dgettext("projects", "Ready")}
+                    </span>
+                  <% else %>
+                    <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-yellow-500/10 text-yellow-500 flex-shrink-0">
+                      {dgettext("projects", "No Video")}
+                    </span>
+                  <% end %>
+                  <p class="text-xs text-[var(--glass-text-secondary)] flex-1 truncate">{panel.description}</p>
+                </div>
+              <% end %>
+            </div>
           </div>
+
+          <%!-- Compose config --%>
+          <div class="glass-surface rounded-xl p-5 space-y-4">
+            <h3 class="text-sm font-semibold text-[var(--glass-text-primary)]">
+              {dgettext("projects", "Compose Settings")}
+            </h3>
+            <%!-- Transition --%>
+            <div>
+              <label class="text-xs text-[var(--glass-text-tertiary)] mb-1.5 block">{dgettext("projects", "Transition Effect")}</label>
+              <div class="flex items-center gap-2 flex-wrap">
+                <%= for {val, label} <- [{"crossfade", dgettext("projects", "Crossfade")}, {"fade-black", dgettext("projects", "Fade Black")}, {"none", dgettext("projects", "None")}] do %>
+                  <button phx-click="set_compose_transition" phx-value-value={val} class={["px-3 py-1.5 rounded-lg text-xs font-medium transition-all", if(@compose_transition == val, do: "bg-[var(--glass-accent-from)]/20 text-[var(--glass-accent-from)] ring-1 ring-[var(--glass-accent-from)]/30", else: "bg-[var(--glass-bg-muted)] text-[var(--glass-text-secondary)]")]}>
+                    {label}
+                  </button>
+                <% end %>
+                <select phx-change="set_compose_transition_ms" name="value" class="glass-input text-xs py-1 pl-2 pr-6 ml-1">
+                  <option value="300" selected={@compose_transition_ms == "300"}>300ms</option>
+                  <option value="500" selected={@compose_transition_ms == "500"}>500ms</option>
+                  <option value="800" selected={@compose_transition_ms == "800"}>800ms</option>
+                  <option value="1000" selected={@compose_transition_ms == "1000"}>1000ms</option>
+                </select>
+              </div>
+            </div>
+            <%!-- Subtitles --%>
+            <div>
+              <label class="text-xs text-[var(--glass-text-tertiary)] mb-1.5 block">{dgettext("projects", "Subtitle Mode")}</label>
+              <div class="flex items-center gap-2 flex-wrap">
+                <%= for {val, label} <- [{"burn-in", dgettext("projects", "Burn-in")}, {"soft", dgettext("projects", "Soft Sub")}, {"both", dgettext("projects", "Both")}, {"none", dgettext("projects", "None")}] do %>
+                  <button phx-click="set_compose_subtitle" phx-value-value={val} class={["px-3 py-1.5 rounded-lg text-xs font-medium transition-all", if(@compose_subtitle == val, do: "bg-[var(--glass-accent-from)]/20 text-[var(--glass-accent-from)] ring-1 ring-[var(--glass-accent-from)]/30", else: "bg-[var(--glass-bg-muted)] text-[var(--glass-text-secondary)]")]}>
+                    {label}
+                  </button>
+                <% end %>
+              </div>
+            </div>
+            <%!-- BGM --%>
+            <div>
+              <label class="text-xs text-[var(--glass-text-tertiary)] mb-1.5 block">{dgettext("projects", "Background Music")}</label>
+              <div class="flex items-center gap-2">
+                <%= for {val, label} <- [{"none", dgettext("projects", "None")}, {"preset", dgettext("projects", "Preset")}] do %>
+                  <button phx-click="set_compose_bgm" phx-value-value={val} class={["px-3 py-1.5 rounded-lg text-xs font-medium transition-all", if(@compose_bgm == val, do: "bg-[var(--glass-accent-from)]/20 text-[var(--glass-accent-from)] ring-1 ring-[var(--glass-accent-from)]/30", else: "bg-[var(--glass-bg-muted)] text-[var(--glass-text-secondary)]")]}>
+                    {label}
+                  </button>
+                <% end %>
+              </div>
+            </div>
+          </div>
+
+          <%!-- Compose button --%>
           <button
-            phx-click="select_all_panels"
-            class="text-xs text-[var(--glass-accent-from)] hover:text-[var(--glass-accent-to)] transition-colors"
+            phx-click="compose_video"
+            class={["w-full py-3 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all", if(@ready and @selected_count > 0, do: "glass-btn glass-btn-primary hover:shadow-lg", else: "glass-btn glass-btn-primary opacity-50 cursor-not-allowed")]}
+            disabled={!@ready or @selected_count == 0}
           >
-            {dgettext("projects", "Select All")}
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 010 1.972l-11.54 6.347a1.125 1.125 0 01-1.667-.986V5.653z" />
+            </svg>
+            {dgettext("projects", "Compose Video")} ({@selected_count} {dgettext("projects", "panels")})
           </button>
         </div>
-        <div class="divide-y divide-[var(--glass-stroke-soft)] max-h-[40vh] overflow-y-auto">
-          <%= for {panel, idx} <- Enum.with_index(@all_panels) do %>
-            <div
-              class="flex items-center gap-3 px-5 py-2.5 hover:bg-[var(--glass-bg-muted)] transition-colors cursor-pointer"
-              phx-click="toggle_panel_select"
-              phx-value-panel-id={panel.id}
-            >
-              <%!-- Checkbox --%>
-              <div class={[
-                "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0 transition-colors",
-                if(MapSet.member?(@selected_panels, panel.id),
-                  do: "bg-[var(--glass-accent-from)] border-[var(--glass-accent-from)]",
-                  else: "border-[var(--glass-stroke-base)]"
-                )
-              ]}>
-                <svg
-                  :if={MapSet.member?(@selected_panels, panel.id)}
-                  class="w-3 h-3 text-[var(--glass-text-on-accent)]"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="3"
-                  viewBox="0 0 24 24"
-                >
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-              <%!-- Index --%>
-              <span class="text-xs text-[var(--glass-text-tertiary)] w-6 text-center">{idx + 1}</span>
-              <%!-- Thumbnail --%>
-              <div class="w-12 h-8 rounded bg-[var(--glass-bg-muted)] flex-shrink-0 overflow-hidden">
-                <img
-                  :if={panel.image_url && panel.image_url != ""}
-                  src={panel.image_url}
-                  class="w-full h-full object-cover"
-                />
-              </div>
-              <%!-- Status chip --%>
-              <%= if panel.video_url && panel.video_url != "" do %>
-                <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-green-500/10 text-green-500 flex-shrink-0">
-                  {dgettext("projects", "Ready")}
-                </span>
-              <% else %>
-                <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-yellow-500/10 text-yellow-500 flex-shrink-0">
-                  {dgettext("projects", "No Video")}
-                </span>
-              <% end %>
-              <%!-- Description --%>
-              <p class="text-xs text-[var(--glass-text-secondary)] flex-1 truncate">
-                {panel.description}
-              </p>
+
+        <%!-- ═══ RIGHT COLUMN: Preview & Export ═══ --%>
+        <div class="col-span-5 space-y-5">
+          <%!-- Video preview --%>
+          <div class="glass-surface rounded-xl overflow-hidden">
+            <div class="px-5 py-3 border-b border-[var(--glass-stroke-soft)]">
+              <h3 class="text-sm font-semibold text-[var(--glass-text-primary)]">
+                {dgettext("projects", "Preview")}
+              </h3>
             </div>
-          <% end %>
-        </div>
-      </div>
+            <div class="aspect-video bg-black/80 flex items-center justify-center">
+              <%= if @current_episode && @current_episode.composed_video_key do %>
+                <video src={@current_episode.composed_video_key} controls class="w-full h-full" />
+              <% else %>
+                <div class="text-center p-6">
+                  <svg class="w-10 h-10 mx-auto text-white/20 mb-2" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24">
+                    <path d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 010 1.972l-11.54 6.347a1.125 1.125 0 01-1.667-.986V5.653z" />
+                  </svg>
+                  <p class="text-xs text-white/30">{dgettext("projects", "Composed video will appear here")}</p>
+                </div>
+              <% end %>
+            </div>
+          </div>
 
-      <%!-- Compose config --%>
-      <div class="glass-surface rounded-xl p-5 space-y-5">
-        <h3 class="text-sm font-semibold text-[var(--glass-text-primary)]">
-          {dgettext("projects", "Compose Settings")}
-        </h3>
+          <%!-- Compose progress --%>
+          <div :if={@compose_task} class="glass-surface rounded-xl p-4">
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-2.5 h-2.5 rounded-full bg-[var(--glass-accent-from)] animate-pulse" />
+              <span class="text-xs font-semibold text-[var(--glass-text-primary)]">{dgettext("projects", "Composing...")}</span>
+            </div>
+            <div class="h-1.5 bg-[var(--glass-bg-muted)] rounded-full overflow-hidden">
+              <div class="h-full bg-gradient-to-r from-[var(--glass-accent-from)] to-[var(--glass-accent-to)] animate-pulse" style="width: 60%" />
+            </div>
+          </div>
 
-        <%!-- Transition --%>
-        <div>
-          <label class="text-xs text-[var(--glass-text-tertiary)] mb-2 block">
-            {dgettext("projects", "Transition Effect")}
-          </label>
-          <div class="flex items-center gap-2">
-            <%= for {val, label} <- [{"crossfade", dgettext("projects", "Crossfade")}, {"fade-black", dgettext("projects", "Fade Black")}, {"none", dgettext("projects", "None")}] do %>
-              <button
-                phx-click="set_compose_transition"
-                phx-value-value={val}
-                class={[
-                  "px-3 py-1.5 rounded-lg text-xs font-medium transition-all",
-                  if(@compose_transition == val,
-                    do:
-                      "bg-[var(--glass-accent-from)]/20 text-[var(--glass-accent-from)] ring-1 ring-[var(--glass-accent-from)]/30",
-                    else:
-                      "bg-[var(--glass-bg-muted)] text-[var(--glass-text-secondary)] hover:text-[var(--glass-text-primary)]"
-                  )
-                ]}
-              >
-                {label}
+          <%!-- Export buttons --%>
+          <div class="glass-surface rounded-xl p-5 space-y-3">
+            <h3 class="text-sm font-semibold text-[var(--glass-text-primary)]">
+              {dgettext("projects", "Export")}
+            </h3>
+            <div class="grid grid-cols-2 gap-2">
+              <button class="glass-btn glass-btn-secondary px-3 py-2 text-xs flex items-center justify-center gap-1.5" disabled>
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                  <path d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                </svg>
+                {dgettext("projects", "Export to JianYing")}
               </button>
-            <% end %>
-            <select
-              phx-change="set_compose_transition_ms"
-              name="value"
-              class="glass-input text-xs py-1 pl-2 pr-6 ml-2"
+              <button class="glass-btn glass-btn-secondary px-3 py-2 text-xs flex items-center justify-center gap-1.5" disabled>
+                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                  <path d="M7.217 10.907a2.25 2.25 0 100 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186l9.566-5.314m-9.566 7.5l9.566 5.314m0 0a2.25 2.25 0 103.935 2.186 2.25 2.25 0 00-3.935-2.186zm0-12.814a2.25 2.25 0 103.933-2.185 2.25 2.25 0 00-3.933 2.185z" />
+                </svg>
+                {dgettext("projects", "Publish to Douyin")}
+              </button>
+            </div>
+            <button
+              phx-click="generate_promo_copy"
+              class="w-full glass-btn glass-btn-secondary px-3 py-2 text-xs flex items-center justify-center gap-1.5"
             >
-              <option value="300" selected={@compose_transition_ms == "300"}>300ms</option>
-              <option value="500" selected={@compose_transition_ms == "500"}>500ms</option>
-              <option value="800" selected={@compose_transition_ms == "800"}>800ms</option>
-              <option value="1000" selected={@compose_transition_ms == "1000"}>1000ms</option>
-            </select>
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                <path d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+              </svg>
+              {dgettext("projects", "Generate Promo Copy")}
+            </button>
           </div>
         </div>
-
-        <%!-- Subtitles --%>
-        <div>
-          <label class="text-xs text-[var(--glass-text-tertiary)] mb-2 block">
-            {dgettext("projects", "Subtitle Mode")}
-          </label>
-          <div class="flex items-center gap-2">
-            <%= for {val, label} <- [{"burn-in", dgettext("projects", "Burn-in")}, {"soft", dgettext("projects", "Soft Sub")}, {"both", dgettext("projects", "Both")}, {"none", dgettext("projects", "None")}] do %>
-              <button
-                phx-click="set_compose_subtitle"
-                phx-value-value={val}
-                class={[
-                  "px-3 py-1.5 rounded-lg text-xs font-medium transition-all",
-                  if(@compose_subtitle == val,
-                    do:
-                      "bg-[var(--glass-accent-from)]/20 text-[var(--glass-accent-from)] ring-1 ring-[var(--glass-accent-from)]/30",
-                    else:
-                      "bg-[var(--glass-bg-muted)] text-[var(--glass-text-secondary)] hover:text-[var(--glass-text-primary)]"
-                  )
-                ]}
-              >
-                {label}
-              </button>
-            <% end %>
-          </div>
-        </div>
-
-        <%!-- BGM --%>
-        <div>
-          <label class="text-xs text-[var(--glass-text-tertiary)] mb-2 block">
-            {dgettext("projects", "Background Music")}
-          </label>
-          <div class="flex items-center gap-2">
-            <%= for {val, label} <- [{"none", dgettext("projects", "None")}, {"preset", dgettext("projects", "Preset")}] do %>
-              <button
-                phx-click="set_compose_bgm"
-                phx-value-value={val}
-                class={[
-                  "px-3 py-1.5 rounded-lg text-xs font-medium transition-all",
-                  if(@compose_bgm == val,
-                    do:
-                      "bg-[var(--glass-accent-from)]/20 text-[var(--glass-accent-from)] ring-1 ring-[var(--glass-accent-from)]/30",
-                    else:
-                      "bg-[var(--glass-bg-muted)] text-[var(--glass-text-secondary)] hover:text-[var(--glass-text-primary)]"
-                  )
-                ]}
-              >
-                {label}
-              </button>
-            <% end %>
-          </div>
-        </div>
-      </div>
-
-      <%!-- Compose progress (if running) --%>
-      <div :if={@compose_task} class="glass-surface rounded-xl p-5">
-        <div class="flex items-center gap-3 mb-3">
-          <div class="w-3 h-3 rounded-full bg-[var(--glass-accent-from)] animate-pulse" />
-          <h3 class="text-sm font-semibold text-[var(--glass-text-primary)]">
-            {dgettext("projects", "Composing...")}
-          </h3>
-        </div>
-        <div class="h-1.5 bg-[var(--glass-bg-muted)] rounded-full overflow-hidden">
-          <div
-            class="h-full bg-gradient-to-r from-[var(--glass-accent-from)] to-[var(--glass-accent-to)] transition-all animate-pulse"
-            style="width: 60%"
-          />
-        </div>
-        <p class="text-xs text-[var(--glass-text-tertiary)] mt-2">
-          {dgettext("projects", "Processing video composition. This may take several minutes.")}
-        </p>
-      </div>
-
-      <%!-- One-click compose button --%>
-      <button
-        phx-click="compose_video"
-        class={[
-          "w-full py-3.5 rounded-xl text-base font-semibold flex items-center justify-center gap-2 transition-all",
-          if(@ready and @selected_count > 0,
-            do: "glass-btn glass-btn-primary hover:shadow-lg",
-            else: "glass-btn glass-btn-primary opacity-50 cursor-not-allowed"
-          )
-        ]}
-        disabled={!@ready or @selected_count == 0}
-      >
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 010 1.972l-11.54 6.347a1.125 1.125 0 01-1.667-.986V5.653z"
-          />
-        </svg>
-        {dgettext("projects", "Compose Video")} ({@selected_count} {dgettext("projects", "panels")})
-      </button>
-
-      <%!-- Compose result placeholder --%>
-      <div class="glass-surface rounded-xl p-8 text-center">
-        <svg
-          class="w-12 h-12 mx-auto text-[var(--glass-text-tertiary)] opacity-30 mb-3"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1"
-          viewBox="0 0 24 24"
-        >
-          <path d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 01-1.125-1.125M3.375 19.5h1.5C5.496 19.5 6 18.996 6 18.375m-2.625 0V5.625m0 12.75v-1.5c0-.621.504-1.125 1.125-1.125m18.375 2.625V5.625m0 12.75c0 .621-.504 1.125-1.125 1.125m1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125m0 3.75h-1.5A1.125 1.125 0 0118 18.375M20.625 4.5H3.375m17.25 0c.621 0 1.125.504 1.125 1.125M20.625 4.5h-1.5C18.504 4.5 18 5.004 18 5.625m3.75 0v1.5c0 .621-.504 1.125-1.125 1.125M3.375 4.5c-.621 0-1.125.504-1.125 1.125M3.375 4.5h1.5C5.496 4.5 6 5.004 6 5.625m-2.625 0v1.5c0 .621.504 1.125 1.125 1.125m0 0h1.5m-1.5 0c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125m1.5-3.75C5.496 8.25 6 7.746 6 7.125v-1.5M4.875 8.25C5.496 8.25 6 8.754 6 9.375v1.5m0-5.25v5.25m0-5.25C6 5.004 6.504 4.5 7.125 4.5h9.75c.621 0 1.125.504 1.125 1.125m1.125 2.625h1.5m-1.5 0A1.125 1.125 0 0118 7.125v-1.5m1.125 2.625c-.621 0-1.125.504-1.125 1.125v1.5m2.625-2.625c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125M18 5.625v5.25M7.125 12h9.75m-9.75 0A1.125 1.125 0 016 10.875M7.125 12C6.504 12 6 12.504 6 13.125m0-2.25C6 11.496 5.496 12 4.875 12M18 10.875c0 .621-.504 1.125-1.125 1.125M18 10.875c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125m-12 5.25v-5.25m0 5.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125m-12 0v-1.5c0-.621-.504-1.125-1.125-1.125M18 18.375v-5.25m0 5.25v-1.5c0-.621.504-1.125 1.125-1.125M18 13.125v1.5c0 .621.504 1.125 1.125 1.125M18 13.125c0-.621.504-1.125 1.125-1.125M6 13.125v1.5c0 .621-.504 1.125-1.125 1.125M6 13.125C6 12.504 5.496 12 4.875 12m-1.5 0h1.5m-1.5 0c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125m1.5-3.75C5.496 12 6 12.504 6 13.125" />
-        </svg>
-        <p class="text-sm text-[var(--glass-text-tertiary)]">
-          {dgettext("projects", "Composed video will appear here after processing.")}
-        </p>
       </div>
     </div>
     """
@@ -1326,6 +1277,42 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
     dispatch_batch_task(socket, "video_panel", "panel")
   end
 
+  # ── Retry failed tasks ──
+
+  def handle_event("retry_failed_images", _, socket) do
+    retry_failed_tasks(socket, "image_panel")
+  end
+
+  def handle_event("retry_failed_videos", _, socket) do
+    retry_failed_tasks(socket, "video_panel")
+  end
+
+  def handle_event("retry_failed_voices", _, socket) do
+    retry_failed_tasks(socket, "voice_line")
+  end
+
+  defp retry_failed_tasks(socket, task_type) do
+    project_id = socket.assigns.project.id
+    user_id = socket.assigns.current_scope.user.id
+
+    failed = Tasks.list_failed_tasks(project_id, task_type)
+    count = length(failed)
+
+    Enum.each(failed, fn task ->
+      Tasks.create_task(%{
+        user_id: user_id,
+        project_id: project_id,
+        episode_id: task.episode_id,
+        type: task.type,
+        target_type: task.target_type,
+        target_id: task.target_id,
+        payload: task.payload
+      })
+    end)
+
+    {:noreply, put_flash(socket, :info, "#{count} failed tasks re-queued.")}
+  end
+
   def handle_event("compose_video", _, socket) do
     project = socket.assigns.project
     user_id = socket.assigns.current_scope.user.id
@@ -1346,6 +1333,10 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
     else
       {:noreply, put_flash(socket, :error, dgettext("projects", "Select an episode first."))}
     end
+  end
+
+  def handle_event("generate_promo_copy", _, socket) do
+    {:noreply, put_flash(socket, :info, dgettext("projects", "Promo copy generation coming soon."))}
   end
 
   def handle_event("add_character", _, socket) do
@@ -1473,6 +1464,11 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
   end
 
   def handle_event("update_novel_text", %{"novel_text" => text}, socket) do
+    # Persist to episode so text survives page reload
+    if episode = socket.assigns.current_episode do
+      Production.update_episode(episode, %{novel_text: text})
+    end
+
     {:noreply, assign(socket, :novel_text, text)}
   end
 
