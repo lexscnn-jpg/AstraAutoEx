@@ -323,3 +323,9 @@ msgstr "测试中..."
 #, elixir-autogen, elixir-format
 msgid "Total Spent"
 msgstr "总消费"
+
+msgid "Guide"
+msgstr "使用手册"
+
+msgid "User Guide"
+msgstr "使用手册"

@@ -28,7 +28,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
      |> assign(:current_episode, current_episode)
      |> assign(:storyboards, load_storyboards(current_episode))
      |> assign(:active_tasks, Tasks.list_project_tasks(project_id, status: "processing"))
-     |> assign(:novel_text, "")
+     |> assign(:novel_text, (current_episode && current_episode.novel_text) || "")
      |> assign(:show_assistant, false)
      |> assign(:editing_panel, nil)
      |> assign(:show_character_modal, false)
@@ -1144,7 +1144,9 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
           )}
         </p>
       </div>
-       <%!-- Panel checklist --%>
+      <div class="grid grid-cols-12 gap-4">
+       <%!-- Left: Panel checklist + settings --%>
+      <div class="col-span-5 space-y-3">
       <div class="glass-surface rounded-xl overflow-hidden">
         <div class="flex items-center justify-between px-5 py-3 border-b border-[var(--glass-stroke-soft)]">
           <div class="flex items-center gap-2">
@@ -1220,8 +1222,8 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
         </div>
       </div>
        <%!-- Compose config --%>
-      <div class="glass-surface rounded-xl p-5 space-y-5">
-        <h3 class="text-sm font-semibold text-[var(--glass-text-primary)]">
+      <div class="glass-surface rounded-xl p-4 space-y-3">
+        <h3 class="text-xs font-semibold text-[var(--glass-text-primary)]">
           {dgettext("projects", "Compose Settings")}
         </h3>
          <%!-- Transition --%>
@@ -1356,8 +1358,11 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
           "projects",
           "panels"
         )})
-      </button> <%!-- Compose result / video preview (enlarged) --%>
-      <div class="glass-surface rounded-xl p-6 min-h-[400px] flex items-center justify-center bg-black/20">
+      </button>
+      </div>
+      <%!-- Right: Video preview --%>
+      <div class="col-span-7">
+      <div class="glass-surface rounded-xl p-6 min-h-[400px] flex items-center justify-center bg-black/20 sticky top-20">
         <svg
           class="w-12 h-12 mx-auto text-[var(--glass-text-tertiary)] opacity-30 mb-3"
           fill="none"
@@ -1370,6 +1375,8 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
         <p class="text-sm text-[var(--glass-text-tertiary)]">
           {dgettext("projects", "Composed video will appear here after processing.")}
         </p>
+      </div>
+      </div>
       </div>
     </div>
     """

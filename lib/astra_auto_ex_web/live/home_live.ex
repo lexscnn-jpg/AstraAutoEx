@@ -113,12 +113,7 @@ defmodule AstraAutoExWeb.HomeLive do
                     value={@story_input}
                     class="w-full resize-none bg-transparent text-base leading-relaxed text-[var(--glass-text-primary)] placeholder:text-[var(--glass-text-tertiary)] focus:outline-none"
                     style="min-height: 160px"
-                    placeholder={
-                      dgettext(
-                        "projects",
-                        "Paste or type your story here, or drag a .txt/.md file..."
-                      )
-                    }
+                    placeholder="在此输入你的一句话故事创意，小说片段或剧本大纲...（支持粘贴，拖拽上传）"
                     phx-debounce="300"
                   />
                   <.live_file_input upload={@uploads.story_file} class="hidden" id="story-file-input" />

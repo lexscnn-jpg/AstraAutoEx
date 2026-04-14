@@ -283,7 +283,7 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetForm do
             user_id: user_id,
             name: params["name"],
             introduction: params["description"],
-            aliases: aliases
+            aliases: Enum.join(aliases, ", ")
           })
 
         "location" ->
