@@ -1535,6 +1535,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
   end
 
   def handle_event("set_art_style", %{"style" => style}, socket) do
+    Production.upsert_novel_project(%{project_id: socket.assigns.project.id, art_style: style})
     {:noreply, assign(socket, :art_style, style)}
   end
 
