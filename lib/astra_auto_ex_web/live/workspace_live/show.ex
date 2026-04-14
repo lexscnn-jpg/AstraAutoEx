@@ -2834,6 +2834,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
   end
 
   def handle_event("set_aspect_ratio", %{"ratio" => ratio}, socket) do
+    Projects.update_project(socket.assigns.project, %{aspect_ratio: ratio})
     {:noreply, assign(socket, :aspect_ratio, ratio)}
   end
 
@@ -2845,6 +2846,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
   end
 
   def handle_event("set_art_style", %{"style" => style}, socket) do
+    save_novel_setting(socket.assigns.project.id, :art_style, style)
     {:noreply, assign(socket, :art_style, style)}
   end
 
