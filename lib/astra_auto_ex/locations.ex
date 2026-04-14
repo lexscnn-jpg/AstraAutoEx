@@ -15,6 +15,17 @@ defmodule AstraAutoEx.Locations do
 
   def get_location!(id), do: Repo.get!(Location, id) |> Repo.preload(:images)
 
+  @doc "Find locations by name within a project (fuzzy match)."
+  def list_locations_by_name(project_id, name) when is_binary(name) do
+    from(l in Location,
+      where: l.project_id == ^project_id and ilike(l.name, ^"%#{name}%"),
+      preload: [:images]
+    )
+    |> Repo.all()
+  end
+
+  def list_locations_by_name(_, _), do: []
+
   def create_location(attrs) do
     %Location{} |> Location.changeset(attrs) |> Repo.insert()
   end

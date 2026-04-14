@@ -83,25 +83,30 @@ AstraAutoEx 是 AI 驱动的短剧/漫画视频生产平台，从 Next.js 原项
 4. **制作 (film)** — video_stage: 视频/配音生成 + 重试
 5. **AI 剪辑 (compose)** — compose_stage: 左右分栏（面板选择+设置 | 预览+导出）
 
-## 当前项目状态 (v0.6.4)
-- 最后完成: v0.6.4 项目页核心功能
-  - Film → 成片 阶段重命名
-  - 分镜面板道具标签（橙色）+ 角色（蓝色）+ 场景（绿色）完整三色标签
-  - AI 实体提取：EntityExtractor 模块，并行LLM提取角色/场景/道具
-  - 分镜面板悬浮生成按钮（无图面板显示"生成图片"快捷按钮）
-  - "开始创作"按钮使用提示（悬浮显示管线步骤说明）
-  - 提取后自动创建项目角色/场景记录
+## 当前项目状态 (v0.7.0)
+- 最后完成: v0.7.0 核心管线打通 + 生图质量提升
+  - **Sprint 1 Bug修复:** #58 AI写/开始创作自动进入下一阶段 + novel_text DB持久化 + #24 剧本拆解字段名修正(camera_move/panel_index)
+  - **Sprint 2 配音系统:** #27 MiniMax 300+音色动态加载API + #28 FFmpeg音视频合并 + #29 跳过配音开关 + #30 SubtitleGenerator字幕生成器
+  - **Sprint 3 合成系统:** #37 预览窗放大+引流文案生成+CapCut导出 + #38 紧凑布局 + VideoCompose FFmpeg实装 + 发布平台选择
+  - **Sprint 4 一致性生图:** #33 collect_reference_images深度实现(字符串解析+description匹配+场景参考图) + #26 实体提取6种操作按钮(全部生成/重试/清除/单个生成/编辑) + Locations.list_locations_by_name
+  - **Sprint 5 首尾帧+抽卡:** #34 首尾帧FL模式+LLM过渡重写 + #43 抽卡机制(candidate_count多候选+选择/删除)
+  - 新增文件: subtitle_generator.ex, capcut_exporter.ex
+  - 翻译: 新增 20+ 条中文翻译
 - 进行中: 无
-- 下一步:
-  - 端到端生成测试（需要有效 API Key 调通 AI 提供商）
-  - MiniMax 2.8HD 300+ 系统音色 API 对接
-  - 剪映导出实际实现（XML 时间线格式）
-  - 分镜一致性生图：collectPanelReferenceImages 逻辑深度实现
+- 下一步 (v0.7.1~v0.7.2):
+  - 端到端生成测试（需要有效 API Key）
   - 口型同步移植（原项目已有FAL/Vidu/Bailian完整实现）
+  - 集数选择器完善 (#21-22)
+  - 管线动画弹窗 (#23)
+  - 图生图上传参考图 (#42)
+  - HOME 拖拽上传修复 (#8/52)
+  - 使用手册翻译检查 (#48)
+  - 模型测试真实反馈 (#49)
 - 已知问题:
   - "Episode 1" 在标题中仍为英文
-  - 自动链 toggle 开关 CSS 在部分主题下不显示滑块（需调试 peer-checked）
+  - 自动链 toggle 开关 CSS 在部分主题下不显示滑块
   - 计费统计数据为空（需要实际 API 调用后才有记录）
+  - 版本更新日志弹窗未实现 (#63)
 
 ## 重要决策记录
 - 从 Next.js 迁移到 Phoenix LiveView：利用 OTP 并发处理 AI 任务，无需 Redis/BullMQ

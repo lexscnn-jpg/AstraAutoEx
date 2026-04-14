@@ -148,6 +148,60 @@ defmodule AstraAutoEx.Media.FFmpeg do
     run_ffmpeg(args)
   end
 
+  @doc "Merge voice audio track into video (replace or mix)."
+  def merge_voice_audio(video_path, audio_path, output_path, opts \\ []) do
+    mode = Keyword.get(opts, :mode, :replace)
+
+    args =
+      case mode do
+        :replace ->
+          # Replace video's audio with voice audio
+          ["-y", "-i", video_path, "-i", audio_path,
+           "-map", "0:v", "-map", "1:a",
+           "-c:v", "copy", "-c:a", "aac", "-shortest",
+           output_path]
+
+        :mix ->
+          # Mix voice audio with existing video audio
+          voice_vol = Keyword.get(opts, :voice_volume, 1.0)
+          video_vol = Keyword.get(opts, :video_volume, 0.3)
+          ["-y", "-i", video_path, "-i", audio_path,
+           "-filter_complex",
+           "[0:a]volume=#{video_vol}[va];[1:a]volume=#{voice_vol}[voice];[va][voice]amix=inputs=2:duration=first[out]",
+           "-map", "0:v", "-map", "[out]",
+           "-c:v", "copy", "-c:a", "aac",
+           output_path]
+      end
+
+    run_ffmpeg(args)
+  end
+
+  @doc "Merge multiple voice audio files into a single track with timestamps."
+  def merge_voice_segments(segments, output_path) do
+    # segments: [%{audio_path: path, start_time: float}]
+    if Enum.empty?(segments) do
+      {:error, "No audio segments"}
+    else
+      # Build complex filter for mixing at specific timestamps
+      input_args = Enum.flat_map(segments, fn s -> ["-i", s.audio_path] end)
+
+      delays =
+        segments
+        |> Enum.with_index()
+        |> Enum.map(fn {s, i} ->
+          delay_ms = trunc((s.start_time || 0.0) * 1000)
+          "[#{i}:a]adelay=#{delay_ms}|#{delay_ms}[a#{i}]"
+        end)
+        |> Enum.join(";")
+
+      mix_inputs = Enum.map_join(0..(length(segments) - 1), "", fn i -> "[a#{i}]" end)
+      filter = "#{delays};#{mix_inputs}amix=inputs=#{length(segments)}:normalize=0[out]"
+
+      args = ["-y"] ++ input_args ++ ["-filter_complex", filter, "-map", "[out]", "-c:a", "aac", output_path]
+      run_ffmpeg(args)
+    end
+  end
+
   @doc "Get video duration in seconds."
   def get_duration(video_path) do
     args = [

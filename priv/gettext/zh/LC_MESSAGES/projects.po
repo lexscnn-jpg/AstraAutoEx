@@ -745,3 +745,59 @@ msgstr "角色"
 
 msgid "Location"
 msgstr "场景"
+
+# v0.7.0 new translations
+
+msgid "Export to CapCut"
+msgstr "导出到剪映"
+
+msgid "Download MP4"
+msgstr "下载 MP4"
+
+msgid "Promo Copy"
+msgstr "引流文案"
+
+msgid "AI Generate"
+msgstr "AI 生成"
+
+msgid "Entity Actions"
+msgstr "实体操作"
+
+msgid "Clear All"
+msgstr "清除全部"
+
+msgid "Retry All"
+msgstr "全部重试"
+
+msgid "Generate All"
+msgstr "全部生成"
+
+msgid "Skip voice (dub later)"
+msgstr "跳过配音（后期配音）"
+
+msgid "Publish Location"
+msgstr "发布位置"
+
+msgid "Copy to clipboard"
+msgstr "复制到剪贴板"
+
+msgid "Generating promo copy..."
+msgstr "正在生成引流文案..."
+
+msgid "Char"
+msgstr "角色"
+
+msgid "Scene"
+msgstr "场景"
+
+msgid "chars"
+msgstr "角色"
+
+msgid "scenes"
+msgstr "场景"
+
+msgid "props"
+msgstr "道具"
+
+msgid "Click generate to create promotional copy for your video..."
+msgstr "点击生成按钮，为你的视频创建引流文案..."

@@ -40,12 +40,38 @@ defmodule AstraAutoEx.Workers.Handlers.VideoPanel do
       duration: payload["duration"] || 5
     }
 
-    # Add last frame for first-last-frame mode
+    # First-Last Frame mode: use next panel's image as last frame
     request =
-      if payload["last_frame_image_url"] do
-        Map.put(request, :last_frame_image_url, payload["last_frame_image_url"])
-      else
-        request
+      cond do
+        payload["last_frame_image_url"] ->
+          Map.put(request, :last_frame_image_url, payload["last_frame_image_url"])
+
+        payload["fl_mode"] && payload["next_panel_id"] ->
+          next_panel = Production.get_panel!(payload["next_panel_id"])
+
+          if next_panel.image_url && next_panel.image_url != "" do
+            # Optionally rewrite prompt with LLM for smoother transition
+            fl_prompt =
+              if payload["custom_prompt"] && payload["custom_prompt"] != "" do
+                payload["custom_prompt"]
+              else
+                case AstraAutoEx.AI.FlPromptRewriter.rewrite(
+                  task.user_id, panel, next_panel, prompt, "default"
+                ) do
+                  {:ok, rewritten} -> rewritten
+                  _ -> prompt
+                end
+              end
+
+            request
+            |> Map.put(:last_frame_image_url, next_panel.image_url)
+            |> Map.put(:prompt, fl_prompt)
+          else
+            request
+          end
+
+        true ->
+          request
       end
 
     Helpers.update_progress(task, 40)
@@ -179,15 +205,65 @@ defmodule AstraAutoEx.Workers.Handlers.VideoCompose do
       storage_key =
         Provider.generate_key("compose", "mp4", project_id: task.project_id, media_type: "video")
 
-      # For now, store compose metadata (actual FFmpeg compose requires system FFmpeg)
-      compose_result = %{
-        episode_id: episode_id,
-        panel_count: length(panel_videos),
-        total_duration: Enum.reduce(panel_videos, 0, fn p, acc -> acc + p.duration end),
-        panels: panel_videos,
-        storage_key: storage_key,
-        status: "composed"
-      }
+      # Build compose options from payload
+      subtitle_mode = payload["subtitle_mode"] || "none"
+      _bgm_mode = payload["bgm"] || "none"
+
+      compose_opts = [
+        transition: payload["transition"] || "crossfade",
+        transition_ms: String.to_integer(payload["transition_ms"] || "500")
+      ]
+
+      # Generate subtitles if requested
+      compose_opts =
+        if subtitle_mode != "none" do
+          case AstraAutoEx.Media.SubtitleGenerator.generate_for_episode(episode_id) do
+            {:ok, srt_path} -> Keyword.put(compose_opts, :subtitle_path, srt_path)
+            _ -> compose_opts
+          end
+        else
+          compose_opts
+        end
+
+      Helpers.update_progress(task, 50)
+
+      # Attempt real FFmpeg compose
+      upload_dir = Application.get_env(:astra_auto_ex, :upload_dir, "priv/uploads")
+      output_dir = Path.join(upload_dir, "compose")
+      File.mkdir_p!(output_dir)
+      output_path = Path.join(output_dir, "#{storage_key}.mp4")
+
+      clips = Enum.map(panel_videos, fn p -> %{video_url: p.video_url, duration: p.duration} end)
+
+      compose_result =
+        case AstraAutoEx.Media.FFmpeg.compose(clips, output_path, compose_opts) do
+          {:ok, _path} ->
+            # Real FFmpeg compose succeeded
+            Logger.info("[VideoCompose] FFmpeg compose succeeded: #{output_path}")
+
+            %{
+              episode_id: episode_id,
+              panel_count: length(panel_videos),
+              total_duration: Enum.reduce(panel_videos, 0, fn p, acc -> acc + p.duration end),
+              output_path: output_path,
+              storage_key: storage_key,
+              status: "composed"
+            }
+
+          {:error, reason} ->
+            # FFmpeg not available or failed — store metadata only
+            Logger.warning("[VideoCompose] FFmpeg unavailable: #{inspect(reason)}, storing metadata")
+
+            %{
+              episode_id: episode_id,
+              panel_count: length(panel_videos),
+              total_duration: Enum.reduce(panel_videos, 0, fn p, acc -> acc + p.duration end),
+              panels: panel_videos,
+              storage_key: storage_key,
+              status: "metadata_only",
+              error: inspect(reason)
+            }
+        end
 
       # Save compose result to media
       Media.upsert_media_object(%{
@@ -196,6 +272,12 @@ defmodule AstraAutoEx.Workers.Handlers.VideoCompose do
         media_type: "video",
         content_type: "video/mp4",
         metadata: compose_result
+      })
+
+      # Update episode compose status
+      Production.update_episode(episode, %{
+        compose_status: compose_result.status,
+        composed_video_key: storage_key
       })
 
       Helpers.update_progress(task, 95)

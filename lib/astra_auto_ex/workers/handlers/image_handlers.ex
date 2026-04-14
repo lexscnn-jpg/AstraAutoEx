@@ -34,8 +34,10 @@ defmodule AstraAutoEx.Workers.Handlers.ImagePanel do
     provider = model_config["provider"]
     model = model_config["model"]
 
-    # Collect reference images (character appearances)
-    reference_images = collect_reference_images(panel, characters)
+    # Collect reference images (character + location appearances)
+    reference_images = collect_reference_images(panel, characters, task.project_id)
+
+    candidate_count = payload["candidate_count"] || 1
 
     request = %{
       prompt: prompt,
@@ -46,24 +48,57 @@ defmodule AstraAutoEx.Workers.Handlers.ImagePanel do
 
     Helpers.update_progress(task, 40)
 
-    case Helpers.generate_image(task.user_id, provider, request) do
-      {:ok, %{status: :completed, image_url: url}} ->
-        # Save to panel
-        Production.update_panel(panel, %{image_url: url})
+    if candidate_count > 1 do
+      # Multi-candidate mode: generate N images, store all as candidates
+      results =
+        1..candidate_count
+        |> Enum.map(fn _i ->
+          Helpers.generate_image(task.user_id, provider, request)
+        end)
+
+      urls =
+        results
+        |> Enum.flat_map(fn
+          {:ok, %{status: :completed, image_urls: urls}} -> urls
+          {:ok, %{status: :completed, image_url: url}} when is_binary(url) -> [url]
+          _ -> []
+        end)
+
+      if length(urls) > 0 do
+        # First candidate becomes the main image
+        Production.update_panel(panel, %{
+          image_url: hd(urls),
+          candidate_images: %{"urls" => urls, "selected" => 0}
+        })
+
         Helpers.update_progress(task, 95)
-
-        # Auto-trigger downstream if full-auto mode
         maybe_auto_trigger_video_voice(task, episode)
+        {:ok, %{image_urls: urls, candidate_count: length(urls)}}
+      else
+        {:error, "All candidate generations failed"}
+      end
+    else
+      # Single image mode (default)
+      case Helpers.generate_image(task.user_id, provider, request) do
+        {:ok, %{status: :completed, image_urls: [url | _]}} ->
+          Production.update_panel(panel, %{image_url: url})
+          Helpers.update_progress(task, 95)
+          maybe_auto_trigger_video_voice(task, episode)
+          {:ok, %{image_url: url}}
 
-        {:ok, %{image_url: url}}
+        {:ok, %{status: :completed, image_url: url}} when is_binary(url) ->
+          Production.update_panel(panel, %{image_url: url})
+          Helpers.update_progress(task, 95)
+          maybe_auto_trigger_video_voice(task, episode)
+          {:ok, %{image_url: url}}
 
-      {:ok, %{external_id: ext_id} = result} ->
-        # Async task - save external_id for polling
-        Tasks.update_task(task, %{external_id: ext_id, status: "processing"})
-        {:ok, result}
+        {:ok, %{external_id: ext_id} = result} ->
+          Tasks.update_task(task, %{external_id: ext_id, status: "processing"})
+          {:ok, result}
 
-      {:error, reason} ->
-        {:error, reason}
+        {:error, reason} ->
+          {:error, reason}
+      end
     end
   end
 
@@ -111,19 +146,61 @@ defmodule AstraAutoEx.Workers.Handlers.ImagePanel do
     end
   end
 
-  defp collect_reference_images(panel, characters) do
-    # Get character appearance images referenced in this panel
-    char_names = panel.characters || []
+  defp collect_reference_images(panel, characters, project_id) do
+    # Parse character names from panel's characters field (string, comma-separated)
+    char_names_str = panel.characters || ""
 
-    characters
-    |> Enum.filter(fn c -> c.name in char_names end)
-    |> Enum.flat_map(fn c ->
-      case Characters.list_appearances(c.id) do
-        [%{image_url: url} | _] when is_binary(url) and url != "" -> [url]
-        _ -> []
+    char_names =
+      char_names_str
+      |> String.split(~r/[,;，、]/)
+      |> Enum.map(&String.trim/1)
+      |> Enum.reject(&(&1 == ""))
+
+    # Also check description for character name mentions
+    description = panel.description || ""
+
+    # Match characters by exact name in char_names OR name appearing in description
+    matched_chars =
+      characters
+      |> Enum.filter(fn c ->
+        name = c.name || ""
+        name in char_names or String.contains?(description, name)
+      end)
+
+    # Collect appearance images from matched characters
+    char_images =
+      matched_chars
+      |> Enum.flat_map(fn c ->
+        case Characters.list_appearances(c.id) do
+          appearances when is_list(appearances) ->
+            appearances
+            |> Enum.filter(fn a -> a.image_url && a.image_url != "" end)
+            |> Enum.map(& &1.image_url)
+            |> Enum.take(1)
+
+          _ ->
+            []
+        end
+      end)
+
+    # Also collect location reference images if available
+    location_name = panel.location || ""
+
+    location_images =
+      if location_name != "" do
+        Locations.list_locations_by_name(project_id, location_name)
+        |> Enum.flat_map(fn loc ->
+          (loc.images || [])
+          |> Enum.filter(fn img -> img.image_url && img.image_url != "" end)
+          |> Enum.take(1)
+          |> Enum.map(& &1.image_url)
+        end)
+        |> Enum.take(1)
+      else
+        []
       end
-    end)
-    |> Enum.take(4)
+
+    (char_images ++ location_images) |> Enum.take(4)
   end
 
   defp maybe_auto_trigger_video_voice(task, episode) do

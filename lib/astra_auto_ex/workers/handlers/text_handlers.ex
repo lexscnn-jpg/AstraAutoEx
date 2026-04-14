@@ -240,11 +240,14 @@ defmodule AstraAutoEx.Workers.Handlers.StoryToScript do
           Enum.with_index(panels, fn panel_data, pidx ->
             Production.create_panel(%{
               storyboard_id: sb.id,
+              episode_id: episode.id,
               description: Map.get(panel_data, "description", ""),
               shot_type: Map.get(panel_data, "shot_type", "medium shot"),
-              camera_movement: Map.get(panel_data, "camera", ""),
-              dialogue: Map.get(panel_data, "dialogue", ""),
-              sort_order: pidx
+              camera_move: Map.get(panel_data, "camera", ""),
+              characters: Map.get(panel_data, "characters", "") |> to_string_field(),
+              location: Map.get(panel_data, "location", ""),
+              acting_notes: Map.get(panel_data, "dialogue", ""),
+              panel_index: pidx
             })
           end)
         end)
@@ -253,6 +256,10 @@ defmodule AstraAutoEx.Workers.Handlers.StoryToScript do
         :ok
     end
   end
+
+  defp to_string_field(val) when is_list(val), do: Enum.join(val, ", ")
+  defp to_string_field(val) when is_binary(val), do: val
+  defp to_string_field(_), do: ""
 
   defp extract_json(nil), do: {:error, nil}
 

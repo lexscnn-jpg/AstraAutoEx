@@ -205,6 +205,71 @@ defmodule AstraAutoEx.AI.Providers.Minimax do
     end
   end
 
+  # ── Voice List (300+ system voices) ──
+
+  @doc "Fetch all available system voices from MiniMax API."
+  def list_voices(config) do
+    api_key = Map.fetch!(config, :api_key)
+    url = "#{base_url(config)}/voices"
+    headers = auth_headers(api_key)
+
+    case Req.get(url, headers: headers, receive_timeout: 15_000) do
+      {:ok, %{status: 200, body: %{"base_resp" => %{"status_code" => 0}} = resp}} ->
+        voices = Map.get(resp, "voices", Map.get(resp, "voice_list", []))
+
+        presets =
+          Enum.map(voices, fn v ->
+            %{
+              id: v["voice_id"] || v["id"] || "",
+              name: v["name"] || v["voice_id"] || "",
+              gender: normalize_gender(v["gender"]),
+              language: v["language"] || "zh",
+              description: v["description"] || v["desc"] || "",
+              category: v["category"] || v["tag"] || "system",
+              preview_url: v["audition_url"] || v["preview_url"]
+            }
+          end)
+
+        {:ok, presets}
+
+      {:ok, %{status: 200, body: body}} ->
+        # Fallback: try alternate response format
+        voices = Map.get(body, "data", Map.get(body, "voices", []))
+
+        if is_list(voices) && length(voices) > 0 do
+          presets =
+            Enum.map(voices, fn v ->
+              %{
+                id: v["voice_id"] || v["id"] || "",
+                name: v["name"] || "",
+                gender: normalize_gender(v["gender"]),
+                language: v["language"] || "zh",
+                description: v["description"] || "",
+                category: v["category"] || "system",
+                preview_url: v["audition_url"]
+              }
+            end)
+
+          {:ok, presets}
+        else
+          {:error, "Unexpected voice list format"}
+        end
+
+      {:ok, %{body: body}} ->
+        {:error, body}
+
+      {:error, reason} ->
+        {:error, reason}
+    end
+  end
+
+  defp normalize_gender("male"), do: "male"
+  defp normalize_gender("female"), do: "female"
+  defp normalize_gender("Male"), do: "male"
+  defp normalize_gender("Female"), do: "female"
+  defp normalize_gender(g) when is_binary(g), do: String.downcase(g)
+  defp normalize_gender(_), do: "unknown"
+
   # ── Voice Design ──
 
   def design_voice(request, config) do

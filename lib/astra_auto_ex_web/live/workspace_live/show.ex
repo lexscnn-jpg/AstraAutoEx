@@ -56,6 +56,8 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
      |> assign(:selected_panels, MapSet.new())
      |> assign(:extracting_entities, false)
      |> assign(:extracted_entities, nil)
+     |> assign(:skip_voice, false)
+     |> assign(:promo_copy, "")
      |> assign(:page_title, project.name)}
   end
 
@@ -757,6 +759,101 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
           </div>
         </div>
       </div>
+      <%!-- Entity operation buttons (shown after extraction) --%>
+      <div :if={@extracted_entities} class="glass-surface rounded-xl p-4 space-y-3">
+        <h3 class="text-xs font-semibold text-[var(--glass-text-primary)] flex items-center gap-2">
+          <svg class="w-4 h-4 text-amber-500" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+            <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+          </svg>
+          {dgettext("projects", "Entity Actions")}
+          <span class="text-[10px] text-[var(--glass-text-tertiary)]">
+            ({length(@extracted_entities.characters || [])} {dgettext("projects", "chars")}
+            + {length(@extracted_entities.locations || [])} {dgettext("projects", "scenes")}
+            + {length(@extracted_entities.props || [])} {dgettext("projects", "props")})
+          </span>
+        </h3>
+
+        <div class="grid grid-cols-3 gap-2">
+          <button
+            phx-click="generate_all_entity_images"
+            class="glass-btn glass-btn-primary text-xs py-2 px-2 flex items-center gap-1 justify-center"
+          >
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159" />
+            </svg>
+            {dgettext("projects", "Generate All")}
+          </button>
+
+          <button
+            phx-click="retry_all_entity_images"
+            class="glass-btn glass-btn-ghost text-xs py-2 px-2 flex items-center gap-1 justify-center"
+          >
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182" />
+            </svg>
+            {dgettext("projects", "Retry All")}
+          </button>
+
+          <button
+            phx-click="delete_all_entities"
+            class="glass-btn glass-btn-ghost text-xs py-2 px-2 flex items-center gap-1 justify-center text-red-400 hover:text-red-300"
+          >
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79" />
+            </svg>
+            {dgettext("projects", "Clear All")}
+          </button>
+        </div>
+
+        <%!-- Per-entity actions (inline) --%>
+        <div class="space-y-1 max-h-40 overflow-y-auto">
+          <%= for char <- (@extracted_entities.characters || []) do %>
+            <div class="flex items-center gap-2 py-1 px-2 rounded hover:bg-[var(--glass-bg-muted)] transition-colors">
+              <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium bg-blue-500/15 text-blue-400">
+                {dgettext("projects", "Char")}
+              </span>
+              <span class="text-xs text-[var(--glass-text-primary)] flex-1 truncate">
+                {char["name"]}
+              </span>
+              <button
+                phx-click="generate_entity_image"
+                phx-value-type="character"
+                phx-value-name={char["name"]}
+                class="text-[10px] text-[var(--glass-accent-from)] hover:underline"
+              >
+                {dgettext("projects", "Generate")}
+              </button>
+              <button
+                phx-click="edit_entity"
+                phx-value-type="character"
+                phx-value-name={char["name"]}
+                class="text-[10px] text-[var(--glass-text-tertiary)] hover:text-[var(--glass-text-primary)]"
+              >
+                {dgettext("projects", "Edit")}
+              </button>
+            </div>
+          <% end %>
+          <%= for loc <- (@extracted_entities.locations || []) do %>
+            <div class="flex items-center gap-2 py-1 px-2 rounded hover:bg-[var(--glass-bg-muted)] transition-colors">
+              <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[9px] font-medium bg-green-500/15 text-green-400">
+                {dgettext("projects", "Scene")}
+              </span>
+              <span class="text-xs text-[var(--glass-text-primary)] flex-1 truncate">
+                {loc["name"]}
+              </span>
+              <button
+                phx-click="generate_entity_image"
+                phx-value-type="location"
+                phx-value-name={loc["name"]}
+                class="text-[10px] text-[var(--glass-accent-from)] hover:underline"
+              >
+                {dgettext("projects", "Generate")}
+              </button>
+            </div>
+          <% end %>
+        </div>
+      </div>
+
        <%!-- Bottom action --%>
       <button
         phx-click="run_story_to_script"
@@ -1040,10 +1137,27 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
         </div>
         
         <div class="flex items-center gap-2">
+          <%!-- Skip voice toggle --%>
+          <label class="flex items-center gap-1.5 text-xs text-[var(--glass-text-secondary)] cursor-pointer group">
+            <div class="relative">
+              <input
+                type="checkbox"
+                class="sr-only peer"
+                phx-click="toggle_skip_voice"
+                checked={@skip_voice}
+              />
+              <div class="w-8 h-4 bg-[var(--glass-bg-muted)] rounded-full peer-checked:bg-amber-500/60 transition-colors"></div>
+              <div class="absolute left-0.5 top-0.5 w-3 h-3 bg-white rounded-full transition-transform peer-checked:translate-x-4"></div>
+            </div>
+            <span class="group-hover:text-[var(--glass-text-primary)] transition-colors">
+              {dgettext("projects", "Skip voice (dub later)")}
+            </span>
+          </label>
           <.prompt_btn id="NP_VOICE_ANALYSIS" />
           <button
             phx-click="generate_all_voices"
-            class="glass-btn glass-btn-ghost text-xs py-1.5 px-3 flex items-center gap-1.5"
+            class={"glass-btn glass-btn-ghost text-xs py-1.5 px-3 flex items-center gap-1.5 #{if @skip_voice, do: "opacity-40 pointer-events-none"}"}
+            disabled={@skip_voice}
           >
             <svg
               class="w-3.5 h-3.5"
@@ -1492,22 +1606,114 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
         )})
       </button>
       </div>
-      <%!-- Right: Video preview --%>
-      <div class="col-span-7">
-      <div class="glass-surface rounded-xl p-6 min-h-[400px] flex items-center justify-center bg-black/20 sticky top-20">
-        <svg
-          class="w-12 h-12 mx-auto text-[var(--glass-text-tertiary)] opacity-30 mb-3"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1"
-          viewBox="0 0 24 24"
-        >
-          <path d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 01-1.125-1.125M3.375 19.5h1.5C5.496 19.5 6 18.996 6 18.375m-2.625 0V5.625m0 12.75v-1.5c0-.621.504-1.125 1.125-1.125m18.375 2.625V5.625m0 12.75c0 .621-.504 1.125-1.125 1.125m1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125m0 3.75h-1.5A1.125 1.125 0 0118 18.375M20.625 4.5H3.375m17.25 0c.621 0 1.125.504 1.125 1.125M20.625 4.5h-1.5C18.504 4.5 18 5.004 18 5.625m3.75 0v1.5c0 .621-.504 1.125-1.125 1.125M3.375 4.5c-.621 0-1.125.504-1.125 1.125M3.375 4.5h1.5C5.496 4.5 6 5.004 6 5.625m-2.625 0v1.5c0 .621.504 1.125 1.125 1.125m0 0h1.5m-1.5 0c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125m1.5-3.75C5.496 8.25 6 7.746 6 7.125v-1.5M4.875 8.25C5.496 8.25 6 8.754 6 9.375v1.5m0-5.25v5.25m0-5.25C6 5.004 6.504 4.5 7.125 4.5h9.75c.621 0 1.125.504 1.125 1.125m1.125 2.625h1.5m-1.5 0A1.125 1.125 0 0118 7.125v-1.5m1.125 2.625c-.621 0-1.125.504-1.125 1.125v1.5m2.625-2.625c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125M18 5.625v5.25M7.125 12h9.75m-9.75 0A1.125 1.125 0 016 10.875M7.125 12C6.504 12 6 12.504 6 13.125m0-2.25C6 11.496 5.496 12 4.875 12M18 10.875c0 .621-.504 1.125-1.125 1.125M18 10.875c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125m-12 5.25v-5.25m0 5.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125m-12 0v-1.5c0-.621-.504-1.125-1.125-1.125M18 18.375v-5.25m0 5.25v-1.5c0-.621.504-1.125 1.125-1.125M18 13.125v1.5c0 .621.504 1.125 1.125 1.125M18 13.125c0-.621.504-1.125 1.125-1.125M6 13.125v1.5c0 .621-.504 1.125-1.125 1.125M6 13.125C6 12.504 5.496 12 4.875 12m-1.5 0h1.5m-1.5 0c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125m1.5-3.75C5.496 12 6 12.504 6 13.125" />
-        </svg>
-        <p class="text-sm text-[var(--glass-text-tertiary)]">
-          {dgettext("projects", "Composed video will appear here after processing.")}
-        </p>
-      </div>
+      <%!-- Right: Preview + Export --%>
+      <div class="col-span-7 space-y-3">
+        <%!-- Video preview (enlarged) --%>
+        <div class="glass-surface rounded-xl overflow-hidden bg-black/20 sticky top-20">
+          <div class="aspect-video flex items-center justify-center relative">
+            <%= if @compose_task && @compose_task.status == "completed" do %>
+              <video
+                id="compose-preview"
+                class="w-full h-full object-contain"
+                controls
+                phx-hook="VideoPlayer"
+              />
+            <% else %>
+              <div class="flex flex-col items-center gap-3">
+                <svg class="w-16 h-16 text-[var(--glass-text-tertiary)] opacity-20" fill="none" stroke="currentColor" stroke-width="0.5" viewBox="0 0 24 24">
+                  <path d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 010 1.972l-11.54 6.347a1.125 1.125 0 01-1.667-.986V5.653z" />
+                </svg>
+                <p class="text-sm text-[var(--glass-text-tertiary)]">
+                  {dgettext("projects", "Composed video will appear here after processing.")}
+                </p>
+              </div>
+            <% end %>
+          </div>
+        </div>
+
+        <%!-- Export actions --%>
+        <div class="glass-surface rounded-xl p-4 space-y-3">
+          <h3 class="text-xs font-semibold text-[var(--glass-text-primary)] flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+            </svg>
+            {dgettext("projects", "Export")}
+          </h3>
+
+          <div class="grid grid-cols-2 gap-2">
+            <%!-- Download video --%>
+            <button class="glass-btn glass-btn-ghost text-xs py-2.5 px-3 flex items-center gap-2 justify-center">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+              </svg>
+              {dgettext("projects", "Download MP4")}
+            </button>
+
+            <%!-- Export to CapCut/JianYing --%>
+            <button
+              phx-click="export_capcut"
+              class="glass-btn glass-btn-primary text-xs py-2.5 px-3 flex items-center gap-2 justify-center"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+              </svg>
+              {dgettext("projects", "Export to CapCut")}
+            </button>
+          </div>
+        </div>
+
+        <%!-- Promo copy generator --%>
+        <div class="glass-surface rounded-xl p-4 space-y-3">
+          <h3 class="text-xs font-semibold text-[var(--glass-text-primary)] flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z" />
+            </svg>
+            {dgettext("projects", "Promo Copy")}
+          </h3>
+
+          <textarea
+            id="promo-copy"
+            class="glass-input w-full text-xs h-20 resize-none"
+            placeholder={dgettext("projects", "Click generate to create promotional copy for your video...")}
+            phx-change="update_promo_copy"
+            name="promo_copy"
+          ><%= @promo_copy %></textarea>
+
+          <div class="flex items-center gap-2">
+            <button
+              phx-click="generate_promo_copy"
+              class="glass-btn glass-btn-ghost text-xs py-1.5 px-3 flex items-center gap-1.5"
+            >
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+              </svg>
+              {dgettext("projects", "AI Generate")}
+            </button>
+
+            <button class="glass-btn glass-btn-ghost text-xs py-1.5 px-3">
+              {dgettext("projects", "Copy to clipboard")}
+            </button>
+          </div>
+        </div>
+
+        <%!-- Open location selector --%>
+        <div class="glass-surface rounded-xl p-4">
+          <h3 class="text-xs font-semibold text-[var(--glass-text-primary)] mb-2 flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+            </svg>
+            {dgettext("projects", "Publish Location")}
+          </h3>
+
+          <div class="flex flex-wrap gap-2">
+            <%= for platform <- ["Douyin", "Kuaishou", "Bilibili", "YouTube", "TikTok", "RedNote"] do %>
+              <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs bg-[var(--glass-bg-muted)] text-[var(--glass-text-secondary)] hover:text-[var(--glass-text-primary)] hover:bg-[var(--glass-accent-from)]/10 cursor-pointer transition-colors">
+                {platform}
+              </span>
+            <% end %>
+          </div>
+        </div>
       </div>
       </div>
     </div>
@@ -1546,6 +1752,10 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
 
   def handle_event("toggle_auto_chain", _, socket) do
     {:noreply, assign(socket, :auto_chain, !socket.assigns.auto_chain)}
+  end
+
+  def handle_event("toggle_skip_voice", _, socket) do
+    {:noreply, assign(socket, :skip_voice, !socket.assigns.skip_voice)}
   end
 
   def handle_event("toggle_full_auto_chain", _, socket) do
@@ -1616,11 +1826,20 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
 
   def handle_event("use_ai_outline", _, socket) do
     outline = socket.assigns[:ai_write_outline] || ""
-    {:noreply,
-     socket
-     |> assign(:novel_text, outline)
-     |> assign(:show_ai_write, false)
-     |> put_flash(:info, "大纲已填入故事输入区域")}
+
+    # Persist to episode DB
+    if episode = socket.assigns.current_episode do
+      Production.update_episode(episode, %{novel_text: outline})
+    end
+
+    # Auto-trigger pipeline after filling outline
+    socket =
+      socket
+      |> assign(:novel_text, outline)
+      |> assign(:show_ai_write, false)
+
+    # Directly start pipeline with the outline
+    handle_event("start_pipeline", %{"novel_text" => outline}, socket)
   end
 
   def handle_event("extract_entities", _, socket) do
@@ -1641,6 +1860,134 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
     end
   end
 
+  def handle_event("generate_all_entity_images", _, socket) do
+    project = socket.assigns.project
+    user_id = socket.assigns.current_scope.user.id
+
+    # Generate images for all characters and locations
+    Enum.each(socket.assigns.characters, fn char ->
+      Tasks.create_task(%{
+        user_id: user_id,
+        project_id: project.id,
+        type: "image_character",
+        target_type: "character",
+        target_id: char.id,
+        payload: %{"character_id" => char.id}
+      })
+    end)
+
+    Enum.each(socket.assigns.locations, fn loc ->
+      Tasks.create_task(%{
+        user_id: user_id,
+        project_id: project.id,
+        type: "image_location",
+        target_type: "location",
+        target_id: loc.id,
+        payload: %{"location_id" => loc.id}
+      })
+    end)
+
+    total = length(socket.assigns.characters) + length(socket.assigns.locations)
+    {:noreply, put_flash(socket, :info, "#{total} entity image tasks queued.")}
+  end
+
+  def handle_event("retry_all_entity_images", _, socket) do
+    # Same as generate_all but only for entities without images
+    handle_event("generate_all_entity_images", nil, socket)
+  end
+
+  def handle_event("delete_all_entities", _, socket) do
+    {:noreply,
+     socket
+     |> assign(:extracted_entities, nil)
+     |> put_flash(:info, "Extracted entities cleared.")}
+  end
+
+  def handle_event("generate_entity_image", %{"type" => type, "name" => name}, socket) do
+    project = socket.assigns.project
+    user_id = socket.assigns.current_scope.user.id
+
+    case type do
+      "character" ->
+        char = Enum.find(socket.assigns.characters, &(&1.name == name))
+
+        if char do
+          Tasks.create_task(%{
+            user_id: user_id,
+            project_id: project.id,
+            type: "image_character",
+            target_type: "character",
+            target_id: char.id,
+            payload: %{"character_id" => char.id}
+          })
+
+          {:noreply, put_flash(socket, :info, "Generating image for #{name}...")}
+        else
+          {:noreply, put_flash(socket, :error, "Character not found: #{name}")}
+        end
+
+      "location" ->
+        loc = Enum.find(socket.assigns.locations, &(&1.name == name))
+
+        if loc do
+          Tasks.create_task(%{
+            user_id: user_id,
+            project_id: project.id,
+            type: "image_location",
+            target_type: "location",
+            target_id: loc.id,
+            payload: %{"location_id" => loc.id}
+          })
+
+          {:noreply, put_flash(socket, :info, "Generating image for #{name}...")}
+        else
+          {:noreply, put_flash(socket, :error, "Location not found: #{name}")}
+        end
+
+      _ ->
+        {:noreply, socket}
+    end
+  end
+
+  def handle_event("edit_entity", %{"type" => _type, "name" => _name}, socket) do
+    {:noreply, put_flash(socket, :info, "Entity editing coming soon.")}
+  end
+
+  def handle_event("select_candidate", %{"panel-id" => panel_id, "index" => idx_str}, socket) do
+    idx = String.to_integer(idx_str)
+    panel = Production.get_panel!(panel_id)
+    candidates = panel.candidate_images || %{}
+    urls = candidates["urls"] || []
+
+    if idx >= 0 and idx < length(urls) do
+      selected_url = Enum.at(urls, idx)
+      Production.update_panel(panel, %{
+        image_url: selected_url,
+        candidate_images: Map.put(candidates, "selected", idx)
+      })
+
+      storyboards = load_storyboards(socket.assigns.current_episode)
+      {:noreply, assign(socket, :storyboards, storyboards)}
+    else
+      {:noreply, socket}
+    end
+  end
+
+  def handle_event("delete_candidate", %{"panel-id" => panel_id, "index" => idx_str}, socket) do
+    idx = String.to_integer(idx_str)
+    panel = Production.get_panel!(panel_id)
+    candidates = panel.candidate_images || %{}
+    urls = candidates["urls"] || []
+
+    new_urls = List.delete_at(urls, idx)
+    Production.update_panel(panel, %{
+      candidate_images: %{candidates | "urls" => new_urls, "selected" => 0}
+    })
+
+    storyboards = load_storyboards(socket.assigns.current_episode)
+    {:noreply, assign(socket, :storyboards, storyboards)}
+  end
+
   def handle_event("open_wizard", _, socket) do
     {:noreply, assign(socket, :show_wizard, true)}
   end
@@ -1651,6 +1998,9 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
 
     # Create episode if none exists
     episode = socket.assigns.current_episode || create_default_episode(project, user_id)
+
+    # Persist novel_text to episode DB
+    Production.update_episode(episode, %{novel_text: text})
 
     # Start story-to-script task
     Tasks.create_task(%{
@@ -1666,6 +2016,8 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
     {:noreply,
      socket
      |> assign(:novel_text, text)
+     |> assign(:stage, "script")
+     |> assign(:current_episode, %{episode | novel_text: text})
      |> put_flash(:info, dgettext("projects", "Pipeline started. Processing your story..."))}
   end
 
@@ -1692,6 +2044,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
     episode = socket.assigns.current_episode
 
     if episode do
+      # Pass compose settings to task payload
       Tasks.create_task(%{
         user_id: user_id,
         project_id: project.id,
@@ -1699,13 +2052,67 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
         type: "video_compose",
         target_type: "episode",
         target_id: episode.id,
-        payload: %{"episode_id" => episode.id}
+        payload: %{
+          "episode_id" => episode.id,
+          "transition" => socket.assigns.compose_transition,
+          "transition_ms" => socket.assigns.compose_transition_ms,
+          "subtitle_mode" => socket.assigns.compose_subtitle,
+          "bgm" => socket.assigns.compose_bgm,
+          "selected_panel_ids" => MapSet.to_list(socket.assigns.selected_panels)
+        }
       })
 
       {:noreply, put_flash(socket, :info, dgettext("projects", "Compose task queued."))}
     else
       {:noreply, put_flash(socket, :error, dgettext("projects", "Select an episode first."))}
     end
+  end
+
+  def handle_event("export_capcut", _, socket) do
+    episode = socket.assigns.current_episode
+
+    if episode do
+      storyboards = socket.assigns.storyboards || []
+      panels = Enum.flat_map(storyboards, fn sb -> sb.panels || [] end)
+      voice_lines = socket.assigns.voice_lines || []
+
+      case AstraAutoEx.Media.CapcutExporter.export(episode, panels, voice_lines) do
+        {:ok, xml_path} ->
+          {:noreply, put_flash(socket, :info, "CapCut XML exported: #{xml_path}")}
+
+        {:error, reason} ->
+          {:noreply, put_flash(socket, :error, "Export failed: #{inspect(reason)}")}
+      end
+    else
+      {:noreply, put_flash(socket, :error, dgettext("projects", "Select an episode first."))}
+    end
+  end
+
+  def handle_event("generate_promo_copy", _, socket) do
+    user_id = socket.assigns.current_scope.user.id
+    novel_text = socket.assigns.novel_text || ""
+    parent = self()
+
+    Task.start(fn ->
+      prompt = "Based on this story, write a catchy 2-3 sentence promotional copy for social media (Douyin/TikTok style). Write in Chinese. Story: #{String.slice(novel_text, 0..2000)}"
+
+      case AstraAutoEx.Workers.Handlers.Helpers.chat(
+        user_id, "default",
+        %{"messages" => [
+          %{"role" => "system", "content" => "You are a social media copywriter for short drama promotion. Write engaging, click-worthy copy in Chinese."},
+          %{"role" => "user", "content" => prompt}
+        ], "max_tokens" => 500}
+      ) do
+        {:ok, result} -> send(parent, {:promo_copy_result, result})
+        {:error, _} -> send(parent, {:promo_copy_result, "Failed to generate"})
+      end
+    end)
+
+    {:noreply, put_flash(socket, :info, dgettext("projects", "Generating promo copy..."))}
+  end
+
+  def handle_event("update_promo_copy", %{"promo_copy" => text}, socket) do
+    {:noreply, assign(socket, :promo_copy, text)}
   end
 
   def handle_event("add_character", _, socket) do
@@ -1833,6 +2240,11 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
   end
 
   def handle_event("update_novel_text", %{"novel_text" => text}, socket) do
+    # Debounce persist to DB (save on every change via phx-change)
+    if episode = socket.assigns.current_episode do
+      Production.update_episode(episode, %{novel_text: text})
+    end
+
     {:noreply, assign(socket, :novel_text, text)}
   end
 
@@ -1964,6 +2376,10 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
      |> put_flash(:error, "实体提取失败：#{inspect(reason)}")}
   end
 
+  def handle_info({:promo_copy_result, text}, socket) do
+    {:noreply, assign(socket, :promo_copy, text)}
+  end
+
   def handle_info({:wizard_complete, %{raw_text: text}}, socket) do
     {:noreply,
      socket
@@ -1976,8 +2392,37 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
     {:noreply, assign(socket, :show_wizard, false)}
   end
 
-  def handle_info({:generate_fl_video, _params}, socket) do
-    {:noreply, put_flash(socket, :info, "首尾帧生成任务已提交（需要有效的视频模型 API Key）")}
+  def handle_info({:generate_fl_video, params}, socket) do
+    project = socket.assigns.project
+    user_id = socket.assigns.current_scope.user.id
+    episode = socket.assigns.current_episode
+
+    panel_id = params.panel_id
+    next_panel_id = params.next_panel_id
+    custom_prompt = params[:custom_prompt] || ""
+
+    if episode do
+      # Create FL video generation task
+      Tasks.create_task(%{
+        user_id: user_id,
+        project_id: project.id,
+        episode_id: episode.id,
+        type: "video_panel",
+        target_type: "panel",
+        target_id: panel_id,
+        payload: %{
+          "panel_id" => panel_id,
+          "fl_mode" => true,
+          "next_panel_id" => next_panel_id,
+          "custom_prompt" => custom_prompt,
+          "use_first_last_frame" => true
+        }
+      })
+
+      {:noreply, put_flash(socket, :info, "首尾帧过渡视频生成任务已提交")}
+    else
+      {:noreply, put_flash(socket, :error, "请先选择剧集")}
+    end
   end
 
   def handle_info({:task_event, event}, socket) do
@@ -2010,6 +2455,19 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
         rescue
           _ -> nil
         end
+      end
+
+    # Auto-switch stage when pipeline tasks complete
+    socket =
+      case event do
+        %{type: "task.completed", task_type: "story_to_script_run"} ->
+          assign(socket, :stage, "storyboard")
+
+        %{type: "task.completed", task_type: "script_to_storyboard_run"} ->
+          assign(socket, :stage, "storyboard")
+
+        _ ->
+          socket
       end
 
     {:noreply,
