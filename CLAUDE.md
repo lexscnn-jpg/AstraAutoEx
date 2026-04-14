@@ -98,6 +98,9 @@ AstraAutoEx 是 AI 驱动的短剧/漫画视频生产平台，从 Next.js 原项
   - 修复：测试请求传递 model ID（之前缺失导致用错误默认值）
   - 核心：Helpers.chat 请求格式标准化（contents→messages 自动转换）
   - 核心：chat 结果标准化（%{content: str}→str，兼容所有 handler）
+  - 新增：管线进度横幅（active_tasks 实时显示 + 任务类型中文标签）
+  - 新增：auto_chain/full_auto_chain 持久化到 NovelProject DB
+  - 新增：aspect_ratio/art_style 选择持久化（项目级别保存）
 - 进行中: 无
 - 下一步:
   - 端到端生成测试（MiniMax 生图 API 已配置）
