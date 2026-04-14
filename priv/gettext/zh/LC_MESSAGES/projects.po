@@ -848,3 +848,15 @@ msgstr "没有同时拥有视频和配音的面板。"
 
 msgid "Lip sync queued for %{count} panels."
 msgstr "已为 %{count} 个面板排队口型同步。"
+
+msgid "Delete Episode"
+msgstr "删除集数"
+
+msgid "Delete current episode? This cannot be undone."
+msgstr "删除当前集数？此操作不可撤销。"
+
+msgid "Episode deleted"
+msgstr "集数已删除"
+
+msgid "Cannot delete the last episode"
+msgstr "无法删除最后一集"

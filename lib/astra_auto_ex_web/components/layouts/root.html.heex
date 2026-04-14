@@ -31,7 +31,7 @@
             >
               <path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" />
             </svg>
-            Beta v0.7.5
+            Beta v0.7.6
           </button>
         </div>
 
@@ -188,12 +188,28 @@
         </div>
 
         <div class="flex-1 overflow-y-auto px-6 py-4 space-y-6 text-sm">
-          <%!-- v0.7.5 --%>
+          <%!-- v0.7.6 --%>
           <div>
             <div class="flex items-center gap-2 mb-2">
               <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-500/20 text-green-400">
                 最新
               </span>
+              <span class="font-bold text-[var(--glass-text-primary)]">v0.7.6</span>
+              <span class="text-xs text-[var(--glass-text-tertiary)]">2026-04-15</span>
+            </div>
+            <p class="text-[10px] text-[var(--glass-text-tertiary)] mb-1.5 italic">
+              工作区修复 + 计费热力图 + 集数管理
+            </p>
+            <ul class="space-y-1 text-[var(--glass-text-secondary)] list-disc list-inside text-xs">
+              <li><strong>工作区 textarea 修复</strong>：故事文本从首页正确同步到工作区（第二处 value= 属性修复）</li>
+              <li><strong>集数删除</strong>：新增集数删除按钮（保留最后一集保护）</li>
+              <li><strong>计费面板重设计</strong>：紧凑单行摘要 + 30天活动热力图 + 精简 Tab</li>
+            </ul>
+          </div>
+
+          <%!-- v0.7.5 --%>
+          <div>
+            <div class="flex items-center gap-2 mb-2">
               <span class="font-bold text-[var(--glass-text-primary)]">v0.7.5</span>
               <span class="text-xs text-[var(--glass-text-tertiary)]">2026-04-15</span>
             </div>

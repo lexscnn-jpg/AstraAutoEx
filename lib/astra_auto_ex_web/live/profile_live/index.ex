@@ -1121,53 +1121,11 @@ defmodule AstraAutoExWeb.ProfileLive.Index do
   defp billing_tab(assigns) do
     ~H"""
     <div class="space-y-4">
-      <div class="glass-surface p-6">
-        <h3 class="font-semibold text-[var(--glass-text-primary)] mb-4">
-          {dgettext("default", "Usage Summary")}
-        </h3>
-
-        <div class="grid grid-cols-3 gap-4">
-          <div class="text-center">
-            <p class="text-xs text-[var(--glass-text-tertiary)]">
-              {dgettext("default", "Total Calls")}
-            </p>
-            <p class="text-2xl font-bold text-[var(--glass-text-primary)]">
-              {@billing_summary.total_calls}
-            </p>
-          </div>
-
-          <div class="text-center">
-            <p class="text-xs text-[var(--glass-text-tertiary)]">
-              {dgettext("default", "Total Spent")}
-            </p>
-            <p class="text-2xl font-bold text-[var(--glass-accent-from)]">
-              ¥{Decimal.round(@billing_summary.total_cost, 2)}
-            </p>
-          </div>
-
-          <div class="text-center">
-            <p class="text-xs text-[var(--glass-text-tertiary)]">
-              {dgettext("default", "Status")}
-            </p>
-            <p class="text-2xl font-bold text-green-400">
-              {if @billing_summary.total_calls > 0, do: "活跃", else: "待使用"}
-            </p>
-          </div>
-        </div>
-
-        <%= if @billing_summary.total_calls == 0 do %>
-          <div class="mt-4 p-3 rounded-lg bg-[var(--glass-bg-muted)] text-center">
-            <p class="text-xs text-[var(--glass-text-tertiary)]">
-              调用 AI 生成功能后，使用记录将自动出现在此处
-            </p>
-          </div>
-        <% end %>
-      </div>
-      <%!-- Detailed Stats Panel --%>
       <.live_component
         module={AstraAutoExWeb.ProfileLive.BillingStats}
         id="billing-stats"
         user_id={@current_scope.user.id}
+        billing_summary={@billing_summary}
       />
     </div>
     """
