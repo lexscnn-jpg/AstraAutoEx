@@ -31,9 +31,8 @@ defmodule AstraAutoExWeb.WorkspaceLive.ImportWizard do
     ~H"""
     <div class="glass-card p-6">
       <div class="flex items-center justify-between mb-6">
-        <h3 class="text-lg font-semibold text-[var(--glass-text-primary)]">
-          智能导入向导
-        </h3>
+        <h3 class="text-lg font-semibold text-[var(--glass-text-primary)]">智能导入向导</h3>
+        
         <button
           type="button"
           phx-click="close_wizard"
@@ -45,7 +44,6 @@ defmodule AstraAutoExWeb.WorkspaceLive.ImportWizard do
           </svg>
         </button>
       </div>
-
       <!-- Step Indicators -->
       <div class="flex items-center gap-2 mb-8">
         <%= for {label, num} <- [{"来源", 1}, {"解析", 2}, {"映射", 3}, {"确认", 4}] do %>
@@ -58,12 +56,17 @@ defmodule AstraAutoExWeb.WorkspaceLive.ImportWizard do
               end}>
               <%= if num < @step do %>
                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                  <path
+                    fill-rule="evenodd"
+                    d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                    clip-rule="evenodd"
+                  />
                 </svg>
               <% else %>
                 {num}
               <% end %>
             </div>
+            
             <span class={"text-xs " <> if(num == @step, do: "text-[var(--glass-text-primary)]", else: "text-[var(--glass-text-tertiary)]")}>
               {label}
             </span>
@@ -73,7 +76,6 @@ defmodule AstraAutoExWeb.WorkspaceLive.ImportWizard do
           </div>
         <% end %>
       </div>
-
       <!-- Step Content -->
       <%= case @step do %>
         <% 1 -> %>
@@ -92,9 +94,8 @@ defmodule AstraAutoExWeb.WorkspaceLive.ImportWizard do
   defp step_source(assigns) do
     ~H"""
     <div class="space-y-4">
-      <p class="text-sm text-[var(--glass-text-secondary)]">
-        选择你的故事来源方式：
-      </p>
+      <p class="text-sm text-[var(--glass-text-secondary)]">选择你的故事来源方式：</p>
+      
       <div class="grid grid-cols-2 gap-3">
         <button
           type="button"
@@ -105,7 +106,9 @@ defmodule AstraAutoExWeb.WorkspaceLive.ImportWizard do
             if(@source_type == "text", do: "ring-2 ring-[var(--glass-accent-from)]", else: "hover:ring-1 hover:ring-[var(--glass-stroke-base)]")}
         >
           <div class="text-2xl mb-2">📝</div>
+          
           <div class="text-sm font-medium text-[var(--glass-text-primary)]">粘贴文本</div>
+          
           <div class="text-xs text-[var(--glass-text-tertiary)] mt-1">直接输入故事内容</div>
         </button>
         <button
@@ -117,12 +120,13 @@ defmodule AstraAutoExWeb.WorkspaceLive.ImportWizard do
             if(@source_type == "file", do: "ring-2 ring-[var(--glass-accent-from)]", else: "hover:ring-1 hover:ring-[var(--glass-stroke-base)]")}
         >
           <div class="text-2xl mb-2">📄</div>
+          
           <div class="text-sm font-medium text-[var(--glass-text-primary)]">上传文件</div>
+          
           <div class="text-xs text-[var(--glass-text-tertiary)] mt-1">.txt / .md 文件</div>
         </button>
       </div>
-
-      <textarea
+       <textarea
         phx-change="update_raw_text"
         phx-target={@myself}
         name="raw_text"
@@ -130,7 +134,6 @@ defmodule AstraAutoExWeb.WorkspaceLive.ImportWizard do
         class="glass-input w-full text-sm"
         placeholder="在此粘贴你的故事文本..."
       ><%= @raw_text %></textarea>
-
       <div class="flex justify-end">
         <button
           type="button"
@@ -153,14 +156,21 @@ defmodule AstraAutoExWeb.WorkspaceLive.ImportWizard do
         <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-[var(--glass-accent-from)] to-[var(--glass-accent-to)] mb-4 animate-pulse">
           <svg class="w-8 h-8 text-white animate-spin" fill="none" viewBox="0 0 24 24">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
-            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+            <path
+              class="opacity-75"
+              fill="currentColor"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+            />
           </svg>
         </div>
+        
         <p class="text-[var(--glass-text-primary)] font-medium mb-2">AI 正在分析你的故事...</p>
+        
         <p class="text-sm text-[var(--glass-text-tertiary)]">自动识别剧集分割点、角色和场景</p>
       <% else %>
         <%= if @error do %>
           <div class="text-red-400 mb-4">{@error}</div>
+          
           <button
             type="button"
             phx-click="retry_parse"
@@ -171,6 +181,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.ImportWizard do
           </button>
         <% else %>
           <p class="text-[var(--glass-text-secondary)]">解析完成</p>
+          
           <button
             type="button"
             phx-click="next_step"
@@ -191,6 +202,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.ImportWizard do
       <p class="text-sm text-[var(--glass-text-secondary)]">
         AI 已将故事拆分为 {length(@parsed_episodes)} 集。你可以调整顺序和内容：
       </p>
+      
       <div class="space-y-3 max-h-[400px] overflow-y-auto">
         <%= for {ep, idx} <- Enum.with_index(@parsed_episodes) do %>
           <div class="glass-card p-4">
@@ -202,6 +214,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.ImportWizard do
                 <div class="text-sm font-medium text-[var(--glass-text-primary)] truncate">
                   {Map.get(ep, :title, "第 #{idx + 1} 集")}
                 </div>
+                
                 <div class="text-xs text-[var(--glass-text-tertiary)] line-clamp-2 mt-1">
                   {String.slice(Map.get(ep, :content, ""), 0..120)}...
                 </div>
@@ -210,13 +223,11 @@ defmodule AstraAutoExWeb.WorkspaceLive.ImportWizard do
           </div>
         <% end %>
       </div>
-
+      
       <%= if @parsed_episodes == [] do %>
-        <div class="text-center py-8 text-[var(--glass-text-tertiary)]">
-          未检测到剧集分割。将整段文本作为单集处理。
-        </div>
+        <div class="text-center py-8 text-[var(--glass-text-tertiary)]">未检测到剧集分割。将整段文本作为单集处理。</div>
       <% end %>
-
+      
       <div class="flex justify-between">
         <button
           type="button"
@@ -245,17 +256,22 @@ defmodule AstraAutoExWeb.WorkspaceLive.ImportWizard do
       <div class="glass-card p-4 bg-green-500/5 border border-green-500/20">
         <div class="flex items-center gap-3">
           <svg class="w-6 h-6 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+            <path
+              fill-rule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+              clip-rule="evenodd"
+            />
           </svg>
           <div>
             <div class="text-sm font-medium text-green-400">准备就绪</div>
+            
             <div class="text-xs text-[var(--glass-text-tertiary)]">
               共 {length(@parsed_episodes)} 集，{String.length(@raw_text)} 字
             </div>
           </div>
         </div>
       </div>
-
+      
       <div class="flex justify-between">
         <button
           type="button"
@@ -333,11 +349,15 @@ defmodule AstraAutoExWeb.WorkspaceLive.ImportWizard do
   end
 
   def handle_event("confirm_import", %{"analyze" => analyze}, socket) do
-    send(self(), {:wizard_complete, %{
-      raw_text: socket.assigns.raw_text,
-      episodes: socket.assigns.parsed_episodes,
-      analyze_assets: analyze == "true"
-    }})
+    send(
+      self(),
+      {:wizard_complete,
+       %{
+         raw_text: socket.assigns.raw_text,
+         episodes: socket.assigns.parsed_episodes,
+         analyze_assets: analyze == "true"
+       }}
+    )
 
     {:noreply, socket}
   end
@@ -372,7 +392,10 @@ defmodule AstraAutoExWeb.WorkspaceLive.ImportWizard do
       |> Enum.with_index(1)
       |> Enum.map(fn {content, idx} ->
         title =
-          case Regex.run(~r/^(第\d+集|(?i)episode\s*\d+|(?i)ep\s*\d+)[：:\s]*(.*)/u, String.trim(content)) do
+          case Regex.run(
+                 ~r/^(第\d+集|(?i)episode\s*\d+|(?i)ep\s*\d+)[：:\s]*(.*)/u,
+                 String.trim(content)
+               ) do
             [_, _marker, name] when name != "" -> "第 #{idx} 集：#{String.trim(name)}"
             _ -> "第 #{idx} 集"
           end

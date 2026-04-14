@@ -61,43 +61,50 @@ defmodule AstraAutoExWeb.HomeLive do
               style="animation-duration: 8s"
             >
             </div>
+            
             <div
               class="absolute -top-2 -right-2 w-6 h-6 border-t-2 border-r-2 border-[var(--glass-stroke-base)] rounded-tr-sm opacity-40 animate-pulse"
               style="animation-duration: 8s"
             >
             </div>
+            
             <div
               class="absolute -bottom-2 -left-2 w-6 h-6 border-b-2 border-l-2 border-[var(--glass-stroke-base)] rounded-bl-sm opacity-40 animate-pulse"
               style="animation-duration: 8s"
             >
             </div>
+            
             <div
               class="absolute -bottom-2 -right-2 w-6 h-6 border-b-2 border-r-2 border-[var(--glass-stroke-base)] rounded-br-sm opacity-40 animate-pulse"
               style="animation-duration: 8s"
             >
             </div>
-            <%!-- REC indicator --%>
+             <%!-- REC indicator --%>
             <div class="absolute top-1 right-4 flex items-center gap-1.5 opacity-40">
               <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
               <span class="text-[10px] text-red-400 font-mono tracking-wider">REC</span>
             </div>
-
-            <%!-- Title with animations --%>
+             <%!-- Title with animations --%>
             <div class="text-center py-6">
               <h1 class="text-3xl font-extrabold text-[var(--glass-text-primary)] tracking-tight twh-focus-pull">
                 {dgettext("landing", "AstrAuto Drama")}
               </h1>
+              
               <p
                 id="hero-typewriter"
                 phx-hook="TypewriterHero"
-                data-text={dgettext("projects", "Describe your story and let AI generate cinematic short dramas")}
+                data-text={
+                  dgettext(
+                    "projects",
+                    "Describe your story and let AI generate cinematic short dramas"
+                  )
+                }
                 class="text-sm text-[var(--glass-text-tertiary)] mt-2 font-mono"
               >
                 >_ <span data-typewriter-target></span><span class="animate-pulse">|</span>
               </p>
             </div>
-
-            <%!-- Story Composer --%>
+             <%!-- Story Composer --%>
             <form phx-change="validate_quick_create" phx-submit="start_create">
               <div class="glass-surface rounded-2xl p-5 shadow-sm">
                 <div phx-drop-target={@uploads.story_file.ref} class="relative">
@@ -131,13 +138,11 @@ defmodule AstraAutoExWeb.HomeLive do
                         viewBox="0 0 24 24"
                       >
                         <path d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
-                      </svg>
-                      {dgettext("projects", "Drop .txt/.md file")}
+                      </svg> {dgettext("projects", "Drop .txt/.md file")}
                     </label>
                   </div>
                 </div>
-
-                <%!-- Upload entries --%>
+                 <%!-- Upload entries --%>
                 <%= for entry <- @uploads.story_file.entries do %>
                   <div class="flex items-center gap-2 mt-2 text-xs text-[var(--glass-text-secondary)]">
                     <span>{entry.client_name}</span>
@@ -147,6 +152,7 @@ defmodule AstraAutoExWeb.HomeLive do
                         style={"width: #{entry.progress}%"}
                       />
                     </div>
+                    
                     <button
                       type="button"
                       phx-click="cancel_upload"
@@ -157,11 +163,11 @@ defmodule AstraAutoExWeb.HomeLive do
                     </button>
                   </div>
                 <% end %>
+                
                 <%= for err <- upload_errors(@uploads.story_file) do %>
                   <p class="text-xs text-red-400 mt-1">{upload_error_to_string(err)}</p>
                 <% end %>
-
-                <%!-- Bottom toolbar --%>
+                 <%!-- Bottom toolbar --%>
                 <div class="flex items-center justify-between pt-3 mt-3 border-t border-[var(--glass-stroke-soft)]">
                   <div class="flex items-center gap-3">
                     <div class="flex items-center gap-1.5 text-[var(--glass-text-tertiary)]">
@@ -184,7 +190,9 @@ defmodule AstraAutoExWeb.HomeLive do
                         <% end %>
                       </select>
                     </div>
+                    
                     <div class="w-px h-4 bg-[var(--glass-stroke-soft)]"></div>
+                    
                     <div class="flex items-center gap-1.5 text-[var(--glass-text-tertiary)] relative">
                       <svg
                         class="w-4 h-4"
@@ -206,8 +214,7 @@ defmodule AstraAutoExWeb.HomeLive do
                       </select>
                     </div>
                   </div>
-
-                  <%!-- Custom art style prompt (when "custom" selected) --%>
+                   <%!-- Custom art style prompt (when "custom" selected) --%>
                   <div :if={@art_style == "custom"} class="w-full mt-2">
                     <textarea
                       name="art_style_prompt"
@@ -218,7 +225,7 @@ defmodule AstraAutoExWeb.HomeLive do
                       placeholder="输入自定义画风描述..."
                     ><%= assigns[:art_style_prompt] || "" %></textarea>
                   </div>
-
+                  
                   <div class="flex items-center gap-3">
                     <button
                       type="button"
@@ -233,8 +240,7 @@ defmodule AstraAutoExWeb.HomeLive do
                         viewBox="0 0 24 24"
                       >
                         <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
-                      </svg>
-                      {dgettext("projects", "AI Write")}
+                      </svg> {dgettext("projects", "AI Write")}
                     </button>
                     <button
                       type="submit"
@@ -262,7 +268,7 @@ defmodule AstraAutoExWeb.HomeLive do
             </form>
           </div>
         </section>
-
+        
         <%!-- ═══════════ Recent Projects ═══════════ --%>
         <section class="px-6 py-6 flex-1">
           <div class="max-w-5xl mx-auto">
@@ -270,6 +276,7 @@ defmodule AstraAutoExWeb.HomeLive do
               <h2 class="text-lg font-bold text-[var(--glass-text-primary)]">
                 {dgettext("projects", "Recent Projects")}
               </h2>
+              
               <.link
                 navigate={~p"/projects"}
                 class="text-xs text-[var(--glass-accent-from)] hover:text-[var(--glass-accent-to)] transition-colors"
@@ -277,6 +284,7 @@ defmodule AstraAutoExWeb.HomeLive do
                 {dgettext("projects", "View All Projects")} →
               </.link>
             </div>
+            
             <%= if length(@projects) > 0 do %>
               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 <%= for project <- Enum.take(@projects, 4) do %>
@@ -285,6 +293,7 @@ defmodule AstraAutoExWeb.HomeLive do
                       <h3 class="text-sm font-bold text-[var(--glass-text-primary)] group-hover:text-[var(--glass-accent-from)] truncate">
                         {project.name}
                       </h3>
+                      
                       <p
                         :if={project.description && project.description != ""}
                         class="text-xs text-[var(--glass-text-tertiary)] mt-1.5 line-clamp-2 flex items-start gap-1"
@@ -297,9 +306,9 @@ defmodule AstraAutoExWeb.HomeLive do
                           viewBox="0 0 24 24"
                         >
                           <path d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m2.25 0H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-                        </svg>
-                        <span>{project.description}</span>
+                        </svg> <span>{project.description}</span>
                       </p>
+                      
                       <div class="flex items-center gap-1.5 mt-3 text-[var(--glass-text-tertiary)]">
                         <svg
                           class="w-3.5 h-3.5 opacity-50"
@@ -328,8 +337,7 @@ defmodule AstraAutoExWeb.HomeLive do
           </div>
         </section>
       </div>
-
-      <%!-- ═══════════ AI Write Modal ═══════════ --%>
+       <%!-- ═══════════ AI Write Modal ═══════════ --%>
       <%= if @show_ai_modal do %>
         <div class="fixed inset-0 z-50 flex items-center justify-center">
           <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" phx-click="close_ai_modal" />
@@ -347,15 +355,18 @@ defmodule AstraAutoExWeb.HomeLive do
                     <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
                   </svg>
                 </div>
+                
                 <div>
                   <h3 class="text-base font-bold text-[var(--glass-text-primary)]">
                     {dgettext("projects", "AI Write")}
                   </h3>
+                  
                   <p class="text-xs text-[var(--glass-text-tertiary)]">
                     {dgettext("projects", "Generate Outline")}
                   </p>
                 </div>
               </div>
+              
               <button
                 type="button"
                 phx-click="close_ai_modal"
@@ -364,8 +375,7 @@ defmodule AstraAutoExWeb.HomeLive do
                 &times;
               </button>
             </div>
-
-            <%!-- Phase: Input --%>
+             <%!-- Phase: Input --%>
             <div :if={@ai_phase == :input} class="space-y-4">
               <textarea
                 phx-change="update_ai_prompt"
@@ -384,10 +394,15 @@ defmodule AstraAutoExWeb.HomeLive do
                   phx-click="view_prompt_template"
                   class="text-xs text-[var(--glass-text-tertiary)] hover:text-[var(--glass-accent-from)] transition-colors flex items-center gap-1"
                 >
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                  <svg
+                    class="w-3.5 h-3.5"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                    viewBox="0 0 24 24"
+                  >
                     <path d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
-                  </svg>
-                  {dgettext("projects", "Prompt")}
+                  </svg> {dgettext("projects", "Prompt")}
                 </button>
                 <button
                   type="button"
@@ -403,17 +418,16 @@ defmodule AstraAutoExWeb.HomeLive do
                     viewBox="0 0 24 24"
                   >
                     <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
-                  </svg>
-                  {dgettext("projects", "Generate Outline")}
+                  </svg> {dgettext("projects", "Generate Outline")}
                 </button>
               </div>
             </div>
-
-            <%!-- Phase: Loading --%>
+             <%!-- Phase: Loading --%>
             <div :if={@ai_phase == :loading} class="py-12 text-center space-y-6">
               <div class="inline-block relative">
                 <div class="w-14 h-14 rounded-full border-4 border-[var(--glass-stroke-base)] border-t-[var(--glass-accent-from)] animate-spin">
                 </div>
+                
                 <svg
                   class="w-6 h-6 absolute top-4 left-4 text-[var(--glass-accent-from)] animate-pulse"
                   fill="none"
@@ -424,12 +438,12 @@ defmodule AstraAutoExWeb.HomeLive do
                   <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
                 </svg>
               </div>
+              
               <p class="text-sm text-[var(--glass-text-secondary)] animate-pulse">
                 {Enum.at(@ai_status_messages, @ai_status_index)}
               </p>
             </div>
-
-            <%!-- Phase: Outline --%>
+             <%!-- Phase: Outline --%>
             <div :if={@ai_phase == :outline} class="space-y-4">
               <div class="flex items-center justify-between">
                 <span class="text-sm text-[var(--glass-text-secondary)]">
@@ -439,6 +453,7 @@ defmodule AstraAutoExWeb.HomeLive do
                   {dgettext("projects", "%{count} episodes", count: @ai_episode_count)}
                 </span>
               </div>
+              
               <textarea
                 phx-change="update_ai_outline"
                 phx-debounce="300"

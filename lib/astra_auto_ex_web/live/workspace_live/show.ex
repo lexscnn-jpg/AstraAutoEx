@@ -41,9 +41,9 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
      |> assign(:task_progress, %{})
      |> assign(:viewing_prompt, nil)
      |> assign(:aspect_ratio, project.aspect_ratio || "16:9")
-     |> assign(:art_style, "realistic")
-     |> assign(:auto_chain, false)
-     |> assign(:full_auto_chain, false)
+     |> assign(:art_style, load_novel_field(project, :art_style, "realistic"))
+     |> assign(:auto_chain, load_novel_field(project, :auto_chain_enabled, false))
+     |> assign(:full_auto_chain, load_novel_field(project, :full_auto_chain_enabled, false))
      |> assign(:pipeline_state, :idle)
      |> assign(:show_ai_write, false)
      |> assign(:show_wizard, false)
@@ -87,8 +87,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
               </select>
             </div>
           </div>
-
-          <%!-- Center: Stage tabs --%>
+           <%!-- Center: Stage tabs --%>
           <div class="flex items-center gap-0.5 p-1 rounded-xl bg-[var(--glass-bg-muted)]">
             <%= for stage <- @stages do %>
               <button
@@ -107,8 +106,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
               </button>
             <% end %>
           </div>
-
-          <%!-- Right: Action buttons --%>
+           <%!-- Right: Action buttons --%>
           <div class="flex items-center gap-2">
             <a
               href={~p"/asset-hub"}
@@ -122,8 +120,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                 viewBox="0 0 24 24"
               >
                 <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-              </svg>
-              {dgettext("projects", "Assets")}
+              </svg> {dgettext("projects", "Assets")}
             </a>
             <button
               phx-click="toggle_assistant"
@@ -141,8 +138,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                   cy="12"
                   r="3"
                 />
-              </svg>
-              {dgettext("projects", "Config")}
+              </svg> {dgettext("projects", "Config")}
             </button>
             <button
               phx-click="toggle_assistant"
@@ -161,16 +157,16 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
             </button>
           </div>
         </div>
-
-        <%!-- Episode info bar --%>
+         <%!-- Episode info bar --%>
         <div
           :if={@current_episode}
           class="text-center py-3 border-b border-[var(--glass-stroke-soft)]"
         >
           <p class="text-sm font-semibold text-[var(--glass-text-primary)]">
-            {dgettext("projects", "Currently editing:")}
-            {@current_episode.title || "Episode #{@current_episode.episode_number}"}
+            {dgettext("projects", "Currently editing:")} {@current_episode.title ||
+              "Episode #{@current_episode.episode_number}"}
           </p>
+          
           <p class="text-xs text-[var(--glass-text-tertiary)]">
             {dgettext(
               "projects",
@@ -178,8 +174,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
             )}
           </p>
         </div>
-
-        <%!-- Main content --%>
+         <%!-- Main content --%>
         <main class="flex-1 overflow-y-auto">
           <div class="max-w-6xl mx-auto px-6 py-6">
             <%= case @stage do %>
@@ -231,8 +226,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
           </div>
         </main>
       </div>
-
-      <%!-- AI Assistant Drawer --%>
+       <%!-- AI Assistant Drawer --%>
       <aside
         :if={@show_assistant}
         class="fixed top-[52px] right-0 bottom-0 w-80 glass-surface border-l border-[var(--glass-stroke-base)] flex flex-col z-40 shadow-2xl"
@@ -244,26 +238,19 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
           current_scope={@current_scope}
         />
       </aside>
-
-      <%!-- Prompt Viewer Modal --%>
-      <.prompt_viewer_modal :if={@viewing_prompt} prompt={@viewing_prompt} />
-
-      <%!-- Import Wizard --%>
+       <%!-- Prompt Viewer Modal --%>
+      <.prompt_viewer_modal :if={@viewing_prompt} prompt={@viewing_prompt} /> <%!-- Import Wizard --%>
       <.live_component
         :if={@show_wizard}
         module={AstraAutoExWeb.WorkspaceLive.ImportWizard}
         id="import-wizard"
-      />
-
-      <%!-- Pipeline Progress Modal --%>
+      /> <%!-- Pipeline Progress Modal --%>
       <.live_component
         module={AstraAutoExWeb.WorkspaceLive.PipelineModal}
         id="pipeline-modal"
         active={@pipeline_state == :running}
         status_messages={["准备中...", "思考中...", "写作中...", "润色中...", "即将完成..."]}
-      />
-
-      <%!-- Voice Picker --%>
+      /> <%!-- Voice Picker --%>
       <.live_component
         :if={@show_voice_picker}
         module={AstraAutoExWeb.WorkspaceLive.VoicePicker}
@@ -294,8 +281,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
           stroke-linejoin="round"
           d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
         />
-      </svg>
-      {dgettext("projects", "Prompt")}
+      </svg> {dgettext("projects", "Prompt")}
     </button>
     """
   end
@@ -308,8 +294,9 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
         <div class="flex items-center justify-between mb-4">
           <div>
             <h3 class="text-lg font-bold text-[var(--glass-text-primary)]">{@prompt.label}</h3>
-            <code class="text-xs text-[var(--glass-text-tertiary)]">{@prompt.id}</code>
+             <code class="text-xs text-[var(--glass-text-tertiary)]">{@prompt.id}</code>
           </div>
+          
           <button
             phx-click="close_prompt_viewer"
             class="text-[var(--glass-text-tertiary)] hover:text-[var(--glass-text-primary)] text-xl"
@@ -317,12 +304,13 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
             &times;
           </button>
         </div>
+        
         <div class="flex-1 overflow-y-auto">
           <label class="text-xs text-[var(--glass-text-tertiary)] mb-1 block">
             {dgettext("projects", "System Prompt Template")}
-          </label>
-          <pre class="glass-input w-full text-xs font-mono whitespace-pre-wrap p-4 max-h-[55vh] overflow-y-auto"><%= @prompt.text %></pre>
+          </label> <pre class="glass-input w-full text-xs font-mono whitespace-pre-wrap p-4 max-h-[55vh] overflow-y-auto"><%= @prompt.text %></pre>
         </div>
+        
         <div class="flex justify-end mt-4 pt-3 border-t border-[var(--glass-stroke-base)]">
           <button
             phx-click="close_prompt_viewer"
@@ -353,9 +341,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
           value={@novel_text}
           phx-change="update_novel_text"
           phx-debounce="500"
-        />
-
-        <%!-- Bottom toolbar --%>
+        /> <%!-- Bottom toolbar --%>
         <div class="flex items-center justify-between pt-4 mt-4 border-t border-[var(--glass-stroke-soft)]">
           <div class="flex items-center gap-3">
             <%!-- Aspect ratio --%>
@@ -379,8 +365,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                 <% end %>
               </select>
             </div>
-
-            <%!-- Art style --%>
+             <%!-- Art style --%>
             <div class="flex items-center gap-1.5">
               <svg
                 class="w-4 h-4 text-[var(--glass-text-tertiary)]"
@@ -402,7 +387,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
               </select>
             </div>
           </div>
-
+          
           <div class="flex items-center gap-3">
             <.prompt_btn id="NP_AI_STORY_OUTLINE" />
             <button
@@ -419,8 +404,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                 viewBox="0 0 24 24"
               >
                 <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
-              </svg>
-              {dgettext("projects", "AI Write")}
+              </svg> {dgettext("projects", "AI Write")}
             </button>
             <form phx-submit="start_pipeline" class="inline">
               <input type="hidden" name="novel_text" value={@novel_text} />
@@ -444,52 +428,94 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
           </div>
         </div>
       </div>
-
-      <%!-- Auto-chain controls --%>
+       <%!-- Auto-chain controls --%>
       <div class="glass-surface rounded-xl p-4 space-y-3">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
             <span class="text-sm font-medium text-[var(--glass-text-primary)]">自动链</span>
             <span class="group relative">
-              <svg class="w-3.5 h-3.5 text-[var(--glass-text-tertiary)] cursor-help" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+              <svg
+                class="w-3.5 h-3.5 text-[var(--glass-text-tertiary)] cursor-help"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                  clip-rule="evenodd"
+                />
               </svg>
               <span class="invisible group-hover:visible absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 text-xs text-[var(--glass-text-primary)] bg-[var(--glass-bg-surface-modal)] rounded-lg shadow-lg border border-[var(--glass-stroke-base)] z-50">
                 每步完成后自动执行下一步
               </span>
             </span>
           </div>
+          
           <label class="relative inline-flex items-center cursor-pointer">
-            <input type="checkbox" class="sr-only peer" checked={@auto_chain} phx-click="toggle_auto_chain" />
+            <input
+              type="checkbox"
+              class="sr-only peer"
+              checked={@auto_chain}
+              phx-click="toggle_auto_chain"
+            />
             <div class="w-9 h-5 bg-[var(--glass-bg-muted)] peer-checked:bg-[var(--glass-accent-from)] rounded-full transition-colors after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full" />
           </label>
         </div>
+        
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-2">
             <span class="text-sm font-medium text-[var(--glass-text-primary)]">全自动</span>
             <span class="group relative">
-              <svg class="w-3.5 h-3.5 text-[var(--glass-text-tertiary)] cursor-help" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+              <svg
+                class="w-3.5 h-3.5 text-[var(--glass-text-tertiary)] cursor-help"
+                fill="currentColor"
+                viewBox="0 0 20 20"
+              >
+                <path
+                  fill-rule="evenodd"
+                  d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z"
+                  clip-rule="evenodd"
+                />
               </svg>
               <span class="invisible group-hover:visible absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 text-xs text-[var(--glass-text-primary)] bg-[var(--glass-bg-surface-modal)] rounded-lg shadow-lg border border-[var(--glass-stroke-base)] z-50">
                 一键从故事直接到成片
               </span>
             </span>
           </div>
+          
           <label class="relative inline-flex items-center cursor-pointer">
-            <input type="checkbox" class="sr-only peer" checked={@full_auto_chain} phx-click="toggle_full_auto_chain" />
+            <input
+              type="checkbox"
+              class="sr-only peer"
+              checked={@full_auto_chain}
+              phx-click="toggle_full_auto_chain"
+            />
             <div class="w-9 h-5 bg-[var(--glass-bg-muted)] peer-checked:bg-[var(--glass-accent-from)] rounded-full transition-colors after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full" />
           </label>
         </div>
-        <%!-- Pipeline control bar --%>
-        <div :if={@pipeline_state in [:running, :paused]} class="flex items-center gap-2 pt-2 border-t border-[var(--glass-stroke-soft)]">
-          <button :if={@pipeline_state == :running} phx-click="pause_pipeline" class="glass-btn text-xs py-1 px-3 flex items-center gap-1">
+         <%!-- Pipeline control bar --%>
+        <div
+          :if={@pipeline_state in [:running, :paused]}
+          class="flex items-center gap-2 pt-2 border-t border-[var(--glass-stroke-soft)]"
+        >
+          <button
+            :if={@pipeline_state == :running}
+            phx-click="pause_pipeline"
+            class="glass-btn text-xs py-1 px-3 flex items-center gap-1"
+          >
             ⏸ 暂停
           </button>
-          <button :if={@pipeline_state == :paused} phx-click="resume_pipeline" class="glass-btn glass-btn-primary text-xs py-1 px-3 flex items-center gap-1">
+          <button
+            :if={@pipeline_state == :paused}
+            phx-click="resume_pipeline"
+            class="glass-btn glass-btn-primary text-xs py-1 px-3 flex items-center gap-1"
+          >
             ▶ 恢复
           </button>
-          <button phx-click="stop_pipeline" class="glass-btn text-xs py-1 px-3 text-red-400 hover:text-red-300">
+          <button
+            phx-click="stop_pipeline"
+            class="glass-btn text-xs py-1 px-3 text-red-400 hover:text-red-300"
+          >
             ⏹ 停止
           </button>
           <span class="text-xs text-[var(--glass-text-tertiary)] ml-auto">
@@ -497,16 +523,22 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
           </span>
         </div>
       </div>
-
-      <%!-- Asset hint card --%>
+       <%!-- Asset hint card --%>
       <div class="glass-surface rounded-xl p-4 flex items-start gap-3">
-        <svg class="w-5 h-5 text-[var(--glass-text-tertiary)] mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+        <svg
+          class="w-5 h-5 text-[var(--glass-text-tertiary)] mt-0.5 flex-shrink-0"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.5"
+          viewBox="0 0 24 24"
+        >
           <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z" />
         </svg>
         <div>
           <p class="text-sm font-medium text-[var(--glass-text-primary)]">
             {dgettext("projects", "Need custom characters and scenes?")}
           </p>
+          
           <p class="text-xs text-[var(--glass-text-tertiary)] mt-0.5">
             点击右上角素材库按钮上传资产文件或手动添加角色/场景。AI 将优先使用素材库中的资产。
           </p>
@@ -523,17 +555,18 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
         <div class="flex items-center gap-3">
           <div class="w-1 h-6 rounded-full bg-gradient-to-b from-[var(--glass-accent-from)] to-[var(--glass-accent-to)]">
           </div>
+          
           <h2 class="text-lg font-bold text-[var(--glass-text-primary)]">
             {dgettext("projects", "Script Breakdown")}
           </h2>
-          <.prompt_btn id="NP_AGENT_CLIP" />
-          <.prompt_btn id="NP_SCREENPLAY_CONVERSION" />
+           <.prompt_btn id="NP_AGENT_CLIP" /> <.prompt_btn id="NP_SCREENPLAY_CONVERSION" />
         </div>
+        
         <button phx-click="run_story_to_script" class="glass-btn glass-btn-ghost text-xs py-1.5 px-3">
           {dgettext("projects", "Generate Script")}
         </button>
       </div>
-
+      
       <div class="grid grid-cols-12 gap-5">
         <%!-- Left: Script clips --%>
         <div class="col-span-12 lg:col-span-8 space-y-3">
@@ -543,16 +576,16 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
             </p>
           </div>
         </div>
-
-        <%!-- Right: Project assets --%>
+         <%!-- Right: Project assets --%>
         <div class="col-span-12 lg:col-span-4 space-y-4">
           <div class="glass-surface rounded-xl p-4">
             <div class="flex items-center gap-2 mb-3">
               <h3 class="text-sm font-semibold text-[var(--glass-text-primary)]">
                 {dgettext("projects", "Characters")} ({length(@characters)})
               </h3>
-              <.prompt_btn id="NP_AGENT_CHARACTER_PROFILE" />
+               <.prompt_btn id="NP_AGENT_CHARACTER_PROFILE" />
             </div>
+            
             <div class="space-y-2">
               <%= for char <- @characters do %>
                 <div class="flex items-center gap-2 p-2 rounded-lg hover:bg-[var(--glass-bg-muted)] transition-colors">
@@ -565,16 +598,19 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                       </span>
                     <% end %>
                   </div>
+                  
                   <div class="min-w-0">
                     <p class="text-sm font-medium text-[var(--glass-text-primary)] truncate">
                       {char.name}
                     </p>
+                    
                     <p class="text-[10px] text-[var(--glass-text-tertiary)] truncate">
                       {char.description || char.introduction || ""}
                     </p>
                   </div>
                 </div>
               <% end %>
+              
               <button
                 phx-click="add_character"
                 class="w-full p-2 rounded-lg border border-dashed border-[var(--glass-stroke-base)] text-xs text-[var(--glass-text-tertiary)] hover:border-[var(--glass-accent-from)] hover:text-[var(--glass-accent-from)] transition-colors"
@@ -583,11 +619,12 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
               </button>
             </div>
           </div>
-
+          
           <div class="glass-surface rounded-xl p-4">
             <h3 class="text-sm font-semibold text-[var(--glass-text-primary)] mb-3">
               {dgettext("projects", "Locations")} ({length(@locations)})
             </h3>
+            
             <div class="space-y-2">
               <%= for loc <- @locations do %>
                 <div class="flex items-center gap-2 p-2 rounded-lg hover:bg-[var(--glass-bg-muted)] transition-colors">
@@ -598,6 +635,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                       <span class="text-[10px] text-[var(--glass-text-tertiary)]">L</span>
                     <% end %>
                   </div>
+                  
                   <p class="text-sm text-[var(--glass-text-primary)] truncate">{loc.name}</p>
                 </div>
               <% end %>
@@ -605,8 +643,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
           </div>
         </div>
       </div>
-
-      <%!-- Bottom action --%>
+       <%!-- Bottom action --%>
       <button
         phx-click="run_story_to_script"
         class="w-full glass-btn glass-btn-primary py-3 text-base flex items-center justify-center gap-2"
@@ -639,13 +676,14 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
         <div class="flex items-center gap-3">
           <div class="w-1 h-6 rounded-full bg-gradient-to-b from-[var(--glass-accent-from)] to-[var(--glass-accent-to)]">
           </div>
+          
           <h2 class="text-lg font-bold text-[var(--glass-text-primary)]">
             {dgettext("projects", "Storyboard")}
           </h2>
         </div>
+        
         <div class="flex items-center gap-2">
-          <.prompt_btn id="NP_AGENT_STORYBOARD_PLAN" />
-          <.prompt_btn id="NP_SINGLE_PANEL_IMAGE" />
+          <.prompt_btn id="NP_AGENT_STORYBOARD_PLAN" /> <.prompt_btn id="NP_SINGLE_PANEL_IMAGE" />
           <button
             phx-click="generate_all_images"
             class="glass-btn glass-btn-primary px-4 py-2 text-sm flex items-center gap-1.5"
@@ -658,13 +696,11 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
               viewBox="0 0 24 24"
             >
               <path d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.41a2.25 2.25 0 013.182 0l2.909 2.91m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
-            </svg>
-            {dgettext("projects", "Generate All Images")}
+            </svg> {dgettext("projects", "Generate All Images")}
           </button>
         </div>
       </div>
-
-      <%!-- Info bar with counts --%>
+       <%!-- Info bar with counts --%>
       <div :if={@total_count > 0} class="glass-surface rounded-xl px-5 py-3 flex items-center gap-6">
         <div class="flex items-center gap-2">
           <span class="text-sm text-[var(--glass-text-tertiary)]">
@@ -672,7 +708,9 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
           </span>
           <span class="text-sm font-semibold text-[var(--glass-text-primary)]">{@total_count}</span>
         </div>
+        
         <div class="w-px h-4 bg-[var(--glass-stroke-soft)]"></div>
+        
         <div class="flex items-center gap-2">
           <span class="text-sm text-[var(--glass-text-tertiary)]">
             {dgettext("projects", "Images:")}
@@ -687,7 +725,9 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
             {@image_count}/{@total_count}
           </span>
         </div>
+        
         <div class="w-px h-4 bg-[var(--glass-stroke-soft)]"></div>
+        
         <div class="flex items-center gap-2">
           <span class="text-sm text-[var(--glass-text-tertiary)]">
             {dgettext("projects", "Videos:")}
@@ -703,7 +743,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
           </span>
         </div>
       </div>
-
+      
       <%= if @storyboards && length(@storyboards) > 0 do %>
         <%= for sb <- @storyboards do %>
           <div class="glass-surface rounded-xl p-4">
@@ -733,7 +773,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                         </svg>
                       </div>
                     <% end %>
-                    <%!-- Task progress overlay --%>
+                     <%!-- Task progress overlay --%>
                     <div
                       :if={task_progress_for(@task_progress, panel.id)}
                       class="absolute bottom-0 left-0 right-0 bg-black/60 px-2 py-1"
@@ -745,30 +785,34 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                         />
                       </div>
                     </div>
-                    <%!-- Edit icon on hover --%>
+                     <%!-- Edit icon on hover --%>
                     <div class="absolute top-1.5 right-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                       <span class="glass-chip text-[10px] bg-black/60 text-[var(--glass-text-primary)] backdrop-blur-sm">
                         {dgettext("projects", "Edit")}
                       </span>
                     </div>
                   </div>
+                  
                   <div class="p-2.5">
                     <p class="text-xs text-[var(--glass-text-secondary)] line-clamp-2 leading-relaxed">
                       {panel.description}
                     </p>
+                    
                     <div class="flex flex-wrap items-center gap-1 mt-1.5">
                       <%!-- Shot type chip --%>
                       <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-[var(--glass-accent-from)]/10 text-[var(--glass-accent-from)]">
                         {panel.shot_type || "MS"}
-                      </span>
-                      <%!-- Character tags (blue) --%>
+                      </span> <%!-- Character tags (blue) --%>
                       <%= for char <- parse_panel_characters(panel) do %>
                         <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-blue-500/10 text-blue-400">
                           {char}
                         </span>
                       <% end %>
-                      <%!-- Location tag (green) --%>
-                      <span :if={panel_location(panel)} class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-green-500/10 text-green-400">
+                       <%!-- Location tag (green) --%>
+                      <span
+                        :if={panel_location(panel)}
+                        class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-green-500/10 text-green-400"
+                      >
                         {panel_location(panel)}
                       </span>
                       <span
@@ -778,7 +822,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                         {dgettext("projects", "Video")}
                       </span>
                     </div>
-                    <%!-- Video prompt preview --%>
+                     <%!-- Video prompt preview --%>
                     <p
                       :if={panel.video_prompt && panel.video_prompt != ""}
                       class="text-[10px] text-[var(--glass-text-tertiary)] mt-1.5 line-clamp-1 italic"
@@ -807,8 +851,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
           </p>
         </div>
       <% end %>
-
-      <%!-- Panel Editor Modal --%>
+       <%!-- Panel Editor Modal --%>
       <.live_component
         :if={@editing_panel}
         module={AstraAutoExWeb.WorkspaceLive.PanelEditor}
@@ -846,10 +889,12 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
         <div class="flex items-center gap-3">
           <div class="w-1 h-6 rounded-full bg-gradient-to-b from-[var(--glass-accent-from)] to-[var(--glass-accent-to)]">
           </div>
+          
           <div>
             <h2 class="text-lg font-bold text-[var(--glass-text-primary)]">
               {dgettext("projects", "Film")}
             </h2>
+            
             <p class="text-xs text-[var(--glass-text-tertiary)] mt-0.5">
               {dgettext("projects", "%{total} panels", total: length(@all_panels))}
               <span :if={@video_count > 0} class="text-green-500 ml-1">
@@ -861,6 +906,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
             </p>
           </div>
         </div>
+        
         <div class="flex items-center gap-2">
           <.prompt_btn id="NP_VOICE_ANALYSIS" />
           <button
@@ -875,8 +921,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
               viewBox="0 0 24 24"
             >
               <path d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m-4 0h8" />
-            </svg>
-            {dgettext("projects", "Generate All Voices")}
+            </svg> {dgettext("projects", "Generate All Voices")}
           </button>
           <button
             phx-click="generate_all_videos"
@@ -890,13 +935,11 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
               viewBox="0 0 24 24"
             >
               <path d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 010 1.972l-11.54 6.347a1.125 1.125 0 01-1.667-.986V5.653z" />
-            </svg>
-            {dgettext("projects", "Generate All Videos")}
+            </svg> {dgettext("projects", "Generate All Videos")}
           </button>
         </div>
       </div>
-
-      <%!-- Voice lines collapsible --%>
+       <%!-- Voice lines collapsible --%>
       <details :if={@voice_lines && length(@voice_lines) > 0} class="glass-surface rounded-xl">
         <summary class="flex items-center gap-3 px-5 py-3 cursor-pointer select-none hover:bg-[var(--glass-bg-muted)] rounded-xl transition-colors">
           <svg
@@ -917,6 +960,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
             </span>
           </div>
         </summary>
+        
         <div class="px-5 pb-4 space-y-1.5 border-t border-[var(--glass-stroke-soft)]">
           <%= for vl <- @voice_lines do %>
             <div class="flex items-center gap-3 py-2 hover:bg-[var(--glass-bg-muted)] rounded-lg px-2 transition-colors">
@@ -926,9 +970,8 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
               <span class="text-sm font-medium text-[var(--glass-text-primary)] w-20 truncate">
                 {vl.speaker || "Narrator"}
               </span>
-              <p class="text-xs text-[var(--glass-text-tertiary)] flex-1 truncate">
-                {vl.content}
-              </p>
+              <p class="text-xs text-[var(--glass-text-tertiary)] flex-1 truncate">{vl.content}</p>
+              
               <%= if vl.audio_url && vl.audio_url != "" do %>
                 <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-green-500/10 text-green-500">
                   {dgettext("projects", "generated")}
@@ -946,8 +989,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
           <% end %>
         </div>
       </details>
-
-      <%!-- Video panels grid --%>
+       <%!-- Video panels grid --%>
       <%= if length(@all_panels) > 0 do %>
         <div class="grid grid-cols-3 gap-4">
           <%= for {panel, idx} <- Enum.with_index(@all_panels) do %>
@@ -1002,6 +1044,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                   <% end %>
                 <% end %>
               </div>
+              
               <div class="p-3">
                 <div class="flex items-center gap-1.5 mb-1.5">
                   <span
@@ -1011,6 +1054,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                     {panel.shot_type}
                   </span>
                 </div>
+                
                 <p class="text-xs text-[var(--glass-text-secondary)] line-clamp-2">
                   {panel.description}
                 </p>
@@ -1018,27 +1062,26 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
             </div>
           <% end %>
         </div>
-      <%!-- First/Last Frame Transitions --%>
-      <%= if length(@all_panels) > 1 do %>
-        <div class="mt-6">
-          <h3 class="text-sm font-semibold text-[var(--glass-text-primary)] mb-3 flex items-center gap-2">
-            首尾帧过渡
-            <span class="glass-chip text-[10px]">{length(@all_panels) - 1} 对</span>
-          </h3>
-          <div class="space-y-3">
-            <%= for {panel, idx} <- Enum.with_index(@all_panels), idx < length(@all_panels) - 1 do %>
-              <.live_component
-                module={AstraAutoExWeb.WorkspaceLive.FirstLastFrame}
-                id={"fl-#{panel.id}"}
-                current_panel={panel}
-                next_panel={Enum.at(@all_panels, idx + 1)}
-                panel_index={idx}
-              />
-            <% end %>
+         <%!-- First/Last Frame Transitions --%>
+        <%= if length(@all_panels) > 1 do %>
+          <div class="mt-6">
+            <h3 class="text-sm font-semibold text-[var(--glass-text-primary)] mb-3 flex items-center gap-2">
+              首尾帧过渡 <span class="glass-chip text-[10px]">{length(@all_panels) - 1} 对</span>
+            </h3>
+            
+            <div class="space-y-3">
+              <%= for {panel, idx} <- Enum.with_index(@all_panels), idx < length(@all_panels) - 1 do %>
+                <.live_component
+                  module={AstraAutoExWeb.WorkspaceLive.FirstLastFrame}
+                  id={"fl-#{panel.id}"}
+                  current_panel={panel}
+                  next_panel={Enum.at(@all_panels, idx + 1)}
+                  panel_index={idx}
+                />
+              <% end %>
+            </div>
           </div>
-        </div>
-      <% end %>
-
+        <% end %>
       <% else %>
         <div class="glass-surface rounded-xl p-12 text-center">
           <svg
@@ -1093,6 +1136,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
         <h1 class="text-2xl font-bold text-[var(--glass-text-primary)]">
           {dgettext("projects", "AI Edit")}
         </h1>
+        
         <p class="text-sm text-[var(--glass-text-tertiary)] mt-1">
           {dgettext(
             "projects",
@@ -1100,18 +1144,19 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
           )}
         </p>
       </div>
-
-      <%!-- Panel checklist --%>
+       <%!-- Panel checklist --%>
       <div class="glass-surface rounded-xl overflow-hidden">
         <div class="flex items-center justify-between px-5 py-3 border-b border-[var(--glass-stroke-soft)]">
           <div class="flex items-center gap-2">
             <h3 class="text-sm font-semibold text-[var(--glass-text-primary)]">
               {dgettext("projects", "Panel Clips")}
             </h3>
+            
             <span class="text-xs text-[var(--glass-text-tertiary)]">
               ({@video_count}/{@total} {dgettext("projects", "ready")})
             </span>
           </div>
+          
           <button
             phx-click="select_all_panels"
             class="text-xs text-[var(--glass-accent-from)] hover:text-[var(--glass-accent-to)] transition-colors"
@@ -1119,6 +1164,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
             {dgettext("projects", "Select All")}
           </button>
         </div>
+        
         <div class="divide-y divide-[var(--glass-stroke-soft)] max-h-[40vh] overflow-y-auto">
           <%= for {panel, idx} <- Enum.with_index(@all_panels) do %>
             <div
@@ -1145,7 +1191,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                   <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
                 </svg>
               </div>
-              <%!-- Index --%>
+               <%!-- Index --%>
               <span class="text-xs text-[var(--glass-text-tertiary)] w-6 text-center">{idx + 1}</span>
               <%!-- Thumbnail --%>
               <div class="w-12 h-8 rounded bg-[var(--glass-bg-muted)] flex-shrink-0 overflow-hidden">
@@ -1155,7 +1201,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                   class="w-full h-full object-cover"
                 />
               </div>
-              <%!-- Status chip --%>
+               <%!-- Status chip --%>
               <%= if panel.video_url && panel.video_url != "" do %>
                 <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-green-500/10 text-green-500 flex-shrink-0">
                   {dgettext("projects", "Ready")}
@@ -1165,7 +1211,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                   {dgettext("projects", "No Video")}
                 </span>
               <% end %>
-              <%!-- Description --%>
+               <%!-- Description --%>
               <p class="text-xs text-[var(--glass-text-secondary)] flex-1 truncate">
                 {panel.description}
               </p>
@@ -1173,14 +1219,12 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
           <% end %>
         </div>
       </div>
-
-      <%!-- Compose config --%>
+       <%!-- Compose config --%>
       <div class="glass-surface rounded-xl p-5 space-y-5">
         <h3 class="text-sm font-semibold text-[var(--glass-text-primary)]">
           {dgettext("projects", "Compose Settings")}
         </h3>
-
-        <%!-- Transition --%>
+         <%!-- Transition --%>
         <div>
           <label class="text-xs text-[var(--glass-text-tertiary)] mb-2 block">
             {dgettext("projects", "Transition Effect")}
@@ -1203,20 +1247,23 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                 {label}
               </button>
             <% end %>
+            
             <select
               phx-change="set_compose_transition_ms"
               name="value"
               class="glass-input text-xs py-1 pl-2 pr-6 ml-2"
             >
               <option value="300" selected={@compose_transition_ms == "300"}>300ms</option>
+              
               <option value="500" selected={@compose_transition_ms == "500"}>500ms</option>
+              
               <option value="800" selected={@compose_transition_ms == "800"}>800ms</option>
+              
               <option value="1000" selected={@compose_transition_ms == "1000"}>1000ms</option>
             </select>
           </div>
         </div>
-
-        <%!-- Subtitles --%>
+         <%!-- Subtitles --%>
         <div>
           <label class="text-xs text-[var(--glass-text-tertiary)] mb-2 block">
             {dgettext("projects", "Subtitle Mode")}
@@ -1241,8 +1288,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
             <% end %>
           </div>
         </div>
-
-        <%!-- BGM --%>
+         <%!-- BGM --%>
         <div>
           <label class="text-xs text-[var(--glass-text-tertiary)] mb-2 block">
             {dgettext("projects", "Background Music")}
@@ -1268,8 +1314,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
           </div>
         </div>
       </div>
-
-      <%!-- Compose progress (if running) --%>
+       <%!-- Compose progress (if running) --%>
       <div :if={@compose_task} class="glass-surface rounded-xl p-5">
         <div class="flex items-center gap-3 mb-3">
           <div class="w-3 h-3 rounded-full bg-[var(--glass-accent-from)] animate-pulse" />
@@ -1277,18 +1322,19 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
             {dgettext("projects", "Composing...")}
           </h3>
         </div>
+        
         <div class="h-1.5 bg-[var(--glass-bg-muted)] rounded-full overflow-hidden">
           <div
             class="h-full bg-gradient-to-r from-[var(--glass-accent-from)] to-[var(--glass-accent-to)] transition-all animate-pulse"
             style="width: 60%"
           />
         </div>
+        
         <p class="text-xs text-[var(--glass-text-tertiary)] mt-2">
           {dgettext("projects", "Processing video composition. This may take several minutes.")}
         </p>
       </div>
-
-      <%!-- One-click compose button --%>
+       <%!-- One-click compose button --%>
       <button
         phx-click="compose_video"
         class={[
@@ -1306,11 +1352,11 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
             stroke-linejoin="round"
             d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 010 1.972l-11.54 6.347a1.125 1.125 0 01-1.667-.986V5.653z"
           />
-        </svg>
-        {dgettext("projects", "Compose Video")} ({@selected_count} {dgettext("projects", "panels")})
-      </button>
-
-      <%!-- Compose result / video preview (enlarged) --%>
+        </svg> {dgettext("projects", "Compose Video")} ({@selected_count} {dgettext(
+          "projects",
+          "panels"
+        )})
+      </button> <%!-- Compose result / video preview (enlarged) --%>
       <div class="glass-surface rounded-xl p-6 min-h-[400px] flex items-center justify-center bg-black/20">
         <svg
           class="w-12 h-12 mx-auto text-[var(--glass-text-tertiary)] opacity-30 mb-3"
@@ -1820,19 +1866,35 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
   # ── Panel entity tag helpers ──
   defp parse_panel_characters(panel) do
     case Map.get(panel, :characters) do
-      nil -> []
-      chars when is_list(chars) -> chars
+      nil ->
+        []
+
+      chars when is_list(chars) ->
+        chars
+
       chars when is_binary(chars) ->
         case Jason.decode(chars) do
           {:ok, list} when is_list(list) -> list
           _ -> []
         end
-      _ -> []
+
+      _ ->
+        []
     end
   end
 
   defp panel_location(panel) do
     loc = Map.get(panel, :location)
     if loc && loc != "", do: loc, else: nil
+  end
+
+  # Load a field from NovelProject settings, with fallback default
+  defp load_novel_field(project, field, default) do
+    case AstraAutoEx.Production.get_novel_project(project.id) do
+      nil -> default
+      np -> Map.get(np, field) || default
+    end
+  rescue
+    _ -> default
   end
 end

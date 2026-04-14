@@ -49,7 +49,9 @@ defmodule AstraAutoExWeb.ProfileLive.BillingStats do
           <div class="text-xs text-[var(--glass-text-tertiary)]">预估总费用</div>
         </div>
         <div class="glass-card p-4 text-center">
-          <div class="text-2xl font-bold text-[var(--glass-text-primary)]">{length(@stats_by_model)}</div>
+          <div class="text-2xl font-bold text-[var(--glass-text-primary)]">
+            {length(@stats_by_model)}
+          </div>
           <div class="text-xs text-[var(--glass-text-tertiary)]">使用模型数</div>
         </div>
       </div>
@@ -77,7 +79,9 @@ defmodule AstraAutoExWeb.ProfileLive.BillingStats do
             <%= for stat <- @stats_by_model do %>
               <div class="glass-card p-3 flex items-center justify-between">
                 <div>
-                  <div class="text-sm font-medium text-[var(--glass-text-primary)]">{stat.model_key}</div>
+                  <div class="text-sm font-medium text-[var(--glass-text-primary)]">
+                    {stat.model_key}
+                  </div>
                   <div class="text-xs text-[var(--glass-text-tertiary)]">
                     {stat.model_type} · {stat.total_calls} 次调用 · 成功率 {success_rate(stat)}%
                   </div>
@@ -91,13 +95,14 @@ defmodule AstraAutoExWeb.ProfileLive.BillingStats do
               <div class="text-center py-8 text-[var(--glass-text-tertiary)]">暂无调用记录</div>
             <% end %>
           </div>
-
         <% "project" -> %>
           <div class="space-y-2">
             <%= for stat <- @stats_by_project do %>
               <div class="glass-card p-3 flex items-center justify-between">
                 <div>
-                  <div class="text-sm font-medium text-[var(--glass-text-primary)]">{stat.project_name || "项目 ##{stat.project_id}"}</div>
+                  <div class="text-sm font-medium text-[var(--glass-text-primary)]">
+                    {stat.project_name || "项目 ##{stat.project_id}"}
+                  </div>
                   <div class="text-xs text-[var(--glass-text-tertiary)]">{stat.total_calls} 次调用</div>
                 </div>
                 <div class="text-sm font-medium text-[var(--glass-accent-from)]">
@@ -109,7 +114,6 @@ defmodule AstraAutoExWeb.ProfileLive.BillingStats do
               <div class="text-center py-8 text-[var(--glass-text-tertiary)]">暂无项目记录</div>
             <% end %>
           </div>
-
         <% "date" -> %>
           <div class="space-y-1">
             <%= for stat <- @stats_by_date do %>
@@ -121,15 +125,18 @@ defmodule AstraAutoExWeb.ProfileLive.BillingStats do
                     style={"width: #{bar_width(stat.total_calls, @stats_by_date)}%"}
                   />
                 </div>
-                <span class="w-12 text-right text-[var(--glass-text-secondary)]">{stat.total_calls}</span>
-                <span class="w-16 text-right text-[var(--glass-accent-from)]">¥{format_cost(stat.total_cost)}</span>
+                <span class="w-12 text-right text-[var(--glass-text-secondary)]">
+                  {stat.total_calls}
+                </span>
+                <span class="w-16 text-right text-[var(--glass-accent-from)]">
+                  ¥{format_cost(stat.total_cost)}
+                </span>
               </div>
             <% end %>
             <%= if @stats_by_date == [] do %>
               <div class="text-center py-8 text-[var(--glass-text-tertiary)]">暂无日期记录</div>
             <% end %>
           </div>
-
         <% "recent" -> %>
           <div class="space-y-1 max-h-[400px] overflow-y-auto">
             <%= for call <- @recent do %>
@@ -158,12 +165,15 @@ defmodule AstraAutoExWeb.ProfileLive.BillingStats do
   end
 
   defp success_rate(%{total_calls: 0}), do: 0
-  defp success_rate(%{total_calls: total, success_count: success}), do: round(success / total * 100)
+
+  defp success_rate(%{total_calls: total, success_count: success}),
+    do: round(success / total * 100)
 
   defp format_cost(nil), do: "0.00"
   defp format_cost(cost), do: Decimal.round(cost, 2) |> Decimal.to_string()
 
   defp bar_width(_calls, []), do: 0
+
   defp bar_width(calls, stats) do
     max_calls = stats |> Enum.map(& &1.total_calls) |> Enum.max(fn -> 1 end)
     if max_calls == 0, do: 0, else: round(calls / max_calls * 100)

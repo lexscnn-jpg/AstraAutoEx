@@ -79,19 +79,24 @@ AstraAutoEx 是 AI 驱动的短剧/漫画视频生产平台，从 Next.js 原项
 4. **制作 (film)** — video_stage: 视频/配音生成 + 重试
 5. **AI 剪辑 (compose)** — compose_stage: 左右分栏（面板选择+设置 | 预览+导出）
 
-## 当前项目状态 (v0.6.0)
-- 最后完成: Phase 8 — 完整中文翻译(45+条)、版本日志弹窗、模型配置保存修复
-- 进行中: 无（8个Phase全部完成并推送）
+## 当前项目状态 (v0.6.1)
+- 最后完成: 迭代 v0.6.1-v0.7.0 全量实施（7大commit，~3700+行）
+  - Phase A: 42条翻译补全+5修正、导航栏Guide按钮、5步出片指南页、ImportWizard 4步向导
+  - Phase B: 首页10比例+17画风+自定义+打字机动画、ProjectsLive项目管理页（图片数/视频数/完成度）、素材库5类CRUD表单+3新Schema+迁移、自动链暂停/恢复/停止控制器、AI写作handler、PipelineModal动画弹窗、计费ApiCallLog+CostTracker+BillingStats面板
+  - Phase C: FlPromptRewriter首尾帧、VoicePresets音色、FirstLastFrame UI、AI剪辑预览放大
+  - 集成: 全部组件挂载到父视图，0 errors 0 warnings
+- 进行中: 无
 - 下一步:
-  - 素材库创建弹窗验证（modal 可能需要热重载后测试）
-  - 提示词选择器组件（PromptPicker LiveComponent）
-  - 自动链人工确认弹窗
-  - 端到端生成测试视频（需要有效的 API Key）
+  - 端到端生成测试（需要有效 API Key 调通 AI 提供商）
+  - 素材库"精调"功能实际接入图像编辑模型
+  - MiniMax 2.8HD 300+ 系统音色 API 对接
+  - 抽卡功能 UI（候选网格+选择+删除）
   - 剪映导出实际实现（XML 时间线格式）
+  - 分镜一致性生图：collectPanelReferenceImages 逻辑深度实现
 - 已知问题:
-  - 素材库"新建资产"弹窗可能需要硬刷新页面才能显示（热重载时序问题）
-  - "Episode 1" 在标题中仍为英文（需要翻译或改为中文格式）
-  - 首页画风下拉仍显示英文 "Realistic"（首页用的是独立模板，未接入 ArtStyles 模块）
+  - "Episode 1" 在标题中仍为英文
+  - 自动链 toggle 开关 CSS 在部分主题下不显示滑块（需调试 peer-checked）
+  - 计费统计数据为空（需要实际 API 调用后才有记录）
 
 ## 重要决策记录
 - 从 Next.js 迁移到 Phoenix LiveView：利用 OTP 并发处理 AI 任务，无需 Redis/BullMQ

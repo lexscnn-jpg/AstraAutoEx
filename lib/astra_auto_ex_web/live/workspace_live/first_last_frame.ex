@@ -36,7 +36,9 @@ defmodule AstraAutoExWeb.WorkspaceLive.FirstLastFrame do
             <%= if @current_panel.image_url do %>
               <img src={@current_panel.image_url} class="w-full h-full object-cover" />
             <% else %>
-              <div class="w-full h-full flex items-center justify-center text-[var(--glass-text-tertiary)]">无图</div>
+              <div class="w-full h-full flex items-center justify-center text-[var(--glass-text-tertiary)]">
+                无图
+              </div>
             <% end %>
           </div>
         </div>
@@ -55,7 +57,9 @@ defmodule AstraAutoExWeb.WorkspaceLive.FirstLastFrame do
             <%= if @next_panel.image_url do %>
               <img src={@next_panel.image_url} class="w-full h-full object-cover" />
             <% else %>
-              <div class="w-full h-full flex items-center justify-center text-[var(--glass-text-tertiary)]">无图</div>
+              <div class="w-full h-full flex items-center justify-center text-[var(--glass-text-tertiary)]">
+                无图
+              </div>
             <% end %>
           </div>
         </div>
@@ -93,8 +97,19 @@ defmodule AstraAutoExWeb.WorkspaceLive.FirstLastFrame do
         >
           <%= if @generating do %>
             <svg class="w-3.5 h-3.5 animate-spin" fill="none" viewBox="0 0 24 24">
-              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
-              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+              />
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+              />
             </svg>
             生成中...
           <% else %>
@@ -124,11 +139,15 @@ defmodule AstraAutoExWeb.WorkspaceLive.FirstLastFrame do
   end
 
   def handle_event("generate_fl_video", _, socket) do
-    send(self(), {:generate_fl_video, %{
-      panel_id: socket.assigns.current_panel.id,
-      next_panel_id: socket.assigns.next_panel.id,
-      custom_prompt: socket.assigns.custom_prompt
-    }})
+    send(
+      self(),
+      {:generate_fl_video,
+       %{
+         panel_id: socket.assigns.current_panel.id,
+         next_panel_id: socket.assigns.next_panel.id,
+         custom_prompt: socket.assigns.custom_prompt
+       }}
+    )
 
     {:noreply, assign(socket, :generating, true)}
   end
@@ -138,9 +157,12 @@ defmodule AstraAutoExWeb.WorkspaceLive.FirstLastFrame do
     last_desc = Map.get(next, :description, "") || ""
 
     cond do
-      last_desc == "" -> first_desc
+      last_desc == "" ->
+        first_desc
+
       Map.get(current, :location) == Map.get(next, :location) ->
         "#{String.slice(first_desc, 0..30)}... 镜头自然过渡：#{String.slice(last_desc, 0..30)}..."
+
       true ->
         "#{String.slice(first_desc, 0..30)}... 场景转换至：#{String.slice(last_desc, 0..30)}..."
     end

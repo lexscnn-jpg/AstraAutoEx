@@ -15,6 +15,7 @@ defmodule AstraAutoEx.AI.VoicePresets do
   @doc "Search presets by name"
   def search(query) do
     q = String.downcase(query)
+
     Enum.filter(all(), fn p ->
       String.contains?(String.downcase(p.name), q) or
         String.contains?(String.downcase(p.description || ""), q)
@@ -25,6 +26,7 @@ defmodule AstraAutoEx.AI.VoicePresets do
   def filter_by_gender(gender) when gender in ["male", "female"] do
     Enum.filter(all(), &(&1.gender == gender))
   end
+
   def filter_by_gender(_), do: all()
 
   @doc "Filter by language"
@@ -39,18 +41,66 @@ defmodule AstraAutoEx.AI.VoicePresets do
 
   defp default_presets do
     [
-      %{id: "Calm_Woman", name: "沉稳女声", gender: "female", language: "zh", description: "温柔沉稳的成熟女声"},
-      %{id: "Gentle_Woman", name: "温柔女声", gender: "female", language: "zh", description: "轻柔甜美的女声"},
-      %{id: "Sweet_Girl", name: "甜美少女", gender: "female", language: "zh", description: "活泼可爱的少女声"},
-      %{id: "Confident_Woman", name: "自信女声", gender: "female", language: "zh", description: "干练自信的职业女声"},
-      %{id: "Deep_Voice_Man", name: "低沉男声", gender: "male", language: "zh", description: "浑厚低沉的男声"},
+      %{
+        id: "Calm_Woman",
+        name: "沉稳女声",
+        gender: "female",
+        language: "zh",
+        description: "温柔沉稳的成熟女声"
+      },
+      %{
+        id: "Gentle_Woman",
+        name: "温柔女声",
+        gender: "female",
+        language: "zh",
+        description: "轻柔甜美的女声"
+      },
+      %{
+        id: "Sweet_Girl",
+        name: "甜美少女",
+        gender: "female",
+        language: "zh",
+        description: "活泼可爱的少女声"
+      },
+      %{
+        id: "Confident_Woman",
+        name: "自信女声",
+        gender: "female",
+        language: "zh",
+        description: "干练自信的职业女声"
+      },
+      %{
+        id: "Deep_Voice_Man",
+        name: "低沉男声",
+        gender: "male",
+        language: "zh",
+        description: "浑厚低沉的男声"
+      },
       %{id: "Warm_Man", name: "温暖男声", gender: "male", language: "zh", description: "温暖亲切的男声"},
       %{id: "Young_Man", name: "青年男声", gender: "male", language: "zh", description: "阳光开朗的年轻男声"},
       %{id: "Narrator", name: "旁白", gender: "male", language: "zh", description: "专业沉稳的旁白配音"},
       %{id: "Cute_Boy", name: "可爱男孩", gender: "male", language: "zh", description: "稚嫩可爱的男童声"},
-      %{id: "Energetic_Girl_EN", name: "活力女生(英)", gender: "female", language: "en", description: "Energetic young female voice"},
-      %{id: "Professional_Man_EN", name: "专业男声(英)", gender: "male", language: "en", description: "Professional male narrator"},
-      %{id: "Friendly_Woman_EN", name: "友好女声(英)", gender: "female", language: "en", description: "Friendly warm female voice"}
+      %{
+        id: "Energetic_Girl_EN",
+        name: "活力女生(英)",
+        gender: "female",
+        language: "en",
+        description: "Energetic young female voice"
+      },
+      %{
+        id: "Professional_Man_EN",
+        name: "专业男声(英)",
+        gender: "male",
+        language: "en",
+        description: "Professional male narrator"
+      },
+      %{
+        id: "Friendly_Woman_EN",
+        name: "友好女声(英)",
+        gender: "female",
+        language: "en",
+        description: "Friendly warm female voice"
+      }
     ]
   end
 end

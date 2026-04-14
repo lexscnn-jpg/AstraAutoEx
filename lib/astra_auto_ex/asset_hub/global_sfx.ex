@@ -19,7 +19,15 @@ defmodule AstraAutoEx.AssetHub.GlobalSfx do
 
   def changeset(sfx, attrs) do
     sfx
-    |> cast(attrs, [:user_id, :folder_id, :name, :category, :description, :audio_url, :duration_ms])
+    |> cast(attrs, [
+      :user_id,
+      :folder_id,
+      :name,
+      :category,
+      :description,
+      :audio_url,
+      :duration_ms
+    ])
     |> validate_required([:user_id, :name])
   end
 end

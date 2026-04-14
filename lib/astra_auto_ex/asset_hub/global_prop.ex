@@ -21,8 +21,17 @@ defmodule AstraAutoEx.AssetHub.GlobalProp do
 
   def changeset(prop, attrs) do
     prop
-    |> cast(attrs, [:user_id, :folder_id, :name, :prop_type, :description,
-                    :image_url, :image_urls, :selected_index, :previous_image_url])
+    |> cast(attrs, [
+      :user_id,
+      :folder_id,
+      :name,
+      :prop_type,
+      :description,
+      :image_url,
+      :image_urls,
+      :selected_index,
+      :previous_image_url
+    ])
     |> validate_required([:user_id, :name])
   end
 end

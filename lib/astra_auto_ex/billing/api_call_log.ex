@@ -23,8 +23,15 @@ defmodule AstraAutoEx.Billing.ApiCallLog do
   end
 
   @required_fields [:user_id, :model_key, :model_type, :pipeline_step, :status]
-  @optional_fields [:project_id, :project_name, :input_tokens, :output_tokens,
-                    :cost_estimate, :duration_ms, :metadata]
+  @optional_fields [
+    :project_id,
+    :project_name,
+    :input_tokens,
+    :output_tokens,
+    :cost_estimate,
+    :duration_ms,
+    :metadata
+  ]
 
   def changeset(log, attrs) do
     log

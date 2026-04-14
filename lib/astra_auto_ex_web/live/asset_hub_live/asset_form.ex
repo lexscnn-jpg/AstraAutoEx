@@ -31,7 +31,10 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetForm do
 
         socket
         |> assign(:name, Map.get(item, :name, ""))
-        |> assign(:description, Map.get(item, :description, "") || Map.get(item, :introduction, "") || "")
+        |> assign(
+          :description,
+          Map.get(item, :description, "") || Map.get(item, :introduction, "") || ""
+        )
         |> assign(:gender, Map.get(item, :gender, ""))
         |> assign(:aliases, (Map.get(item, :aliases, []) || []) |> Enum.join(", "))
       else
@@ -50,8 +53,18 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetForm do
           <h3 class="text-lg font-semibold text-[var(--glass-text-primary)]">
             {form_title(@asset_type, @editing)}
           </h3>
-          <button type="button" phx-click="close_asset_form" class="text-[var(--glass-text-tertiary)] hover:text-[var(--glass-text-primary)]">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <button
+            type="button"
+            phx-click="close_asset_form"
+            class="text-[var(--glass-text-tertiary)] hover:text-[var(--glass-text-primary)]"
+          >
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
               <path d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
@@ -79,12 +92,25 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetForm do
           <%= if @asset_type == "character" do %>
             <div>
               <label class="block text-xs text-[var(--glass-text-tertiary)] mb-1">别名（逗号分隔）</label>
-              <input type="text" name="aliases" value={@aliases} phx-change="update_field" phx-target={@myself} class="glass-input w-full text-sm" placeholder="别名1, 别名2..." />
+              <input
+                type="text"
+                name="aliases"
+                value={@aliases}
+                phx-change="update_field"
+                phx-target={@myself}
+                class="glass-input w-full text-sm"
+                placeholder="别名1, 别名2..."
+              />
             </div>
             <div class="grid grid-cols-2 gap-3">
               <div>
                 <label class="block text-xs text-[var(--glass-text-tertiary)] mb-1">性别</label>
-                <select name="gender" class="glass-input w-full text-sm" phx-change="update_field" phx-target={@myself}>
+                <select
+                  name="gender"
+                  class="glass-input w-full text-sm"
+                  phx-change="update_field"
+                  phx-target={@myself}
+                >
                   <option value="">未指定</option>
                   <option value="male" selected={@gender == "male"}>男</option>
                   <option value="female" selected={@gender == "female"}>女</option>
@@ -92,7 +118,12 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetForm do
               </div>
               <div>
                 <label class="block text-xs text-[var(--glass-text-tertiary)] mb-1">候选数量（抽卡）</label>
-                <select name="candidate_count" class="glass-input w-full text-sm" phx-change="update_field" phx-target={@myself}>
+                <select
+                  name="candidate_count"
+                  class="glass-input w-full text-sm"
+                  phx-change="update_field"
+                  phx-target={@myself}
+                >
                   <%= for n <- 1..4 do %>
                     <option value={n} selected={@candidate_count == n}>{n} 张</option>
                   <% end %>
@@ -105,7 +136,12 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetForm do
           <%= if @asset_type == "prop" do %>
             <div>
               <label class="block text-xs text-[var(--glass-text-tertiary)] mb-1">道具类型</label>
-              <select name="prop_type" class="glass-input w-full text-sm" phx-change="update_field" phx-target={@myself}>
+              <select
+                name="prop_type"
+                class="glass-input w-full text-sm"
+                phx-change="update_field"
+                phx-target={@myself}
+              >
                 <option value="">通用</option>
                 <option value="weapon" selected={@prop_type == "weapon"}>武器</option>
                 <option value="tool" selected={@prop_type == "tool"}>工具</option>
@@ -121,14 +157,24 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetForm do
             <div class="grid grid-cols-2 gap-3">
               <div>
                 <label class="block text-xs text-[var(--glass-text-tertiary)] mb-1">性别</label>
-                <select name="gender" class="glass-input w-full text-sm" phx-change="update_field" phx-target={@myself}>
+                <select
+                  name="gender"
+                  class="glass-input w-full text-sm"
+                  phx-change="update_field"
+                  phx-target={@myself}
+                >
                   <option value="male" selected={@gender == "male"}>男</option>
                   <option value="female" selected={@gender == "female"}>女</option>
                 </select>
               </div>
               <div>
                 <label class="block text-xs text-[var(--glass-text-tertiary)] mb-1">语言</label>
-                <select name="language" class="glass-input w-full text-sm" phx-change="update_field" phx-target={@myself}>
+                <select
+                  name="language"
+                  class="glass-input w-full text-sm"
+                  phx-change="update_field"
+                  phx-target={@myself}
+                >
                   <option value="zh" selected={@language == "zh"}>中文</option>
                   <option value="en" selected={@language == "en"}>English</option>
                   <option value="ja" selected={@language == "ja"}>日本語</option>
@@ -141,7 +187,12 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetForm do
           <%= if @asset_type == "bgm" do %>
             <div>
               <label class="block text-xs text-[var(--glass-text-tertiary)] mb-1">类别</label>
-              <select name="category" class="glass-input w-full text-sm" phx-change="update_field" phx-target={@myself}>
+              <select
+                name="category"
+                class="glass-input w-full text-sm"
+                phx-change="update_field"
+                phx-target={@myself}
+              >
                 <option value="">通用</option>
                 <option value="epic">史诗</option>
                 <option value="romantic">浪漫</option>
@@ -184,7 +235,11 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetForm do
               <button type="button" phx-click="close_asset_form" class="glass-btn px-4 py-2 text-sm">
                 取消
               </button>
-              <button type="submit" class="glass-btn glass-btn-primary px-4 py-2 text-sm" disabled={@saving}>
+              <button
+                type="submit"
+                class="glass-btn glass-btn-primary px-4 py-2 text-sm"
+                disabled={@saving}
+              >
                 {if @editing, do: "更新", else: "创建"}
               </button>
             </div>
@@ -218,44 +273,62 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetForm do
     result =
       case type do
         "character" ->
-          aliases = (params["aliases"] || "") |> String.split(",") |> Enum.map(&String.trim/1) |> Enum.reject(&(&1 == ""))
+          aliases =
+            (params["aliases"] || "")
+            |> String.split(",")
+            |> Enum.map(&String.trim/1)
+            |> Enum.reject(&(&1 == ""))
+
           AssetHub.create_global_character(%{
-            user_id: user_id, name: params["name"],
-            introduction: params["description"], aliases: aliases
+            user_id: user_id,
+            name: params["name"],
+            introduction: params["description"],
+            aliases: aliases
           })
 
         "location" ->
           AssetHub.create_global_location(%{
-            user_id: user_id, name: params["name"], summary: params["description"]
+            user_id: user_id,
+            name: params["name"],
+            summary: params["description"]
           })
 
         "prop" ->
           AssetHub.create_global_prop(%{
-            user_id: user_id, name: params["name"],
-            description: params["description"], prop_type: params["prop_type"]
+            user_id: user_id,
+            name: params["name"],
+            description: params["description"],
+            prop_type: params["prop_type"]
           })
 
         "voice" ->
           AssetHub.create_global_voice(%{
-            user_id: user_id, name: params["name"],
-            description: params["description"], gender: params["gender"],
+            user_id: user_id,
+            name: params["name"],
+            description: params["description"],
+            gender: params["gender"],
             language: params["language"]
           })
 
         "bgm" ->
           AssetHub.create_global_bgm(%{
-            user_id: user_id, name: params["name"],
-            description: params["description"], category: params["category"],
+            user_id: user_id,
+            name: params["name"],
+            description: params["description"],
+            category: params["category"],
             is_instrumental: params["is_instrumental"] == "true"
           })
 
         "sfx" ->
           AssetHub.create_global_sfx(%{
-            user_id: user_id, name: params["name"],
-            description: params["description"], category: params["category"]
+            user_id: user_id,
+            name: params["name"],
+            description: params["description"],
+            category: params["category"]
           })
 
-        _ -> {:error, "Unknown asset type"}
+        _ ->
+          {:error, "Unknown asset type"}
       end
 
     case result do

@@ -15,14 +15,11 @@ defmodule AstraAutoExWeb.GuideLive do
     <div class="glass-page min-h-screen">
       <div class="max-w-4xl mx-auto px-6 py-12">
         <div class="text-center mb-12">
-          <h1 class="text-3xl font-bold text-[var(--glass-text-primary)] mb-3">
-            5 分钟出片指南
-          </h1>
-          <p class="text-[var(--glass-text-secondary)]">
-            从灵感到成片，只需 5 个步骤
-          </p>
+          <h1 class="text-3xl font-bold text-[var(--glass-text-primary)] mb-3">5 分钟出片指南</h1>
+          
+          <p class="text-[var(--glass-text-secondary)]">从灵感到成片，只需 5 个步骤</p>
         </div>
-
+        
         <div class="space-y-6">
           <%= for step <- steps() do %>
             <div
@@ -38,26 +35,31 @@ defmodule AstraAutoExWeb.GuideLive do
                     else: "bg-[var(--glass-bg-muted)] text-[var(--glass-text-tertiary)]")}>
                   {step.number}
                 </div>
+                
                 <div class="flex-1">
                   <h3 class="text-lg font-semibold text-[var(--glass-text-primary)] mb-1">
                     {step.title}
                   </h3>
-                  <p class="text-sm text-[var(--glass-text-secondary)] mb-3">
-                    {step.description}
-                  </p>
+                  
+                  <p class="text-sm text-[var(--glass-text-secondary)] mb-3">{step.description}</p>
+                  
                   <%= if step.number == @active_step do %>
                     <div class="mt-3 space-y-2">
                       <%= for tip <- step.tips do %>
                         <div class="flex items-start gap-2 text-sm text-[var(--glass-text-secondary)]">
                           <span class="text-[var(--glass-accent-from)] mt-0.5">
                             <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                              <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                              <path
+                                fill-rule="evenodd"
+                                d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
+                                clip-rule="evenodd"
+                              />
                             </svg>
-                          </span>
-                          <span>{tip}</span>
+                          </span> <span>{tip}</span>
                         </div>
                       <% end %>
                     </div>
+                    
                     <%= if step.time do %>
                       <div class="mt-3 text-xs text-[var(--glass-text-tertiary)]">
                         预计用时：{step.time}
@@ -69,30 +71,37 @@ defmodule AstraAutoExWeb.GuideLive do
             </div>
           <% end %>
         </div>
-
+        
         <div class="mt-12 glass-card p-6">
-          <h3 class="text-lg font-semibold text-[var(--glass-text-primary)] mb-3">
-            快捷操作
-          </h3>
+          <h3 class="text-lg font-semibold text-[var(--glass-text-primary)] mb-3">快捷操作</h3>
+          
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div class="text-center p-4 rounded-lg bg-[var(--glass-bg-muted)]">
               <div class="text-2xl mb-2">🔗</div>
+              
               <div class="text-sm font-medium text-[var(--glass-text-primary)]">自动链模式</div>
+              
               <div class="text-xs text-[var(--glass-text-tertiary)] mt-1">每步完成后自动执行下一步</div>
             </div>
+            
             <div class="text-center p-4 rounded-lg bg-[var(--glass-bg-muted)]">
               <div class="text-2xl mb-2">🚀</div>
+              
               <div class="text-sm font-medium text-[var(--glass-text-primary)]">全自动模式</div>
+              
               <div class="text-xs text-[var(--glass-text-tertiary)] mt-1">一键从故事到成片</div>
             </div>
+            
             <div class="text-center p-4 rounded-lg bg-[var(--glass-bg-muted)]">
               <div class="text-2xl mb-2">✍️</div>
+              
               <div class="text-sm font-medium text-[var(--glass-text-primary)]">AI 帮我写</div>
+              
               <div class="text-xs text-[var(--glass-text-tertiary)] mt-1">输入灵感，AI 生成完整大纲</div>
             </div>
           </div>
         </div>
-
+        
         <div class="mt-8 text-center">
           <a
             href={~p"/home"}

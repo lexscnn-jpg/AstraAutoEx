@@ -35,15 +35,11 @@ defmodule AstraAutoExWeb.ProjectsLive.Index do
             <h1 class="text-2xl font-bold text-[var(--glass-text-primary)]">
               {dgettext("projects", "All Projects")}
             </h1>
-            <p class="text-sm text-[var(--glass-text-tertiary)] mt-1">
-              共 {length(@projects)} 个项目
-            </p>
+            
+            <p class="text-sm text-[var(--glass-text-tertiary)] mt-1">共 {length(@projects)} 个项目</p>
           </div>
-          <a href={~p"/home"} class="glass-btn glass-btn-primary px-4 py-2 text-sm">
-            + 新建项目
-          </a>
+           <a href={~p"/home"} class="glass-btn glass-btn-primary px-4 py-2 text-sm">+ 新建项目</a>
         </div>
-
         <!-- Search -->
         <div class="mb-6">
           <input
@@ -56,7 +52,6 @@ defmodule AstraAutoExWeb.ProjectsLive.Index do
             class="glass-input w-full max-w-md text-sm"
           />
         </div>
-
         <!-- Project Grid -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           <%= for project <- @page_projects do %>
@@ -65,24 +60,23 @@ defmodule AstraAutoExWeb.ProjectsLive.Index do
                 <h3 class="text-sm font-semibold text-[var(--glass-text-primary)] truncate">
                   {project.name}
                 </h3>
+                
                 <p class="text-xs text-[var(--glass-text-tertiary)] mt-1 line-clamp-2 min-h-[2rem]">
                   {project.description || "无描述"}
                 </p>
               </a>
-
               <!-- Stats -->
               <div class="flex items-center gap-3 mt-3 text-xs text-[var(--glass-text-tertiary)]">
                 <span title="剧集">📺 {episode_count(project)}</span>
                 <span title="图片">🖼 {image_count(project)}</span>
                 <span title="视频">🎬 {video_count(project)}</span>
               </div>
-
               <!-- Completion bar -->
               <div class="mt-3">
                 <div class="flex items-center justify-between text-xs text-[var(--glass-text-tertiary)] mb-1">
-                  <span>完成度</span>
-                  <span>{completion(project)}%</span>
+                  <span>完成度</span> <span>{completion(project)}%</span>
                 </div>
+                
                 <div class="w-full h-1.5 bg-[var(--glass-bg-muted)] rounded-full overflow-hidden">
                   <div
                     class="h-full bg-gradient-to-r from-[var(--glass-accent-from)] to-[var(--glass-accent-to)] rounded-full transition-all"
@@ -90,7 +84,6 @@ defmodule AstraAutoExWeb.ProjectsLive.Index do
                   />
                 </div>
               </div>
-
               <!-- Footer -->
               <div class="flex items-center justify-between mt-3 pt-3 border-t border-[var(--glass-stroke-base)]">
                 <span class="text-xs text-[var(--glass-text-tertiary)]">
@@ -108,17 +101,18 @@ defmodule AstraAutoExWeb.ProjectsLive.Index do
             </div>
           <% end %>
         </div>
-
+        
         <%= if @page_projects == [] do %>
           <div class="text-center py-16 text-[var(--glass-text-tertiary)]">
             <div class="text-4xl mb-3">📂</div>
+            
             <p>暂无项目</p>
+            
             <a href={~p"/home"} class="glass-btn glass-btn-primary px-6 py-2 mt-4 inline-block">
               创建第一个项目
             </a>
           </div>
         <% end %>
-
         <!-- Pagination -->
         <%= if @total_pages > 1 do %>
           <div class="flex items-center justify-center gap-2 mt-8">
@@ -131,9 +125,7 @@ defmodule AstraAutoExWeb.ProjectsLive.Index do
             >
               ←
             </button>
-            <span class="text-sm text-[var(--glass-text-secondary)]">
-              {@page} / {@total_pages}
-            </span>
+            <span class="text-sm text-[var(--glass-text-secondary)]">{@page} / {@total_pages}</span>
             <button
               type="button"
               phx-click="page"
@@ -145,15 +137,14 @@ defmodule AstraAutoExWeb.ProjectsLive.Index do
             </button>
           </div>
         <% end %>
-
         <!-- Delete Confirmation -->
         <%= if @confirm_delete do %>
           <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
             <div class="glass-card p-6 max-w-sm mx-4">
               <h3 class="text-lg font-semibold text-[var(--glass-text-primary)] mb-2">确认删除</h3>
-              <p class="text-sm text-[var(--glass-text-secondary)] mb-4">
-                确定要删除此项目吗？此操作不可撤销。
-              </p>
+              
+              <p class="text-sm text-[var(--glass-text-secondary)] mb-4">确定要删除此项目吗？此操作不可撤销。</p>
+              
               <div class="flex justify-end gap-3">
                 <button
                   type="button"

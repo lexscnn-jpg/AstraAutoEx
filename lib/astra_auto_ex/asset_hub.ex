@@ -2,7 +2,16 @@ defmodule AstraAutoEx.AssetHub do
   @moduledoc "Context for global reusable assets: characters, locations, voices, folders."
   import Ecto.Query
   alias AstraAutoEx.Repo
-  alias AstraAutoEx.AssetHub.{GlobalAssetFolder, GlobalCharacter, GlobalLocation, GlobalVoice, GlobalProp, GlobalSfx, GlobalBgm}
+
+  alias AstraAutoEx.AssetHub.{
+    GlobalAssetFolder,
+    GlobalCharacter,
+    GlobalLocation,
+    GlobalVoice,
+    GlobalProp,
+    GlobalSfx,
+    GlobalBgm
+  }
 
   # ── Folders ──
   def list_folders(user_id),

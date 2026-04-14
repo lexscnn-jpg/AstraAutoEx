@@ -22,8 +22,18 @@ defmodule AstraAutoEx.AssetHub.GlobalBgm do
 
   def changeset(bgm, attrs) do
     bgm
-    |> cast(attrs, [:user_id, :folder_id, :name, :category, :description,
-                    :audio_url, :duration_ms, :prompt, :lyrics, :is_instrumental])
+    |> cast(attrs, [
+      :user_id,
+      :folder_id,
+      :name,
+      :category,
+      :description,
+      :audio_url,
+      :duration_ms,
+      :prompt,
+      :lyrics,
+      :is_instrumental
+    ])
     |> validate_required([:user_id, :name])
   end
 end

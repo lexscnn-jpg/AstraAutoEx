@@ -41,9 +41,11 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
           <h1 class="text-2xl font-bold text-[var(--glass-text-primary)]">
             {dgettext("projects", "Asset Hub")}
           </h1>
+          
           <p class="text-sm text-[var(--glass-text-tertiary)] mt-1">
             {dgettext("projects", "Manage your global characters, locations, and media assets.")}
           </p>
+          
           <p class="text-xs text-[var(--glass-text-tertiary)] mt-1 flex items-center gap-1">
             <svg
               class="w-3.5 h-3.5"
@@ -53,8 +55,7 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
               viewBox="0 0 24 24"
             >
               <circle cx="12" cy="12" r="10" /><path d="M12 16v-4" /><path d="M12 8h.01" />
-            </svg>
-            {dgettext(
+            </svg> {dgettext(
               "projects",
               "Assets use default models. To change, go to"
             )}
@@ -63,7 +64,7 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
             </a>
           </p>
         </div>
-
+        
         <div class="flex gap-5">
           <%!-- Left sidebar: Folders --%>
           <aside class="w-52 flex-shrink-0">
@@ -76,7 +77,7 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
                   +
                 </button>
               </div>
-
+              
               <div class="space-y-1">
                 <button
                   phx-click="set_scope"
@@ -98,8 +99,7 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
                     viewBox="0 0 24 24"
                   >
                     <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z" />
-                  </svg>
-                  {dgettext("projects", "All Assets")}
+                  </svg> {dgettext("projects", "All Assets")}
                 </button>
                 <button
                   phx-click="set_scope"
@@ -121,18 +121,16 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
                     viewBox="0 0 24 24"
                   >
                     <rect x="2" y="3" width="20" height="14" rx="2" /><path d="M8 21h8" /><path d="M12 17v4" />
-                  </svg>
-                  {dgettext("projects", "Project Assets")}
+                  </svg> {dgettext("projects", "Project Assets")}
                 </button>
               </div>
-
+              
               <p class="text-[10px] text-[var(--glass-text-tertiary)] mt-3 opacity-60">
                 {dgettext("projects", "No folders yet")}
               </p>
             </div>
           </aside>
-
-          <%!-- Main content --%>
+           <%!-- Main content --%>
           <div class="flex-1 min-w-0">
             <%!-- Top bar: tabs + actions --%>
             <div class="flex items-center justify-between mb-4">
@@ -154,7 +152,7 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
                   </button>
                 <% end %>
               </div>
-
+              
               <div class="flex items-center gap-2">
                 <input
                   type="text"
@@ -179,8 +177,7 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
                       x2="12"
                       y2="3"
                     />
-                  </svg>
-                  {dgettext("projects", "Export")}
+                  </svg> {dgettext("projects", "Export")}
                 </button>
                 <button
                   phx-click="create_asset"
@@ -190,18 +187,20 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
                 </button>
               </div>
             </div>
-
-            <%!-- Asset grid --%>
+             <%!-- Asset grid --%>
             <div class="glass-surface rounded-xl p-6 min-h-[400px]">
               <%= if all_items_for_tab(@tab, assigns) == [] do %>
                 <div class="text-center py-16">
                   <div class="text-4xl text-[var(--glass-text-tertiary)] opacity-30 mb-4">+</div>
+                  
                   <p class="text-sm font-medium text-[var(--glass-text-secondary)] mb-1">
                     {dgettext("projects", "No assets yet")}
                   </p>
+                  
                   <p class="text-xs text-[var(--glass-text-tertiary)] mb-5">
                     {dgettext("projects", "Click the button above to add characters or scenes.")}
                   </p>
+                  
                   <button
                     phx-click="create_asset"
                     class="glass-btn glass-btn-primary text-sm py-2 px-5 inline-flex items-center gap-1"
@@ -220,24 +219,33 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
           </div>
         </div>
       </div>
-      <%!-- Create Asset Modal --%>
+       <%!-- Create Asset Modal --%>
       <div :if={@show_create_modal} class="fixed inset-0 z-50 flex items-center justify-center">
         <div class="absolute inset-0 bg-black/60" phx-click="close_create_modal" />
         <div class="glass-card p-6 w-full max-w-md relative z-10">
           <h2 class="text-lg font-bold text-[var(--glass-text-primary)] mb-4">
             {dgettext("projects", "Create Asset")}
           </h2>
+          
           <div class="flex gap-2 mb-4">
             <%= for {type, label} <- [{"character", dgettext("projects", "Character")}, {"location", dgettext("projects", "Location")}] do %>
               <button
                 phx-click="set_create_type"
                 phx-value-type={type}
-                class={["px-3 py-1.5 rounded-lg text-xs font-medium transition-all", if(@create_type == type, do: "bg-[var(--glass-accent-from)]/20 text-[var(--glass-accent-from)] ring-1 ring-[var(--glass-accent-from)]/30", else: "bg-[var(--glass-bg-muted)] text-[var(--glass-text-secondary)]")]}
+                class={[
+                  "px-3 py-1.5 rounded-lg text-xs font-medium transition-all",
+                  if(@create_type == type,
+                    do:
+                      "bg-[var(--glass-accent-from)]/20 text-[var(--glass-accent-from)] ring-1 ring-[var(--glass-accent-from)]/30",
+                    else: "bg-[var(--glass-bg-muted)] text-[var(--glass-text-secondary)]"
+                  )
+                ]}
               >
                 {label}
               </button>
             <% end %>
           </div>
+          
           <.form for={@create_form} phx-submit="save_asset" class="space-y-4" id="create-asset-form">
             <div>
               <label class="text-xs text-[var(--glass-text-tertiary)] mb-1 block">
@@ -245,14 +253,20 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
               </label>
               <input type="text" name="asset[name]" class="glass-input w-full" required autofocus />
             </div>
+            
             <div>
               <label class="text-xs text-[var(--glass-text-tertiary)] mb-1 block">
                 {dgettext("projects", "Description")}
               </label>
               <textarea name="asset[description]" class="glass-input w-full h-20 resize-none" />
             </div>
+            
             <div class="flex justify-end gap-2 pt-2">
-              <button type="button" phx-click="close_create_modal" class="px-4 py-2 text-sm text-[var(--glass-text-tertiary)]">
+              <button
+                type="button"
+                phx-click="close_create_modal"
+                class="px-4 py-2 text-sm text-[var(--glass-text-tertiary)]"
+              >
                 {dgettext("default", "Cancel")}
               </button>
               <button type="submit" class="glass-btn glass-btn-primary px-6 py-2 text-sm">
@@ -262,8 +276,7 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
           </.form>
         </div>
       </div>
-
-      <%!-- Asset Form Modal --%>
+       <%!-- Asset Form Modal --%>
       <.live_component
         :if={@show_asset_form}
         module={AstraAutoExWeb.AssetHubLive.AssetForm}
@@ -271,17 +284,22 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
         asset_type={@asset_form_type}
         editing={@editing_asset}
         user_id={@current_scope.user.id}
-      />
-
-      <%!-- Delete Confirmation --%>
+      /> <%!-- Delete Confirmation --%>
       <%= if @confirm_delete_id do %>
         <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
           <div class="glass-card p-6 max-w-sm mx-4">
             <h3 class="text-lg font-semibold text-[var(--glass-text-primary)] mb-2">确认删除</h3>
+            
             <p class="text-sm text-[var(--glass-text-secondary)] mb-4">确定要删除此资产吗？此操作不可撤销。</p>
+            
             <div class="flex justify-end gap-3">
               <button phx-click="cancel_delete" class="glass-btn px-4 py-2 text-sm">取消</button>
-              <button phx-click="confirm_delete" class="px-4 py-2 text-sm bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30">删除</button>
+              <button
+                phx-click="confirm_delete"
+                class="px-4 py-2 text-sm bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30"
+              >
+                删除
+              </button>
             </div>
           </div>
         </div>
@@ -316,15 +334,18 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
               {String.first(Map.get(@item, :name, "?") || "?")}
             </span>
         <% end %>
+        
         <span class="absolute top-2 right-2 glass-chip text-[10px] bg-black/40 text-white">
           {Map.get(@item, :type, "asset")}
         </span>
       </div>
+      
       <div class="p-3">
         <div class="flex items-center justify-between">
           <h3 class="text-sm font-medium text-[var(--glass-text-primary)] truncate flex-1">
             {Map.get(@item, :name, "")}
           </h3>
+          
           <button
             phx-click="delete_asset"
             phx-value-id={@item.id}
@@ -332,11 +353,18 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
             class="opacity-0 group-hover:opacity-100 text-[var(--glass-text-tertiary)] hover:text-red-400 transition-all ml-1"
             title="删除"
           >
-            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <svg
+              class="w-3.5 h-3.5"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
               <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
             </svg>
           </button>
         </div>
+        
         <p class="text-xs text-[var(--glass-text-tertiary)] mt-0.5 line-clamp-1">
           {Map.get(@item, :description, "") || Map.get(@item, :introduction, "") || ""}
         </p>
@@ -393,11 +421,24 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
 
     try do
       case socket.assigns.confirm_delete_type do
-        "character" -> AssetHub.get_global_character!(socket.assigns.confirm_delete_id) |> AssetHub.delete_global_character()
-        "location" -> AssetHub.get_global_location!(socket.assigns.confirm_delete_id) |> AssetHub.delete_global_location()
-        "prop" -> AssetHub.get_global_prop!(socket.assigns.confirm_delete_id) |> AssetHub.delete_global_prop()
-        "voice" -> AssetHub.get_global_voice!(socket.assigns.confirm_delete_id) |> AssetHub.delete_global_voice()
-        _ -> {:ok, nil}
+        "character" ->
+          AssetHub.get_global_character!(socket.assigns.confirm_delete_id)
+          |> AssetHub.delete_global_character()
+
+        "location" ->
+          AssetHub.get_global_location!(socket.assigns.confirm_delete_id)
+          |> AssetHub.delete_global_location()
+
+        "prop" ->
+          AssetHub.get_global_prop!(socket.assigns.confirm_delete_id)
+          |> AssetHub.delete_global_prop()
+
+        "voice" ->
+          AssetHub.get_global_voice!(socket.assigns.confirm_delete_id)
+          |> AssetHub.delete_global_voice()
+
+        _ ->
+          {:ok, nil}
       end
 
       {:noreply,
