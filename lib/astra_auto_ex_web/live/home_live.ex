@@ -116,13 +116,13 @@ defmodule AstraAutoExWeb.HomeLive do
                     placeholder="在此输入你的一句话故事创意，小说片段或剧本大纲...（支持粘贴，拖拽上传）"
                     phx-debounce="300"
                   />
-                  <.live_file_input upload={@uploads.story_file} class="hidden" id="story-file-input" />
+                  <.live_file_input upload={@uploads.story_file} class="hidden" />
                   <div
                     :if={@story_input == ""}
                     class="absolute bottom-2 right-2 flex items-center gap-1 text-xs text-[var(--glass-text-tertiary)]"
                   >
                     <label
-                      for="story-file-input"
+                      for={@uploads.story_file.ref}
                       class="flex items-center gap-1 cursor-pointer hover:text-[var(--glass-text-secondary)] transition-colors opacity-70 hover:opacity-100"
                     >
                       <svg
@@ -337,41 +337,27 @@ defmodule AstraAutoExWeb.HomeLive do
         <div class="fixed inset-0 z-50 flex items-center justify-center">
           <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" phx-click="close_ai_modal" />
           <div class="glass-card p-6 w-full max-w-lg relative z-10 shadow-2xl">
-            <div class="flex items-center justify-between mb-4">
-              <div class="flex items-center gap-2">
-                <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-[var(--glass-accent-from)] to-[var(--glass-accent-to)] flex items-center justify-center">
-                  <svg
-                    class="w-4 h-4 text-white"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.5"
-                    viewBox="0 0 24 24"
-                  >
+            <div class="flex items-center justify-between mb-5">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center shadow-lg">
+                  <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
                     <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
                   </svg>
                 </div>
-                
                 <div>
-                  <h3 class="text-base font-bold text-[var(--glass-text-primary)]">
-                    {dgettext("projects", "AI Write")}
-                  </h3>
-                  
-                  <p class="text-xs text-[var(--glass-text-tertiary)]">
-                    {dgettext("projects", "Generate Outline")}
-                  </p>
+                  <h3 class="text-lg font-bold text-[var(--glass-text-primary)]">AI 创作助手</h3>
+                  <p class="text-xs text-[var(--glass-text-tertiary)]">输入你的创意，AI 自动生成 65-80 集剧本大纲</p>
                 </div>
               </div>
-              
-              <button
-                type="button"
-                phx-click="close_ai_modal"
-                class="text-[var(--glass-text-tertiary)] hover:text-[var(--glass-text-primary)] text-xl leading-none"
-              >
-                &times;
+              <button type="button" phx-click="close_ai_modal" class="text-[var(--glass-text-tertiary)] hover:text-[var(--glass-text-primary)]">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path d="M6 18L18 6M6 6l12 12" />
+                </svg>
               </button>
             </div>
              <%!-- Phase: Input --%>
             <div :if={@ai_phase == :input} class="space-y-4">
+              <h4 class="text-sm font-semibold text-[var(--glass-text-primary)]">输入你的创意内容</h4>
               <textarea
                 phx-change="update_ai_prompt"
                 phx-debounce="300"
@@ -379,10 +365,11 @@ defmodule AstraAutoExWeb.HomeLive do
                 value={@ai_prompt}
                 rows="6"
                 class="glass-input w-full resize-none"
-                placeholder={
-                  dgettext("projects", "E.g. A modern urban revenge story about a woman who...")
-                }
+                placeholder={"输入关键词、IP名称、故事灵感...\n\n例如：\n• 古代宫廷 复仇 悬疑 女主角\n• 根据陈情令改编\n• 现代霸总+替身新娘+复仇逆袭"}
               />
+              <p class="text-xs text-[var(--glass-text-tertiary)] bg-[var(--glass-bg-muted)] rounded-lg p-2.5">
+                AI 将生成完整多集短剧大纲（65-80集），你可以审阅修改后再确认
+              </p>
               <div class="flex items-center justify-between">
                 <button
                   type="button"

@@ -34,7 +34,11 @@ AstraAutoEx 是 AI 驱动的短剧/漫画视频生产平台，从 Next.js 原项
 - 函数超过 50 行必须拆分
 - 每次改动后检查浏览器 `http://localhost:4000` 验证编译是否通过
 - 翻译：所有 `dgettext("projects", "...")` 字符串都需在 `priv/gettext/zh/LC_MESSAGES/projects.po` 有中文翻译
-- 每次迭代更新版本号 (`root.html.heex` 中的 `Beta vX.Y.Z`) 并追加更新日志
+- **版本号规则**（每次迭代必须执行）：
+  1. 更新 `root.html.heex` 中的 `Beta vX.Y.Z`
+  2. 更新 `CLAUDE.md` 中"当前项目状态"的版本号
+  3. 在更新日志弹窗中追加本次更新内容
+  4. 版本号遵循语义化：patch(bug修复) → minor(功能新增) → major(大版本)
 
 ## 代码风格
 - 使用 `@spec` 类型注解标注公开函数

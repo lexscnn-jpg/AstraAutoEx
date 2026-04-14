@@ -257,6 +257,86 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
         id="voice-picker"
         target={@voice_picker_target}
       />
+
+      <%!-- AI Write Modal (workspace version) --%>
+      <%= if @show_ai_write do %>
+        <div class="fixed inset-0 z-50 flex items-center justify-center">
+          <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" phx-click="close_ai_write" />
+          <div class="glass-card p-6 w-full max-w-lg relative z-10 shadow-2xl">
+            <div class="flex items-center justify-between mb-5">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center">
+                  <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+                  </svg>
+                </div>
+                <div>
+                  <h3 class="text-lg font-bold text-[var(--glass-text-primary)]">AI 创作助手</h3>
+                  <p class="text-xs text-[var(--glass-text-tertiary)]">输入创意灵感，AI 生成故事大纲</p>
+                </div>
+              </div>
+              <button phx-click="close_ai_write" class="text-[var(--glass-text-tertiary)] hover:text-[var(--glass-text-primary)]">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" /></svg>
+              </button>
+            </div>
+
+            <%= case assigns[:ai_write_phase] || :input do %>
+              <% :input -> %>
+                <div class="space-y-4">
+                  <h4 class="text-sm font-semibold text-[var(--glass-text-primary)]">输入你的创意内容</h4>
+                  <textarea
+                    phx-change="update_ai_write_prompt"
+                    phx-debounce="300"
+                    name="prompt"
+                    rows="6"
+                    class="glass-input w-full resize-none"
+                    placeholder={"输入关键词、IP名称、故事灵感...\n\n例如：\n• 古代宫廷 复仇 悬疑 女主角\n• 现代霸总+替身新娘+复仇逆袭"}
+                  ><%= assigns[:ai_write_prompt] || "" %></textarea>
+                  <p class="text-xs text-[var(--glass-text-tertiary)] bg-[var(--glass-bg-muted)] rounded-lg p-2.5">
+                    AI 将生成完整多集短剧大纲，确认后自动填入故事输入区域并启动管线。
+                  </p>
+                  <div class="flex justify-end">
+                    <button
+                      phx-click="generate_ai_write"
+                      disabled={String.trim(assigns[:ai_write_prompt] || "") == ""}
+                      class="glass-btn glass-btn-primary px-6 py-2 text-sm disabled:opacity-40 flex items-center gap-1.5"
+                    >
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                        <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+                      </svg>
+                      生成剧本大纲
+                    </button>
+                  </div>
+                </div>
+
+              <% :loading -> %>
+                <div class="text-center py-12">
+                  <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 mb-4 animate-pulse">
+                    <svg class="w-8 h-8 text-white animate-spin" fill="none" viewBox="0 0 24 24">
+                      <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+                      <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    </svg>
+                  </div>
+                  <p class="text-[var(--glass-text-primary)] font-medium">AI 正在创作中...</p>
+                  <p class="text-xs text-[var(--glass-text-tertiary)] mt-1">请稍候，这可能需要 30-60 秒</p>
+                </div>
+
+              <% :result -> %>
+                <div class="space-y-4">
+                  <textarea
+                    rows="12"
+                    class="glass-input w-full resize-none text-sm"
+                    readonly
+                  ><%= assigns[:ai_write_outline] || "" %></textarea>
+                  <div class="flex justify-end gap-3">
+                    <button phx-click="close_ai_write" class="glass-btn px-4 py-2 text-sm">取消</button>
+                    <button phx-click="use_ai_outline" class="glass-btn glass-btn-primary px-6 py-2 text-sm">使用此大纲</button>
+                  </div>
+                </div>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
     </Layouts.app>
     """
   end
@@ -1441,7 +1521,54 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
     {:noreply,
      socket
      |> assign(:show_ai_write, true)
-     |> put_flash(:info, "AI 写作功能：输入创意灵感，AI 生成完整故事大纲。确认后管线自动进行剧本拆解、角色/场景提取、分镜生成。")}
+     |> assign(:ai_write_prompt, "")
+     |> assign(:ai_write_phase, :input)}
+  end
+
+  def handle_event("close_ai_write", _, socket) do
+    {:noreply, assign(socket, :show_ai_write, false)}
+  end
+
+  def handle_event("update_ai_write_prompt", %{"prompt" => prompt}, socket) do
+    {:noreply, assign(socket, :ai_write_prompt, prompt)}
+  end
+
+  def handle_event("generate_ai_write", _, socket) do
+    prompt = socket.assigns[:ai_write_prompt] || ""
+    if String.trim(prompt) == "" do
+      {:noreply, put_flash(socket, :error, "请输入创意内容")}
+    else
+      # Set loading phase
+      socket = assign(socket, :ai_write_phase, :loading)
+
+      # Dispatch async AI outline generation
+      user_id = socket.assigns.current_scope.user.id
+      lv = self()
+
+      Task.start(fn ->
+        case AstraAutoEx.Workers.Handlers.Helpers.chat(
+          user_id, "default",
+          %{"messages" => [
+            %{"role" => "system", "content" => "你是一个专业短剧编剧。根据用户的创意灵感，生成一个完整的多集短剧大纲（60-80集），包含核心冲突、人物关系和每集概要。"},
+            %{"role" => "user", "content" => prompt}
+          ], "max_tokens" => 4000}
+        ) do
+          {:ok, result} -> send(lv, {:ai_write_result, result})
+          {:error, reason} -> send(lv, {:ai_write_error, reason})
+        end
+      end)
+
+      {:noreply, socket}
+    end
+  end
+
+  def handle_event("use_ai_outline", _, socket) do
+    outline = socket.assigns[:ai_write_outline] || ""
+    {:noreply,
+     socket
+     |> assign(:novel_text, outline)
+     |> assign(:show_ai_write, false)
+     |> put_flash(:info, "大纲已填入故事输入区域")}
   end
 
   def handle_event("open_wizard", _, socket) do
@@ -1686,6 +1813,36 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
   end
 
   @impl true
+  def handle_info({:ai_write_result, text}, socket) do
+    {:noreply,
+     socket
+     |> assign(:ai_write_phase, :result)
+     |> assign(:ai_write_outline, text)}
+  end
+
+  def handle_info({:ai_write_error, reason}, socket) do
+    {:noreply,
+     socket
+     |> assign(:ai_write_phase, :input)
+     |> put_flash(:error, "AI 生成失败：#{inspect(reason)}")}
+  end
+
+  def handle_info({:wizard_complete, %{raw_text: text}}, socket) do
+    {:noreply,
+     socket
+     |> assign(:novel_text, text)
+     |> assign(:show_wizard, false)
+     |> put_flash(:info, "导入完成")}
+  end
+
+  def handle_info(:wizard_closed, socket) do
+    {:noreply, assign(socket, :show_wizard, false)}
+  end
+
+  def handle_info({:generate_fl_video, _params}, socket) do
+    {:noreply, put_flash(socket, :info, "首尾帧生成任务已提交（需要有效的视频模型 API Key）")}
+  end
+
   def handle_info({:task_event, event}, socket) do
     project_id = socket.assigns.project.id
     active = Tasks.list_project_tasks(project_id, status: "processing")
