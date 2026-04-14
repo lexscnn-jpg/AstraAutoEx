@@ -62,11 +62,16 @@ defmodule AstraAutoEx.Workers.Handlers.Helpers do
   @doc "Dispatch a chat/LLM request with automatic cost tracking."
   def chat(user_id, provider_name, request) do
     start = System.monotonic_time(:millisecond)
+    request = normalize_chat_request(request)
 
     result =
       with {:ok, config} <- get_provider_config(user_id, provider_name),
            mod when not is_nil(mod) <- provider_module(provider_name) do
-        mod.chat(request, config)
+        case mod.chat(request, config) do
+          {:ok, %{content: content}} -> {:ok, content}
+          {:ok, text} when is_binary(text) -> {:ok, text}
+          other -> other
+        end
       else
         nil -> {:error, "Unknown provider: #{provider_name}"}
         error -> error
@@ -154,9 +159,9 @@ defmodule AstraAutoEx.Workers.Handlers.Helpers do
   defp default_model(:image), do: %{"provider" => "minimax", "model" => "image-01"}
   defp default_model(:video), do: %{"provider" => "minimax", "model" => "minimax-hailuo-2.3"}
   defp default_model(:tts), do: %{"provider" => "minimax", "model" => "speech-2.8-hd"}
-  defp default_model(:llm), do: %{"provider" => "google", "model" => "gemini-2.5-flash"}
+  defp default_model(:llm), do: %{"provider" => "minimax", "model" => "MiniMax-M2.7-highspeed"}
   defp default_model(:music), do: %{"provider" => "minimax", "model" => "music-2.6"}
-  defp default_model(_), do: %{"provider" => "google", "model" => "gemini-2.5-flash"}
+  defp default_model(_), do: %{"provider" => "minimax", "model" => "MiniMax-M2.7-highspeed"}
 
   defp atomize_keys(map) when is_map(map) do
     Map.new(map, fn
@@ -200,5 +205,37 @@ defmodule AstraAutoEx.Workers.Handlers.Helpers do
     end
 
     result
+  end
+
+  # Normalize chat request: convert Google's `contents` format to OpenAI's `messages` format
+  # so all providers receive a consistent request shape.
+  defp normalize_chat_request(request) do
+    has_messages =
+      Map.has_key?(request, "messages") || Map.has_key?(request, :messages)
+
+    if has_messages do
+      request
+    else
+      # Convert Google `contents` format to `messages`
+      contents = Map.get(request, :contents, Map.get(request, "contents", []))
+
+      messages =
+        Enum.flat_map(contents, fn content ->
+          parts = Map.get(content, "parts", Map.get(content, :parts, []))
+          role = Map.get(content, "role", Map.get(content, :role, "user"))
+
+          Enum.map(parts, fn part ->
+            text = Map.get(part, "text", Map.get(part, :text, ""))
+            %{"role" => to_string(role), "content" => text}
+          end)
+        end)
+
+      model = Map.get(request, :model, Map.get(request, "model"))
+
+      request
+      |> Map.put("messages", messages)
+      |> Map.put("model", model)
+      |> Map.drop([:contents, "contents"])
+    end
   end
 end
