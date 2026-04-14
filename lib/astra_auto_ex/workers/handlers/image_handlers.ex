@@ -51,11 +51,22 @@ defmodule AstraAutoEx.Workers.Handlers.ImagePanel do
 
     candidate_count = payload["candidate_count"] || 1
 
+    # Build subject_reference for MiniMax consistency (first ref image as reference)
+    subject_ref =
+      case all_refs do
+        [first_url | _] when is_binary(first_url) and first_url != "" ->
+          [%{"type" => "image_url", "image_url" => %{"url" => first_url}}]
+
+        _ ->
+          nil
+      end
+
     request = %{
       prompt: final_prompt,
       model: model,
       aspect_ratio: payload["aspect_ratio"] || "16:9",
-      reference_images: all_refs
+      reference_images: all_refs,
+      subject_reference: subject_ref
     }
 
     Helpers.update_progress(task, 40)
