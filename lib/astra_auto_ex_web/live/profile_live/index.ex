@@ -635,6 +635,8 @@ defmodule AstraAutoExWeb.ProfileLive.Index do
               model_selections={@model_selections}
               provider_configs={@provider_configs}
               providers={@providers}
+              testing_model_step={@testing_model_step}
+              model_test_result={@model_test_result}
             />
           <% "prompts" -> %>
             <.prompts_tab
