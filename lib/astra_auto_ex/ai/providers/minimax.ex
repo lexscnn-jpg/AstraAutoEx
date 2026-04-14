@@ -32,7 +32,7 @@ defmodule AstraAutoEx.AI.Providers.Minimax do
     headers = auth_headers(api_key)
 
     messages = Map.get(request, "messages", Map.get(request, :messages, []))
-    model = Map.get(request, "model", Map.get(request, :model, "m2.7-highspeed"))
+    model = Map.get(request, "model", Map.get(request, :model, "MiniMax-M2.7-highspeed"))
     max_tokens = Map.get(request, "max_tokens", Map.get(request, :max_tokens, 4096))
 
     body = %{

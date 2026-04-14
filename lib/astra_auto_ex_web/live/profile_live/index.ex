@@ -1530,6 +1530,7 @@ defmodule AstraAutoExWeb.ProfileLive.Index do
               %{"role" => "system", "content" => "Reply briefly in Chinese."},
               %{"role" => "user", "content" => "你好，请回复一句话确认连接正常。"}
             ],
+            "model" => model,
             "max_tokens" => 100,
             "action" => "model_test"
           }
