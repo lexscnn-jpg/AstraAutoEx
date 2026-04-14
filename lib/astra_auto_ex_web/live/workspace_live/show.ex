@@ -577,12 +577,16 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
     image_count = Enum.count(all_panels, fn p -> p.image_url && p.image_url != "" end)
     video_count = Enum.count(all_panels, fn p -> p.video_url && p.video_url != "" end)
 
+    pending_images = length(all_panels) - image_count
+    image_est = AstraAutoEx.Billing.CostEstimator.estimate_images("image-01", pending_images)
+
     assigns =
       assigns
       |> Map.put(:all_panels, all_panels)
       |> Map.put(:image_count, image_count)
       |> Map.put(:sb_video_count, video_count)
       |> Map.put(:total_count, length(all_panels))
+      |> Map.put(:image_cost_est, AstraAutoEx.Billing.CostEstimator.format_cost(image_est.total))
 
     ~H"""
     <div class="space-y-5 animate-slide-up">
@@ -613,6 +617,9 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
             </svg>
             {dgettext("projects", "Generate All Images")}
           </button>
+          <span :if={@total_count > @image_count} class="text-[10px] text-[var(--glass-text-tertiary)] bg-[var(--glass-bg-muted)] px-2 py-0.5 rounded-full">
+            ~{@image_cost_est}
+          </span>
           <button
             phx-click="retry_failed_images"
             class="glass-btn glass-btn-secondary px-3 py-2 text-xs flex items-center gap-1"
@@ -1266,7 +1273,17 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
     # Create episode if none exists
     episode = socket.assigns.current_episode || create_default_episode(project, user_id)
 
-    # Start story-to-script task
+    # Persist novel_text to episode
+    Production.update_episode(episode, %{novel_text: text})
+
+    # Save art style + aspect ratio to NovelProject
+    Production.upsert_novel_project(%{
+      project_id: project.id,
+      art_style: socket.assigns.art_style,
+      video_ratio: socket.assigns.aspect_ratio
+    })
+
+    # Start story-to-script task with auto-chain flags
     Tasks.create_task(%{
       user_id: user_id,
       project_id: project.id,
@@ -1274,7 +1291,14 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
       type: "story_to_script_run",
       target_type: "episode",
       target_id: episode.id,
-      payload: %{"novel_text" => text, "episode_id" => episode.id, "auto_continue" => true}
+      payload: %{
+        "novel_text" => text,
+        "episode_id" => episode.id,
+        "auto_continue" => socket.assigns.auto_chain_enabled,
+        "full_auto_chain" => socket.assigns.full_auto_chain_enabled,
+        "art_style" => socket.assigns.art_style,
+        "aspect_ratio" => socket.assigns.aspect_ratio
+      }
     })
 
     {:noreply,
@@ -1531,6 +1555,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
   end
 
   def handle_event("set_aspect_ratio", %{"ratio" => ratio}, socket) do
+    Production.upsert_novel_project(%{project_id: socket.assigns.project.id, video_ratio: ratio})
     {:noreply, assign(socket, :aspect_ratio, ratio)}
   end
 
