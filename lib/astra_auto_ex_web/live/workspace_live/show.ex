@@ -2712,6 +2712,13 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
   end
 
   def handle_event("open_voice_picker", %{"line-id" => line_id}, socket) do
+    # Auto-load 300+ voices from MiniMax API on first open
+    user_id = socket.assigns.current_scope.user.id
+
+    Task.start(fn ->
+      AstraAutoEx.AI.VoicePresets.load_from_api(user_id)
+    end)
+
     {:noreply, assign(socket, show_voice_picker: true, voice_picker_target: line_id)}
   end
 
