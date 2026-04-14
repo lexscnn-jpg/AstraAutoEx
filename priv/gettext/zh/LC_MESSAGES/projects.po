@@ -369,7 +369,7 @@ msgstr "应用"
 #: lib/astra_auto_ex_web/live/workspace_live/location_modal.ex:74
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Create"
-msgstr "已创建"
+msgstr "创建"
 
 #: lib/astra_auto_ex_web/live/workspace_live/character_modal.ex:45
 #, elixir-autogen, elixir-format
@@ -384,7 +384,7 @@ msgstr "创建场景"
 #: lib/astra_auto_ex_web/live/workspace_live/character_modal.ex:46
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Edit Character"
-msgstr "+ 添加角色"
+msgstr "编辑角色"
 
 #: lib/astra_auto_ex_web/live/workspace_live/location_modal.ex:35
 #, elixir-autogen, elixir-format
@@ -409,7 +409,7 @@ msgstr "性格"
 #: lib/astra_auto_ex_web/live/workspace_live/voice_picker.ex:41
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Voice Settings"
-msgstr "配音台词"
+msgstr "声音设置"
 
 #: lib/astra_auto_ex_web/live/home_live.ex:446
 #, elixir-autogen, elixir-format
@@ -597,9 +597,181 @@ msgstr "项目资产"
 #: lib/astra_auto_ex_web/live/asset_hub_live/index.ex:282
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Props"
-msgstr "提示词"
+msgstr "道具"
 
 #: lib/astra_auto_ex_web/live/asset_hub_live/index.ex:284
 #, elixir-autogen, elixir-format
 msgid "SFX"
 msgstr "音效"
+
+# ── Workspace stage labels ──
+msgid "Story"
+msgstr "故事"
+
+msgid "Film"
+msgstr "制作"
+
+msgid "AI Edit"
+msgstr "AI 剪辑"
+
+msgid "Assets"
+msgstr "素材库"
+
+msgid "Edit"
+msgstr "编辑"
+
+msgid "Refresh"
+msgstr "刷新"
+
+# ── Story stage ──
+msgid "Currently editing:"
+msgstr "当前编辑:"
+
+msgid "The production pipeline below applies to this episode only."
+msgstr "以下制作管线仅适用于当前剧集。"
+
+msgid "Auto Chain"
+msgstr "自动链"
+
+msgid "Full Auto"
+msgstr "全自动"
+
+msgid "Need custom characters and scenes?"
+msgstr "需要自定义角色和场景吗？"
+
+msgid "Click the Asset Library button in the top-right corner to upload asset documents or manually add characters/scenes. AI will prioritize using assets from the library."
+msgstr "点击右上角的素材库按钮上传资产文档或手动添加角色/场景。AI 将优先使用素材库中的资产。"
+
+msgid "Confirm & Start Drawing"
+msgstr "确认并开始绘制"
+
+# ── Script stage ──
+msgid "Script Breakdown"
+msgstr "剧本拆解"
+
+# ── Storyboard stage ──
+msgid "Panels:"
+msgstr "面板:"
+
+msgid "Images:"
+msgstr "图片:"
+
+msgid "Videos:"
+msgstr "视频:"
+
+msgid "Retry"
+msgstr "重试"
+
+msgid "Retry failed image tasks"
+msgstr "重试失败的图片任务"
+
+msgid "Retry failed video tasks"
+msgstr "重试失败的视频任务"
+
+msgid "Retry failed voice tasks"
+msgstr "重试失败的配音任务"
+
+msgid "Retry Voice"
+msgstr "重试配音"
+
+# ── Film stage ──
+msgid "Voice:"
+msgstr "配音:"
+
+msgid "generated"
+msgstr "已生成"
+
+msgid "No Video"
+msgstr "无视频"
+
+msgid "Generate"
+msgstr "生成"
+
+# ── Compose (AI Edit) stage ──
+msgid "Panel Clips"
+msgstr "面板片段"
+
+msgid "ready"
+msgstr "就绪"
+
+msgid "Select All"
+msgstr "全选"
+
+msgid "Ready"
+msgstr "就绪"
+
+msgid "Compose Settings"
+msgstr "合成设置"
+
+msgid "Transition Effect"
+msgstr "转场效果"
+
+msgid "Crossfade"
+msgstr "交叉淡入"
+
+msgid "Fade Black"
+msgstr "黑场过渡"
+
+msgid "None"
+msgstr "无"
+
+msgid "Subtitle Mode"
+msgstr "字幕模式"
+
+msgid "Burn-in"
+msgstr "硬字幕"
+
+msgid "Soft Sub"
+msgstr "软字幕"
+
+msgid "Both"
+msgstr "双重"
+
+msgid "Background Music"
+msgstr "背景音乐"
+
+msgid "Preset"
+msgstr "预设"
+
+msgid "Composing..."
+msgstr "合成中..."
+
+msgid "Processing video composition. This may take several minutes."
+msgstr "正在合成视频，可能需要几分钟。"
+
+msgid "Compose Video"
+msgstr "合成视频"
+
+msgid "panels"
+msgstr "面板"
+
+msgid "Preview"
+msgstr "预览"
+
+msgid "Composed video will appear here"
+msgstr "合成视频将在此显示"
+
+msgid "Export to JianYing"
+msgstr "导出到剪映"
+
+msgid "Publish to Douyin"
+msgstr "发布到抖音"
+
+msgid "Generate Promo Copy"
+msgstr "生成引流文案"
+
+msgid "Promo copy generation coming soon."
+msgstr "引流文案生成功能即将推出。"
+
+# ── Asset Hub ──
+msgid "Create Asset"
+msgstr "新建资产"
+
+msgid "Character"
+msgstr "角色"
+
+msgid "Location"
+msgstr "场景"
+
+msgid "Asset created successfully."
+msgstr "素材创建成功。"

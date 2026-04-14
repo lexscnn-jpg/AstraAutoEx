@@ -19,7 +19,10 @@
           <a href="/" class="flex items-center gap-2 no-underline">
             <img src={~p"/images/logo.svg"} alt="AstraAuto" class="h-7" />
           </a>
-          <span class="hidden sm:inline-flex items-center gap-1.5 text-xs text-[var(--glass-text-tertiary)] border border-[var(--glass-stroke-base)] rounded-full px-3 py-1">
+          <span
+            class="hidden sm:inline-flex items-center gap-1.5 text-xs text-[var(--glass-text-tertiary)] border border-[var(--glass-stroke-base)] rounded-full px-3 py-1 cursor-pointer hover:border-[var(--glass-accent-from)] hover:text-[var(--glass-text-primary)] transition-all"
+            onclick="document.getElementById('changelog-popup').classList.toggle('hidden')"
+          >
             <svg
               class="w-3.5 h-3.5"
               viewBox="0 0 24 24"
@@ -29,8 +32,39 @@
             >
               <path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" />
             </svg>
-            Beta v0.5.0
+            Beta v0.6.0
           </span>
+          <%!-- Changelog popup (hidden by default) --%>
+          <div id="changelog-popup" class="hidden absolute top-12 left-4 z-50 glass-card p-4 w-80 max-h-96 overflow-y-auto shadow-xl text-xs">
+            <h3 class="font-bold text-sm text-[var(--glass-text-primary)] mb-2">更新日志</h3>
+            <div class="space-y-3">
+              <div>
+                <div class="font-semibold text-[var(--glass-accent-from)]">v0.6.0 (2026-04-14)</div>
+                <ul class="mt-1 space-y-0.5 text-[var(--glass-text-secondary)]">
+                  <li>• 修复故事文本创建后丢失问题</li>
+                  <li>• 17+1 画风预设系统</li>
+                  <li>• 场景增强器 (镜头风格映射)</li>
+                  <li>• Auto Chain / Full Auto 开关</li>
+                  <li>• AI Edit 左右分栏布局</li>
+                  <li>• 失败重试按钮 (图片/视频/配音)</li>
+                  <li>• 素材库创建角色/场景弹窗</li>
+                  <li>• 导出按钮 (剪映/抖音/引流文案)</li>
+                  <li>• Token 成本预估模块</li>
+                  <li>• 完整中文翻译补全</li>
+                  <li>• VideoPlayer/AudioPlayer JS Hooks</li>
+                </ul>
+              </div>
+              <div>
+                <div class="font-semibold text-[var(--glass-text-tertiary)]">v0.5.0</div>
+                <ul class="mt-1 space-y-0.5 text-[var(--glass-text-secondary)]">
+                  <li>• 初始 Phoenix 重构版本</li>
+                  <li>• 基础管线 Story→Script→Storyboard→Film→Compose</li>
+                  <li>• 6 个 AI 提供商集成</li>
+                  <li>• 44 个双语提示词模板</li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
 
         <div class="flex items-center gap-1">
