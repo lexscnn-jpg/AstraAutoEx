@@ -54,6 +54,8 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
      |> assign(:compose_subtitle, "both")
      |> assign(:compose_bgm, "none")
      |> assign(:selected_panels, MapSet.new())
+     |> assign(:extracting_entities, false)
+     |> assign(:extracted_entities, nil)
      |> assign(:page_title, project.name)}
   end
 
@@ -196,6 +198,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                   current_episode={@current_episode}
                   characters={@characters}
                   locations={@locations}
+                  extracting_entities={@extracting_entities}
                 />
               <% "storyboard" -> %>
                 <.storyboard_stage
@@ -496,7 +499,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                 <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
               </svg> {dgettext("projects", "AI Write")}
             </button>
-            <form phx-submit="start_pipeline" class="inline">
+            <form phx-submit="start_pipeline" class="inline relative group/start">
               <input type="hidden" name="novel_text" value={@novel_text} />
               <button
                 type="submit"
@@ -514,6 +517,15 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                   <path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
                 </svg>
               </button>
+              <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 p-3 glass-surface rounded-xl shadow-xl text-xs text-[var(--glass-text-secondary)] opacity-0 group-hover/start:opacity-100 pointer-events-none transition-opacity z-10">
+                <p class="font-medium text-[var(--glass-text-primary)] mb-1">管线将自动执行：</p>
+                <ol class="list-decimal list-inside space-y-0.5 text-[10px]">
+                  <li>AI 拆解故事 → 生成剧本</li>
+                  <li>提取角色/场景/道具</li>
+                  <li>生成分镜描述</li>
+                  <li>按需生成图片/视频/配音</li>
+                </ol>
+              </div>
             </form>
           </div>
         </div>
@@ -652,9 +664,21 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
            <.prompt_btn id="NP_AGENT_CLIP" /> <.prompt_btn id="NP_SCREENPLAY_CONVERSION" />
         </div>
         
-        <button phx-click="run_story_to_script" class="glass-btn glass-btn-ghost text-xs py-1.5 px-3">
-          {dgettext("projects", "Generate Script")}
-        </button>
+        <div class="flex items-center gap-2">
+          <button
+            phx-click="extract_entities"
+            class="glass-btn glass-btn-ghost text-xs py-1.5 px-3 flex items-center gap-1"
+            disabled={@extracting_entities}
+          >
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+              <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            {if @extracting_entities, do: "提取中...", else: "AI 提取实体"}
+          </button>
+          <button phx-click="run_story_to_script" class="glass-btn glass-btn-ghost text-xs py-1.5 px-3">
+            {dgettext("projects", "Generate Script")}
+          </button>
+        </div>
       </div>
       
       <div class="grid grid-cols-12 gap-5">
@@ -875,8 +899,20 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                         />
                       </div>
                     </div>
-                     <%!-- Edit icon on hover --%>
-                    <div class="absolute top-1.5 right-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                     <%!-- Action buttons on hover --%>
+                    <div class="absolute top-1.5 right-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex gap-1">
+                      <%= unless panel.image_url && panel.image_url != "" do %>
+                        <button
+                          phx-click="generate_panel_image"
+                          phx-value-panel-id={panel.id}
+                          class="glass-chip text-[10px] bg-[var(--glass-accent-from)]/80 text-white backdrop-blur-sm hover:bg-[var(--glass-accent-from)] px-1.5 py-0.5"
+                          title="生成图片"
+                        >
+                          <svg class="w-3 h-3 inline" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                          </svg>
+                        </button>
+                      <% end %>
                       <span class="glass-chip text-[10px] bg-black/60 text-[var(--glass-text-primary)] backdrop-blur-sm">
                         {dgettext("projects", "Edit")}
                       </span>
@@ -905,6 +941,12 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                       >
                         {panel_location(panel)}
                       </span>
+                       <%!-- Prop tags (orange) --%>
+                      <%= for prop <- parse_panel_props(panel) do %>
+                        <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-orange-500/10 text-orange-400">
+                          {prop}
+                        </span>
+                      <% end %>
                       <span
                         :if={panel.video_url && panel.video_url != ""}
                         class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-green-500/10 text-green-500"
@@ -1581,6 +1623,24 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
      |> put_flash(:info, "大纲已填入故事输入区域")}
   end
 
+  def handle_event("extract_entities", _, socket) do
+    novel_text = socket.assigns.novel_text || ""
+
+    if String.trim(novel_text) == "" do
+      {:noreply, put_flash(socket, :error, "请先输入故事文本")}
+    else
+      user_id = socket.assigns.current_scope.user.id
+      parent = self()
+
+      Task.start(fn ->
+        result = AstraAutoEx.AI.EntityExtractor.extract_all(user_id, novel_text)
+        send(parent, {:entities_extracted, result})
+      end)
+
+      {:noreply, assign(socket, :extracting_entities, true)}
+    end
+  end
+
   def handle_event("open_wizard", _, socket) do
     {:noreply, assign(socket, :show_wizard, true)}
   end
@@ -1856,6 +1916,54 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
      |> put_flash(:error, "AI 生成失败：#{inspect(reason)}")}
   end
 
+  def handle_info({:entities_extracted, {:ok, entities}}, socket) do
+    project = socket.assigns.project
+    user_id = socket.assigns.current_scope.user.id
+
+    # Auto-create extracted characters in project
+    chars = entities.characters || []
+    locs = entities.locations || []
+
+    Enum.each(chars, fn c ->
+      AstraAutoEx.Characters.create_character(%{
+        project_id: project.id,
+        user_id: user_id,
+        name: c["name"] || "",
+        introduction: c["description"] || c["personality"] || ""
+      })
+    end)
+
+    Enum.each(locs, fn l ->
+      AstraAutoEx.Locations.create_location(%{
+        project_id: project.id,
+        user_id: user_id,
+        name: l["name"] || "",
+        description: l["description"] || ""
+      })
+    end)
+
+    # Reload characters and locations
+    characters = AstraAutoEx.Characters.list_characters(project.id)
+    locations = AstraAutoEx.Locations.list_locations(project.id)
+
+    prop_count = length(entities.props || [])
+
+    {:noreply,
+     socket
+     |> assign(:extracting_entities, false)
+     |> assign(:extracted_entities, entities)
+     |> assign(:characters, characters)
+     |> assign(:locations, locations)
+     |> put_flash(:info, "AI 提取完成：#{length(chars)}角色，#{length(locs)}场景，#{prop_count}道具")}
+  end
+
+  def handle_info({:entities_extracted, {:error, reason}}, socket) do
+    {:noreply,
+     socket
+     |> assign(:extracting_entities, false)
+     |> put_flash(:error, "实体提取失败：#{inspect(reason)}")}
+  end
+
   def handle_info({:wizard_complete, %{raw_text: text}}, socket) do
     {:noreply,
      socket
@@ -2053,7 +2161,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
   defp stage_label("story"), do: dgettext("projects", "Story")
   defp stage_label("script"), do: dgettext("projects", "Script")
   defp stage_label("storyboard"), do: dgettext("projects", "Storyboard")
-  defp stage_label("film"), do: dgettext("projects", "Film")
+  defp stage_label("film"), do: dgettext("projects", "成片")
   defp stage_label("compose"), do: dgettext("projects", "AI Edit")
 
   # ── Panel entity tag helpers ──
@@ -2079,6 +2187,19 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
   defp panel_location(panel) do
     loc = Map.get(panel, :location)
     if loc && loc != "", do: loc, else: nil
+  end
+
+  defp parse_panel_props(panel) do
+    case Map.get(panel, :props) do
+      nil -> []
+      props when is_list(props) -> props
+      props when is_binary(props) ->
+        case Jason.decode(props) do
+          {:ok, list} when is_list(list) -> list
+          _ -> []
+        end
+      _ -> []
+    end
   end
 
   # Load a field from NovelProject settings, with fallback default

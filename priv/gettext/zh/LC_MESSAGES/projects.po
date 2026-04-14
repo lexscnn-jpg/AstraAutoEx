@@ -657,6 +657,9 @@ msgstr "黑场过渡"
 msgid "Film"
 msgstr "成片"
 
+msgid "成片"
+msgstr "成片"
+
 msgid "Generate"
 msgstr "生成"
 
