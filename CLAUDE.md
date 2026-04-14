@@ -83,8 +83,8 @@ AstraAutoEx 是 AI 驱动的短剧/漫画视频生产平台，从 Next.js 原项
 4. **制作 (film)** — video_stage: 视频/配音生成 + 重试
 5. **AI 剪辑 (compose)** — compose_stage: 左右分栏（面板选择+设置 | 预览+导出）
 
-## 当前项目状态 (v0.7.7)
-- 最后完成: v0.7.7 管线打通 + 模型配置修复 + MiniMax LLM (2026-04-15)
+## 当前项目状态 (v0.7.8)
+- 最后完成: v0.7.8 管线完整打通 + 阶段动画 + 设置持久化 (2026-04-15)
   - **v0.7.0-v0.7.2:** 核心管线打通 + 配音 + 合成 + 一致性生图 + 首尾帧抽卡 + 集数选择器 + 管线动画
   - **v0.7.3:** 口型同步(FAL/Vidu/Bailian) + 素材库项目列表 + 翻译审计
   - **v0.7.4:** 异步轮询系统 + Vidu/Bailian Provider + 6项 Bug 修复
@@ -101,6 +101,12 @@ AstraAutoEx 是 AI 驱动的短剧/漫画视频生产平台，从 Next.js 原项
   - 新增：管线进度横幅（active_tasks 实时显示 + 任务类型中文标签）
   - 新增：auto_chain/full_auto_chain 持久化到 NovelProject DB
   - 新增：aspect_ratio/art_style 选择持久化（项目级别保存）
+  - **v0.7.8 (2026-04-15):**
+  - 核心：管线请求标准化（Google contents→OpenAI messages 自动转换）
+  - 核心：智能模型路由（按 step ID 查找，fallback 到 type 匹配）
+  - 优化：中文 pipeline prompt（MiniMax 输出质量提升）
+  - 新增：compose 管线字幕嵌入步骤（SRT→视频）
+  - UI：阶段指示器增强（完成✓ + 当前高亮 + 过渡动画）
 - 进行中: 无
 - 下一步:
   - 端到端生成测试（MiniMax 生图 API 已配置）

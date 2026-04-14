@@ -31,7 +31,7 @@
             >
               <path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" />
             </svg>
-            Beta v0.7.7
+            Beta v0.7.8
           </button>
         </div>
 
@@ -188,12 +188,32 @@
         </div>
 
         <div class="flex-1 overflow-y-auto px-6 py-4 space-y-6 text-sm">
-          <%!-- v0.7.7 --%>
+          <%!-- v0.7.8 --%>
           <div>
             <div class="flex items-center gap-2 mb-2">
               <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-500/20 text-green-400">
                 最新
               </span>
+              <span class="font-bold text-[var(--glass-text-primary)]">v0.7.8</span>
+              <span class="text-xs text-[var(--glass-text-tertiary)]">2026-04-15</span>
+            </div>
+            <p class="text-[10px] text-[var(--glass-text-tertiary)] mb-1.5 italic">
+              管线完整打通 + 阶段动画 + 设置持久化
+            </p>
+            <ul class="space-y-1 text-[var(--glass-text-secondary)] list-disc list-inside text-xs">
+              <li><strong>管线请求标准化</strong>：自动转换 Google→OpenAI 格式，所有 LLM Provider 通用</li>
+              <li><strong>中文提示词</strong>：pipeline 全部改为中文 prompt，MiniMax 输出质量提升</li>
+              <li><strong>智能模型路由</strong>：按步骤 ID 查找用户模型配置，支持每步不同模型</li>
+              <li><strong>字幕嵌入</strong>：compose 管线新增字幕嵌入步骤（concat→subtitle→BGM）</li>
+              <li><strong>设置持久化</strong>：auto_chain / art_style / aspect_ratio 保存到 DB</li>
+              <li><strong>阶段指示器</strong>：完成阶段显示✓，当前阶段高亮，平滑过渡动画</li>
+              <li><strong>管线进度横幅</strong>：实时显示执行中的任务类型 + 中文标签</li>
+            </ul>
+          </div>
+
+          <%!-- v0.7.7 --%>
+          <div>
+            <div class="flex items-center gap-2 mb-2">
               <span class="font-bold text-[var(--glass-text-primary)]">v0.7.7</span>
               <span class="text-xs text-[var(--glass-text-tertiary)]">2026-04-15</span>
             </div>
