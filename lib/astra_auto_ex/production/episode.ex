@@ -1,4 +1,4 @@
-defmodule AstraAutoEx.Production.Episode do
+﻿defmodule AstraAutoEx.Production.Episode do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -8,7 +8,13 @@ defmodule AstraAutoEx.Production.Episode do
   schema "episodes" do
     field :project_id, :integer
     field :user_id, :integer
-    field :episode_number, :integer
+    field :episode_number,
+      :title,
+      :name,
+      :status, :integer
+    field :title, :string
+    field :name, :string
+    field :status, :string, default: "draft"
     field :name, :string
     field :novel_text, :string
     field :audio_url, :string
@@ -31,6 +37,9 @@ defmodule AstraAutoEx.Production.Episode do
       :project_id,
       :user_id,
       :episode_number,
+      :title,
+      :name,
+      :status,
       :name,
       :novel_text,
       :audio_url,

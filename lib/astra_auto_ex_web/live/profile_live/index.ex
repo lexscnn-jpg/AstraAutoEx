@@ -1,4 +1,4 @@
-defmodule AstraAutoExWeb.ProfileLive.Index do
+﻿defmodule AstraAutoExWeb.ProfileLive.Index do
   use AstraAutoExWeb, :live_view
 
   alias AstraAutoEx.Accounts
@@ -62,12 +62,15 @@ defmodule AstraAutoExWeb.ProfileLive.Index do
       models: %{
         "llm" => [%{id: "m2.7-highspeed", name: "M2.7 Highspeed"}],
         "image" => [%{id: "image-01", name: "Image-01"}],
-        "video" => [%{id: "minimax-hailuo-2.3", name: "Hailuo 2.3"}],
+        "video" => [
+          %{id: "minimax-hailuo-2.3", name: "Hailuo 2.3"},
+          %{id: "minimax-hailuo-2.3-fast", name: "Hailuo 2.3 Fast"}
+        ],
         "audio" => [
           %{id: "speech-2.8-hd", name: "Speech 2.8 HD"},
           %{id: "speech-2.8-turbo", name: "Speech 2.8 Turbo"}
         ],
-        "music" => [%{id: "music-2.5", name: "Music 2.5"}]
+        "music" => [%{id: "music-2.6", name: "Music 2.6"}]
       }
     },
     %{
@@ -665,7 +668,7 @@ defmodule AstraAutoExWeb.ProfileLive.Index do
     assigns = assign(assigns, :ordered_providers, ordered ++ extras)
 
     ~H"""
-    <div id="provider-list" phx-hook="DragSort" data-sort-event="reorder_providers" class="grid gap-3">
+    <div id="provider-list" phx-hook="DragSort" data-sort-event="reorder_providers" class="grid grid-cols-1 md:grid-cols-2 gap-3">
       <div
         :for={provider <- @ordered_providers}
         id={"provider-#{provider.id}"}
