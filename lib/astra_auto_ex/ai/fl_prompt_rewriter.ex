@@ -28,7 +28,16 @@ defmodule AstraAutoEx.AI.FlPromptRewriter do
     末帧对白：#{last_dialogue || "(无对白)"}
     """
 
-    case Helpers.chat(user_id, model, system_prompt, user_prompt, temperature: 0.3, max_tokens: 300) do
+    request = %{
+      "messages" => [
+        %{"role" => "system", "content" => system_prompt},
+        %{"role" => "user", "content" => user_prompt}
+      ],
+      "temperature" => 0.3,
+      "max_tokens" => 300
+    }
+
+    case Helpers.chat(user_id, model, request) do
       {:ok, result} ->
         text = String.trim(result)
 

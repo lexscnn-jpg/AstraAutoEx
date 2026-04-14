@@ -14,6 +14,14 @@ defmodule AstraAutoExWeb.WorkspaceLive.ImportWizard do
   end
 
   @impl true
+  def update(%{parsing_done: true, parsed_episodes: episodes}, socket) do
+    {:ok,
+     socket
+     |> assign(:parsing, false)
+     |> assign(:parsed_episodes, episodes)
+     |> assign(:step, 3)}
+  end
+
   def update(assigns, socket) do
     {:ok, assign(socket, assigns)}
   end
@@ -341,23 +349,14 @@ defmodule AstraAutoExWeb.WorkspaceLive.ImportWizard do
 
   defp start_parsing(socket) do
     text = socket.assigns.raw_text
-    lv = self()
+    myself = socket.assigns.myself
 
     Task.start(fn ->
       episodes = split_episodes(text)
-      send(lv, {:wizard_parsed, episodes})
+      send_update(myself, %{parsed_episodes: episodes, parsing_done: true})
     end)
 
     socket
-  end
-
-  @impl true
-  def handle_info({:wizard_parsed, episodes}, socket) do
-    {:noreply,
-     socket
-     |> assign(:parsing, false)
-     |> assign(:parsed_episodes, episodes)
-     |> assign(:step, 3)}
   end
 
   defp split_episodes(text) do
