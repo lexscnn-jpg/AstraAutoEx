@@ -21,7 +21,56 @@ defmodule AstraAutoEx.AI.Providers.Minimax do
   }
 
   @impl true
-  def capabilities, do: [:image, :video, :tts, :music]
+  def capabilities, do: [:chat, :image, :video, :tts, :music]
+
+  # ── Chat / LLM ──
+
+  @impl true
+  def chat(request, config) do
+    api_key = Map.fetch!(config, :api_key)
+    url = "#{base_url(config)}/text/chatcompletion_v2"
+    headers = auth_headers(api_key)
+
+    messages = Map.get(request, "messages", Map.get(request, :messages, []))
+    model = Map.get(request, "model", Map.get(request, :model, "m2.7-highspeed"))
+    max_tokens = Map.get(request, "max_tokens", Map.get(request, :max_tokens, 4096))
+
+    body = %{
+      "model" => model,
+      "messages" => messages,
+      "max_tokens" => max_tokens,
+      "temperature" => Map.get(request, "temperature", Map.get(request, :temperature, 0.7))
+    }
+
+    case Req.post(url, headers: headers, json: body, receive_timeout: 120_000) do
+      {:ok,
+       %{
+         status: 200,
+         body:
+           %{
+             "base_resp" => %{"status_code" => 0},
+             "choices" => [%{"message" => %{"content" => content}} | _]
+           } = resp
+       }} ->
+        usage = Map.get(resp, "usage", %{})
+
+        {:ok,
+         %{
+           content: content,
+           input_tokens: Map.get(usage, "prompt_tokens", 0),
+           output_tokens: Map.get(usage, "completion_tokens", 0)
+         }}
+
+      {:ok, %{status: 200, body: %{"base_resp" => %{"status_msg" => msg}}}} ->
+        {:error, msg}
+
+      {:ok, %{body: body}} ->
+        {:error, body}
+
+      {:error, reason} ->
+        {:error, reason}
+    end
+  end
 
   # ── Video Generation ──
 
