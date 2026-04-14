@@ -47,6 +47,8 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
      |> assign(:pipeline_state, :idle)
      |> assign(:show_ai_write, false)
      |> assign(:show_wizard, false)
+     |> assign(:show_art_style_modal, false)
+     |> assign(:custom_art_prompt, "")
      |> assign(:compose_transition, "crossfade")
      |> assign(:compose_transition_ms, "500")
      |> assign(:compose_subtitle, "both")
@@ -256,6 +258,14 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
         module={AstraAutoExWeb.WorkspaceLive.VoicePicker}
         id="voice-picker"
         target={@voice_picker_target}
+      />
+
+      <%!-- Art Style Custom Modal --%>
+      <.live_component
+        :if={@show_art_style_modal}
+        module={AstraAutoExWeb.WorkspaceLive.ArtStyleModal}
+        id="art-style-modal"
+        current_prompt={@custom_art_prompt}
       />
 
       <%!-- AI Write Modal (workspace version) --%>
@@ -1770,8 +1780,27 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
     {:noreply, assign(socket, :aspect_ratio, ratio)}
   end
 
+  def handle_event("set_art_style", %{"style" => "custom"}, socket) do
+    {:noreply,
+     socket
+     |> assign(:art_style, "custom")
+     |> assign(:show_art_style_modal, true)}
+  end
+
   def handle_event("set_art_style", %{"style" => style}, socket) do
     {:noreply, assign(socket, :art_style, style)}
+  end
+
+  def handle_event("close_art_style_modal", _, socket) do
+    {:noreply, assign(socket, :show_art_style_modal, false)}
+  end
+
+  def handle_event("apply_custom_art_style", %{"prompt" => prompt}, socket) do
+    {:noreply,
+     socket
+     |> assign(:custom_art_prompt, prompt)
+     |> assign(:show_art_style_modal, false)
+     |> put_flash(:info, "自定义画风已应用")}
   end
 
   def handle_event("set_compose_transition", %{"value" => v}, socket) do

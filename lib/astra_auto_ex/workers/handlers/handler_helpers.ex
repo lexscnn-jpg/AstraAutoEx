@@ -38,48 +38,59 @@ defmodule AstraAutoEx.Workers.Handlers.Helpers do
     end
   end
 
-  @doc "Dispatch an image generation request to the appropriate provider."
+  @doc "Dispatch an image generation request with cost tracking."
   def generate_image(user_id, provider_name, request) do
-    with {:ok, config} <- get_provider_config(user_id, provider_name),
-         mod when not is_nil(mod) <- provider_module(provider_name) do
+    tracked_call(user_id, provider_name, "image", "generate_image", fn mod, config ->
       mod.generate_image(request, config)
-    else
-      nil -> {:error, "Unknown provider: #{provider_name}"}
-      error -> error
-    end
+    end)
   end
 
-  @doc "Dispatch a video generation request."
+  @doc "Dispatch a video generation request with cost tracking."
   def generate_video(user_id, provider_name, request) do
-    with {:ok, config} <- get_provider_config(user_id, provider_name),
-         mod when not is_nil(mod) <- provider_module(provider_name) do
+    tracked_call(user_id, provider_name, "video", "generate_video", fn mod, config ->
       mod.generate_video(request, config)
-    else
-      nil -> {:error, "Unknown provider: #{provider_name}"}
-      error -> error
-    end
+    end)
   end
 
-  @doc "Dispatch a TTS request."
+  @doc "Dispatch a TTS request with cost tracking."
   def text_to_speech(user_id, provider_name, request) do
-    with {:ok, config} <- get_provider_config(user_id, provider_name),
-         mod when not is_nil(mod) <- provider_module(provider_name) do
+    tracked_call(user_id, provider_name, "voice", "text_to_speech", fn mod, config ->
       mod.text_to_speech(request, config)
-    else
-      nil -> {:error, "Unknown provider: #{provider_name}"}
-      error -> error
-    end
+    end)
   end
 
-  @doc "Dispatch a chat/LLM request."
+  @doc "Dispatch a chat/LLM request with automatic cost tracking."
   def chat(user_id, provider_name, request) do
-    with {:ok, config} <- get_provider_config(user_id, provider_name),
-         mod when not is_nil(mod) <- provider_module(provider_name) do
-      mod.chat(request, config)
-    else
-      nil -> {:error, "Unknown provider: #{provider_name}"}
-      error -> error
+    start = System.monotonic_time(:millisecond)
+
+    result =
+      with {:ok, config} <- get_provider_config(user_id, provider_name),
+           mod when not is_nil(mod) <- provider_module(provider_name) do
+        mod.chat(request, config)
+      else
+        nil -> {:error, "Unknown provider: #{provider_name}"}
+        error -> error
+      end
+
+    # Track API call cost
+    duration = System.monotonic_time(:millisecond) - start
+    status = if match?({:ok, _}, result), do: "success", else: "failed"
+    pipeline_step = Map.get(request, "action") || Map.get(request, :action) || "chat"
+
+    try do
+      AstraAutoEx.Billing.CostTracker.log_call(%{
+        user_id: user_id,
+        model_key: provider_name,
+        model_type: "text",
+        pipeline_step: to_string(pipeline_step),
+        status: status,
+        duration_ms: duration
+      })
+    rescue
+      _ -> :ok
     end
+
+    result
   end
 
   @doc "Poll an async task."
@@ -158,4 +169,36 @@ defmodule AstraAutoEx.Workers.Handlers.Helpers do
 
   defp safe_to_atom(k) when is_atom(k), do: k
   defp safe_to_atom(k) when is_binary(k), do: String.to_atom(k)
+
+  # Tracked API call wrapper — logs to billing
+  defp tracked_call(user_id, provider_name, model_type, pipeline_step, fun) do
+    start = System.monotonic_time(:millisecond)
+
+    result =
+      with {:ok, config} <- get_provider_config(user_id, provider_name),
+           mod when not is_nil(mod) <- provider_module(provider_name) do
+        fun.(mod, config)
+      else
+        nil -> {:error, "Unknown provider: #{provider_name}"}
+        error -> error
+      end
+
+    duration = System.monotonic_time(:millisecond) - start
+    status = if match?({:ok, _}, result), do: "success", else: "failed"
+
+    try do
+      AstraAutoEx.Billing.CostTracker.log_call(%{
+        user_id: user_id,
+        model_key: to_string(provider_name),
+        model_type: model_type,
+        pipeline_step: pipeline_step,
+        status: status,
+        duration_ms: duration
+      })
+    rescue
+      _ -> :ok
+    end
+
+    result
+  end
 end
