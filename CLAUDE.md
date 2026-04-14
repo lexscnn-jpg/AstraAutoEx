@@ -83,16 +83,21 @@ AstraAutoEx 是 AI 驱动的短剧/漫画视频生产平台，从 Next.js 原项
 4. **制作 (film)** — video_stage: 视频/配音生成 + 重试
 5. **AI 剪辑 (compose)** — compose_stage: 左右分栏（面板选择+设置 | 预览+导出）
 
-## 当前项目状态 (v0.7.6)
-- 最后完成: v0.7.6 工作区修复 + 计费热力图 + 集数管理 (2026-04-15)
+## 当前项目状态 (v0.7.7)
+- 最后完成: v0.7.7 管线打通 + 模型配置修复 + MiniMax LLM (2026-04-15)
   - **v0.7.0-v0.7.2:** 核心管线打通 + 配音 + 合成 + 一致性生图 + 首尾帧抽卡 + 集数选择器 + 管线动画
   - **v0.7.3:** 口型同步(FAL/Vidu/Bailian) + 素材库项目列表 + 翻译审计
   - **v0.7.4:** 异步轮询系统 + Vidu/Bailian Provider + 6项 Bug 修复
   - **v0.7.5:** 5项 Bug 修复 + 合并到 main
-  - **v0.7.6 (2026-04-15):**
-  - 修复：工作区 textarea value 属性（第二处，故事文本从首页正确同步到工作区）
-  - 新增：集数删除按钮（保留最后一集保护）
-  - 重设计：计费面板紧凑单行摘要 + 30天活动热力图
+  - **v0.7.6:** 工作区修复 + 计费热力图 + 集数管理
+  - **v0.7.7 (2026-04-15):**
+  - 修复：模型配置 Tab 崩溃（missing assigns: model_test_result, testing_model_step）
+  - 新增：MiniMax chat/2 LLM 接口（/text/chatcompletion_v2）
+  - 修复：模型测试结果 Map→String 崩溃（正确提取 content 字段）
+  - 修正：MiniMax 模型 ID（MiniMax-M2.7-highspeed，非 m2.7-highspeed）
+  - 修复：测试请求传递 model ID（之前缺失导致用错误默认值）
+  - 核心：Helpers.chat 请求格式标准化（contents→messages 自动转换）
+  - 核心：chat 结果标准化（%{content: str}→str，兼容所有 handler）
 - 进行中: 无
 - 下一步:
   - 端到端生成测试（MiniMax 生图 API 已配置）

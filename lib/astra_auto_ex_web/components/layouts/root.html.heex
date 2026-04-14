@@ -31,7 +31,7 @@
             >
               <path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" />
             </svg>
-            Beta v0.7.6
+            Beta v0.7.7
           </button>
         </div>
 
@@ -188,12 +188,30 @@
         </div>
 
         <div class="flex-1 overflow-y-auto px-6 py-4 space-y-6 text-sm">
-          <%!-- v0.7.6 --%>
+          <%!-- v0.7.7 --%>
           <div>
             <div class="flex items-center gap-2 mb-2">
               <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-500/20 text-green-400">
                 最新
               </span>
+              <span class="font-bold text-[var(--glass-text-primary)]">v0.7.7</span>
+              <span class="text-xs text-[var(--glass-text-tertiary)]">2026-04-15</span>
+            </div>
+            <p class="text-[10px] text-[var(--glass-text-tertiary)] mb-1.5 italic">
+              管线打通 + 模型配置修复 + MiniMax LLM 支持
+            </p>
+            <ul class="space-y-1 text-[var(--glass-text-secondary)] list-disc list-inside text-xs">
+              <li><strong>模型配置修复</strong>：Tab 切换不再崩溃（修复 assigns 传递遗漏）</li>
+              <li><strong>MiniMax LLM</strong>：新增 chat/2 接口，支持 M2.7/M2.5 文本生成</li>
+              <li><strong>管线请求标准化</strong>：自动转换 Google contents 格式为 OpenAI messages 格式</li>
+              <li><strong>模型测试</strong>：正确显示输入/输出内容（修复 Map 结果处理）</li>
+              <li><strong>模型 ID 修正</strong>：MiniMax 模型名称使用正确的 API 格式（MiniMax-M2.7-highspeed）</li>
+            </ul>
+          </div>
+
+          <%!-- v0.7.6 --%>
+          <div>
+            <div class="flex items-center gap-2 mb-2">
               <span class="font-bold text-[var(--glass-text-primary)]">v0.7.6</span>
               <span class="text-xs text-[var(--glass-text-tertiary)]">2026-04-15</span>
             </div>
