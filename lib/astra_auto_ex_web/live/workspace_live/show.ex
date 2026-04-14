@@ -189,6 +189,9 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                   novel_text={@novel_text}
                   aspect_ratio={@aspect_ratio}
                   art_style={@art_style}
+                  auto_chain={@auto_chain}
+                  full_auto_chain={@full_auto_chain}
+                  pipeline_state={@pipeline_state}
                 />
               <% "script" -> %>
                 <.script_stage

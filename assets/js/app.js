@@ -232,6 +232,56 @@ const Hooks = {
     }
   },
 
+  // Video player with controls
+  VideoPlayer: {
+    mounted() {
+      const video = this.el.querySelector("video")
+      if (!video) return
+      this.handleEvent("play_video", ({url}) => {
+        video.src = url
+        video.play()
+      })
+      this.handleEvent("pause_video", () => { video.pause() })
+    }
+  },
+
+  // Audio player with preview
+  AudioPlayer: {
+    mounted() {
+      this.audio = null
+      this.el.addEventListener("click", () => {
+        const url = this.el.dataset.audioUrl
+        if (!url) return
+        if (this.audio && !this.audio.paused) {
+          this.audio.pause()
+          this.audio = null
+          this.el.classList.remove("ring-2", "ring-green-400/50")
+        } else {
+          this.audio = new Audio(url)
+          this.audio.play()
+          this.el.classList.add("ring-2", "ring-green-400/50")
+          this.audio.onended = () => {
+            this.el.classList.remove("ring-2", "ring-green-400/50")
+            this.audio = null
+          }
+        }
+      })
+    },
+    destroyed() {
+      if (this.audio) { this.audio.pause(); this.audio = null }
+    }
+  },
+
+  // Progress bar animation
+  ProgressBar: {
+    mounted() {
+      this.handleEvent("update_progress", ({percent}) => {
+        const bar = this.el.querySelector("[data-progress-bar]")
+        if (bar) bar.style.width = `${percent}%`
+      })
+    }
+  },
+
   // Click outside to close (for modals)
   ClickOutside: {
     mounted() {

@@ -1,4 +1,4 @@
-﻿defmodule AstraAutoExWeb.ProfileLive.Index do
+defmodule AstraAutoExWeb.ProfileLive.Index do
   use AstraAutoExWeb, :live_view
 
   alias AstraAutoEx.Accounts
@@ -927,22 +927,23 @@
               </span>
             </div>
           </div>
-          <select
-            phx-change="set_pipeline_model"
-            phx-value-step={step.id}
-            name="model"
-            class="glass-input flex-1 text-sm py-1.5"
-          >
-            <option value="">-- {dgettext("default", "Select")} --</option>
-            <%= for {provider_name, model_id, model_name, provider_id} <- Map.get(@available_models, step.type, []) do %>
-              <option
-                value={"#{provider_id}/#{model_id}"}
-                selected={pipeline_model_selected?(@model_selections, step.id, provider_id, model_id)}
-              >
-                {provider_name} / {model_name}
-              </option>
-            <% end %>
-          </select>
+          <form phx-change="set_pipeline_model" class="flex-1">
+            <input type="hidden" name="step" value={step.id} />
+            <select
+              name="model"
+              class="glass-input w-full text-sm py-1.5"
+            >
+              <option value="">-- {dgettext("default", "Select")} --</option>
+              <%= for {provider_name, model_id, model_name, provider_id} <- Map.get(@available_models, step.type, []) do %>
+                <option
+                  value={"#{provider_id}/#{model_id}"}
+                  selected={pipeline_model_selected?(@model_selections, step.id, provider_id, model_id)}
+                >
+                  {provider_name} / {model_name}
+                </option>
+              <% end %>
+            </select>
+          </form>
           <button
             phx-click="test_pipeline_model"
             phx-value-step={step.id}

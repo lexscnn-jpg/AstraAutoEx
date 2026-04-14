@@ -20,6 +20,9 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
      |> assign(:sfx, [])
      |> assign(:bgm, [])
      |> assign(:search, "")
+     |> assign(:show_create_modal, false)
+     |> assign(:create_type, "character")
+     |> assign(:create_form, to_form(%{"name" => "", "description" => ""}, as: "asset"))
      |> assign(:page_title, dgettext("projects", "Asset Hub"))}
   end
 
@@ -212,6 +215,48 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
           </div>
         </div>
       </div>
+      <%!-- Create Asset Modal --%>
+      <div :if={@show_create_modal} class="fixed inset-0 z-50 flex items-center justify-center">
+        <div class="absolute inset-0 bg-black/60" phx-click="close_create_modal" />
+        <div class="glass-card p-6 w-full max-w-md relative z-10">
+          <h2 class="text-lg font-bold text-[var(--glass-text-primary)] mb-4">
+            {dgettext("projects", "Create Asset")}
+          </h2>
+          <div class="flex gap-2 mb-4">
+            <%= for {type, label} <- [{"character", dgettext("projects", "Character")}, {"location", dgettext("projects", "Location")}] do %>
+              <button
+                phx-click="set_create_type"
+                phx-value-type={type}
+                class={["px-3 py-1.5 rounded-lg text-xs font-medium transition-all", if(@create_type == type, do: "bg-[var(--glass-accent-from)]/20 text-[var(--glass-accent-from)] ring-1 ring-[var(--glass-accent-from)]/30", else: "bg-[var(--glass-bg-muted)] text-[var(--glass-text-secondary)]")]}
+              >
+                {label}
+              </button>
+            <% end %>
+          </div>
+          <.form for={@create_form} phx-submit="save_asset" class="space-y-4" id="create-asset-form">
+            <div>
+              <label class="text-xs text-[var(--glass-text-tertiary)] mb-1 block">
+                {dgettext("projects", "Name")}
+              </label>
+              <input type="text" name="asset[name]" class="glass-input w-full" required autofocus />
+            </div>
+            <div>
+              <label class="text-xs text-[var(--glass-text-tertiary)] mb-1 block">
+                {dgettext("projects", "Description")}
+              </label>
+              <textarea name="asset[description]" class="glass-input w-full h-20 resize-none" />
+            </div>
+            <div class="flex justify-end gap-2 pt-2">
+              <button type="button" phx-click="close_create_modal" class="px-4 py-2 text-sm text-[var(--glass-text-tertiary)]">
+                {dgettext("default", "Cancel")}
+              </button>
+              <button type="submit" class="glass-btn glass-btn-primary px-6 py-2 text-sm">
+                {dgettext("projects", "Create")}
+              </button>
+            </div>
+          </.form>
+        </div>
+      </div>
     </Layouts.app>
     """
   end
@@ -274,8 +319,45 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
   end
 
   def handle_event("create_asset", _, socket) do
-    {:noreply,
-     put_flash(socket, :info, dgettext("projects", "Asset creation dialog coming soon."))}
+    {:noreply, assign(socket, :show_create_modal, true)}
+  end
+
+  def handle_event("close_create_modal", _, socket) do
+    {:noreply, assign(socket, :show_create_modal, false)}
+  end
+
+  def handle_event("set_create_type", %{"type" => type}, socket) do
+    {:noreply, assign(socket, :create_type, type)}
+  end
+
+  def handle_event("save_asset", %{"asset" => params}, socket) do
+    user = socket.assigns.current_scope.user
+    type = socket.assigns.create_type
+
+    result =
+      case type do
+        "character" ->
+          AssetHub.create_global_character(Map.merge(params, %{"user_id" => user.id}))
+
+        "location" ->
+          AssetHub.create_global_location(Map.merge(params, %{"user_id" => user.id}))
+
+        _ ->
+          {:error, :unsupported_type}
+      end
+
+    case result do
+      {:ok, _asset} ->
+        {:noreply,
+         socket
+         |> assign(:show_create_modal, false)
+         |> assign(:characters, AssetHub.list_global_characters(user.id))
+         |> assign(:locations, AssetHub.list_global_locations(user.id))
+         |> put_flash(:info, dgettext("projects", "Asset created successfully."))}
+
+      {:error, _} ->
+        {:noreply, put_flash(socket, :error, dgettext("default", "Error"))}
+    end
   end
 
   # ── Helpers ──

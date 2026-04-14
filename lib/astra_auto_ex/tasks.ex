@@ -139,6 +139,14 @@ defmodule AstraAutoEx.Tasks do
     |> Repo.all()
   end
 
+  def list_failed_tasks(project_id, task_type) do
+    from(t in Task,
+      where: t.project_id == ^project_id and t.type == ^task_type and t.status == "failed",
+      order_by: [desc: t.inserted_at]
+    )
+    |> Repo.all()
+  end
+
   def list_active_tasks_for_target(target_type, target_id) do
     from(t in Task,
       where:
