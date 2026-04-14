@@ -172,6 +172,10 @@
 .animate-toast-out { animation: toast-out 0.3s ease-in both; }
 .animate-fade-in { animation: fade-in 0.3s ease-out both; }
 .animate-scale-in { animation: scale-in 0.22s ease-out both; }
+@keyframes pulse-slow { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+.animate-pulse-slow { animation: pulse-slow 2.5s ease-in-out infinite; }
+@keyframes slide-up { from { transform: translateY(12px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+.animate-slide-up { animation: slide-up 0.4s ease-out both; }
 
 /* ── Scrollbar ── */
 :where(.overflow-auto,.overflow-y-auto) { scrollbar-width: thin; scrollbar-color: var(--glass-stroke-strong) transparent; }

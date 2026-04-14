@@ -517,6 +517,51 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
   defp config_stage(assigns) do
     ~H"""
     <div class="max-w-4xl mx-auto space-y-6 animate-slide-up">
+      <%!-- Pipeline Progress Banner --%>
+      <div
+        :if={@active_tasks != [] || @pipeline_state == :running}
+        class="glass-surface rounded-2xl p-4 border border-[var(--glass-accent-from)]/30 animate-pulse-slow"
+      >
+        <div class="flex items-center gap-3">
+          <div class="relative">
+            <svg
+              class="w-5 h-5 text-[var(--glass-accent-from)] animate-spin"
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                stroke-width="4"
+              />
+              <path
+                class="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              />
+            </svg>
+          </div>
+          <div class="flex-1">
+            <p class="text-sm font-medium text-[var(--glass-text-primary)]">
+              管线正在执行...
+            </p>
+            <p class="text-xs text-[var(--glass-text-tertiary)] mt-0.5">
+              <%= for task <- @active_tasks do %>
+                <span class="inline-flex items-center gap-1 mr-3">
+                  <span class="w-1.5 h-1.5 rounded-full bg-[var(--glass-accent-from)] animate-pulse" />
+                  {pipeline_step_label(task.type)}
+                </span>
+              <% end %>
+            </p>
+          </div>
+          <div class="text-xs text-[var(--glass-text-tertiary)]">
+            {length(@active_tasks)} 个任务执行中
+          </div>
+        </div>
+      </div>
       <%!-- Story Input Card --%>
       <div class="glass-surface rounded-2xl p-6 shadow-sm">
         <textarea
@@ -2453,7 +2498,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
     {:noreply,
      socket
      |> assign(:novel_text, text)
-     |> assign(:stage, "script")
+     |> assign(:pipeline_state, :running)
      |> assign(:current_episode, %{episode | novel_text: text})
      |> put_flash(:info, dgettext("projects", "Pipeline started. Processing your story..."))}
   end
@@ -3002,9 +3047,12 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
           socket
       end
 
+    pipeline_state = if active == [], do: :idle, else: :running
+
     {:noreply,
      socket
      |> assign(:active_tasks, active)
+     |> assign(:pipeline_state, pipeline_state)
      |> assign(:storyboards, storyboards)
      |> assign(:voice_lines, voice_lines)
      |> assign(:task_progress, task_progress)
@@ -3232,4 +3280,15 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
   rescue
     _ -> default
   end
+
+  defp pipeline_step_label("story_to_script_run"), do: "故事→剧本"
+  defp pipeline_step_label("script_to_storyboard_run"), do: "剧本→分镜"
+  defp pipeline_step_label("analyze_novel"), do: "故事分析"
+  defp pipeline_step_label("clips_build"), do: "片段拆分"
+  defp pipeline_step_label("screenplay_convert"), do: "剧本转换"
+  defp pipeline_step_label("image_panel"), do: "图像生成"
+  defp pipeline_step_label("video_panel"), do: "视频生成"
+  defp pipeline_step_label("voice_generate"), do: "配音生成"
+  defp pipeline_step_label("lip_sync"), do: "口型同步"
+  defp pipeline_step_label(type), do: type
 end
