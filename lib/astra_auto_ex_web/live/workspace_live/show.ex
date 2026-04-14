@@ -733,10 +733,20 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                     <p class="text-xs text-[var(--glass-text-secondary)] line-clamp-2 leading-relaxed">
                       {panel.description}
                     </p>
-                    <div class="flex items-center gap-1.5 mt-1.5">
-                      <%!-- Shot type as colored chip --%>
+                    <div class="flex flex-wrap items-center gap-1 mt-1.5">
+                      <%!-- Shot type chip --%>
                       <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-[var(--glass-accent-from)]/10 text-[var(--glass-accent-from)]">
                         {panel.shot_type || "MS"}
+                      </span>
+                      <%!-- Character tags (blue) --%>
+                      <%= for char <- parse_panel_characters(panel) do %>
+                        <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-blue-500/10 text-blue-400">
+                          {char}
+                        </span>
+                      <% end %>
+                      <%!-- Location tag (green) --%>
+                      <span :if={panel_location(panel)} class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-green-500/10 text-green-400">
+                        {panel_location(panel)}
                       </span>
                       <span
                         :if={panel.video_url && panel.video_url != ""}
@@ -1762,4 +1772,23 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
   defp stage_label("storyboard"), do: dgettext("projects", "Storyboard")
   defp stage_label("film"), do: dgettext("projects", "Film")
   defp stage_label("compose"), do: dgettext("projects", "AI Edit")
+
+  # ── Panel entity tag helpers ──
+  defp parse_panel_characters(panel) do
+    case Map.get(panel, :characters) do
+      nil -> []
+      chars when is_list(chars) -> chars
+      chars when is_binary(chars) ->
+        case Jason.decode(chars) do
+          {:ok, list} when is_list(list) -> list
+          _ -> []
+        end
+      _ -> []
+    end
+  end
+
+  defp panel_location(panel) do
+    loc = Map.get(panel, :location)
+    if loc && loc != "", do: loc, else: nil
+  end
 end

@@ -16,9 +16,14 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
      |> assign(:characters, AssetHub.list_global_characters(user.id))
      |> assign(:locations, AssetHub.list_global_locations(user.id))
      |> assign(:voices, AssetHub.list_global_voices(user.id))
-     |> assign(:props, [])
-     |> assign(:sfx, [])
-     |> assign(:bgm, [])
+     |> assign(:props, AssetHub.list_global_props(user.id))
+     |> assign(:sfx, AssetHub.list_global_sfx(user.id))
+     |> assign(:bgm, AssetHub.list_global_bgm(user.id))
+     |> assign(:show_asset_form, false)
+     |> assign(:asset_form_type, "character")
+     |> assign(:editing_asset, nil)
+     |> assign(:confirm_delete_id, nil)
+     |> assign(:confirm_delete_type, nil)
      |> assign(:search, "")
      |> assign(:show_create_modal, false)
      |> assign(:create_type, "character")
@@ -257,6 +262,30 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
           </.form>
         </div>
       </div>
+
+      <%!-- Asset Form Modal --%>
+      <.live_component
+        :if={@show_asset_form}
+        module={AstraAutoExWeb.AssetHubLive.AssetForm}
+        id="asset-form"
+        asset_type={@asset_form_type}
+        editing={@editing_asset}
+        user_id={@current_scope.user.id}
+      />
+
+      <%!-- Delete Confirmation --%>
+      <%= if @confirm_delete_id do %>
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
+          <div class="glass-card p-6 max-w-sm mx-4">
+            <h3 class="text-lg font-semibold text-[var(--glass-text-primary)] mb-2">确认删除</h3>
+            <p class="text-sm text-[var(--glass-text-secondary)] mb-4">确定要删除此资产吗？此操作不可撤销。</p>
+            <div class="flex justify-end gap-3">
+              <button phx-click="cancel_delete" class="glass-btn px-4 py-2 text-sm">取消</button>
+              <button phx-click="confirm_delete" class="px-4 py-2 text-sm bg-red-500/20 text-red-400 rounded-lg hover:bg-red-500/30">删除</button>
+            </div>
+          </div>
+        </div>
+      <% end %>
     </Layouts.app>
     """
   end
@@ -319,7 +348,57 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
   end
 
   def handle_event("create_asset", _, socket) do
-    {:noreply, assign(socket, :show_create_modal, true)}
+    # Default type based on current tab
+    type =
+      case socket.assigns.tab do
+        "characters" -> "character"
+        "locations" -> "location"
+        "props" -> "prop"
+        "voices" -> "voice"
+        "sfx" -> "sfx"
+        "bgm" -> "bgm"
+        _ -> "character"
+      end
+
+    {:noreply,
+     socket
+     |> assign(:show_asset_form, true)
+     |> assign(:asset_form_type, type)
+     |> assign(:editing_asset, nil)}
+  end
+
+  def handle_event("close_asset_form", _, socket) do
+    {:noreply, assign(socket, :show_asset_form, false)}
+  end
+
+  def handle_event("delete_asset", %{"id" => id, "type" => type}, socket) do
+    {:noreply, assign(socket, confirm_delete_id: id, confirm_delete_type: type)}
+  end
+
+  def handle_event("confirm_delete", _, socket) do
+    user_id = socket.assigns.current_scope.user.id
+
+    try do
+      case socket.assigns.confirm_delete_type do
+        "character" -> AssetHub.get_global_character!(socket.assigns.confirm_delete_id) |> AssetHub.delete_global_character()
+        "location" -> AssetHub.get_global_location!(socket.assigns.confirm_delete_id) |> AssetHub.delete_global_location()
+        "prop" -> AssetHub.get_global_prop!(socket.assigns.confirm_delete_id) |> AssetHub.delete_global_prop()
+        "voice" -> AssetHub.get_global_voice!(socket.assigns.confirm_delete_id) |> AssetHub.delete_global_voice()
+        _ -> {:ok, nil}
+      end
+
+      {:noreply,
+       socket
+       |> reload_assets(user_id)
+       |> assign(:confirm_delete_id, nil)
+       |> put_flash(:info, "已删除")}
+    rescue
+      _ -> {:noreply, assign(socket, :confirm_delete_id, nil) |> put_flash(:error, "删除失败")}
+    end
+  end
+
+  def handle_event("cancel_delete", _, socket) do
+    {:noreply, assign(socket, confirm_delete_id: nil)}
   end
 
   def handle_event("close_create_modal", _, socket) do
@@ -419,5 +498,27 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
       String.contains?(String.downcase(name), term) or
         String.contains?(String.downcase(desc), term)
     end)
+  end
+
+  # ── Callbacks from AssetForm component ──
+  @impl true
+  def handle_info({:asset_created, _type}, socket) do
+    user_id = socket.assigns.current_scope.user.id
+
+    {:noreply,
+     socket
+     |> reload_assets(user_id)
+     |> assign(:show_asset_form, false)
+     |> put_flash(:info, "资产创建成功！")}
+  end
+
+  defp reload_assets(socket, user_id) do
+    socket
+    |> assign(:characters, AssetHub.list_global_characters(user_id))
+    |> assign(:locations, AssetHub.list_global_locations(user_id))
+    |> assign(:props, AssetHub.list_global_props(user_id))
+    |> assign(:voices, AssetHub.list_global_voices(user_id))
+    |> assign(:sfx, AssetHub.list_global_sfx(user_id))
+    |> assign(:bgm, AssetHub.list_global_bgm(user_id))
   end
 end
