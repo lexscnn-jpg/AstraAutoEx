@@ -83,8 +83,8 @@ AstraAutoEx 是 AI 驱动的短剧/漫画视频生产平台，从 Next.js 原项
 4. **制作 (film)** — video_stage: 视频/配音生成 + 重试
 5. **AI 剪辑 (compose)** — compose_stage: 左右分栏（面板选择+设置 | 预览+导出）
 
-## 当前项目状态 (v0.7.9)
-- 最后完成: v0.7.9 Handler修复 + 创作动画 + 面板状态指示器 (2026-04-15)
+## 当前项目状态 (v0.8.0)
+- 最后完成: v0.8.0 AI助手全面升级 + Flova竞品研究 (2026-04-15)
   - **v0.7.0-v0.7.2:** 核心管线打通 + 配音 + 合成 + 一致性生图 + 首尾帧抽卡 + 集数选择器 + 管线动画
   - **v0.7.3:** 口型同步(FAL/Vidu/Bailian) + 素材库项目列表 + 翻译审计
   - **v0.7.4:** 异步轮询系统 + Vidu/Bailian Provider + 6项 Bug 修复
@@ -114,6 +114,13 @@ AstraAutoEx 是 AI 驱动的短剧/漫画视频生产平台，从 Next.js 原项
   - UI：首页"开始创作"加载 spinner 动画
   - UI：面板底部三色管线进度条（图片/视频/配音）
   - UI：面板标签增强（视频/配音/口型同步彩色标签）
+  - **v0.8.0 (2026-04-15):**
+  - 核心：AI 助手消息回路修复（send_update 模式替代 send(self())）
+  - 核心：AI 助手注入项目上下文（名称/角色/场景/故事摘要 → system prompt）
+  - UI：浮动 AI 助手按钮（右下角渐变圆按钮 + hover 放大）
+  - UI：面板滑入动画（animate-slide-in-right）
+  - UI：快捷提问按钮（分析故事/建议镜头/生成文案）
+  - 研究：Flova.ai 竞品研究报告（docs/flova-research-report.md）
 - 进行中: 无
 - 下一步:
   - 端到端生成测试（MiniMax 生图 API 已配置）
