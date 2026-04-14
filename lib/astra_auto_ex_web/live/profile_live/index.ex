@@ -1658,13 +1658,24 @@ defmodule AstraAutoExWeb.ProfileLive.Index do
   def handle_info({:test_model_result, _step_id, provider, model, result, duration}, socket) do
     test_result =
       case result do
-        {:ok, text} ->
+        {:ok, %{content: content} = resp} ->
           %{
             success: true,
             provider: provider,
             model: model,
             duration: duration,
-            response: String.slice(to_string(text), 0..500)
+            response: String.slice(to_string(content), 0..500),
+            input_tokens: Map.get(resp, :input_tokens, 0),
+            output_tokens: Map.get(resp, :output_tokens, 0)
+          }
+
+        {:ok, text} when is_binary(text) ->
+          %{
+            success: true,
+            provider: provider,
+            model: model,
+            duration: duration,
+            response: String.slice(text, 0..500)
           }
 
         {:error, reason} ->
