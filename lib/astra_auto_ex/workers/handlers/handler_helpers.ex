@@ -144,15 +144,41 @@ defmodule AstraAutoEx.Workers.Handlers.Helpers do
     end
   end
 
-  @doc "Get the default model config for a project/user."
-  def get_model_config(user_id, _project_id, model_type) do
+  @doc "Get the model config for a pipeline step or model type."
+  def get_model_config(user_id, _project_id, step_or_type) do
+    key = to_string(step_or_type)
+
     case Accounts.get_user_preference(user_id) do
       nil ->
-        default_model(model_type)
+        default_model(step_or_type)
 
       pref ->
         selections = pref.model_selections || %{}
-        Map.get(selections, to_string(model_type)) || default_model(model_type)
+
+        # Try exact step match first, then fallback type match
+        case Map.get(selections, key) do
+          nil -> find_by_type(selections, key) || default_model(step_or_type)
+          config -> config
+        end
+    end
+  end
+
+  # Find first selection matching the given model type (llm, image, video, etc.)
+  defp find_by_type(selections, type) do
+    type_steps = %{
+      "llm" => ~w(analysis character location storyboard edit),
+      "image" => ~w(image),
+      "video" => ~w(video),
+      "voice" => ~w(voice tts),
+      "music" => ~w(music)
+    }
+
+    case Map.get(type_steps, type) do
+      nil ->
+        nil
+
+      steps ->
+        Enum.find_value(steps, fn step -> Map.get(selections, step) end)
     end
   end
 

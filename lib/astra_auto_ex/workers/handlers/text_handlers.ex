@@ -128,8 +128,12 @@ defmodule AstraAutoEx.Workers.Handlers.StoryToScript do
     if String.trim(novel_text) == "" do
       {:error, "No novel text for script conversion"}
     else
-      model_config = Helpers.get_model_config(task.user_id, task.project_id, :llm)
-      provider = model_config["provider"]
+      analysis_config = Helpers.get_model_config(task.user_id, task.project_id, "analysis")
+      storyboard_config = Helpers.get_model_config(task.user_id, task.project_id, "storyboard")
+      provider = analysis_config["provider"]
+      model = analysis_config["model"]
+      sb_provider = storyboard_config["provider"]
+      sb_model = storyboard_config["model"]
 
       # Step 1: Character analysis
       Helpers.update_progress(task, 15)
@@ -138,9 +142,9 @@ defmodule AstraAutoEx.Workers.Handlers.StoryToScript do
         analyze_step(
           task.user_id,
           provider,
-          model_config["model"],
+          model,
           novel_text,
-          "Extract all characters with their descriptions, personality, and appearance from the text. Return JSON array."
+          "分析以下故事文本，提取所有角色。每个角色需要：name(姓名), gender(性别), age(年龄), personality(性格), appearance(外貌描述)。返回JSON数组。"
         )
 
       # Step 2: Location analysis
@@ -150,9 +154,9 @@ defmodule AstraAutoEx.Workers.Handlers.StoryToScript do
         analyze_step(
           task.user_id,
           provider,
-          model_config["model"],
+          model,
           novel_text,
-          "Extract all locations/scenes with descriptions and mood. Return JSON array."
+          "分析以下故事文本，提取所有场景/地点。每个场景需要：name(名称), description(描述), mood(氛围)。返回JSON数组。"
         )
 
       # Step 3: Clip splitting
@@ -162,9 +166,9 @@ defmodule AstraAutoEx.Workers.Handlers.StoryToScript do
         analyze_step(
           task.user_id,
           provider,
-          model_config["model"],
+          model,
           novel_text,
-          "Split the story into sequential clips (scenes). Each clip should have: title, summary, characters involved, location, dialogue excerpts. Return JSON array."
+          "将以下故事拆分为连续的片段/场景(clips)。每个片段需要：title(标题), summary(概要), characters(涉及角色), location(场景), dialogue(对白摘要)。返回JSON数组。"
         )
 
       # Step 4: Screenplay conversion
@@ -173,10 +177,10 @@ defmodule AstraAutoEx.Workers.Handlers.StoryToScript do
       screenplay =
         analyze_step(
           task.user_id,
-          provider,
-          model_config["model"],
+          sb_provider,
+          sb_model,
           novel_text,
-          "Convert each clip into a screenplay format with: shot descriptions, camera angles, character actions, dialogue, and visual notes. Return JSON array of clips with panels."
+          "将以下故事转换为分镜剧本格式。每个clip包含3-6个panels。每个panel需要：description(画面描述), shot_type(镜头类型: wide/medium/close_up), camera_move(运镜: static/pan/dolly), dialogue(对白), characters(出场角色)。返回JSON数组: [{\"title\":\"\", \"panels\":[{...}]}]"
         )
 
       # Persist results
