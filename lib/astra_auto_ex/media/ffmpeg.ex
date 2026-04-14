@@ -304,10 +304,24 @@ defmodule AstraAutoEx.Media.FFmpeg do
       if Enum.empty?(local_videos) do
         {:error, "No video clips available"}
       else
-        # Concatenate
+        # Step 1: Concatenate videos
         concat_result = concat(local_videos, output_path, opts)
 
-        # Add BGM if provided
+        # Step 2: Add subtitles if provided
+        case {concat_result, Keyword.get(opts, :subtitle_path)} do
+          {{:ok, _}, srt} when is_binary(srt) and srt != "" ->
+            sub_path = output_path <> ".sub.mp4"
+
+            case add_subtitles(output_path, srt, sub_path) do
+              {:ok, _} -> File.rename!(sub_path, output_path)
+              _ -> :ok
+            end
+
+          _ ->
+            :ok
+        end
+
+        # Step 3: Add BGM if provided
         case {concat_result, Keyword.get(opts, :bgm_path)} do
           {{:ok, _}, bgm} when is_binary(bgm) ->
             final_path = output_path <> ".final.mp4"
@@ -317,13 +331,13 @@ defmodule AstraAutoEx.Media.FFmpeg do
               _ -> :ok
             end
 
-            {:ok, output_path}
+          _ ->
+            :ok
+        end
 
-          {{:ok, _}, _} ->
-            {:ok, output_path}
-
-          {error, _} ->
-            error
+        case concat_result do
+          {:ok, _} -> {:ok, output_path}
+          error -> error
         end
       end
     after
