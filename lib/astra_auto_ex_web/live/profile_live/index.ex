@@ -1391,18 +1391,32 @@ defmodule AstraAutoExWeb.ProfileLive.Index do
   def handle_event("test_pipeline_model", %{"step" => step_id}, socket) do
     case Map.get(socket.assigns.model_selections, step_id) do
       %{"provider" => provider, "model" => model} ->
+        user_id = socket.assigns.user.id
+        lv = self()
+
+        Task.start(fn ->
+          test_req = %{
+            "messages" => [
+              %{"role" => "system", "content" => "Reply briefly in Chinese."},
+              %{"role" => "user", "content" => "你好，请回复一句话确认连接正常。"}
+            ],
+            "max_tokens" => 100,
+            "action" => "model_test"
+          }
+
+          start_time = System.monotonic_time(:millisecond)
+          result = AstraAutoEx.Workers.Handlers.Helpers.chat(user_id, provider, test_req)
+          duration = System.monotonic_time(:millisecond) - start_time
+          send(lv, {:test_model_result, step_id, provider, model, result, duration})
+        end)
+
         {:noreply,
-         put_flash(
-           socket,
-           :info,
-           dgettext("default", "Testing %{provider} / %{model}...",
-             provider: provider,
-             model: model
-           )
-         )}
+         socket
+         |> assign(:testing_model_step, step_id)
+         |> put_flash(:info, "正在测试 #{provider}/#{model}...")}
 
       _ ->
-        {:noreply, put_flash(socket, :error, dgettext("default", "No model selected"))}
+        {:noreply, put_flash(socket, :error, "请先选择模型")}
     end
   end
 
@@ -1510,6 +1524,22 @@ defmodule AstraAutoExWeb.ProfileLive.Index do
   # ── handle_info ──
 
   @impl true
+  def handle_info({:test_model_result, step_id, provider, model, result, duration}, socket) do
+    msg =
+      case result do
+        {:ok, text} ->
+          "✅ #{provider}/#{model} 测试成功（#{duration}ms）\n\n请求：你好，请回复一句话确认连接正常。\n响应：#{String.slice(to_string(text), 0..200)}"
+
+        {:error, reason} ->
+          "❌ #{provider}/#{model} 测试失败（#{duration}ms）\n\n错误：#{inspect(reason)}"
+      end
+
+    {:noreply,
+     socket
+     |> assign(:testing_model_step, nil)
+     |> put_flash(if(match?({:ok, _}, result), do: :info, else: :error), msg)}
+  end
+
   def handle_info({:test_connection_result, provider_id, result}, socket) do
     if socket.assigns.testing_provider == provider_id do
       {:noreply, assign(socket, testing_provider: nil, test_result: result)}
