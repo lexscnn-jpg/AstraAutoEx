@@ -60,7 +60,11 @@ defmodule AstraAutoExWeb.ProfileLive.Index do
       has_base_url: true,
       default_base_url: "https://api.minimaxi.com/v1",
       models: %{
-        "llm" => [%{id: "m2.7-highspeed", name: "M2.7 Highspeed"}],
+        "llm" => [
+          %{id: "MiniMax-M2.7-highspeed", name: "M2.7 Highspeed"},
+          %{id: "MiniMax-M2.7", name: "M2.7"},
+          %{id: "MiniMax-M2.5", name: "M2.5"}
+        ],
         "image" => [%{id: "image-01", name: "Image-01"}],
         "video" => [
           %{id: "minimax-hailuo-2.3", name: "Hailuo 2.3"},
