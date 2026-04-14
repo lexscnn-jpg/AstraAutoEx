@@ -83,7 +83,7 @@ AstraAutoEx 是 AI 驱动的短剧/漫画视频生产平台，从 Next.js 原项
 4. **制作 (film)** — video_stage: 视频/配音生成 + 重试
 5. **AI 剪辑 (compose)** — compose_stage: 左右分栏（面板选择+设置 | 预览+导出）
 
-## 当前项目状态 (v0.6.1)
+## 当前项目状态 (v0.6.2)
 - 最后完成: 迭代 v0.6.1-v0.7.0 全量实施（7大commit，~3700+行）
   - Phase A: 42条翻译补全+5修正、导航栏Guide按钮、5步出片指南页、ImportWizard 4步向导
   - Phase B: 首页10比例+17画风+自定义+打字机动画、ProjectsLive项目管理页（图片数/视频数/完成度）、素材库5类CRUD表单+3新Schema+迁移、自动链暂停/恢复/停止控制器、AI写作handler、PipelineModal动画弹窗、计费ApiCallLog+CostTracker+BillingStats面板
