@@ -7,6 +7,7 @@ defmodule AstraAutoEx.Workers.Handlers.ImagePanel do
   require Logger
   alias AstraAutoEx.Workers.Handlers.Helpers
   alias AstraAutoEx.{Production, Characters, Locations, Tasks}
+  alias AstraAutoEx.AI.{SceneEnhancer, ArtStyles}
 
   def execute(task) do
     payload = task.payload || %{}
@@ -66,28 +67,48 @@ defmodule AstraAutoEx.Workers.Handlers.ImagePanel do
     end
   end
 
-  defp build_panel_prompt(panel, _storyboard, characters, _locations) do
+  defp build_panel_prompt(panel, storyboard, characters, _locations) do
     description = panel.description || ""
     shot_type = panel.shot_type || "medium shot"
-    camera = panel.camera_movement || ""
+    camera = panel.camera_move || ""
 
     # Find character names referenced in description
     char_context =
       characters
       |> Enum.filter(fn c -> String.contains?(description, c.name || "") end)
-      |> Enum.map(fn c -> "#{c.name}: #{c.description || ""}" end)
+      |> Enum.map(fn c -> "#{c.name}: #{c.introduction || ""}" end)
       |> Enum.join("; ")
+
+    # Get art style prompt from project settings
+    art_style = storyboard.image_history && storyboard.image_history["art_style"]
+    style_suffix = if art_style, do: ArtStyles.get_prompt(art_style), else: ""
+
+    # Infer scene type from shot_type for camera enhancement
+    scene_type = infer_scene_type(shot_type)
 
     parts =
       [
         "[Shot] #{shot_type}#{if camera != "", do: ", #{camera}", else: ""}",
         "[Scene] #{description}",
-        if(char_context != "", do: "[Characters] #{char_context}", else: nil)
+        if(char_context != "", do: "[Characters] #{char_context}", else: nil),
+        # Scene enhancer: inject camera style based on scene_type
+        SceneEnhancer.enhance_image_prompt("", scene_type) |> String.trim(),
+        # Art style suffix
+        if(style_suffix != "", do: "[Style] #{style_suffix}", else: nil)
       ]
-      |> Enum.reject(&is_nil/1)
+      |> Enum.reject(&(&1 == nil or &1 == ""))
       |> Enum.join("\n")
 
     parts
+  end
+
+  defp infer_scene_type(shot_type) do
+    cond do
+      shot_type in ~w(close_up extreme_close_up) -> "emotion"
+      shot_type in ~w(full wide extreme_wide) -> "epic"
+      shot_type in ~w(pov dutch_angle) -> "suspense"
+      true -> "daily"
+    end
   end
 
   defp collect_reference_images(panel, characters) do

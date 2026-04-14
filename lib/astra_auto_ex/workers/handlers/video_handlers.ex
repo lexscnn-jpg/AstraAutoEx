@@ -7,6 +7,7 @@ defmodule AstraAutoEx.Workers.Handlers.VideoPanel do
   require Logger
   alias AstraAutoEx.Workers.Handlers.Helpers
   alias AstraAutoEx.{Production, Tasks}
+  alias AstraAutoEx.AI.SceneEnhancer
 
   def execute(task) do
     payload = task.payload || %{}
@@ -66,17 +67,19 @@ defmodule AstraAutoEx.Workers.Handlers.VideoPanel do
   end
 
   defp build_video_prompt(panel, _storyboard) do
+    base_description = panel.description || ""
+
     parts =
       [
         if(panel.shot_type, do: "[镜头] #{panel.shot_type}", else: nil),
-        if(panel.camera_movement, do: "#{panel.camera_movement}", else: nil),
-        "[视频描述] #{panel.description || ""}",
-        if(panel.dialogue, do: "[对白] #{panel.dialogue}", else: nil)
+        if(panel.camera_move, do: "#{panel.camera_move}", else: nil),
+        "[视频描述] #{base_description}"
       ]
       |> Enum.reject(&is_nil/1)
       |> Enum.join("\n")
 
-    parts
+    # Enhance with camera style + action tags (default to "daily" scene type)
+    SceneEnhancer.enhance_video_prompt(parts, "daily", base_description)
   end
 
   defp maybe_auto_trigger_compose(task, episode) do

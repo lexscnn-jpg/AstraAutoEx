@@ -41,7 +41,9 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
      |> assign(:task_progress, %{})
      |> assign(:viewing_prompt, nil)
      |> assign(:aspect_ratio, project.aspect_ratio || "16:9")
-     |> assign(:art_style, "realistic")
+     |> assign(:art_style, load_art_style(project))
+     |> assign(:auto_chain_enabled, load_chain_flag(project, :auto_chain_enabled))
+     |> assign(:full_auto_chain_enabled, load_chain_flag(project, :full_auto_chain_enabled))
      |> assign(:compose_transition, "crossfade")
      |> assign(:compose_transition_ms, "500")
      |> assign(:compose_subtitle, "both")
@@ -184,6 +186,8 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                   novel_text={@novel_text}
                   aspect_ratio={@aspect_ratio}
                   art_style={@art_style}
+                  auto_chain_enabled={@auto_chain_enabled}
+                  full_auto_chain_enabled={@full_auto_chain_enabled}
                 />
               <% "script" -> %>
                 <.script_stage
@@ -371,6 +375,28 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                   </option>
                 <% end %>
               </select>
+            </div>
+
+            <%!-- Auto-chain toggles --%>
+            <div class="flex items-center gap-3 ml-4 border-l border-[var(--glass-stroke-soft)] pl-4">
+              <label class="flex items-center gap-1.5 cursor-pointer text-xs text-[var(--glass-text-secondary)]">
+                <input
+                  type="checkbox"
+                  checked={@auto_chain_enabled}
+                  phx-click="toggle_auto_chain"
+                  class="w-3.5 h-3.5 rounded border-[var(--glass-stroke-base)] text-[var(--glass-accent-from)] focus:ring-[var(--glass-accent-from)]/30"
+                />
+                {dgettext("projects", "Auto Chain")}
+              </label>
+              <label class="flex items-center gap-1.5 cursor-pointer text-xs text-[var(--glass-text-secondary)]">
+                <input
+                  type="checkbox"
+                  checked={@full_auto_chain_enabled}
+                  phx-click="toggle_full_auto_chain"
+                  class="w-3.5 h-3.5 rounded border-[var(--glass-stroke-base)] text-[var(--glass-accent-from)] focus:ring-[var(--glass-accent-from)]/30"
+                />
+                {dgettext("projects", "Full Auto")}
+              </label>
             </div>
           </div>
 
@@ -1355,6 +1381,18 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
     end
   end
 
+  def handle_event("toggle_auto_chain", _, socket) do
+    new_val = !socket.assigns.auto_chain_enabled
+    Production.upsert_novel_project(%{project_id: socket.assigns.project.id, auto_chain_enabled: new_val})
+    {:noreply, assign(socket, :auto_chain_enabled, new_val)}
+  end
+
+  def handle_event("toggle_full_auto_chain", _, socket) do
+    new_val = !socket.assigns.full_auto_chain_enabled
+    Production.upsert_novel_project(%{project_id: socket.assigns.project.id, full_auto_chain_enabled: new_val})
+    {:noreply, assign(socket, :full_auto_chain_enabled, new_val)}
+  end
+
   def handle_event("generate_promo_copy", _, socket) do
     {:noreply, put_flash(socket, :info, dgettext("projects", "Promo copy generation coming soon."))}
   end
@@ -1722,4 +1760,18 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
   defp stage_label("storyboard"), do: dgettext("projects", "Storyboard")
   defp stage_label("film"), do: dgettext("projects", "Film")
   defp stage_label("compose"), do: dgettext("projects", "AI Edit")
+
+  defp load_art_style(project) do
+    case Production.get_novel_project(project.id) do
+      nil -> "realistic"
+      np -> np.art_style || "realistic"
+    end
+  end
+
+  defp load_chain_flag(project, field) do
+    case Production.get_novel_project(project.id) do
+      nil -> false
+      np -> Map.get(np, field, false)
+    end
+  end
 end
