@@ -44,6 +44,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.PipelineModal do
   @impl true
   def render(assigns) do
     ~H"""
+    <div>
     <div :if={@active} class="fixed inset-0 z-50 flex items-center justify-center">
       <%!-- Backdrop --%>
       <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" />
@@ -76,6 +77,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.PipelineModal do
           已用时 {format_elapsed(@elapsed_seconds)}
         </p>
       </div>
+    </div>
     </div>
     """
   end

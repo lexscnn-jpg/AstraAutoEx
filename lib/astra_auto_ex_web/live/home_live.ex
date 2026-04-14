@@ -207,6 +207,18 @@ defmodule AstraAutoExWeb.HomeLive do
                     </div>
                   </div>
 
+                  <%!-- Custom art style prompt (when "custom" selected) --%>
+                  <div :if={@art_style == "custom"} class="w-full mt-2">
+                    <textarea
+                      name="art_style_prompt"
+                      rows="2"
+                      phx-change="update_art_style_prompt"
+                      phx-debounce="500"
+                      class="glass-input w-full text-xs resize-none border-[var(--glass-stroke-soft)]"
+                      placeholder="输入自定义画风描述..."
+                    ><%= assigns[:art_style_prompt] || "" %></textarea>
+                  </div>
+
                   <div class="flex items-center gap-3">
                     <button
                       type="button"
@@ -516,6 +528,10 @@ defmodule AstraAutoExWeb.HomeLive do
 
   def handle_event("select_art_style", %{"art_style" => style}, socket) do
     {:noreply, assign(socket, :art_style, style)}
+  end
+
+  def handle_event("update_art_style_prompt", %{"art_style_prompt" => prompt}, socket) do
+    {:noreply, assign(socket, :art_style_prompt, prompt)}
   end
 
   def handle_event("cancel_upload", %{"ref" => ref}, socket) do

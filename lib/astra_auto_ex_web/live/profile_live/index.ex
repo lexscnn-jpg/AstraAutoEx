@@ -988,14 +988,12 @@ defmodule AstraAutoExWeb.ProfileLive.Index do
           </div>
         </div>
       </div>
-      <div class="glass-surface p-6">
-        <h3 class="font-semibold text-[var(--glass-text-primary)] mb-3">
-          {dgettext("default", "Recent Usage")}
-        </h3>
-        <p class="text-sm text-[var(--glass-text-tertiary)]">
-          BSL 1.1 — This is a self-hosted deployment. Billing tracks API costs for your own provider keys.
-        </p>
-      </div>
+      <%!-- Detailed Stats Panel --%>
+      <.live_component
+        module={AstraAutoExWeb.ProfileLive.BillingStats}
+        id="billing-stats"
+        user_id={@current_scope.user.id}
+      />
     </div>
     """
   end

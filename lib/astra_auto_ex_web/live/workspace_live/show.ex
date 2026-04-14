@@ -247,6 +247,29 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
 
       <%!-- Prompt Viewer Modal --%>
       <.prompt_viewer_modal :if={@viewing_prompt} prompt={@viewing_prompt} />
+
+      <%!-- Import Wizard --%>
+      <.live_component
+        :if={@show_wizard}
+        module={AstraAutoExWeb.WorkspaceLive.ImportWizard}
+        id="import-wizard"
+      />
+
+      <%!-- Pipeline Progress Modal --%>
+      <.live_component
+        module={AstraAutoExWeb.WorkspaceLive.PipelineModal}
+        id="pipeline-modal"
+        active={@pipeline_state == :running}
+        status_messages={["准备中...", "思考中...", "写作中...", "润色中...", "即将完成..."]}
+      />
+
+      <%!-- Voice Picker --%>
+      <.live_component
+        :if={@show_voice_picker}
+        module={AstraAutoExWeb.WorkspaceLive.VoicePicker}
+        id="voice-picker"
+        target={@voice_picker_target}
+      />
     </Layouts.app>
     """
   end
@@ -995,6 +1018,27 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
             </div>
           <% end %>
         </div>
+      <%!-- First/Last Frame Transitions --%>
+      <%= if length(@all_panels) > 1 do %>
+        <div class="mt-6">
+          <h3 class="text-sm font-semibold text-[var(--glass-text-primary)] mb-3 flex items-center gap-2">
+            首尾帧过渡
+            <span class="glass-chip text-[10px]">{length(@all_panels) - 1} 对</span>
+          </h3>
+          <div class="space-y-3">
+            <%= for {panel, idx} <- Enum.with_index(@all_panels), idx < length(@all_panels) - 1 do %>
+              <.live_component
+                module={AstraAutoExWeb.WorkspaceLive.FirstLastFrame}
+                id={"fl-#{panel.id}"}
+                current_panel={panel}
+                next_panel={Enum.at(@all_panels, idx + 1)}
+                panel_index={idx}
+              />
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+
       <% else %>
         <div class="glass-surface rounded-xl p-12 text-center">
           <svg
