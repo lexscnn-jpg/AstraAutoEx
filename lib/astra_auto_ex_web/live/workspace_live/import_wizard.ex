@@ -1,0 +1,385 @@
+defmodule AstraAutoExWeb.WorkspaceLive.ImportWizard do
+  use AstraAutoExWeb, :live_component
+
+  @impl true
+  def mount(socket) do
+    {:ok,
+     socket
+     |> assign(:step, 1)
+     |> assign(:source_type, "text")
+     |> assign(:raw_text, "")
+     |> assign(:parsing, false)
+     |> assign(:parsed_episodes, [])
+     |> assign(:error, nil)}
+  end
+
+  @impl true
+  def update(assigns, socket) do
+    {:ok, assign(socket, assigns)}
+  end
+
+  @impl true
+  def render(assigns) do
+    ~H"""
+    <div class="glass-card p-6">
+      <div class="flex items-center justify-between mb-6">
+        <h3 class="text-lg font-semibold text-[var(--glass-text-primary)]">
+          智能导入向导
+        </h3>
+        <button
+          type="button"
+          phx-click="close_wizard"
+          phx-target={@myself}
+          class="text-[var(--glass-text-tertiary)] hover:text-[var(--glass-text-primary)]"
+        >
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Step Indicators -->
+      <div class="flex items-center gap-2 mb-8">
+        <%= for {label, num} <- [{"来源", 1}, {"解析", 2}, {"映射", 3}, {"确认", 4}] do %>
+          <div class="flex items-center gap-2">
+            <div class={"w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold transition-all " <>
+              cond do
+                num < @step -> "bg-green-500/20 text-green-400"
+                num == @step -> "bg-gradient-to-br from-[var(--glass-accent-from)] to-[var(--glass-accent-to)] text-white"
+                true -> "bg-[var(--glass-bg-muted)] text-[var(--glass-text-tertiary)]"
+              end}>
+              <%= if num < @step do %>
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                </svg>
+              <% else %>
+                {num}
+              <% end %>
+            </div>
+            <span class={"text-xs " <> if(num == @step, do: "text-[var(--glass-text-primary)]", else: "text-[var(--glass-text-tertiary)]")}>
+              {label}
+            </span>
+            <%= if num < 4 do %>
+              <div class={"w-8 h-px " <> if(num < @step, do: "bg-green-500/40", else: "bg-[var(--glass-stroke-base)]")} />
+            <% end %>
+          </div>
+        <% end %>
+      </div>
+
+      <!-- Step Content -->
+      <%= case @step do %>
+        <% 1 -> %>
+          <.step_source {assigns} />
+        <% 2 -> %>
+          <.step_parse {assigns} />
+        <% 3 -> %>
+          <.step_mapping {assigns} />
+        <% 4 -> %>
+          <.step_confirm {assigns} />
+      <% end %>
+    </div>
+    """
+  end
+
+  defp step_source(assigns) do
+    ~H"""
+    <div class="space-y-4">
+      <p class="text-sm text-[var(--glass-text-secondary)]">
+        选择你的故事来源方式：
+      </p>
+      <div class="grid grid-cols-2 gap-3">
+        <button
+          type="button"
+          phx-click="set_source"
+          phx-value-type="text"
+          phx-target={@myself}
+          class={"glass-card p-4 text-center transition-all cursor-pointer " <>
+            if(@source_type == "text", do: "ring-2 ring-[var(--glass-accent-from)]", else: "hover:ring-1 hover:ring-[var(--glass-stroke-base)]")}
+        >
+          <div class="text-2xl mb-2">📝</div>
+          <div class="text-sm font-medium text-[var(--glass-text-primary)]">粘贴文本</div>
+          <div class="text-xs text-[var(--glass-text-tertiary)] mt-1">直接输入故事内容</div>
+        </button>
+        <button
+          type="button"
+          phx-click="set_source"
+          phx-value-type="file"
+          phx-target={@myself}
+          class={"glass-card p-4 text-center transition-all cursor-pointer " <>
+            if(@source_type == "file", do: "ring-2 ring-[var(--glass-accent-from)]", else: "hover:ring-1 hover:ring-[var(--glass-stroke-base)]")}
+        >
+          <div class="text-2xl mb-2">📄</div>
+          <div class="text-sm font-medium text-[var(--glass-text-primary)]">上传文件</div>
+          <div class="text-xs text-[var(--glass-text-tertiary)] mt-1">.txt / .md 文件</div>
+        </button>
+      </div>
+
+      <textarea
+        phx-change="update_raw_text"
+        phx-target={@myself}
+        name="raw_text"
+        rows="8"
+        class="glass-input w-full text-sm"
+        placeholder="在此粘贴你的故事文本..."
+      ><%= @raw_text %></textarea>
+
+      <div class="flex justify-end">
+        <button
+          type="button"
+          phx-click="next_step"
+          phx-target={@myself}
+          disabled={@raw_text == ""}
+          class="glass-btn glass-btn-primary px-6 py-2 disabled:opacity-50"
+        >
+          下一步 →
+        </button>
+      </div>
+    </div>
+    """
+  end
+
+  defp step_parse(assigns) do
+    ~H"""
+    <div class="text-center py-12">
+      <%= if @parsing do %>
+        <div class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-[var(--glass-accent-from)] to-[var(--glass-accent-to)] mb-4 animate-pulse">
+          <svg class="w-8 h-8 text-white animate-spin" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+          </svg>
+        </div>
+        <p class="text-[var(--glass-text-primary)] font-medium mb-2">AI 正在分析你的故事...</p>
+        <p class="text-sm text-[var(--glass-text-tertiary)]">自动识别剧集分割点、角色和场景</p>
+      <% else %>
+        <%= if @error do %>
+          <div class="text-red-400 mb-4">{@error}</div>
+          <button
+            type="button"
+            phx-click="retry_parse"
+            phx-target={@myself}
+            class="glass-btn glass-btn-primary px-6 py-2"
+          >
+            重试
+          </button>
+        <% else %>
+          <p class="text-[var(--glass-text-secondary)]">解析完成</p>
+          <button
+            type="button"
+            phx-click="next_step"
+            phx-target={@myself}
+            class="glass-btn glass-btn-primary px-6 py-2 mt-4"
+          >
+            下一步 →
+          </button>
+        <% end %>
+      <% end %>
+    </div>
+    """
+  end
+
+  defp step_mapping(assigns) do
+    ~H"""
+    <div class="space-y-4">
+      <p class="text-sm text-[var(--glass-text-secondary)]">
+        AI 已将故事拆分为 {length(@parsed_episodes)} 集。你可以调整顺序和内容：
+      </p>
+      <div class="space-y-3 max-h-[400px] overflow-y-auto">
+        <%= for {ep, idx} <- Enum.with_index(@parsed_episodes) do %>
+          <div class="glass-card p-4">
+            <div class="flex items-center gap-3">
+              <span class="flex-shrink-0 w-8 h-8 rounded-full bg-[var(--glass-bg-muted)] flex items-center justify-center text-sm font-bold text-[var(--glass-text-secondary)]">
+                {idx + 1}
+              </span>
+              <div class="flex-1 min-w-0">
+                <div class="text-sm font-medium text-[var(--glass-text-primary)] truncate">
+                  {Map.get(ep, :title, "第 #{idx + 1} 集")}
+                </div>
+                <div class="text-xs text-[var(--glass-text-tertiary)] line-clamp-2 mt-1">
+                  {String.slice(Map.get(ep, :content, ""), 0..120)}...
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+
+      <%= if @parsed_episodes == [] do %>
+        <div class="text-center py-8 text-[var(--glass-text-tertiary)]">
+          未检测到剧集分割。将整段文本作为单集处理。
+        </div>
+      <% end %>
+
+      <div class="flex justify-between">
+        <button
+          type="button"
+          phx-click="prev_step"
+          phx-target={@myself}
+          class="glass-btn px-6 py-2 text-[var(--glass-text-secondary)]"
+        >
+          ← 上一步
+        </button>
+        <button
+          type="button"
+          phx-click="next_step"
+          phx-target={@myself}
+          class="glass-btn glass-btn-primary px-6 py-2"
+        >
+          下一步 →
+        </button>
+      </div>
+    </div>
+    """
+  end
+
+  defp step_confirm(assigns) do
+    ~H"""
+    <div class="space-y-4">
+      <div class="glass-card p-4 bg-green-500/5 border border-green-500/20">
+        <div class="flex items-center gap-3">
+          <svg class="w-6 h-6 text-green-400 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+          </svg>
+          <div>
+            <div class="text-sm font-medium text-green-400">准备就绪</div>
+            <div class="text-xs text-[var(--glass-text-tertiary)]">
+              共 {length(@parsed_episodes)} 集，{String.length(@raw_text)} 字
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-between">
+        <button
+          type="button"
+          phx-click="prev_step"
+          phx-target={@myself}
+          class="glass-btn px-6 py-2 text-[var(--glass-text-secondary)]"
+        >
+          ← 上一步
+        </button>
+        <div class="flex gap-3">
+          <button
+            type="button"
+            phx-click="confirm_import"
+            phx-value-analyze="false"
+            phx-target={@myself}
+            class="glass-btn px-6 py-2"
+          >
+            保存
+          </button>
+          <button
+            type="button"
+            phx-click="confirm_import"
+            phx-value-analyze="true"
+            phx-target={@myself}
+            class="glass-btn glass-btn-primary px-6 py-2"
+          >
+            保存并分析资产
+          </button>
+        </div>
+      </div>
+    </div>
+    """
+  end
+
+  @impl true
+  def handle_event("set_source", %{"type" => type}, socket) do
+    {:noreply, assign(socket, :source_type, type)}
+  end
+
+  def handle_event("update_raw_text", %{"raw_text" => text}, socket) do
+    {:noreply, assign(socket, :raw_text, text)}
+  end
+
+  def handle_event("next_step", _params, socket) do
+    step = socket.assigns.step
+
+    socket =
+      cond do
+        step == 1 and socket.assigns.raw_text != "" ->
+          socket
+          |> assign(:step, 2)
+          |> assign(:parsing, true)
+          |> start_parsing()
+
+        step >= 2 and step < 4 ->
+          assign(socket, :step, step + 1)
+
+        true ->
+          socket
+      end
+
+    {:noreply, socket}
+  end
+
+  def handle_event("prev_step", _params, socket) do
+    {:noreply, assign(socket, :step, max(1, socket.assigns.step - 1))}
+  end
+
+  def handle_event("retry_parse", _params, socket) do
+    {:noreply,
+     socket
+     |> assign(:parsing, true)
+     |> assign(:error, nil)
+     |> start_parsing()}
+  end
+
+  def handle_event("confirm_import", %{"analyze" => analyze}, socket) do
+    send(self(), {:wizard_complete, %{
+      raw_text: socket.assigns.raw_text,
+      episodes: socket.assigns.parsed_episodes,
+      analyze_assets: analyze == "true"
+    }})
+
+    {:noreply, socket}
+  end
+
+  def handle_event("close_wizard", _params, socket) do
+    send(self(), :wizard_closed)
+    {:noreply, socket}
+  end
+
+  defp start_parsing(socket) do
+    text = socket.assigns.raw_text
+    lv = self()
+
+    Task.start(fn ->
+      episodes = split_episodes(text)
+      send(lv, {:wizard_parsed, episodes})
+    end)
+
+    socket
+  end
+
+  @impl true
+  def handle_info({:wizard_parsed, episodes}, socket) do
+    {:noreply,
+     socket
+     |> assign(:parsing, false)
+     |> assign(:parsed_episodes, episodes)
+     |> assign(:step, 3)}
+  end
+
+  defp split_episodes(text) do
+    # Simple episode detection: split by "第X集", "Episode X", "EP X", etc.
+    parts =
+      Regex.split(~r/(?=第\d+集|(?i)episode\s*\d+|(?i)ep\s*\d+)/u, text)
+      |> Enum.reject(&(String.trim(&1) == ""))
+
+    if length(parts) <= 1 do
+      [%{title: "第 1 集", content: text}]
+    else
+      parts
+      |> Enum.with_index(1)
+      |> Enum.map(fn {content, idx} ->
+        title =
+          case Regex.run(~r/^(第\d+集|(?i)episode\s*\d+|(?i)ep\s*\d+)[：:\s]*(.*)/u, String.trim(content)) do
+            [_, _marker, name] when name != "" -> "第 #{idx} 集：#{String.trim(name)}"
+            _ -> "第 #{idx} 集"
+          end
+
+        %{title: title, content: String.trim(content)}
+      end)
+    end
+  end
+end

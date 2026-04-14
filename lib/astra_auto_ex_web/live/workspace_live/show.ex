@@ -42,6 +42,11 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
      |> assign(:viewing_prompt, nil)
      |> assign(:aspect_ratio, project.aspect_ratio || "16:9")
      |> assign(:art_style, "realistic")
+     |> assign(:auto_chain, false)
+     |> assign(:full_auto_chain, false)
+     |> assign(:pipeline_state, :idle)
+     |> assign(:show_ai_write, false)
+     |> assign(:show_wizard, false)
      |> assign(:compose_transition, "crossfade")
      |> assign(:compose_transition_ms, "500")
      |> assign(:compose_subtitle, "both")
@@ -343,10 +348,9 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                 name="ratio"
                 class="glass-input text-xs py-1 pl-2 pr-6 border-[var(--glass-stroke-soft)]"
               >
-                <option value="9:16" selected={@aspect_ratio == "9:16"}>9:16</option>
-                <option value="16:9" selected={@aspect_ratio == "16:9"}>16:9</option>
-                <option value="1:1" selected={@aspect_ratio == "1:1"}>1:1</option>
-                <option value="4:3" selected={@aspect_ratio == "4:3"}>4:3</option>
+                <%= for {r, label} <- [{"16:9", "16:9 横屏·长视频"}, {"9:16", "9:16 竖屏·短剧"}, {"1:1", "1:1 方形"}, {"3:2", "3:2 风景"}, {"2:3", "2:3 海报"}, {"4:3", "4:3 传统"}, {"3:4", "3:4 直播"}, {"5:4", "5:4 广告"}, {"4:5", "4:5 信息流"}, {"21:9", "21:9 电影"}] do %>
+                  <option value={r} selected={@aspect_ratio == r}>{label}</option>
+                <% end %>
               </select>
             </div>
 
@@ -366,18 +370,9 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                 name="style"
                 class="glass-input text-xs py-1 pl-2 pr-6 border-[var(--glass-stroke-soft)]"
               >
-                <option value="realistic" selected={@art_style == "realistic"}>
-                  {dgettext("projects", "Realistic")}
-                </option>
-                <option value="anime" selected={@art_style == "anime"}>
-                  {dgettext("projects", "Anime")}
-                </option>
-                <option value="oil_painting" selected={@art_style == "oil_painting"}>
-                  {dgettext("projects", "Oil Painting")}
-                </option>
-                <option value="custom" selected={@art_style == "custom"}>
-                  {dgettext("projects", "Custom")}
-                </option>
+                <%= for {label, value} <- AstraAutoEx.AI.ArtStyles.style_options() do %>
+                  <option value={value} selected={@art_style == value}>{label}</option>
+                <% end %>
               </select>
             </div>
           </div>
@@ -386,7 +381,9 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
             <.prompt_btn id="NP_AI_STORY_OUTLINE" />
             <button
               type="button"
+              phx-click="open_ai_write"
               class="text-sm text-[var(--glass-accent-from)] hover:text-[var(--glass-accent-to)] transition-colors flex items-center gap-1"
+              title="输入创意灵感，AI 生成完整故事大纲。确认后管线自动进行剧本拆解、角色/场景提取、分镜生成。"
             >
               <svg
                 class="w-4 h-4"
@@ -422,15 +419,62 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
         </div>
       </div>
 
+      <%!-- Auto-chain controls --%>
+      <div class="glass-surface rounded-xl p-4 space-y-3">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="text-sm font-medium text-[var(--glass-text-primary)]">自动链</span>
+            <span class="group relative">
+              <svg class="w-3.5 h-3.5 text-[var(--glass-text-tertiary)] cursor-help" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+              </svg>
+              <span class="invisible group-hover:visible absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 text-xs text-[var(--glass-text-primary)] bg-[var(--glass-bg-surface-modal)] rounded-lg shadow-lg border border-[var(--glass-stroke-base)] z-50">
+                每步完成后自动执行下一步
+              </span>
+            </span>
+          </div>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" class="sr-only peer" checked={@auto_chain} phx-click="toggle_auto_chain" />
+            <div class="w-9 h-5 bg-[var(--glass-bg-muted)] peer-checked:bg-[var(--glass-accent-from)] rounded-full transition-colors after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full" />
+          </label>
+        </div>
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="text-sm font-medium text-[var(--glass-text-primary)]">全自动</span>
+            <span class="group relative">
+              <svg class="w-3.5 h-3.5 text-[var(--glass-text-tertiary)] cursor-help" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+              </svg>
+              <span class="invisible group-hover:visible absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-48 p-2 text-xs text-[var(--glass-text-primary)] bg-[var(--glass-bg-surface-modal)] rounded-lg shadow-lg border border-[var(--glass-stroke-base)] z-50">
+                一键从故事直接到成片
+              </span>
+            </span>
+          </div>
+          <label class="relative inline-flex items-center cursor-pointer">
+            <input type="checkbox" class="sr-only peer" checked={@full_auto_chain} phx-click="toggle_full_auto_chain" />
+            <div class="w-9 h-5 bg-[var(--glass-bg-muted)] peer-checked:bg-[var(--glass-accent-from)] rounded-full transition-colors after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:after:translate-x-full" />
+          </label>
+        </div>
+        <%!-- Pipeline control bar --%>
+        <div :if={@pipeline_state in [:running, :paused]} class="flex items-center gap-2 pt-2 border-t border-[var(--glass-stroke-soft)]">
+          <button :if={@pipeline_state == :running} phx-click="pause_pipeline" class="glass-btn text-xs py-1 px-3 flex items-center gap-1">
+            ⏸ 暂停
+          </button>
+          <button :if={@pipeline_state == :paused} phx-click="resume_pipeline" class="glass-btn glass-btn-primary text-xs py-1 px-3 flex items-center gap-1">
+            ▶ 恢复
+          </button>
+          <button phx-click="stop_pipeline" class="glass-btn text-xs py-1 px-3 text-red-400 hover:text-red-300">
+            ⏹ 停止
+          </button>
+          <span class="text-xs text-[var(--glass-text-tertiary)] ml-auto">
+            {if @pipeline_state == :paused, do: "已暂停", else: "运行中..."}
+          </span>
+        </div>
+      </div>
+
       <%!-- Asset hint card --%>
       <div class="glass-surface rounded-xl p-4 flex items-start gap-3">
-        <svg
-          class="w-5 h-5 text-[var(--glass-text-tertiary)] mt-0.5 flex-shrink-0"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.5"
-          viewBox="0 0 24 24"
-        >
+        <svg class="w-5 h-5 text-[var(--glass-text-tertiary)] mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
           <path d="M22 19a2 2 0 01-2 2H4a2 2 0 01-2-2V5a2 2 0 012-2h5l2 3h9a2 2 0 012 2z" />
         </svg>
         <div>
@@ -438,10 +482,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
             {dgettext("projects", "Need custom characters and scenes?")}
           </p>
           <p class="text-xs text-[var(--glass-text-tertiary)] mt-0.5">
-            {dgettext(
-              "projects",
-              "Click the Asset Library button in the top-right corner to upload asset documents or manually add characters/scenes. AI will prioritize using assets from the library."
-            )}
+            点击右上角素材库按钮上传资产文件或手动添加角色/场景。AI 将优先使用素材库中的资产。
           </p>
         </div>
       </div>
@@ -989,7 +1030,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
       |> Map.put(:selected_count, selected_count)
 
     ~H"""
-    <div class="max-w-4xl mx-auto space-y-6 animate-slide-up">
+    <div class="max-w-6xl mx-auto space-y-6 animate-slide-up">
       <%!-- Title centered --%>
       <div class="text-center py-4">
         <h1 class="text-2xl font-bold text-[var(--glass-text-primary)]">
@@ -1212,8 +1253,8 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
         {dgettext("projects", "Compose Video")} ({@selected_count} {dgettext("projects", "panels")})
       </button>
 
-      <%!-- Compose result placeholder --%>
-      <div class="glass-surface rounded-xl p-8 text-center">
+      <%!-- Compose result / video preview (enlarged) --%>
+      <div class="glass-surface rounded-xl p-6 min-h-[400px] flex items-center justify-center bg-black/20">
         <svg
           class="w-12 h-12 mx-auto text-[var(--glass-text-tertiary)] opacity-30 mb-3"
           fill="none"
@@ -1259,6 +1300,42 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
 
   def handle_event("toggle_assistant", _, socket) do
     {:noreply, assign(socket, :show_assistant, !socket.assigns.show_assistant)}
+  end
+
+  def handle_event("toggle_auto_chain", _, socket) do
+    {:noreply, assign(socket, :auto_chain, !socket.assigns.auto_chain)}
+  end
+
+  def handle_event("toggle_full_auto_chain", _, socket) do
+    new_val = !socket.assigns.full_auto_chain
+    socket = if new_val, do: assign(socket, :auto_chain, true), else: socket
+    {:noreply, assign(socket, :full_auto_chain, new_val)}
+  end
+
+  def handle_event("pause_pipeline", _, socket) do
+    {:noreply, assign(socket, :pipeline_state, :paused)}
+  end
+
+  def handle_event("resume_pipeline", _, socket) do
+    {:noreply, assign(socket, :pipeline_state, :running)}
+  end
+
+  def handle_event("stop_pipeline", _, socket) do
+    {:noreply,
+     socket
+     |> assign(:pipeline_state, :idle)
+     |> put_flash(:info, "管线已停止，已完成的结果已保留。")}
+  end
+
+  def handle_event("open_ai_write", _, socket) do
+    {:noreply,
+     socket
+     |> assign(:show_ai_write, true)
+     |> put_flash(:info, "AI 写作功能：输入创意灵感，AI 生成完整故事大纲。确认后管线自动进行剧本拆解、角色/场景提取、分镜生成。")}
+  end
+
+  def handle_event("open_wizard", _, socket) do
+    {:noreply, assign(socket, :show_wizard, true)}
   end
 
   def handle_event("start_pipeline", %{"novel_text" => text}, socket) do

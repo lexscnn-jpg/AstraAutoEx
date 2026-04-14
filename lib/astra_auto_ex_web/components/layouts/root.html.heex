@@ -29,11 +29,11 @@
             >
               <path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" />
             </svg>
-            Beta v0.5.0
+            Beta v0.6.1
           </span>
         </div>
 
-        <div class="flex items-center gap-1">
+        <div class="flex items-center gap-2 pr-2">
           <%= if @current_scope do %>
             <a
               href={~p"/home"}
@@ -67,6 +67,22 @@
               {dgettext("default", "Asset Hub")}
             </a>
             <a
+              href={~p"/guide"}
+              class="nav-link flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm text-[var(--glass-text-secondary)] hover:text-[var(--glass-text-primary)] hover:bg-[var(--glass-bg-muted)] transition-all"
+              title={dgettext("default", "User Guide")}
+            >
+              <svg
+                class="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                viewBox="0 0 24 24"
+              >
+                <path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z" /><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z" />
+              </svg>
+              {dgettext("default", "Guide")}
+            </a>
+            <a
               href={~p"/profile"}
               class="nav-link flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm text-[var(--glass-text-secondary)] hover:text-[var(--glass-text-primary)] hover:bg-[var(--glass-bg-muted)] transition-all"
             >
@@ -82,7 +98,7 @@
               {dgettext("default", "Settings")}
             </a>
 
-            <span class="mx-1 h-4 w-px bg-[var(--glass-stroke-base)]"></span>
+            <span class="mx-1.5 h-4 w-px bg-[var(--glass-stroke-base)]"></span>
 
             <span class="text-xs text-[var(--glass-text-tertiary)] hidden lg:inline">
               {@current_scope.user.email}

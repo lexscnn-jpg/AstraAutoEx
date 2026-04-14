@@ -367,9 +367,9 @@ msgstr "应用"
 
 #: lib/astra_auto_ex_web/live/workspace_live/character_modal.ex:122
 #: lib/astra_auto_ex_web/live/workspace_live/location_modal.ex:74
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "Create"
-msgstr "已创建"
+msgstr "创建"
 
 #: lib/astra_auto_ex_web/live/workspace_live/character_modal.ex:45
 #, elixir-autogen, elixir-format
@@ -382,9 +382,9 @@ msgid "Create Location"
 msgstr "创建场景"
 
 #: lib/astra_auto_ex_web/live/workspace_live/character_modal.ex:46
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "Edit Character"
-msgstr "+ 添加角色"
+msgstr "编辑角色"
 
 #: lib/astra_auto_ex_web/live/workspace_live/location_modal.ex:35
 #, elixir-autogen, elixir-format
@@ -407,9 +407,9 @@ msgid "Personality"
 msgstr "性格"
 
 #: lib/astra_auto_ex_web/live/workspace_live/voice_picker.ex:41
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "Voice Settings"
-msgstr "配音台词"
+msgstr "语音设置"
 
 #: lib/astra_auto_ex_web/live/home_live.ex:446
 #, elixir-autogen, elixir-format
@@ -428,9 +428,9 @@ msgid "AI generation failed: %{reason}"
 msgstr "AI 生成失败：%{reason}"
 
 #: lib/astra_auto_ex_web/live/home_live.ex:218
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "All Projects"
-msgstr "我的项目"
+msgstr "全部项目"
 
 #: lib/astra_auto_ex_web/live/home_live.ex:795
 #, elixir-autogen, elixir-format
@@ -597,9 +597,137 @@ msgstr "项目资产"
 #: lib/astra_auto_ex_web/live/asset_hub_live/index.ex:282
 #, elixir-autogen, elixir-format, fuzzy
 msgid "Props"
-msgstr "提示词"
+msgstr "道具"
 
 #: lib/astra_auto_ex_web/live/asset_hub_live/index.ex:284
 #, elixir-autogen, elixir-format
 msgid "SFX"
 msgstr "音效"
+
+## ---- Missing translations added by A1 translation check ----
+
+msgid "AI Edit"
+msgstr "AI 剪辑"
+
+msgid "Anime"
+msgstr "动漫"
+
+msgid "Assets"
+msgstr "资产"
+
+msgid "Background Music"
+msgstr "背景音乐"
+
+msgid "Both"
+msgstr "双轨"
+
+msgid "Burn-in"
+msgstr "烧录字幕"
+
+msgid "Compose Settings"
+msgstr "合成设置"
+
+msgid "Compose Video"
+msgstr "合成视频"
+
+msgid "Composed video will appear here after processing."
+msgstr "合成视频处理完成后将在此显示。"
+
+msgid "Composing..."
+msgstr "合成中..."
+
+msgid "Confirm & Start Drawing"
+msgstr "确认并开始绘制"
+
+msgid "Crossfade"
+msgstr "交叉淡入淡出"
+
+msgid "Currently editing:"
+msgstr "当前编辑："
+
+msgid "Custom"
+msgstr "自定义"
+
+msgid "Edit"
+msgstr "编辑"
+
+msgid "Fade Black"
+msgstr "黑场过渡"
+
+msgid "Film"
+msgstr "成片"
+
+msgid "Generate"
+msgstr "生成"
+
+msgid "Images:"
+msgstr "图片："
+
+msgid "Need custom characters and scenes?"
+msgstr "需要自定义角色和场景吗？"
+
+msgid "No Video"
+msgstr "无视频"
+
+msgid "None"
+msgstr "无"
+
+msgid "Oil Painting"
+msgstr "油画"
+
+msgid "Panel Clips"
+msgstr "面板片段"
+
+msgid "Panels:"
+msgstr "面板："
+
+msgid "Preset"
+msgstr "预设"
+
+msgid "Processing video composition. This may take several minutes."
+msgstr "正在处理视频合成，可能需要几分钟。"
+
+msgid "Ready"
+msgstr "就绪"
+
+msgid "Realistic"
+msgstr "写实"
+
+msgid "Refresh"
+msgstr "刷新"
+
+msgid "Script Breakdown"
+msgstr "剧本拆解"
+
+msgid "Select All"
+msgstr "全选"
+
+msgid "Soft Sub"
+msgstr "外挂字幕"
+
+msgid "Story"
+msgstr "故事"
+
+msgid "Subtitle Mode"
+msgstr "字幕模式"
+
+msgid "Transition Effect"
+msgstr "转场效果"
+
+msgid "Videos:"
+msgstr "视频："
+
+msgid "Voice:"
+msgstr "配音："
+
+msgid "generated"
+msgstr "已生成"
+
+msgid "panels"
+msgstr "个面板"
+
+msgid "ready"
+msgstr "就绪"
+
+msgid "%{total} panels"
+msgstr "%{total} 个面板"

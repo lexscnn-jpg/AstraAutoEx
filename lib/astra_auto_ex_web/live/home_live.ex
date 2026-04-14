@@ -26,6 +26,8 @@ defmodule AstraAutoExWeb.HomeLive do
      # Quick create state
      |> assign(:story_input, "")
      |> assign(:aspect_ratio, "16:9")
+     |> assign(:art_style, "realistic")
+     |> assign(:show_art_dropdown, false)
      # AI write modal state
      |> assign(:show_ai_modal, false)
      |> assign(:ai_phase, :input)
@@ -80,17 +82,18 @@ defmodule AstraAutoExWeb.HomeLive do
               <span class="text-[10px] text-red-400 font-mono tracking-wider">REC</span>
             </div>
 
-            <%!-- Title --%>
+            <%!-- Title with animations --%>
             <div class="text-center py-6">
-              <h1 class="text-3xl font-extrabold text-[var(--glass-text-primary)] tracking-tight">
+              <h1 class="text-3xl font-extrabold text-[var(--glass-text-primary)] tracking-tight twh-focus-pull">
                 {dgettext("landing", "AstrAuto Drama")}
               </h1>
-              <p class="text-sm text-[var(--glass-text-tertiary)] mt-2 font-mono">
-                >_ {dgettext(
-                  "projects",
-                  "Describe your story and let AI generate cinematic short dramas"
-                )}
-                <span class="animate-pulse">|</span>
+              <p
+                id="hero-typewriter"
+                phx-hook="TypewriterHero"
+                data-text={dgettext("projects", "Describe your story and let AI generate cinematic short dramas")}
+                class="text-sm text-[var(--glass-text-tertiary)] mt-2 font-mono"
+              >
+                >_ <span data-typewriter-target></span><span class="animate-pulse">|</span>
               </p>
             </div>
 
@@ -171,13 +174,13 @@ defmodule AstraAutoExWeb.HomeLive do
                         name="ratio"
                         class="bg-transparent text-sm text-[var(--glass-text-primary)] border-none focus:ring-0 py-0 pl-0 pr-5 cursor-pointer"
                       >
-                        <%= for r <- ["9:16", "16:9", "1:1", "4:3"] do %>
-                          <option value={r} selected={@aspect_ratio == r}>{r}</option>
+                        <%= for {r, label} <- [{"16:9", "16:9 横屏·长视频"}, {"9:16", "9:16 竖屏·短剧"}, {"1:1", "1:1 方形·封面"}, {"3:2", "3:2 横屏·风景"}, {"2:3", "2:3 竖屏·海报"}, {"4:3", "4:3 横屏·传统"}, {"3:4", "3:4 竖屏·直播"}, {"5:4", "5:4 横屏·广告"}, {"4:5", "4:5 竖屏·信息流"}, {"21:9", "21:9 超宽·电影"}] do %>
+                          <option value={r} selected={@aspect_ratio == r}>{label}</option>
                         <% end %>
                       </select>
                     </div>
                     <div class="w-px h-4 bg-[var(--glass-stroke-soft)]"></div>
-                    <div class="flex items-center gap-1.5 text-[var(--glass-text-tertiary)]">
+                    <div class="flex items-center gap-1.5 text-[var(--glass-text-tertiary)] relative">
                       <svg
                         class="w-4 h-4"
                         fill="none"
@@ -187,9 +190,15 @@ defmodule AstraAutoExWeb.HomeLive do
                       >
                         <path d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42" />
                       </svg>
-                      <span class="text-sm text-[var(--glass-text-primary)]">
-                        {dgettext("projects", "Realistic")}
-                      </span>
+                      <select
+                        phx-change="select_art_style"
+                        name="art_style"
+                        class="bg-transparent text-sm text-[var(--glass-text-primary)] border-none focus:ring-0 py-0 pl-0 pr-5 cursor-pointer"
+                      >
+                        <%= for {label, value} <- AstraAutoEx.AI.ArtStyles.style_options() do %>
+                          <option value={value} selected={@art_style == value}>{label}</option>
+                        <% end %>
+                      </select>
                     </div>
                   </div>
 
@@ -244,12 +253,12 @@ defmodule AstraAutoExWeb.HomeLive do
               <h2 class="text-lg font-bold text-[var(--glass-text-primary)]">
                 {dgettext("projects", "Recent Projects")}
               </h2>
-              <a
-                href="#all-projects"
+              <.link
+                navigate={~p"/projects"}
                 class="text-xs text-[var(--glass-accent-from)] hover:text-[var(--glass-accent-to)] transition-colors"
               >
                 {dgettext("projects", "View All Projects")} →
-              </a>
+              </.link>
             </div>
             <%= if length(@projects) > 0 do %>
               <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -488,6 +497,10 @@ defmodule AstraAutoExWeb.HomeLive do
 
   def handle_event("select_aspect_ratio", %{"ratio" => ratio}, socket) do
     {:noreply, assign(socket, :aspect_ratio, ratio)}
+  end
+
+  def handle_event("select_art_style", %{"art_style" => style}, socket) do
+    {:noreply, assign(socket, :art_style, style)}
   end
 
   def handle_event("cancel_upload", %{"ref" => ref}, socket) do

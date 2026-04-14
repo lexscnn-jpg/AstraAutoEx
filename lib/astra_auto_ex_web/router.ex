@@ -41,6 +41,8 @@ defmodule AstraAutoExWeb.Router do
       live "/projects/:id", WorkspaceLive.Show
       live "/profile", ProfileLive.Index
       live "/asset-hub", AssetHubLive.Index
+      live "/guide", GuideLive
+      live "/projects", ProjectsLive.Index
       live "/assistant", AssistantLive.Standalone
     end
   end

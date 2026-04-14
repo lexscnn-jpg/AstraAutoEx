@@ -28,6 +28,45 @@ import topbar from "../vendor/topbar"
 // ── Custom Hooks ──
 
 const Hooks = {
+  // TypewriterHero — subtitle typing + delete loop
+  TypewriterHero: {
+    mounted() {
+      const el = this.el
+      const text = el.dataset.text || ""
+      const TYPE_SPEED = 55
+      const DELETE_SPEED = 20
+      const PAUSE = 3200
+      let i = 0, deleting = false
+
+      const span = el.querySelector("[data-typewriter-target]")
+      if (!span) return
+
+      const tick = () => {
+        if (!deleting) {
+          span.textContent = text.slice(0, i + 1)
+          i++
+          if (i >= text.length) {
+            deleting = true
+            this._timer = setTimeout(tick, PAUSE)
+            return
+          }
+          this._timer = setTimeout(tick, TYPE_SPEED)
+        } else {
+          span.textContent = text.slice(0, i)
+          i--
+          if (i <= 0) {
+            deleting = false
+            this._timer = setTimeout(tick, 500)
+            return
+          }
+          this._timer = setTimeout(tick, DELETE_SPEED)
+        }
+      }
+      this._timer = setTimeout(tick, 600)
+    },
+    destroyed() { clearTimeout(this._timer) }
+  },
+
   // Auto-scroll chat messages to bottom
   ScrollBottom: {
     mounted() { this.scrollToBottom() },
