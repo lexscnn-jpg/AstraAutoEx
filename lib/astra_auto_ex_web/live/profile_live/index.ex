@@ -1524,7 +1524,7 @@ defmodule AstraAutoExWeb.ProfileLive.Index do
   # ── handle_info ──
 
   @impl true
-  def handle_info({:test_model_result, step_id, provider, model, result, duration}, socket) do
+  def handle_info({:test_model_result, _step_id, provider, model, result, duration}, socket) do
     msg =
       case result do
         {:ok, text} ->

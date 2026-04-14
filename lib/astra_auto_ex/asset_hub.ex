@@ -6,7 +6,9 @@ defmodule AstraAutoEx.AssetHub do
   alias AstraAutoEx.AssetHub.{
     GlobalAssetFolder,
     GlobalCharacter,
+    GlobalCharacterAppearance,
     GlobalLocation,
+    GlobalLocationImage,
     GlobalVoice,
     GlobalProp,
     GlobalSfx,
@@ -85,6 +87,49 @@ defmodule AstraAutoEx.AssetHub do
     do: %GlobalBgm{} |> GlobalBgm.changeset(attrs) |> Repo.insert()
 
   def delete_global_bgm(gb), do: Repo.delete(gb)
+  def update_global_bgm(gb, attrs), do: gb |> GlobalBgm.changeset(attrs) |> Repo.update()
+
+  def update_global_sfx(gs, attrs), do: gs |> GlobalSfx.changeset(attrs) |> Repo.update()
+  def get_global_sfx!(id), do: Repo.get!(GlobalSfx, id)
+  def get_global_bgm!(id), do: Repo.get!(GlobalBgm, id)
+
+  def update_global_location(gl, attrs), do: gl |> GlobalLocation.changeset(attrs) |> Repo.update()
+
+  # ── Appearance helpers ──
+
+  def create_or_update_appearance(character, attrs) do
+    case character.appearances do
+      [existing | _] ->
+        existing |> GlobalCharacterAppearance.changeset(attrs) |> Repo.update()
+
+      _ ->
+        %GlobalCharacterAppearance{}
+        |> GlobalCharacterAppearance.changeset(attrs)
+        |> Repo.insert()
+    end
+  end
+
+  def list_appearances(character_id) do
+    from(a in GlobalCharacterAppearance,
+      where: a.global_character_id == ^character_id,
+      order_by: [asc: a.appearance_index]
+    )
+    |> Repo.all()
+  end
+
+  # ── Location image helpers ──
+
+  def create_or_update_location_image(location, attrs) do
+    case location.images do
+      [existing | _] ->
+        existing |> GlobalLocationImage.changeset(attrs) |> Repo.update()
+
+      _ ->
+        %GlobalLocationImage{}
+        |> GlobalLocationImage.changeset(attrs)
+        |> Repo.insert()
+    end
+  end
 
   # ── Generic helpers ──
   def get_global_character!(id), do: Repo.get!(GlobalCharacter, id) |> Repo.preload(:appearances)

@@ -25,9 +25,9 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
      |> assign(:confirm_delete_id, nil)
      |> assign(:confirm_delete_type, nil)
      |> assign(:search, "")
-     |> assign(:show_create_modal, false)
-     |> assign(:create_type, "character")
-     |> assign(:create_form, to_form(%{"name" => "", "description" => ""}, as: "asset"))
+     |> assign(:detail_asset, nil)
+     |> assign(:detail_type, nil)
+     |> assign(:generating_ids, MapSet.new())
      |> assign(:page_title, dgettext("projects", "Asset Hub"))}
   end
 
@@ -41,11 +41,11 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
           <h1 class="text-2xl font-bold text-[var(--glass-text-primary)]">
             {dgettext("projects", "Asset Hub")}
           </h1>
-          
+
           <p class="text-sm text-[var(--glass-text-tertiary)] mt-1">
             {dgettext("projects", "Manage your global characters, locations, and media assets.")}
           </p>
-          
+
           <p class="text-xs text-[var(--glass-text-tertiary)] mt-1 flex items-center gap-1">
             <svg
               class="w-3.5 h-3.5"
@@ -64,20 +64,17 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
             </a>
           </p>
         </div>
-        
+
         <div class="flex gap-5">
           <%!-- Left sidebar: Folders --%>
-          <aside class="w-52 flex-shrink-0">
+          <aside class="w-52 flex-shrink-0 hidden lg:block">
             <div class="glass-surface rounded-xl p-4">
               <div class="flex items-center justify-between mb-3">
                 <span class="text-sm font-semibold text-[var(--glass-text-primary)]">
                   {dgettext("projects", "Folders")}
                 </span>
-                <button class="w-6 h-6 rounded-full bg-[var(--glass-accent-from)] text-white flex items-center justify-center text-xs hover:opacity-80 transition-opacity">
-                  +
-                </button>
               </div>
-              
+
               <div class="space-y-1">
                 <button
                   phx-click="set_scope"
@@ -124,7 +121,7 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
                   </svg> {dgettext("projects", "Project Assets")}
                 </button>
               </div>
-              
+
               <p class="text-[10px] text-[var(--glass-text-tertiary)] mt-3 opacity-60">
                 {dgettext("projects", "No folders yet")}
               </p>
@@ -133,7 +130,7 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
            <%!-- Main content --%>
           <div class="flex-1 min-w-0">
             <%!-- Top bar: tabs + actions --%>
-            <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center justify-between mb-4 flex-wrap gap-2">
               <div class="flex gap-1 p-1 rounded-xl bg-[var(--glass-bg-muted)]">
                 <%= for tab <- ~w(all characters locations props voices sfx bgm) do %>
                   <button
@@ -149,10 +146,11 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
                     ]}
                   >
                     {tab_label(tab)}
+                    <span class="ml-1 text-[10px] opacity-50">{tab_count(tab, assigns)}</span>
                   </button>
                 <% end %>
               </div>
-              
+
               <div class="flex items-center gap-2">
                 <input
                   type="text"
@@ -163,21 +161,15 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
                   placeholder={dgettext("projects", "Search assets...")}
                   class="glass-input px-3 py-1.5 text-xs w-40"
                 />
-                <button class="glass-btn glass-btn-ghost text-xs py-1.5 px-3 flex items-center gap-1">
-                  <svg
-                    class="w-3.5 h-3.5"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="1.5"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4" /><polyline points="7 10 12 15 17 10" /><line
-                      x1="12"
-                      y1="15"
-                      x2="12"
-                      y2="3"
-                    />
-                  </svg> {dgettext("projects", "Export")}
+                <button
+                  phx-click="generate_all"
+                  class="glass-btn glass-btn-ghost text-xs py-1.5 px-3 flex items-center gap-1"
+                  title="为当前标签页所有无图资产批量生成"
+                >
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                  </svg>
+                  全部生成
                 </button>
                 <button
                   phx-click="create_asset"
@@ -192,15 +184,15 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
               <%= if all_items_for_tab(@tab, assigns) == [] do %>
                 <div class="text-center py-16">
                   <div class="text-4xl text-[var(--glass-text-tertiary)] opacity-30 mb-4">+</div>
-                  
+
                   <p class="text-sm font-medium text-[var(--glass-text-secondary)] mb-1">
                     {dgettext("projects", "No assets yet")}
                   </p>
-                  
+
                   <p class="text-xs text-[var(--glass-text-tertiary)] mb-5">
                     {dgettext("projects", "Click the button above to add characters or scenes.")}
                   </p>
-                  
+
                   <button
                     phx-click="create_asset"
                     class="glass-btn glass-btn-primary text-sm py-2 px-5 inline-flex items-center gap-1"
@@ -211,69 +203,15 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
               <% else %>
                 <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                   <%= for item <- all_items_for_tab(@tab, assigns) do %>
-                    <.asset_card item={item} />
+                    <.asset_card
+                      item={item}
+                      generating={MapSet.member?(@generating_ids, item.id)}
+                    />
                   <% end %>
                 </div>
               <% end %>
             </div>
           </div>
-        </div>
-      </div>
-       <%!-- Create Asset Modal --%>
-      <div :if={@show_create_modal} class="fixed inset-0 z-50 flex items-center justify-center">
-        <div class="absolute inset-0 bg-black/60" phx-click="close_create_modal" />
-        <div class="glass-card p-6 w-full max-w-md relative z-10">
-          <h2 class="text-lg font-bold text-[var(--glass-text-primary)] mb-4">
-            {dgettext("projects", "Create Asset")}
-          </h2>
-          
-          <div class="flex gap-2 mb-4">
-            <%= for {type, label} <- [{"character", dgettext("projects", "Character")}, {"location", dgettext("projects", "Location")}] do %>
-              <button
-                phx-click="set_create_type"
-                phx-value-type={type}
-                class={[
-                  "px-3 py-1.5 rounded-lg text-xs font-medium transition-all",
-                  if(@create_type == type,
-                    do:
-                      "bg-[var(--glass-accent-from)]/20 text-[var(--glass-accent-from)] ring-1 ring-[var(--glass-accent-from)]/30",
-                    else: "bg-[var(--glass-bg-muted)] text-[var(--glass-text-secondary)]"
-                  )
-                ]}
-              >
-                {label}
-              </button>
-            <% end %>
-          </div>
-          
-          <.form for={@create_form} phx-submit="save_asset" class="space-y-4" id="create-asset-form">
-            <div>
-              <label class="text-xs text-[var(--glass-text-tertiary)] mb-1 block">
-                {dgettext("projects", "Name")}
-              </label>
-              <input type="text" name="asset[name]" class="glass-input w-full" required autofocus />
-            </div>
-            
-            <div>
-              <label class="text-xs text-[var(--glass-text-tertiary)] mb-1 block">
-                {dgettext("projects", "Description")}
-              </label>
-              <textarea name="asset[description]" class="glass-input w-full h-20 resize-none" />
-            </div>
-            
-            <div class="flex justify-end gap-2 pt-2">
-              <button
-                type="button"
-                phx-click="close_create_modal"
-                class="px-4 py-2 text-sm text-[var(--glass-text-tertiary)]"
-              >
-                {dgettext("default", "Cancel")}
-              </button>
-              <button type="submit" class="glass-btn glass-btn-primary px-6 py-2 text-sm">
-                {dgettext("projects", "Create")}
-              </button>
-            </div>
-          </.form>
         </div>
       </div>
        <%!-- Asset Form Modal --%>
@@ -284,14 +222,26 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
         asset_type={@asset_form_type}
         editing={@editing_asset}
         user_id={@current_scope.user.id}
-      /> <%!-- Delete Confirmation --%>
+      />
+
+      <%!-- Asset Detail Panel --%>
+      <.live_component
+        :if={@detail_asset != nil}
+        module={AstraAutoExWeb.AssetHubLive.AssetDetail}
+        id="asset-detail"
+        asset={@detail_asset}
+        asset_type={@detail_type}
+        user_id={@current_scope.user.id}
+      />
+
+      <%!-- Delete Confirmation --%>
       <%= if @confirm_delete_id do %>
         <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm">
           <div class="glass-card p-6 max-w-sm mx-4">
             <h3 class="text-lg font-semibold text-[var(--glass-text-primary)] mb-2">确认删除</h3>
-            
+
             <p class="text-sm text-[var(--glass-text-secondary)] mb-4">确定要删除此资产吗？此操作不可撤销。</p>
-            
+
             <div class="flex justify-end gap-3">
               <button phx-click="cancel_delete" class="glass-btn px-4 py-2 text-sm">取消</button>
               <button
@@ -308,14 +258,36 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
     """
   end
 
+  # ── Asset Card Component ──
+
   defp asset_card(assigns) do
     ~H"""
-    <div class="glass-card overflow-hidden group cursor-pointer hover:shadow-lg transition-all">
-      <div class="aspect-square bg-[var(--glass-bg-muted)] flex items-center justify-center relative">
+    <div
+      class="glass-card overflow-hidden group cursor-pointer hover:shadow-lg transition-all relative"
+      phx-click="open_detail"
+      phx-value-id={@item.id}
+      phx-value-type={@item.type}
+    >
+      <div class="aspect-square bg-[var(--glass-bg-muted)] flex items-center justify-center relative overflow-hidden">
         <%= cond do %>
-          <% Map.get(@item, :image_url) && Map.get(@item, :image_url) != "" -> %>
-            <img src={@item.image_url} class="w-full h-full object-cover" />
-          <% Map.get(@item, :type) in ["sfx", "bgm"] -> %>
+          <% has_image?(@item) -> %>
+            <img src={get_image(@item)} class="w-full h-full object-cover" />
+          <% @item.type in ["sfx", "bgm"] -> %>
+            <div class="flex flex-col items-center gap-1">
+              <svg
+                class="w-10 h-10 text-[var(--glass-text-tertiary)] opacity-40"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                viewBox="0 0 24 24"
+              >
+                <path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle cx="18" cy="16" r="3" />
+              </svg>
+              <%= if Map.get(@item, :audio_url) do %>
+                <span class="text-[9px] text-green-400 bg-green-500/20 px-1.5 py-0.5 rounded">已生成</span>
+              <% end %>
+            </div>
+          <% @item.type == "voice" -> %>
             <svg
               class="w-10 h-10 text-[var(--glass-text-tertiary)] opacity-40"
               fill="none"
@@ -323,50 +295,74 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
               stroke-width="1.5"
               viewBox="0 0 24 24"
             >
-              <path d="M9 18V5l12-2v13" /><circle cx="6" cy="18" r="3" /><circle
-                cx="18"
-                cy="16"
-                r="3"
-              />
+              <path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z" /><path d="M19 10v2a7 7 0 01-14 0v-2" /><line x1="12" y1="19" x2="12" y2="23" /><line x1="8" y1="23" x2="16" y2="23" />
             </svg>
           <% true -> %>
             <span class="text-3xl text-[var(--glass-text-tertiary)] opacity-30">
               {String.first(Map.get(@item, :name, "?") || "?")}
             </span>
         <% end %>
-        
-        <span class="absolute top-2 right-2 glass-chip text-[10px] bg-black/40 text-white">
-          {Map.get(@item, :type, "asset")}
+
+        <%!-- Type badge --%>
+        <span class={"absolute top-2 left-2 text-[10px] px-1.5 py-0.5 rounded font-medium #{type_badge(@item.type)}"}>
+          {type_label_short(@item.type)}
         </span>
-      </div>
-      
-      <div class="p-3">
-        <div class="flex items-center justify-between">
-          <h3 class="text-sm font-medium text-[var(--glass-text-primary)] truncate flex-1">
-            {Map.get(@item, :name, "")}
-          </h3>
-          
-          <button
-            phx-click="delete_asset"
-            phx-value-id={@item.id}
-            phx-value-type={Map.get(@item, :type, "character")}
-            class="opacity-0 group-hover:opacity-100 text-[var(--glass-text-tertiary)] hover:text-red-400 transition-all ml-1"
-            title="删除"
-          >
-            <svg
-              class="w-3.5 h-3.5"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              viewBox="0 0 24 24"
-            >
-              <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-            </svg>
-          </button>
+
+        <%!-- Generating spinner overlay --%>
+        <div :if={@generating} class="absolute inset-0 bg-black/50 flex items-center justify-center">
+          <div class="w-6 h-6 border-2 border-[var(--glass-accent-from)] border-t-transparent rounded-full animate-spin" />
         </div>
-        
+
+        <%!-- Hover action overlay --%>
+        <div class="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-all flex items-end justify-center pb-2 opacity-0 group-hover:opacity-100">
+          <div class="flex gap-1" phx-click-away="noop">
+            <%= if @item.type in ["character", "location", "prop"] do %>
+              <button
+                phx-click="quick_generate"
+                phx-value-id={@item.id}
+                phx-value-type={@item.type}
+                class="bg-white/90 text-gray-800 text-[10px] px-2 py-1 rounded hover:bg-white transition-colors"
+                title={if has_image?(@item), do: "重新生成", else: "生成参考图"}
+              >
+                <svg class="w-3 h-3 inline" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+                </svg>
+              </button>
+            <% end %>
+            <button
+              phx-click="edit_from_card"
+              phx-value-id={@item.id}
+              phx-value-type={@item.type}
+              class="bg-white/90 text-gray-800 text-[10px] px-2 py-1 rounded hover:bg-white transition-colors"
+              title="编辑"
+            >
+              <svg class="w-3 h-3 inline" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" />
+                <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" />
+              </svg>
+            </button>
+            <button
+              phx-click="delete_asset"
+              phx-value-id={@item.id}
+              phx-value-type={@item.type}
+              class="bg-red-500/80 text-white text-[10px] px-2 py-1 rounded hover:bg-red-500 transition-colors"
+              title="删除"
+            >
+              <svg class="w-3 h-3 inline" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="p-3">
+        <h3 class="text-sm font-medium text-[var(--glass-text-primary)] truncate">
+          {Map.get(@item, :name, "")}
+        </h3>
+
         <p class="text-xs text-[var(--glass-text-tertiary)] mt-0.5 line-clamp-1">
-          {Map.get(@item, :description, "") || Map.get(@item, :introduction, "") || ""}
+          {Map.get(@item, :description, "") || Map.get(@item, :introduction, "") || Map.get(@item, :summary, "") || ""}
         </p>
       </div>
     </div>
@@ -389,7 +385,6 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
   end
 
   def handle_event("create_asset", _, socket) do
-    # Default type based on current tab
     type =
       case socket.assigns.tab do
         "characters" -> "character"
@@ -411,6 +406,130 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
   def handle_event("close_asset_form", _, socket) do
     {:noreply, assign(socket, :show_asset_form, false)}
   end
+
+  # ── Detail view ──
+
+  def handle_event("open_detail", %{"id" => id, "type" => type}, socket) do
+    asset = find_asset(socket.assigns, id, type)
+
+    if asset do
+      {:noreply, assign(socket, detail_asset: asset, detail_type: type)}
+    else
+      {:noreply, socket}
+    end
+  end
+
+  def handle_event("close_detail", _, socket) do
+    {:noreply, assign(socket, detail_asset: nil, detail_type: nil)}
+  end
+
+  # ── Edit from card or detail ──
+
+  def handle_event("edit_from_card", %{"id" => id, "type" => type}, socket) do
+    asset = find_asset(socket.assigns, id, type)
+
+    {:noreply,
+     socket
+     |> assign(:show_asset_form, true)
+     |> assign(:asset_form_type, type)
+     |> assign(:editing_asset, asset)}
+  end
+
+  def handle_event("edit_asset", %{"id" => id, "type" => type}, socket) do
+    asset = find_asset(socket.assigns, id, type)
+
+    {:noreply,
+     socket
+     |> assign(:show_asset_form, true)
+     |> assign(:asset_form_type, type)
+     |> assign(:editing_asset, asset)
+     |> assign(:detail_asset, nil)}
+  end
+
+  # ── Quick generate from card overlay ──
+
+  def handle_event("quick_generate", %{"id" => id, "type" => type}, socket) do
+    asset = find_asset(socket.assigns, id, type)
+    user_id = socket.assigns.current_scope.user.id
+
+    if asset && type in ["character", "location", "prop"] do
+      generating_ids = MapSet.put(socket.assigns.generating_ids, id)
+      socket = assign(socket, :generating_ids, generating_ids)
+
+      parent = self()
+
+      Task.start(fn ->
+        result =
+          case type do
+            "character" ->
+              AstraAutoEx.AssetHub.Generator.generate_character_image(user_id, asset)
+
+            "location" ->
+              AstraAutoEx.AssetHub.Generator.generate_location_image(user_id, asset)
+
+            "prop" ->
+              AstraAutoEx.AssetHub.Generator.generate_prop_image(user_id, asset)
+          end
+
+        send(parent, {:generation_complete, id, result})
+      end)
+
+      {:noreply, socket}
+    else
+      {:noreply, socket}
+    end
+  end
+
+  # ── Batch generate all ──
+
+  def handle_event("generate_all", _, socket) do
+    user_id = socket.assigns.current_scope.user.id
+    tab = socket.assigns.tab
+    items = all_items_for_tab(tab, socket.assigns)
+
+    # Filter to items that need generation (visual types without images)
+    to_generate =
+      items
+      |> Enum.filter(fn item ->
+        item.type in ["character", "location", "prop"] && !has_image?(item)
+      end)
+
+    if to_generate == [] do
+      {:noreply, put_flash(socket, :info, "所有资产已有参考图，无需生成")}
+    else
+      ids = Enum.map(to_generate, & &1.id) |> MapSet.new()
+      generating_ids = MapSet.union(socket.assigns.generating_ids, ids)
+
+      root_pid = self()
+
+      Enum.each(to_generate, fn item ->
+        asset = find_asset(socket.assigns, item.id, item.type)
+
+        Task.start(fn ->
+          result =
+            case item.type do
+              "character" ->
+                AstraAutoEx.AssetHub.Generator.generate_character_image(user_id, asset)
+
+              "location" ->
+                AstraAutoEx.AssetHub.Generator.generate_location_image(user_id, asset)
+
+              "prop" ->
+                AstraAutoEx.AssetHub.Generator.generate_prop_image(user_id, asset)
+            end
+
+          send(root_pid, {:generation_complete, item.id, result})
+        end)
+      end)
+
+      {:noreply,
+       socket
+       |> assign(:generating_ids, generating_ids)
+       |> put_flash(:info, "正在为 #{MapSet.size(ids)} 个资产生成参考图...")}
+    end
+  end
+
+  # ── Delete ──
 
   def handle_event("delete_asset", %{"id" => id, "type" => type}, socket) do
     {:noreply, assign(socket, confirm_delete_id: id, confirm_delete_type: type)}
@@ -437,6 +556,14 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
           AssetHub.get_global_voice!(socket.assigns.confirm_delete_id)
           |> AssetHub.delete_global_voice()
 
+        "sfx" ->
+          AssetHub.get_global_sfx!(socket.assigns.confirm_delete_id)
+          |> AssetHub.delete_global_sfx()
+
+        "bgm" ->
+          AssetHub.get_global_bgm!(socket.assigns.confirm_delete_id)
+          |> AssetHub.delete_global_bgm()
+
         _ ->
           {:ok, nil}
       end
@@ -445,6 +572,7 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
        socket
        |> reload_assets(user_id)
        |> assign(:confirm_delete_id, nil)
+       |> assign(:detail_asset, nil)
        |> put_flash(:info, "已删除")}
     rescue
       _ -> {:noreply, assign(socket, :confirm_delete_id, nil) |> put_flash(:error, "删除失败")}
@@ -455,42 +583,81 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
     {:noreply, assign(socket, confirm_delete_id: nil)}
   end
 
-  def handle_event("close_create_modal", _, socket) do
-    {:noreply, assign(socket, :show_create_modal, false)}
+  # ── Callbacks ──
+
+  @impl true
+  def handle_info({:asset_created, _type}, socket) do
+    user_id = socket.assigns.current_scope.user.id
+
+    {:noreply,
+     socket
+     |> reload_assets(user_id)
+     |> assign(:show_asset_form, false)
+     |> put_flash(:info, "资产创建成功！")}
   end
 
-  def handle_event("set_create_type", %{"type" => type}, socket) do
-    {:noreply, assign(socket, :create_type, type)}
+  def handle_info({:asset_updated, _type}, socket) do
+    user_id = socket.assigns.current_scope.user.id
+
+    {:noreply,
+     socket
+     |> reload_assets(user_id)
+     |> refresh_detail()}
   end
 
-  def handle_event("save_asset", %{"asset" => params}, socket) do
-    user = socket.assigns.current_scope.user
-    type = socket.assigns.create_type
+  def handle_info({:generation_complete, asset_id, result}, socket) do
+    user_id = socket.assigns.current_scope.user.id
+    generating_ids = MapSet.delete(socket.assigns.generating_ids, asset_id)
 
-    result =
-      case type do
-        "character" ->
-          AssetHub.create_global_character(Map.merge(params, %{"user_id" => user.id}))
+    socket =
+      case result do
+        {:ok, _} ->
+          socket
+          |> reload_assets(user_id)
+          |> refresh_detail()
+          |> put_flash(:info, "参考图生成成功")
 
-        "location" ->
-          AssetHub.create_global_location(Map.merge(params, %{"user_id" => user.id}))
-
-        _ ->
-          {:error, :unsupported_type}
+        {:error, reason} ->
+          put_flash(socket, :error, "生成失败：#{inspect(reason)}")
       end
 
-    case result do
-      {:ok, _asset} ->
-        {:noreply,
-         socket
-         |> assign(:show_create_modal, false)
-         |> assign(:characters, AssetHub.list_global_characters(user.id))
-         |> assign(:locations, AssetHub.list_global_locations(user.id))
-         |> put_flash(:info, dgettext("projects", "Asset created successfully."))}
+    {:noreply, assign(socket, :generating_ids, generating_ids)}
+  end
 
-      {:error, _} ->
-        {:noreply, put_flash(socket, :error, dgettext("default", "Error"))}
-    end
+  def handle_info({:refine_complete, _id, result}, socket) do
+    user_id = socket.assigns.current_scope.user.id
+
+    socket =
+      case result do
+        {:ok, _} ->
+          socket
+          |> reload_assets(user_id)
+          |> refresh_detail()
+          |> put_flash(:info, "精调完成")
+
+        {:error, reason} ->
+          put_flash(socket, :error, "精调失败：#{inspect(reason)}")
+      end
+
+    {:noreply, socket}
+  end
+
+  def handle_info({:music_complete, _id, result}, socket) do
+    user_id = socket.assigns.current_scope.user.id
+
+    socket =
+      case result do
+        {:ok, _} ->
+          socket
+          |> reload_assets(user_id)
+          |> refresh_detail()
+          |> put_flash(:info, "音乐生成成功")
+
+        {:error, reason} ->
+          put_flash(socket, :error, "音乐生成失败：#{inspect(reason)}")
+      end
+
+    {:noreply, socket}
   end
 
   # ── Helpers ──
@@ -503,6 +670,18 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
   defp tab_label("sfx"), do: dgettext("projects", "SFX")
   defp tab_label("bgm"), do: dgettext("projects", "BGM")
 
+  defp tab_count("all", assigns) do
+    length(assigns.characters) + length(assigns.locations) + length(assigns.props) +
+      length(assigns.voices) + length(assigns.sfx) + length(assigns.bgm)
+  end
+
+  defp tab_count("characters", assigns), do: length(assigns.characters)
+  defp tab_count("locations", assigns), do: length(assigns.locations)
+  defp tab_count("props", assigns), do: length(assigns.props)
+  defp tab_count("voices", assigns), do: length(assigns.voices)
+  defp tab_count("sfx", assigns), do: length(assigns.sfx)
+  defp tab_count("bgm", assigns), do: length(assigns.bgm)
+
   defp all_items_for_tab(tab, assigns) do
     items =
       case tab do
@@ -514,23 +693,12 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
             tag_items(assigns.sfx, "sfx") ++
             tag_items(assigns.bgm, "bgm")
 
-        "characters" ->
-          tag_items(assigns.characters, "character")
-
-        "locations" ->
-          tag_items(assigns.locations, "location")
-
-        "props" ->
-          tag_items(assigns.props, "prop")
-
-        "voices" ->
-          tag_items(assigns.voices, "voice")
-
-        "sfx" ->
-          tag_items(assigns.sfx, "sfx")
-
-        "bgm" ->
-          tag_items(assigns.bgm, "bgm")
+        "characters" -> tag_items(assigns.characters, "character")
+        "locations" -> tag_items(assigns.locations, "location")
+        "props" -> tag_items(assigns.props, "prop")
+        "voices" -> tag_items(assigns.voices, "voice")
+        "sfx" -> tag_items(assigns.sfx, "sfx")
+        "bgm" -> tag_items(assigns.bgm, "bgm")
       end
 
     filter_items(items, assigns.search)
@@ -547,24 +715,88 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
 
     Enum.filter(items, fn item ->
       name = Map.get(item, :name, "") || ""
-      desc = Map.get(item, :description, "") || Map.get(item, :introduction, "") || ""
+      desc = Map.get(item, :description, "") || Map.get(item, :introduction, "") || Map.get(item, :summary, "") || ""
 
       String.contains?(String.downcase(name), term) or
         String.contains?(String.downcase(desc), term)
     end)
   end
 
-  # ── Callbacks from AssetForm component ──
-  @impl true
-  def handle_info({:asset_created, _type}, socket) do
-    user_id = socket.assigns.current_scope.user.id
+  defp find_asset(assigns, id, type) do
+    list =
+      case type do
+        "character" -> assigns.characters
+        "location" -> assigns.locations
+        "prop" -> assigns.props
+        "voice" -> assigns.voices
+        "sfx" -> assigns.sfx
+        "bgm" -> assigns.bgm
+        _ -> []
+      end
 
-    {:noreply,
-     socket
-     |> reload_assets(user_id)
-     |> assign(:show_asset_form, false)
-     |> put_flash(:info, "资产创建成功！")}
+    Enum.find(list, fn item -> to_string(item.id) == to_string(id) end)
   end
+
+  defp has_image?(item) do
+    case item.type do
+      "character" ->
+        case Map.get(item, :appearances, []) do
+          [%{image_url: url} | _] when is_binary(url) and url != "" -> true
+          _ -> false
+        end
+
+      "location" ->
+        case Map.get(item, :images, []) do
+          [%{image_url: url} | _] when is_binary(url) and url != "" -> true
+          _ -> false
+        end
+
+      "prop" ->
+        url = Map.get(item, :image_url)
+        is_binary(url) and url != ""
+
+      _ ->
+        false
+    end
+  end
+
+  defp get_image(item) do
+    case item.type do
+      "character" ->
+        case Map.get(item, :appearances, []) do
+          [%{image_url: url} | _] -> url
+          _ -> nil
+        end
+
+      "location" ->
+        case Map.get(item, :images, []) do
+          [%{image_url: url} | _] -> url
+          _ -> nil
+        end
+
+      "prop" ->
+        Map.get(item, :image_url)
+
+      _ ->
+        nil
+    end
+  end
+
+  defp type_badge("character"), do: "bg-blue-500/20 text-blue-400"
+  defp type_badge("location"), do: "bg-green-500/20 text-green-400"
+  defp type_badge("prop"), do: "bg-orange-500/20 text-orange-400"
+  defp type_badge("voice"), do: "bg-purple-500/20 text-purple-400"
+  defp type_badge("bgm"), do: "bg-pink-500/20 text-pink-400"
+  defp type_badge("sfx"), do: "bg-yellow-500/20 text-yellow-400"
+  defp type_badge(_), do: "bg-gray-500/20 text-gray-400"
+
+  defp type_label_short("character"), do: "角色"
+  defp type_label_short("location"), do: "场景"
+  defp type_label_short("prop"), do: "道具"
+  defp type_label_short("voice"), do: "音色"
+  defp type_label_short("bgm"), do: "BGM"
+  defp type_label_short("sfx"), do: "SFX"
+  defp type_label_short(_), do: ""
 
   defp reload_assets(socket, user_id) do
     socket
@@ -574,5 +806,20 @@ defmodule AstraAutoExWeb.AssetHubLive.Index do
     |> assign(:voices, AssetHub.list_global_voices(user_id))
     |> assign(:sfx, AssetHub.list_global_sfx(user_id))
     |> assign(:bgm, AssetHub.list_global_bgm(user_id))
+  end
+
+  defp refresh_detail(socket) do
+    if socket.assigns.detail_asset && socket.assigns.detail_type do
+      asset =
+        find_asset(
+          socket.assigns,
+          socket.assigns.detail_asset.id,
+          socket.assigns.detail_type
+        )
+
+      assign(socket, :detail_asset, asset)
+    else
+      socket
+    end
   end
 end

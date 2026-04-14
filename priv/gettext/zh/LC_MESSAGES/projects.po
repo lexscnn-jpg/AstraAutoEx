@@ -731,3 +731,14 @@ msgstr "就绪"
 
 msgid "%{total} panels"
 msgstr "%{total} 个面板"
+
+## ---- Asset Hub v0.6.3 translations ----
+
+msgid "Asset created successfully."
+msgstr "资产创建成功！"
+
+msgid "Character"
+msgstr "角色"
+
+msgid "Location"
+msgstr "场景"

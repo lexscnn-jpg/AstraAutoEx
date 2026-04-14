@@ -29,14 +29,25 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetForm do
       if assigns[:editing] do
         item = assigns.editing
 
+        aliases_str =
+          case Map.get(item, :aliases) do
+            nil -> ""
+            s when is_binary(s) -> s
+            l when is_list(l) -> Enum.join(l, ", ")
+          end
+
         socket
         |> assign(:name, Map.get(item, :name, ""))
         |> assign(
           :description,
-          Map.get(item, :description, "") || Map.get(item, :introduction, "") || ""
+          Map.get(item, :description, "") || Map.get(item, :introduction, "") ||
+            Map.get(item, :summary, "") || ""
         )
-        |> assign(:gender, Map.get(item, :gender, ""))
-        |> assign(:aliases, (Map.get(item, :aliases, []) || []) |> Enum.join(", "))
+        |> assign(:gender, Map.get(item, :gender, "") || "")
+        |> assign(:language, Map.get(item, :language, "zh") || "zh")
+        |> assign(:category, Map.get(item, :category, "") || "")
+        |> assign(:prop_type, Map.get(item, :prop_type, "") || "")
+        |> assign(:aliases, aliases_str)
       else
         socket
       end
@@ -72,6 +83,29 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetForm do
 
         <form phx-submit="save_asset" phx-target={@myself} class="space-y-4">
           <input type="hidden" name="asset_type" value={@asset_type} />
+
+          <%!-- Type selector (only in create mode) --%>
+          <%= if !@editing do %>
+            <div class="flex flex-wrap gap-1.5 pb-2 border-b border-[var(--glass-stroke-base)]">
+              <%= for {type, label} <- [{"character", "角色"}, {"location", "场景"}, {"prop", "道具"}, {"voice", "音色"}, {"bgm", "BGM"}, {"sfx", "音效"}] do %>
+                <button
+                  type="button"
+                  phx-click="switch_type"
+                  phx-value-type={type}
+                  phx-target={@myself}
+                  class={[
+                    "px-2.5 py-1 rounded text-xs font-medium transition-all",
+                    if(@asset_type == type,
+                      do: "bg-[var(--glass-accent-from)]/20 text-[var(--glass-accent-from)] ring-1 ring-[var(--glass-accent-from)]/30",
+                      else: "bg-[var(--glass-bg-muted)] text-[var(--glass-text-secondary)] hover:text-[var(--glass-text-primary)]"
+                    )
+                  ]}
+                >
+                  {label}
+                </button>
+              <% end %>
+            </div>
+          <% end %>
 
           <%!-- Name (all types) --%>
           <div>
@@ -251,6 +285,20 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetForm do
   end
 
   @impl true
+  def handle_event("switch_type", %{"type" => type}, socket) do
+    {:noreply,
+     socket
+     |> assign(:asset_type, type)
+     |> assign(:name, "")
+     |> assign(:description, "")
+     |> assign(:gender, "")
+     |> assign(:language, "zh")
+     |> assign(:category, "")
+     |> assign(:aliases, "")
+     |> assign(:prop_type, "")
+     |> assign(:error, nil)}
+  end
+
   def handle_event("update_field", params, socket) do
     socket =
       socket
@@ -269,71 +317,19 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetForm do
   def handle_event("save_asset", params, socket) do
     user_id = socket.assigns.user_id
     type = params["asset_type"]
+    editing = socket.assigns.editing
 
     result =
-      case type do
-        "character" ->
-          aliases =
-            (params["aliases"] || "")
-            |> String.split(",")
-            |> Enum.map(&String.trim/1)
-            |> Enum.reject(&(&1 == ""))
-
-          AssetHub.create_global_character(%{
-            user_id: user_id,
-            name: params["name"],
-            introduction: params["description"],
-            aliases: Enum.join(aliases, ", ")
-          })
-
-        "location" ->
-          AssetHub.create_global_location(%{
-            user_id: user_id,
-            name: params["name"],
-            summary: params["description"]
-          })
-
-        "prop" ->
-          AssetHub.create_global_prop(%{
-            user_id: user_id,
-            name: params["name"],
-            description: params["description"],
-            prop_type: params["prop_type"]
-          })
-
-        "voice" ->
-          AssetHub.create_global_voice(%{
-            user_id: user_id,
-            name: params["name"],
-            description: params["description"],
-            gender: params["gender"],
-            language: params["language"]
-          })
-
-        "bgm" ->
-          AssetHub.create_global_bgm(%{
-            user_id: user_id,
-            name: params["name"],
-            description: params["description"],
-            category: params["category"],
-            is_instrumental: params["is_instrumental"] == "true"
-          })
-
-        "sfx" ->
-          AssetHub.create_global_sfx(%{
-            user_id: user_id,
-            name: params["name"],
-            description: params["description"],
-            category: params["category"]
-          })
-
-        _ ->
-          {:error, "Unknown asset type"}
+      if editing do
+        update_asset(type, editing, params)
+      else
+        create_asset(type, user_id, params)
       end
 
     case result do
       {:ok, _asset} ->
-        send(self(), {:asset_created, type})
+        msg = if editing, do: :asset_updated, else: :asset_created
+        send(self(), {msg, type})
         {:noreply, socket}
 
       {:error, changeset} when is_struct(changeset) ->
@@ -343,6 +339,126 @@ defmodule AstraAutoExWeb.AssetHubLive.AssetForm do
         {:noreply, assign(socket, :error, "错误：#{msg}")}
     end
   end
+
+  defp create_asset("character", user_id, params) do
+    aliases =
+      (params["aliases"] || "")
+      |> String.split(",")
+      |> Enum.map(&String.trim/1)
+      |> Enum.reject(&(&1 == ""))
+
+    AssetHub.create_global_character(%{
+      user_id: user_id,
+      name: params["name"],
+      introduction: params["description"],
+      aliases: Enum.join(aliases, ", ")
+    })
+  end
+
+  defp create_asset("location", user_id, params) do
+    AssetHub.create_global_location(%{
+      user_id: user_id,
+      name: params["name"],
+      summary: params["description"]
+    })
+  end
+
+  defp create_asset("prop", user_id, params) do
+    AssetHub.create_global_prop(%{
+      user_id: user_id,
+      name: params["name"],
+      description: params["description"],
+      prop_type: params["prop_type"]
+    })
+  end
+
+  defp create_asset("voice", user_id, params) do
+    AssetHub.create_global_voice(%{
+      user_id: user_id,
+      name: params["name"],
+      description: params["description"],
+      gender: params["gender"],
+      language: params["language"]
+    })
+  end
+
+  defp create_asset("bgm", user_id, params) do
+    AssetHub.create_global_bgm(%{
+      user_id: user_id,
+      name: params["name"],
+      description: params["description"],
+      category: params["category"],
+      is_instrumental: params["is_instrumental"] == "true"
+    })
+  end
+
+  defp create_asset("sfx", user_id, params) do
+    AssetHub.create_global_sfx(%{
+      user_id: user_id,
+      name: params["name"],
+      description: params["description"],
+      category: params["category"]
+    })
+  end
+
+  defp create_asset(_, _, _), do: {:error, "Unknown asset type"}
+
+  defp update_asset("character", asset, params) do
+    aliases =
+      (params["aliases"] || "")
+      |> String.split(",")
+      |> Enum.map(&String.trim/1)
+      |> Enum.reject(&(&1 == ""))
+
+    AssetHub.update_global_character(asset, %{
+      name: params["name"],
+      introduction: params["description"],
+      aliases: Enum.join(aliases, ", ")
+    })
+  end
+
+  defp update_asset("location", asset, params) do
+    AssetHub.update_global_location(asset, %{
+      name: params["name"],
+      summary: params["description"]
+    })
+  end
+
+  defp update_asset("prop", asset, params) do
+    AssetHub.update_global_prop(asset, %{
+      name: params["name"],
+      description: params["description"],
+      prop_type: params["prop_type"]
+    })
+  end
+
+  defp update_asset("voice", asset, params) do
+    AssetHub.update_global_voice(asset, %{
+      name: params["name"],
+      description: params["description"],
+      gender: params["gender"],
+      language: params["language"]
+    })
+  end
+
+  defp update_asset("bgm", asset, params) do
+    AssetHub.update_global_bgm(asset, %{
+      name: params["name"],
+      description: params["description"],
+      category: params["category"],
+      is_instrumental: params["is_instrumental"] == "true"
+    })
+  end
+
+  defp update_asset("sfx", asset, params) do
+    AssetHub.update_global_sfx(asset, %{
+      name: params["name"],
+      description: params["description"],
+      category: params["category"]
+    })
+  end
+
+  defp update_asset(_, _, _), do: {:error, "Unknown asset type"}
 
   defp maybe_assign(socket, params, key, assign_key) do
     if Map.has_key?(params, key), do: assign(socket, assign_key, params[key]), else: socket

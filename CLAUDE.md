@@ -83,20 +83,24 @@ AstraAutoEx 是 AI 驱动的短剧/漫画视频生产平台，从 Next.js 原项
 4. **制作 (film)** — video_stage: 视频/配音生成 + 重试
 5. **AI 剪辑 (compose)** — compose_stage: 左右分栏（面板选择+设置 | 预览+导出）
 
-## 当前项目状态 (v0.6.2)
-- 最后完成: 迭代 v0.6.1-v0.7.0 全量实施（7大commit，~3700+行）
-  - Phase A: 42条翻译补全+5修正、导航栏Guide按钮、5步出片指南页、ImportWizard 4步向导
-  - Phase B: 首页10比例+17画风+自定义+打字机动画、ProjectsLive项目管理页（图片数/视频数/完成度）、素材库5类CRUD表单+3新Schema+迁移、自动链暂停/恢复/停止控制器、AI写作handler、PipelineModal动画弹窗、计费ApiCallLog+CostTracker+BillingStats面板
-  - Phase C: FlPromptRewriter首尾帧、VoicePresets音色、FirstLastFrame UI、AI剪辑预览放大
-  - 集成: 全部组件挂载到父视图，0 errors 0 warnings
+## 当前项目状态 (v0.6.3)
+- 最后完成: v0.6.3 素材库完整CRUD + 生成系统
+  - 素材库5类完整CRUD：创建/编辑/删除/搜索，支持全部6种类型切换
+  - 资产卡片增强：悬浮操作按钮（生成/编辑/删除），类型标签，生成中动画
+  - 资产详情面板：图像预览+描述+类型信息+生成/精调/删除操作
+  - 图像生成系统：角色三视图、场景参考图、道具设定图（Generator模块）
+  - 精调（指令式修改）：输入修改指令→参考当前图→生成新图→支持撤销
+  - BGM 音乐生成：MiniMax music-2.6 API 集成，音频播放预览
+  - 批量生成："全部生成"按钮，为所有无图资产并行生成
+  - 编辑模式：点击卡片打开详情，编辑按钮预填充所有字段
+  - 标签页计数：每个Tab显示资产数量
 - 进行中: 无
 - 下一步:
   - 端到端生成测试（需要有效 API Key 调通 AI 提供商）
-  - 素材库"精调"功能实际接入图像编辑模型
   - MiniMax 2.8HD 300+ 系统音色 API 对接
-  - 抽卡功能 UI（候选网格+选择+删除）
   - 剪映导出实际实现（XML 时间线格式）
   - 分镜一致性生图：collectPanelReferenceImages 逻辑深度实现
+  - 口型同步移植（原项目已有FAL/Vidu/Bailian完整实现）
 - 已知问题:
   - "Episode 1" 在标题中仍为英文
   - 自动链 toggle 开关 CSS 在部分主题下不显示滑块（需调试 peer-checked）
