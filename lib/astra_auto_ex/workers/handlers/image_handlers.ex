@@ -151,7 +151,7 @@ defmodule AstraAutoEx.Workers.Handlers.ImageCharacter do
     provider = model_config["provider"]
 
     prompt =
-      "Character portrait: #{character.name}. #{character.description || ""}. #{appearance.description || ""}"
+      "Character portrait: #{character.name}. #{character.introduction || ""}. #{appearance.description || ""}"
 
     # Get primary appearance for reference (style consistency)
     reference_images =

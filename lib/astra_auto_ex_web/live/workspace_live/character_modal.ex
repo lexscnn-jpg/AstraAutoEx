@@ -14,14 +14,16 @@ defmodule AstraAutoExWeb.WorkspaceLive.CharacterModal do
     character = assigns[:character]
     mode = if character, do: :edit, else: :create
 
+    profile = if character, do: character.profile_data || %{}, else: %{}
+
     form_data =
       if character do
         %{
           name: character.name,
-          gender: character.gender,
-          age: character.age,
-          description: character.description,
-          personality: character.personality
+          gender: profile["gender"] || "",
+          age: profile["age"] || "",
+          description: character.introduction || "",
+          personality: profile["personality"] || ""
         }
       else
         %{name: "", gender: "", age: "", description: "", personality: ""}
@@ -133,13 +135,26 @@ defmodule AstraAutoExWeb.WorkspaceLive.CharacterModal do
   def handle_event("save_character", %{"character" => params}, socket) do
     project_id = socket.assigns.project_id
 
+    # Map form fields to schema fields
+    profile_data = %{
+      "gender" => params["gender"],
+      "age" => params["age"],
+      "personality" => params["personality"]
+    }
+
+    attrs =
+      params
+      |> Map.put("introduction", params["description"])
+      |> Map.put("profile_data", profile_data)
+      |> Map.drop(["description", "gender", "age", "personality"])
+
     result =
       case socket.assigns.mode do
         :create ->
-          Characters.create_character(Map.put(params, "project_id", project_id))
+          Characters.create_character(Map.put(attrs, "project_id", project_id))
 
         :edit ->
-          Characters.update_character(socket.assigns.character, params)
+          Characters.update_character(socket.assigns.character, attrs)
       end
 
     case result do

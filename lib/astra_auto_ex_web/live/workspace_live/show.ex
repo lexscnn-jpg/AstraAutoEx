@@ -490,8 +490,9 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
               <%= for char <- @characters do %>
                 <div class="flex items-center gap-2 p-2 rounded-lg hover:bg-[var(--glass-bg-muted)] transition-colors">
                   <div class="w-10 h-10 rounded-lg bg-[var(--glass-bg-muted)] flex items-center justify-center overflow-hidden flex-shrink-0">
-                    <%= if char.image_url && char.image_url != "" do %>
-                      <img src={char.image_url} class="w-full h-full object-cover" />
+                    <% first_appearance = List.first(char.appearances) %>
+                    <%= if first_appearance && first_appearance.image_url && first_appearance.image_url != "" do %>
+                      <img src={first_appearance.image_url} class="w-full h-full object-cover" />
                     <% else %>
                       <span class="text-sm text-[var(--glass-text-tertiary)]">
                         {String.first(char.name || "?")}
@@ -503,7 +504,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                       {char.name}
                     </p>
                     <p class="text-[10px] text-[var(--glass-text-tertiary)] truncate">
-                      {char.description || char.introduction || ""}
+                      {char.introduction || ""}
                     </p>
                   </div>
                 </div>
@@ -1295,7 +1296,30 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
   end
 
   def handle_event("generate_all_voices", _, socket) do
-    dispatch_batch_task(socket, "voice_line", "voice_line")
+    project = socket.assigns.project
+    user_id = socket.assigns.current_scope.user.id
+    episode = socket.assigns.current_episode
+
+    if episode do
+      voice_lines = Production.list_voice_lines(episode.id)
+      pending = Enum.reject(voice_lines, &(is_binary(&1.audio_url) and &1.audio_url != ""))
+
+      Enum.each(pending, fn vl ->
+        Tasks.create_task(%{
+          user_id: user_id,
+          project_id: project.id,
+          episode_id: episode.id,
+          type: "voice_line",
+          target_type: "voice_line",
+          target_id: vl.id,
+          payload: %{"voice_line_id" => vl.id}
+        })
+      end)
+
+      {:noreply, put_flash(socket, :info, "#{length(pending)} voice tasks queued.")}
+    else
+      {:noreply, put_flash(socket, :error, dgettext("projects", "Select an episode first."))}
+    end
   end
 
   def handle_event("generate_all_videos", _, socket) do

@@ -1,4 +1,4 @@
-﻿defmodule AstraAutoEx.Repo.Migrations.AddTitleStatusToEpisodes do
+defmodule AstraAutoEx.Repo.Migrations.AddTitleStatusToEpisodes do
   use Ecto.Migration
 
   def change do

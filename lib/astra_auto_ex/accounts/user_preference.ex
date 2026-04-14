@@ -1,4 +1,4 @@
-﻿defmodule AstraAutoEx.Accounts.UserPreference do
+defmodule AstraAutoEx.Accounts.UserPreference do
   use Ecto.Schema
   import Ecto.Changeset
 

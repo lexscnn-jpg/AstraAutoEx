@@ -1,4 +1,4 @@
-﻿defmodule AstraAutoExWeb.ProfileLive.Index do
+defmodule AstraAutoExWeb.ProfileLive.Index do
   use AstraAutoExWeb, :live_view
 
   alias AstraAutoEx.Accounts

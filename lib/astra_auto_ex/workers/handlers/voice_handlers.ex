@@ -19,13 +19,15 @@ defmodule AstraAutoEx.Workers.Handlers.VoiceLine do
     model_config = Helpers.get_model_config(task.user_id, task.project_id, :tts)
     provider = model_config["provider"]
 
+    voice_id = voice_line.voice_preset_id || payload["voice_id"] || "Calm_Woman"
+
     request = %{
       text: voice_line.content || "",
       model: model_config["model"],
-      voice_id: voice_line.voice_id || payload["voice_id"] || "Calm_Woman",
+      voice_id: voice_id,
       speed: payload["speed"] || 1.0,
       voice_setting: %{
-        "voice_id" => voice_line.voice_id || "Calm_Woman",
+        "voice_id" => voice_id,
         "speed" => payload["speed"] || 1.0
       }
     }
@@ -34,7 +36,7 @@ defmodule AstraAutoEx.Workers.Handlers.VoiceLine do
 
     case Helpers.text_to_speech(task.user_id, provider, request) do
       {:ok, %{download_url: url}} ->
-        Production.update_voice_line(voice_line, %{audio_url: url, status: "completed"})
+        Production.update_voice_line(voice_line, %{audio_url: url})
         Helpers.update_progress(task, 95)
         maybe_auto_trigger_compose(task)
         {:ok, %{audio_url: url}}
@@ -43,13 +45,12 @@ defmodule AstraAutoEx.Workers.Handlers.VoiceLine do
         audio_url = Map.get(result, :audio_url) || Map.get(result, :download_url)
 
         if audio_url do
-          Production.update_voice_line(voice_line, %{audio_url: audio_url, status: "completed"})
+          Production.update_voice_line(voice_line, %{audio_url: audio_url})
         end
 
         {:ok, result}
 
       {:error, reason} ->
-        Production.update_voice_line(voice_line, %{status: "failed"})
         {:error, reason}
     end
   end
