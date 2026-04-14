@@ -1336,24 +1336,26 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                     </div>
                     <%!-- Action buttons on hover --%>
                     <div class="absolute top-1.5 right-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex gap-1">
-                      <%= unless panel.image_url && panel.image_url != "" do %>
-                        <button
-                          phx-click="generate_panel_image"
-                          phx-value-panel-id={panel.id}
-                          class="glass-chip text-[10px] bg-[var(--glass-accent-from)]/80 text-white backdrop-blur-sm hover:bg-[var(--glass-accent-from)] px-1.5 py-0.5"
-                          title="生成图片"
+                      <button
+                        phx-click="generate_panel_image"
+                        phx-value-panel-id={panel.id}
+                        class="glass-chip text-[10px] bg-[var(--glass-accent-from)]/80 text-white backdrop-blur-sm hover:bg-[var(--glass-accent-from)] px-1.5 py-0.5"
+                        title={if panel.image_url && panel.image_url != "", do: "重新生成", else: "生成图片"}
+                      >
+                        <svg
+                          class="w-3 h-3 inline"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          viewBox="0 0 24 24"
                         >
-                          <svg
-                            class="w-3 h-3 inline"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="2"
-                            viewBox="0 0 24 24"
-                          >
+                          <%= if panel.image_url && panel.image_url != "" do %>
+                            <path d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182" />
+                          <% else %>
                             <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                          </svg>
-                        </button>
-                      <% end %>
+                          <% end %>
+                        </svg>
+                      </button>
 
                       <span class="glass-chip text-[10px] bg-black/60 text-[var(--glass-text-primary)] backdrop-blur-sm">
                         {dgettext("projects", "Edit")}
