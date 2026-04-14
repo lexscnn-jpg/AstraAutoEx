@@ -1395,18 +1395,68 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
 
                       <span
                         :if={panel.video_url && panel.video_url != ""}
-                        class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-green-500/10 text-green-500"
+                        class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-medium bg-blue-500/10 text-blue-400"
                       >
-                        {dgettext("projects", "Video")}
+                        <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 010 1.972l-11.54 6.347a1.125 1.125 0 01-1.667-.986V5.653z" />
+                        </svg>
+                        视频
+                      </span>
+                      <span
+                        :if={panel.audio_url && panel.audio_url != ""}
+                        class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-medium bg-purple-500/10 text-purple-400"
+                      >
+                        <svg
+                          class="w-2.5 h-2.5"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          viewBox="0 0 24 24"
+                        >
+                          <path d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4" />
+                        </svg>
+                        配音
+                      </span>
+                      <span
+                        :if={panel.lip_sync_video_url && panel.lip_sync_video_url != ""}
+                        class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-medium bg-amber-500/10 text-amber-400"
+                      >
+                        口型
                       </span>
                     </div>
-                    <%!-- Video prompt preview --%>
-                    <p
-                      :if={panel.video_prompt && panel.video_prompt != ""}
-                      class="text-[10px] text-[var(--glass-text-tertiary)] mt-1.5 line-clamp-1 italic"
-                    >
-                      {panel.video_prompt}
-                    </p>
+                    <%!-- Mini pipeline status bar --%>
+                    <div class="flex gap-0.5 mt-1.5">
+                      <div
+                        class={[
+                          "h-0.5 flex-1 rounded-full",
+                          if(panel.image_url && panel.image_url != "",
+                            do: "bg-green-500",
+                            else: "bg-[var(--glass-bg-muted)]"
+                          )
+                        ]}
+                        title="图片"
+                      />
+                      <div
+                        class={[
+                          "h-0.5 flex-1 rounded-full",
+                          if(panel.video_url && panel.video_url != "",
+                            do: "bg-blue-500",
+                            else: "bg-[var(--glass-bg-muted)]"
+                          )
+                        ]}
+                        title="视频"
+                      />
+                      <div
+                        class={[
+                          "h-0.5 flex-1 rounded-full",
+                          if(panel.audio_url && panel.audio_url != "",
+                            do: "bg-purple-500",
+                            else: "bg-[var(--glass-bg-muted)]"
+                          )
+                        ]}
+                        title="配音"
+                      />
+                    </div>
                   </div>
                 </div>
               <% end %>
@@ -2540,8 +2590,31 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
   end
 
   def handle_event("run_story_to_script", _, socket) do
-    {:noreply,
-     put_flash(socket, :info, dgettext("projects", "Use Config stage to input story text first."))}
+    episode = socket.assigns.current_episode
+    novel_text = socket.assigns.novel_text
+
+    if episode && novel_text && String.trim(novel_text) != "" do
+      Tasks.create_task(%{
+        user_id: socket.assigns.current_scope.user.id,
+        project_id: socket.assigns.project.id,
+        episode_id: episode.id,
+        type: "story_to_script_run",
+        target_type: "episode",
+        target_id: episode.id,
+        payload: %{
+          "novel_text" => novel_text,
+          "episode_id" => episode.id,
+          "auto_continue" => socket.assigns.auto_chain
+        }
+      })
+
+      {:noreply,
+       socket
+       |> assign(:pipeline_state, :running)
+       |> put_flash(:info, "剧本生成任务已排队，AI 正在分析故事...")}
+    else
+      {:noreply, put_flash(socket, :error, "请先在故事阶段输入故事文本")}
+    end
   end
 
   def handle_event("generate_all_images", _, socket) do
@@ -2549,11 +2622,66 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
   end
 
   def handle_event("generate_all_voices", _, socket) do
-    dispatch_batch_task(socket, "voice_line", "voice_line")
+    user_id = socket.assigns.current_scope.user.id
+    project = socket.assigns.project
+    episode = socket.assigns.current_episode
+
+    if episode do
+      voice_lines = socket.assigns.voice_lines || []
+
+      # Only generate for voice lines without audio
+      to_generate =
+        Enum.filter(voice_lines, fn vl -> is_nil(vl.audio_url) or vl.audio_url == "" end)
+
+      Enum.each(to_generate, fn vl ->
+        Tasks.create_task(%{
+          user_id: user_id,
+          project_id: project.id,
+          episode_id: episode.id,
+          type: "voice_line",
+          target_type: "voice_line",
+          target_id: vl.id,
+          payload: %{"voice_line_id" => vl.id}
+        })
+      end)
+
+      {:noreply, put_flash(socket, :info, "#{length(to_generate)} 条配音任务已排队")}
+    else
+      {:noreply, put_flash(socket, :error, dgettext("projects", "Select an episode first."))}
+    end
   end
 
   def handle_event("generate_all_videos", _, socket) do
-    dispatch_batch_task(socket, "video_panel", "panel")
+    user_id = socket.assigns.current_scope.user.id
+    project = socket.assigns.project
+    episode = socket.assigns.current_episode
+
+    if episode do
+      storyboards = Production.list_storyboards(episode.id)
+      panels = Enum.flat_map(storyboards, &Production.list_panels(&1.id))
+
+      # Only panels with images but no videos
+      to_generate =
+        Enum.filter(panels, fn p ->
+          p.image_url && p.image_url != "" && (is_nil(p.video_url) || p.video_url == "")
+        end)
+
+      Enum.each(to_generate, fn panel ->
+        Tasks.create_task(%{
+          user_id: user_id,
+          project_id: project.id,
+          episode_id: episode.id,
+          type: "video_panel",
+          target_type: "panel",
+          target_id: panel.id,
+          payload: %{"panel_id" => panel.id}
+        })
+      end)
+
+      {:noreply, put_flash(socket, :info, "#{length(to_generate)} 个视频生成任务已排队")}
+    else
+      {:noreply, put_flash(socket, :error, dgettext("projects", "Select an episode first."))}
+    end
   end
 
   def handle_event("generate_all_lip_sync", _, socket) do

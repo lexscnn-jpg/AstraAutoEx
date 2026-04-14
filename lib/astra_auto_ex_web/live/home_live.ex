@@ -37,6 +37,7 @@ defmodule AstraAutoExWeb.HomeLive do
      |> assign(:ai_episode_count, 0)
      |> assign(:ai_status_index, 0)
      |> assign(:ai_timer_ref, nil)
+     |> assign(:creating, false)
      # File upload
      |> allow_upload(:story_file,
        accept: ~w(.txt .md),
@@ -268,22 +269,45 @@ defmodule AstraAutoExWeb.HomeLive do
                     <button
                       type="submit"
                       class="glass-btn glass-btn-primary text-sm py-2 px-6 flex items-center gap-2"
-                      disabled={String.trim(@story_input) == ""}
+                      disabled={String.trim(@story_input) == "" || @creating}
                     >
-                      {dgettext("projects", "Start Creating")}
-                      <svg
-                        class="w-4 h-4"
-                        fill="none"
-                        stroke="currentColor"
-                        stroke-width="2"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          stroke-linecap="round"
-                          stroke-linejoin="round"
-                          d="M13 7l5 5m0 0l-5 5m5-5H6"
-                        />
-                      </svg>
+                      <%= if @creating do %>
+                        <svg
+                          class="w-4 h-4 animate-spin"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                        >
+                          <circle
+                            class="opacity-25"
+                            cx="12"
+                            cy="12"
+                            r="10"
+                            stroke="currentColor"
+                            stroke-width="4"
+                          />
+                          <path
+                            class="opacity-75"
+                            fill="currentColor"
+                            d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                          />
+                        </svg>
+                        创建中...
+                      <% else %>
+                        {dgettext("projects", "Start Creating")}
+                        <svg
+                          class="w-4 h-4"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M13 7l5 5m0 0l-5 5m5-5H6"
+                          />
+                        </svg>
+                      <% end %>
                     </button>
                   </div>
                 </div>
@@ -601,6 +625,7 @@ defmodule AstraAutoExWeb.HomeLive do
     if story == "" do
       {:noreply, put_flash(socket, :error, dgettext("projects", "Please enter a story first"))}
     else
+      socket = assign(socket, :creating, true)
       # Auto-generate project name from the first line / first 30 chars
       name =
         story

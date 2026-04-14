@@ -31,7 +31,7 @@
             >
               <path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" />
             </svg>
-            Beta v0.7.8
+            Beta v0.7.9
           </button>
         </div>
 
@@ -188,12 +188,31 @@
         </div>
 
         <div class="flex-1 overflow-y-auto px-6 py-4 space-y-6 text-sm">
-          <%!-- v0.7.8 --%>
+          <%!-- v0.7.9 --%>
           <div>
             <div class="flex items-center gap-2 mb-2">
               <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-500/20 text-green-400">
                 最新
               </span>
+              <span class="font-bold text-[var(--glass-text-primary)]">v0.7.9</span>
+              <span class="text-xs text-[var(--glass-text-tertiary)]">2026-04-15</span>
+            </div>
+            <p class="text-[10px] text-[var(--glass-text-tertiary)] mb-1.5 italic">
+              Handler 修复 + 创作加载动画 + 面板状态指示器
+            </p>
+            <ul class="space-y-1 text-[var(--glass-text-secondary)] list-disc list-inside text-xs">
+              <li><strong>批量配音修复</strong>：generate_all_voices 改为遍历 voice_lines（之前错误遍历 panels）</li>
+              <li><strong>批量视频智能</strong>：仅为有图片但无视频的面板生成视频任务</li>
+              <li><strong>剧本生成修复</strong>：run_story_to_script 从占位改为实际创建管线任务</li>
+              <li><strong>创作加载动画</strong>：首页"开始创作"点击后显示 spinner + "创建中..."</li>
+              <li><strong>面板状态条</strong>：每个面板底部三色进度条（绿=图片 / 蓝=视频 / 紫=配音）</li>
+              <li><strong>面板标签增强</strong>：视频🎬/配音🎙️/口型同步标签 + 彩色图标</li>
+            </ul>
+          </div>
+
+          <%!-- v0.7.8 --%>
+          <div>
+            <div class="flex items-center gap-2 mb-2">
               <span class="font-bold text-[var(--glass-text-primary)]">v0.7.8</span>
               <span class="text-xs text-[var(--glass-text-tertiary)]">2026-04-15</span>
             </div>
