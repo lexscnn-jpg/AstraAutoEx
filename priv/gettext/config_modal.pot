@@ -1,0 +1,91 @@
+## "config_modal" domain Template file.
+## Project configuration modal: models, visual settings, TTS.
+msgid ""
+msgstr ""
+
+msgid "Project Configuration"
+msgstr ""
+
+msgid "Config Subtitle"
+msgstr ""
+
+msgid "Saved"
+msgstr ""
+
+msgid "Auto Save"
+msgstr ""
+
+## --- Visual Settings ---
+
+msgid "Visual Settings"
+msgstr ""
+
+msgid "Visual Style"
+msgstr ""
+
+msgid "Model Parameters"
+msgstr ""
+
+msgid "Aspect Ratio"
+msgstr ""
+
+## --- TTS Settings ---
+
+msgid "TTS Settings"
+msgstr ""
+
+msgid "TTS Voice"
+msgstr ""
+
+msgid "TTS Rate"
+msgstr ""
+
+## --- Model Config ---
+
+msgid "Loading Models..."
+msgstr ""
+
+msgid "Analysis Model"
+msgstr ""
+
+msgid "Character Model"
+msgstr ""
+
+msgid "Location Model"
+msgstr ""
+
+msgid "Storyboard Model"
+msgstr ""
+
+msgid "Edit Model"
+msgstr ""
+
+msgid "Video Model"
+msgstr ""
+
+msgid "Audio Model"
+msgstr ""
+
+msgid "Video Resolution"
+msgstr ""
+
+msgid "Fetch Models Failed"
+msgstr ""
+
+msgid "Select Model"
+msgstr ""
+
+msgid "Parameter Config"
+msgstr ""
+
+msgid "Fixed"
+msgstr ""
+
+msgid "No Params"
+msgstr ""
+
+msgid "On"
+msgstr ""
+
+msgid "Off"
+msgstr ""

@@ -1,0 +1,149 @@
+## "common" domain Template file.
+## Common operations shared across the application.
+msgid ""
+msgstr ""
+
+## --- General Actions ---
+
+msgid "Generate"
+msgstr ""
+
+msgid "Regenerate"
+msgstr ""
+
+msgid "Preview"
+msgstr ""
+
+msgid "Download"
+msgstr ""
+
+msgid "Upload"
+msgstr ""
+
+msgid "Expand"
+msgstr ""
+
+msgid "Collapse"
+msgstr ""
+
+msgid "Copy"
+msgstr ""
+
+msgid "Paste"
+msgstr ""
+
+msgid "Reset"
+msgstr ""
+
+msgid "Retry"
+msgstr ""
+
+msgid "Previous"
+msgstr ""
+
+msgid "Auto Save"
+msgstr ""
+
+msgid "Saved"
+msgstr ""
+
+msgid "Info"
+msgstr ""
+
+msgid "All"
+msgstr ""
+
+msgid "Rename"
+msgstr ""
+
+msgid "Optional"
+msgstr ""
+
+msgid "Recommended"
+msgstr ""
+
+## --- Task Status ---
+
+msgid "Queued"
+msgstr ""
+
+msgid "Processing"
+msgstr ""
+
+msgid "Completed"
+msgstr ""
+
+msgid "Failed"
+msgstr ""
+
+msgid "Pending"
+msgstr ""
+
+msgid "Paused"
+msgstr ""
+
+msgid "Cancelled"
+msgstr ""
+
+## --- Task Actions ---
+
+msgid "Confirm Cancel"
+msgstr ""
+
+msgid "Cancelling"
+msgstr ""
+
+msgid "Pause"
+msgstr ""
+
+msgid "Resume"
+msgstr ""
+
+## --- Global Tasks ---
+
+msgid "Background Tasks"
+msgstr ""
+
+msgid "%{count} tasks running"
+msgstr ""
+
+## --- Misc ---
+
+msgid "Insufficient Balance"
+msgstr ""
+
+msgid "Insufficient balance. Please recharge."
+msgstr ""
+
+msgid "Operation Failed"
+msgstr ""
+
+msgid "Please Retry"
+msgstr ""
+
+msgid "Unknown Error"
+msgstr ""
+
+msgid "Double-click to rename"
+msgstr ""
+
+msgid "Drag to reorder"
+msgstr ""
+
+msgid "Reference Image"
+msgstr ""
+
+msgid "Preview Large"
+msgstr ""
+
+msgid "View Original"
+msgstr ""
+
+msgid "Scheme %{n}"
+msgstr ""
+
+msgid "Episode"
+msgstr ""
+
+msgid "Project"
+msgstr ""

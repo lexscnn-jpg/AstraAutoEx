@@ -1,0 +1,79 @@
+## "model_section" domain Template file.
+## Model list management, pricing, selection.
+msgid ""
+msgstr ""
+
+msgid "LLM Models"
+msgstr ""
+
+msgid "Image Models"
+msgstr ""
+
+msgid "Video Models"
+msgstr ""
+
+msgid "Price"
+msgstr ""
+
+msgid "Price per Million"
+msgstr ""
+
+msgid "Price per Image"
+msgstr ""
+
+msgid "Price per Video"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Model ID"
+msgstr ""
+
+msgid "Model Name"
+msgstr ""
+
+msgid "Provider"
+msgstr ""
+
+msgid "Resolution"
+msgstr ""
+
+msgid "Add"
+msgstr ""
+
+msgid "Add Model"
+msgstr ""
+
+msgid "Add New Model"
+msgstr ""
+
+msgid "Select Preset"
+msgstr ""
+
+msgid "Custom Model"
+msgstr ""
+
+msgid "Confirm Add"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Done"
+msgstr ""
+
+msgid "Fill Complete"
+msgstr ""
+
+msgid "No Models"
+msgstr ""
+
+msgid "No API Key"
+msgstr ""
+
+msgid "Batch Mode"
+msgstr ""
+
+msgid "Batch Mode Tooltip"
+msgstr ""

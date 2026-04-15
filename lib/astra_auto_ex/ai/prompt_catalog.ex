@@ -12,6 +12,26 @@ defmodule AstraAutoEx.AI.PromptCatalog do
   """
 
   # ---------------------------------------------------------------------------
+  # Asset prompt suffixes — appended to image generation prompts by type
+  # ---------------------------------------------------------------------------
+
+  @character_prompt_suffix "角色设定图，画面分为左右两个区域：【左侧】正面特写(1/3)；【右侧】三视图横排(正面/侧面/背面, 2/3)。纯白背景"
+  @prop_prompt_suffix "道具设定图，画面分为左右两个区域：【左侧】主视图特写(1/3)；【右侧】三视图横排(正面/侧面/背面, 2/3)。纯白背景，无人物/手部/桌面/环境"
+  @location_prompt_suffix ""
+
+  @doc "Suffix appended to character image generation prompts."
+  @spec character_prompt_suffix() :: String.t()
+  def character_prompt_suffix, do: @character_prompt_suffix
+
+  @doc "Suffix appended to prop image generation prompts."
+  @spec prop_prompt_suffix() :: String.t()
+  def prop_prompt_suffix, do: @prop_prompt_suffix
+
+  @doc "Suffix appended to location image generation prompts (currently empty)."
+  @spec location_prompt_suffix() :: String.t()
+  def location_prompt_suffix, do: @location_prompt_suffix
+
+  # ---------------------------------------------------------------------------
   # Prompt IDs (module attributes for compile-time checks)
   # ---------------------------------------------------------------------------
 

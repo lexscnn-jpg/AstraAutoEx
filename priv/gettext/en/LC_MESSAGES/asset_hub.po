@@ -1,0 +1,214 @@
+## "asset_hub" domain translations for en locale.
+## Asset Hub center: global assets, folders, search, import/export.
+msgid ""
+msgstr ""
+"Language: en\n"
+
+msgid "Asset Hub"
+msgstr ""
+
+msgid "Asset Hub Description"
+msgstr ""
+
+msgid "Model Hint"
+msgstr ""
+
+msgid "Model Hint Link"
+msgstr ""
+
+msgid "Model Hint Suffix"
+msgstr ""
+
+## --- Navigation ---
+
+msgid "Folders"
+msgstr ""
+
+msgid "No Folders"
+msgstr ""
+
+msgid "All Assets"
+msgstr ""
+
+msgid "Characters"
+msgstr ""
+
+msgid "Locations"
+msgstr ""
+
+msgid "Props"
+msgstr ""
+
+msgid "Voices"
+msgstr ""
+
+## --- Actions ---
+
+msgid "Add Character"
+msgstr ""
+
+msgid "Add Location"
+msgstr ""
+
+msgid "Add Prop"
+msgstr ""
+
+msgid "Add Voice"
+msgstr ""
+
+msgid "Add Asset"
+msgstr ""
+
+msgid "Download All"
+msgstr ""
+
+msgid "Download All Title"
+msgstr ""
+
+msgid "Downloading..."
+msgstr ""
+
+msgid "Download Success"
+msgstr ""
+
+msgid "Download Failed"
+msgstr ""
+
+msgid "Download Empty"
+msgstr ""
+
+## --- Folder ---
+
+msgid "New Folder"
+msgstr ""
+
+msgid "Edit Folder"
+msgstr ""
+
+msgid "Delete Folder"
+msgstr ""
+
+msgid "Folder Name"
+msgstr ""
+
+msgid "Folder Name Placeholder"
+msgstr ""
+
+msgid "Confirm Delete Folder"
+msgstr ""
+
+## --- Empty State ---
+
+msgid "Empty State"
+msgstr ""
+
+msgid "Empty State Hint"
+msgstr ""
+
+## --- Asset Operations ---
+
+msgid "Generate"
+msgstr ""
+
+msgid "Generating..."
+msgstr ""
+
+msgid "Regenerate"
+msgstr ""
+
+msgid "Undo"
+msgstr ""
+
+msgid "Delete"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
+msgid "Create"
+msgstr ""
+
+## --- Confirm Delete ---
+
+msgid "Confirm Delete Character"
+msgstr ""
+
+msgid "Confirm Delete Location"
+msgstr ""
+
+msgid "Confirm Delete Prop"
+msgstr ""
+
+msgid "Confirm Delete Voice"
+msgstr ""
+
+## --- Voice ---
+
+msgid "Voice Name"
+msgstr ""
+
+msgid "Voice Name Placeholder"
+msgstr ""
+
+msgid "Voice Picker Title"
+msgstr ""
+
+## --- Pagination ---
+
+msgid "Previous Page"
+msgstr ""
+
+msgid "Next Page"
+msgstr ""
+
+## --- Modal ---
+
+msgid "New Character Modal"
+msgstr ""
+
+msgid "New Location Modal"
+msgstr ""
+
+msgid "AI Design"
+msgstr ""
+
+msgid "AI Design Tip"
+msgstr ""
+
+msgid "Reference Upload"
+msgstr ""
+
+msgid "Convert to Character"
+msgstr ""
+
+msgid "Drop or Click Upload"
+msgstr ""
+
+msgid "Supported Image Formats"
+msgstr ""
+
+## --- Voice Settings ---
+
+msgid "Voice Settings Title"
+msgstr ""
+
+msgid "No Voice"
+msgstr ""
+
+msgid "Upload Audio"
+msgstr ""
+
+msgid "AI Design Voice"
+msgstr ""
+
+msgid "Voice Library"
+msgstr ""
+
+msgid "Preview Voice"
+msgstr ""
+
+msgid "Appearance %{index}"
+msgstr ""

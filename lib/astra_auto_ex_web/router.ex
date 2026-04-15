@@ -32,6 +32,13 @@ defmodule AstraAutoExWeb.Router do
     live "/setup", SetupLive
   end
 
+  # Public video sharing — no authentication required
+  scope "/m", AstraAutoExWeb do
+    pipe_through [:browser]
+
+    live "/:public_id", ShareLive
+  end
+
   scope "/", AstraAutoExWeb do
     pipe_through [:browser, :require_authenticated_user]
 

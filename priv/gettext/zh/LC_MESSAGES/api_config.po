@@ -1,0 +1,260 @@
+## "api_config" domain translations for zh locale.
+## API provider configuration, model management, tutorials.
+msgid ""
+msgstr ""
+"Language: zh\n"
+
+msgid "API Configuration"
+msgstr "API 配置"
+
+msgid "Saving..."
+msgstr "保存中..."
+
+msgid "Saved"
+msgstr "已保存"
+
+msgid "Save Failed"
+msgstr "保存失败"
+
+msgid "Connected"
+msgstr "已连接"
+
+msgid "Not Configured"
+msgstr "未配置 Key"
+
+msgid "Configure"
+msgstr "配置"
+
+msgid "Connect"
+msgstr "连接"
+
+msgid "OpenAI Compatible"
+msgstr "OpenAI 兼容层"
+
+msgid "Gemini Compatible"
+msgstr "Gemini 兼容层"
+
+msgid "Show"
+msgstr "显示"
+
+msgid "Hide"
+msgstr "隐藏"
+
+msgid "Capability"
+msgstr "能力"
+
+msgid "Default"
+msgstr "默认"
+
+msgid "Coming Soon"
+msgstr "待上线"
+
+msgid "Fill Complete"
+msgstr "请填写完整信息"
+
+msgid "Model ID Exists"
+msgstr "模型 ID 已存在"
+
+msgid "Model Display Name"
+msgstr "外显名称（你自己看的）"
+
+msgid "Model Actual ID"
+msgstr "实际调用 ID（模型参数）"
+
+msgid "No Models for Provider"
+msgstr "该厂商暂无配置模型"
+
+msgid "Default Model Config"
+msgstr "默认模型配置"
+
+msgid "Text Model"
+msgstr "文本模型"
+
+msgid "Character Model"
+msgstr "角色模型"
+
+msgid "Location Model"
+msgstr "场景模型"
+
+msgid "Storyboard Model"
+msgstr "分镜模型"
+
+msgid "Edit Model"
+msgstr "修图模型"
+
+msgid "Video Model"
+msgstr "视频模型"
+
+msgid "Audio Model"
+msgstr "语音模型"
+
+msgid "Lip Sync Model"
+msgstr "口型同步模型"
+
+msgid "Provider Pool"
+msgstr "厂商资源池"
+
+msgid "Provider Pool Desc"
+msgstr "在此使用来自全球丰富的模型配置"
+
+msgid "Hide Provider"
+msgstr "隐藏提供商"
+
+msgid "Show Provider"
+msgstr "显示提供商"
+
+msgid "Add Model"
+msgstr "添加模型"
+
+msgid "Batch Mode Half Price"
+msgstr "批量模式（价格减半）"
+
+msgid "API Key Label"
+msgstr "API Key"
+
+msgid "API Type"
+msgstr "API 类型"
+
+msgid "Configure API Key"
+msgstr "配置 API Key"
+
+msgid "Enter API Key"
+msgstr "请输入 API Key"
+
+msgid "Test Connection"
+msgstr "测试连接"
+
+msgid "Testing..."
+msgstr "正在测试..."
+
+msgid "Test Passed"
+msgstr "连接测试通过"
+
+msgid "Test Failed"
+msgstr "连接测试未通过"
+
+msgid "Test Retry"
+msgstr "重试"
+
+msgid "Add Anyway"
+msgstr "仍然添加"
+
+## --- Test Steps ---
+
+msgid "Test Step Models"
+msgstr "模型列表"
+
+msgid "Test Step Text Gen"
+msgstr "文本生成"
+
+msgid "Test Step Image Gen"
+msgstr "图像生成"
+
+msgid "Test Step Credits"
+msgstr "余额检查"
+
+msgid "Test Step Audio Gen"
+msgstr "音频生成"
+
+msgid "Test Step Skipped"
+msgstr "已跳过"
+
+## --- Tabs ---
+
+msgid "Tab LLM"
+msgstr "文本模型"
+
+msgid "Tab Image"
+msgstr "图片模型"
+
+msgid "Tab Video"
+msgstr "视频模型"
+
+msgid "Tab Audio"
+msgstr "音频等模型"
+
+msgid "Tab Other"
+msgstr "其他"
+
+## --- Default Model Section ---
+
+msgid "Core Foundation"
+msgstr "文本分析与视频能力"
+
+msgid "Creative Pipeline"
+msgstr "全局图像模型配置"
+
+msgid "Unified Override"
+msgstr "批量配置图像模型"
+
+msgid "Extensions"
+msgstr "扩展功能"
+
+msgid "Core Text Title"
+msgstr "文本分析模型"
+
+msgid "Core Storyboard LLM"
+msgstr "分镜 LLM"
+
+msgid "Core Video Title"
+msgstr "视频生成模型"
+
+msgid "Pipeline Character"
+msgstr "角色生成"
+
+msgid "Pipeline Location"
+msgstr "场景生成"
+
+msgid "Pipeline Storyboard"
+msgstr "镜头生成"
+
+msgid "Pipeline Edit"
+msgstr "编辑图片"
+
+msgid "Ext Lip Sync"
+msgstr "口型同步"
+
+msgid "Ext TTS"
+msgstr "语音合成"
+
+msgid "Ext Voice Design"
+msgstr "音色设计"
+
+msgid "Ext Music Design"
+msgstr "音乐生成"
+
+## --- Tutorial ---
+
+msgid "View Tutorial"
+msgstr "查看教程"
+
+msgid "Tutorial Title"
+msgstr "开通教程"
+
+## --- AI Config Assistant ---
+
+msgid "AI Config Assistant"
+msgstr "AI配置助手"
+
+msgid "Assistant Welcome"
+msgstr "请描述你的接口文档。我会追问缺失信息并自动保存模型。"
+
+msgid "Assistant Send"
+msgstr "发送"
+
+## --- Functional Test ---
+
+msgid "Functional Test"
+msgstr "测试"
+
+msgid "Functional Test Success"
+msgstr "测试通过"
+
+msgid "Functional Test Failed"
+msgstr "测试失败"
+
+msgid "Async Submitted"
+msgstr "异步任务已提交"
+
+msgid "No Model Selected"
+msgstr "请先选择模型"

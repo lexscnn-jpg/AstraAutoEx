@@ -1,0 +1,186 @@
+## "smart_import" domain translations for zh locale.
+## Smart import wizard: file upload, AI analysis, episode splitting.
+msgid ""
+msgstr ""
+"Language: zh\n"
+
+msgid "Start Your Creative Journey"
+msgstr "开启你的创作之旅"
+
+msgid "Choose your creation method"
+msgstr "首先，选择你的创作方式"
+
+## --- Manual Create ---
+
+msgid "Start from Episode 1"
+msgstr "从第一集开始创作"
+
+msgid "Manual Create Description"
+msgstr "从第一集开始，适合边写边播或单集短视频制作"
+
+msgid "Start Creating"
+msgstr "开始创作"
+
+## --- Smart Import ---
+
+msgid "Smart Episode Split"
+msgstr "智能文本分集"
+
+msgid "Smart Import Description"
+msgstr "上传整本小说或剧本，AI 引擎自动识别章节结构，一键完成智能分集。"
+
+msgid "Import Now"
+msgstr "立即导入"
+
+msgid "Recommended"
+msgstr "推荐"
+
+## --- Upload ---
+
+msgid "Upload Raw Material"
+msgstr "上传原始素材"
+
+msgid "Upload Subtitle"
+msgstr "AI 引擎已准备就绪，一键自动分集与格式化"
+
+msgid "Max 30000 Words"
+msgstr "最大支持 3 万字"
+
+msgid "Text Input"
+msgstr "输入文本内容"
+
+msgid "Text Placeholder"
+msgstr "在此处粘贴你的小说章节或剧本内容..."
+
+msgid "Upload Document"
+msgstr "上传完整文档"
+
+msgid "Click to Upload"
+msgstr "点击上传文档"
+
+msgid "Clear Text First"
+msgstr "请先清空左侧文本"
+
+msgid "Supported Formats"
+msgstr "支持 Word, TXT 格式"
+
+msgid "words"
+msgstr "字"
+
+msgid "Start Analyzing"
+msgstr "开始分析"
+
+## --- Analyzing ---
+
+msgid "AI Analyzing Your Story"
+msgstr "AI 正在分析你的故事"
+
+msgid "Identifying chapters..."
+msgstr "识别章节结构，智能分集中..."
+
+msgid "Auto Save After Analysis"
+msgstr "分析完成后将自动保存"
+
+## --- Preview ---
+
+msgid "Smart Split Complete"
+msgstr "智能分集完成"
+
+msgid "Auto Split to %{count} episodes"
+msgstr "已为你自动分为 %{count} 集"
+
+msgid "Total %{words} words"
+msgstr "总计 %{words} 字"
+
+msgid "Auto Saved"
+msgstr "已自动保存"
+
+msgid "Reanalyze"
+msgstr "重新分析"
+
+msgid "Confirm Complete"
+msgstr "确认完成"
+
+msgid "Episode List"
+msgstr "剧集列表"
+
+msgid "Add Episode"
+msgstr "添加剧集"
+
+msgid "Average Words per Episode"
+msgstr "平均每集"
+
+msgid "Episode Content"
+msgstr "剧集内容"
+
+msgid "Plot Summary"
+msgstr "剧情简介"
+
+msgid "Enter Title..."
+msgstr "输入剧集标题..."
+
+msgid "Enter Summary..."
+msgstr "输入剧情简介..."
+
+msgid "New Episode"
+msgstr "新剧集"
+
+## --- Marker Detection ---
+
+msgid "Marker Detected"
+msgstr "检测到分集标记"
+
+msgid "Marker Detected Desc"
+msgstr "检测到分集标记格式"
+
+msgid "Use Marker Split"
+msgstr "使用标识符分集"
+
+msgid "Use Marker Split Desc"
+msgstr "快速、免费"
+
+msgid "Use AI Split"
+msgstr "使用 AI 智能分集"
+
+msgid "Use AI Split Desc"
+msgstr "智能分析、消耗积分"
+
+## --- Errors ---
+
+msgid "File Too Large"
+msgstr "文件过大，请上传小于 10MB 的文件"
+
+msgid "Doc Not Supported"
+msgstr "不支持 .doc 格式，请使用 Word 转换为 .docx"
+
+msgid "File Empty"
+msgstr "文件内容为空"
+
+msgid "File Read Error"
+msgstr "文件读取失败，请重试"
+
+msgid "Upload First"
+msgstr "请先上传或粘贴内容"
+
+msgid "Analyze Failed"
+msgstr "分析失败"
+
+msgid "Save Failed"
+msgstr "保存失败"
+
+## --- Global Analysis ---
+
+msgid "Global Asset Analysis"
+msgstr "全局资产分析"
+
+msgid "Global Analysis Description"
+msgstr "一键提取全书的角色和场景，确保角色形象在所有剧集中保持一致"
+
+msgid "Start Analysis"
+msgstr "立即分析"
+
+msgid "Global Analysis Success"
+msgstr "全局分析完成：新增 %{characters} 个角色，%{locations} 个场景"
+
+msgid "Global Analysis Failed"
+msgstr "全局分析失败"

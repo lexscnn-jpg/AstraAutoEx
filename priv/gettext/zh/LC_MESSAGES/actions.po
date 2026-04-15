@@ -1,0 +1,93 @@
+## "actions" domain translations for zh locale.
+## Global action buttons and pipeline action types.
+msgid ""
+msgstr ""
+"Language: zh\n"
+
+## --- Global Action Buttons ---
+
+msgid "Start Generate"
+msgstr "开始生成"
+
+msgid "Stop"
+msgstr "停止"
+
+msgid "Skip"
+msgstr "跳过"
+
+msgid "Generate All"
+msgstr "全部生成"
+
+msgid "Batch Operation"
+msgstr "批量操作"
+
+msgid "Export"
+msgstr "导出"
+
+msgid "Import"
+msgstr "导入"
+
+msgid "Retry All"
+msgstr "全部重试"
+
+msgid "Clear All"
+msgstr "清除全部"
+
+msgid "Select All"
+msgstr "全选"
+
+msgid "Deselect All"
+msgstr "取消全选"
+
+msgid "Confirm & Start Drawing"
+msgstr "确认并开始绘制"
+
+## --- Pipeline Action Type Labels ---
+
+msgid "action.storyboard"
+msgstr "分镜图"
+
+msgid "action.storyboard_candidate"
+msgstr "分镜候选"
+
+msgid "action.character"
+msgstr "角色图"
+
+msgid "action.location"
+msgstr "场景图"
+
+msgid "action.video"
+msgstr "视频"
+
+msgid "action.analyze"
+msgstr "分析"
+
+msgid "action.analyze_character"
+msgstr "角色分析"
+
+msgid "action.analyze_location"
+msgstr "场景分析"
+
+msgid "action.clips"
+msgstr "片段切割"
+
+msgid "action.storyboard_text_plan"
+msgstr "分镜规划"
+
+msgid "action.storyboard_text_detail"
+msgstr "分镜细节"
+
+msgid "action.tts"
+msgstr "语音合成"
+
+msgid "action.regenerate"
+msgstr "重生成"
+
+msgid "action.voice_generate"
+msgstr "配音生成"
+
+msgid "action.voice_design"
+msgstr "声音设计"
+
+msgid "action.lip_sync"
+msgstr "口型同步"

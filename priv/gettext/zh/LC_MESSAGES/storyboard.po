@@ -1,0 +1,284 @@
+## "storyboard" domain translations for zh locale.
+## Storyboard panel editing, shot types, camera moves, AI data.
+msgid ""
+msgstr ""
+"Language: zh\n"
+
+## --- Header ---
+
+msgid "Storyboard Edit"
+msgstr "分镜编辑"
+
+msgid "%{count} shots"
+msgstr "%{count} 个镜头"
+
+msgid "Submit for Generation"
+msgstr "提交生成"
+
+msgid "Storyboard Panel"
+msgstr "分镜面板"
+
+msgid "%{count} segments"
+msgstr "%{count} 个片段"
+
+msgid "Generate All Panels"
+msgstr "生成所有镜头"
+
+msgid "Generate %{count} pending panels"
+msgstr "生成%{count}个未有图片的镜头"
+
+msgid "Download All"
+msgstr "下载全部"
+
+msgid "Concurrency Limit %{count}"
+msgstr "并发上限 %{count}"
+
+## --- Panel Fields ---
+
+msgid "Shot Type"
+msgstr "镜头类型"
+
+msgid "Camera Move"
+msgstr "镜头运动"
+
+msgid "Source Text"
+msgstr "对应原文"
+
+msgid "Scene Description"
+msgstr "画面描述"
+
+msgid "Video Prompt"
+msgstr "视频提示词"
+
+msgid "Video Prompt Hint"
+msgstr "建议描述主体动作、环境、镜头语言"
+
+msgid "Duration (seconds)"
+msgstr "秒"
+
+msgid "Panel Location"
+msgstr "场景"
+
+msgid "Panel Characters"
+msgstr "角色"
+
+msgid "Panel Description"
+msgstr "描述"
+
+msgid "Panel Text"
+msgstr "对应文本"
+
+## --- Shot Type Names ---
+
+msgid "close_up"
+msgstr "特写"
+
+msgid "medium"
+msgstr "中景"
+
+msgid "wide"
+msgstr "远景"
+
+msgid "extreme_close_up"
+msgstr "极近特写"
+
+msgid "full"
+msgstr "全景"
+
+msgid "establishing"
+msgstr "建立镜头"
+
+msgid "over_the_shoulder"
+msgstr "过肩镜头"
+
+msgid "low_angle"
+msgstr "仰拍"
+
+msgid "high_angle"
+msgstr "俯拍"
+
+msgid "bird_eye"
+msgstr "鸟瞰"
+
+msgid "dutch_angle"
+msgstr "荷兰角"
+
+msgid "pov"
+msgstr "主观视角"
+
+## --- Panel Actions ---
+
+msgid "Regenerate Panel"
+msgstr "重新生成"
+
+msgid "Delete Panel"
+msgstr "删除"
+
+msgid "Insert Before"
+msgstr "在此前插入"
+
+msgid "Insert After"
+msgstr "在此后插入"
+
+msgid "Move Up"
+msgstr "上移"
+
+msgid "Move Down"
+msgstr "下移"
+
+msgid "Card View"
+msgstr "卡片视图"
+
+msgid "Table View"
+msgstr "表格视图"
+
+## --- Group ---
+
+msgid "Group Generating"
+msgstr "生成中..."
+
+msgid "Group Generated"
+msgstr "已生成"
+
+msgid "Group Failed"
+msgstr "失败"
+
+msgid "Group Retry"
+msgstr "重试"
+
+msgid "Regenerate All Panels"
+msgstr "重新生成所有"
+
+msgid "Add Panel"
+msgstr "添加镜头"
+
+msgid "Segment"
+msgstr "片段"
+
+msgid "Add at Start"
+msgstr "在开头添加新分镜组"
+
+msgid "Insert Here"
+msgstr "在此插入新分镜组"
+
+## --- Image ---
+
+msgid "Candidate Image"
+msgstr "候选图"
+
+msgid "Select Candidate"
+msgstr "选择候选"
+
+msgid "Variants"
+msgstr "变体"
+
+msgid "Generate Variants"
+msgstr "生成变体"
+
+msgid "Force Regenerate"
+msgstr "强制重新生成"
+
+msgid "Click to Preview"
+msgstr "点击放大预览"
+
+msgid "Enlarge Preview"
+msgstr "放大预览"
+
+msgid "Candidate %{count}"
+msgstr "候选 %{count}"
+
+msgid "Generate %{count} candidates"
+msgstr "生成 %{count} 张"
+
+## --- AI Data Editor ---
+
+msgid "AI Data Editor"
+msgstr "AI数据编辑器"
+
+msgid "Basic Data"
+msgstr "分镜基础数据"
+
+msgid "Visual Description"
+msgstr "视觉描述"
+
+msgid "Negative Prompt"
+msgstr "负面提示词"
+
+msgid "Lighting Direction"
+msgstr "光照方向"
+
+msgid "Lighting Quality"
+msgstr "光照质感"
+
+msgid "Depth of Field"
+msgstr "景深"
+
+msgid "Color Tone"
+msgstr "色调"
+
+msgid "Character Position"
+msgstr "角色位置规则"
+
+msgid "Photography Rules"
+msgstr "摄影规则"
+
+msgid "Acting Notes"
+msgstr "演技指导"
+
+msgid "JSON Preview"
+msgstr "JSON 预览"
+
+## --- Insert Modal ---
+
+msgid "Insert New Shot"
+msgstr "插入新镜头"
+
+msgid "Insert Position"
+msgstr "插入位置"
+
+msgid "AI Auto Analyze"
+msgstr "AI 自动分析"
+
+## --- Confirm ---
+
+msgid "Confirm delete panel?"
+msgstr "确定要删除这个镜头吗？删除后无法恢复。"
+
+msgid "Confirm delete group?"
+msgstr "确定要删除这整组分镜吗？此操作不可撤销！"
+
+## --- Canvas ---
+
+msgid "No storyboard data"
+msgstr "暂无分镜数据"
+
+msgid "Generate clips and text storyboard first"
+msgstr "请先生成Clips和文字分镜，或点击上方按钮添加分镜组"
+
+## --- Prompts ---
+
+msgid "Image Prompt"
+msgstr "图片提示词"
+
+msgid "AI Modify Instruction"
+msgstr "AI修改指令"
+
+msgid "AI Modify and Generate"
+msgstr "AI修改并生成图片"
+
+msgid "Current Prompt"
+msgstr "当前提示词"
+
+msgid "Custom Style"
+msgstr "自定义风格"
+
+## --- First/Last Frame ---
+
+msgid "First/Last Frame Model"
+msgstr "首尾帧模型"
+
+msgid "First Frame"
+msgstr "首帧"
+
+msgid "Last Frame"
+msgstr "尾帧"

@@ -1,0 +1,74 @@
+## "billing" domain translations for zh locale.
+## Billing, transaction history, cost details.
+msgid ""
+msgstr ""
+"Language: zh\n"
+
+msgid "Transaction Type"
+msgstr "交易类型"
+
+msgid "Start Date"
+msgstr "开始日期"
+
+msgid "End Date"
+msgstr "结束日期"
+
+msgid "All"
+msgstr "全部"
+
+msgid "Income"
+msgstr "收入"
+
+msgid "Expense"
+msgstr "支出"
+
+msgid "Reset"
+msgstr "重置"
+
+msgid "Filter"
+msgstr "筛选"
+
+msgid "No Records"
+msgstr "暂无记录"
+
+msgid "Account Recharge"
+msgstr "账户充值"
+
+msgid "Service Consumption"
+msgstr "服务消费"
+
+msgid "Balance"
+msgstr "余额"
+
+msgid "All Types"
+msgstr "全部类型"
+
+msgid "Available"
+msgstr "可用"
+
+msgid "Frozen"
+msgstr "冻结"
+
+msgid "Total Spent"
+msgstr "总消费"
+
+msgid "Recent Usage"
+msgstr "近期用量"
+
+msgid "Usage Summary"
+msgstr "使用概览"
+
+msgid "Total Calls"
+msgstr "总调用次数"
+
+msgid "Model Pricing"
+msgstr "模型定价"
+
+msgid "Price per Million Tokens"
+msgstr "每百万token"
+
+msgid "Price per Image"
+msgstr "每张"
+
+msgid "Price per Video"
+msgstr "每条"

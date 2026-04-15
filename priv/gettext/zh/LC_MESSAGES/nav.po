@@ -1,0 +1,41 @@
+## "nav" domain translations for zh locale.
+## Navigation bar and global links.
+msgid ""
+msgstr ""
+"Language: zh\n"
+
+msgid "Workspace"
+msgstr "工作区"
+
+msgid "Asset Hub"
+msgstr "资产中心"
+
+msgid "Profile"
+msgstr "设置中心"
+
+msgid "Download Logs"
+msgstr "下载日志"
+
+msgid "Sign In"
+msgstr "登录"
+
+msgid "Sign Up"
+msgstr "注册"
+
+msgid "Logout"
+msgstr "退出登录"
+
+msgid "Home"
+msgstr "首页"
+
+msgid "Guide"
+msgstr "使用手册"
+
+msgid "AI Assistant"
+msgstr "AI 助手"
+
+msgid "Settings"
+msgstr "设置"
+
+msgid "User Guide"
+msgstr "使用手册"

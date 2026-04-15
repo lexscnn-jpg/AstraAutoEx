@@ -1,0 +1,321 @@
+## "video" domain translations for en locale.
+## Video generation, first/last frame, editor, toolbar.
+msgid ""
+msgstr ""
+"Language: en\n"
+
+## --- Panel Card ---
+
+msgid "Play"
+msgstr ""
+
+msgid "Pause"
+msgstr ""
+
+msgid "Retry"
+msgstr ""
+
+msgid "Regenerate"
+msgstr ""
+
+msgid "Download"
+msgstr ""
+
+msgid "Edit"
+msgstr ""
+
+msgid "Generating..."
+msgstr ""
+
+msgid "Lip Sync"
+msgstr ""
+
+msgid "Lip Sync Video"
+msgstr ""
+
+msgid "Original"
+msgstr ""
+
+msgid "Synced"
+msgstr ""
+
+msgid "Image Preview"
+msgstr ""
+
+msgid "Play Voice"
+msgstr ""
+
+msgid "Stop Voice"
+msgstr ""
+
+msgid "No Voice"
+msgstr ""
+
+msgid "Force Regenerate"
+msgstr ""
+
+msgid "Regenerate Video"
+msgstr ""
+
+msgid "Lip Sync Status"
+msgstr ""
+
+msgid "Generate Audio"
+msgstr ""
+
+msgid "Regenerate Lip Sync"
+msgstr ""
+
+msgid "Edit Prompt"
+msgstr ""
+
+msgid "Shot %{number}"
+msgstr ""
+
+msgid "Unknown Shot Type"
+msgstr ""
+
+msgid "Corresponding Text"
+msgstr ""
+
+msgid "Generate Video"
+msgstr ""
+
+msgid "Select Model"
+msgstr ""
+
+msgid "Select Voice"
+msgstr ""
+
+msgid "Batch Mode"
+msgstr ""
+
+msgid "Batch Mode Desc"
+msgstr ""
+
+## --- Camera Move Names ---
+
+msgid "pan_left"
+msgstr ""
+
+msgid "pan_right"
+msgstr ""
+
+msgid "tilt_up"
+msgstr ""
+
+msgid "tilt_down"
+msgstr ""
+
+msgid "zoom_in"
+msgstr ""
+
+msgid "zoom_out"
+msgstr ""
+
+msgid "dolly"
+msgstr ""
+
+msgid "crane"
+msgstr ""
+
+msgid "static"
+msgstr ""
+
+msgid "tracking"
+msgstr ""
+
+msgid "orbit"
+msgstr ""
+
+msgid "handheld"
+msgstr ""
+
+msgid "steady"
+msgstr ""
+
+msgid "whip_pan"
+msgstr ""
+
+msgid "pull_focus"
+msgstr ""
+
+## --- Toolbar ---
+
+msgid "Film Generation"
+msgstr ""
+
+msgid "Filter"
+msgstr ""
+
+msgid "View All"
+msgstr ""
+
+msgid "Show Generated"
+msgstr ""
+
+msgid "Show Pending"
+msgstr ""
+
+msgid "Show Failed"
+msgstr ""
+
+msgid "Total %{count} shots"
+msgstr ""
+
+msgid "%{count} generating"
+msgstr ""
+
+msgid "%{count} completed"
+msgstr ""
+
+msgid "%{count} failed"
+msgstr ""
+
+msgid "Generate All Videos"
+msgstr ""
+
+msgid "Batch Config Title"
+msgstr ""
+
+msgid "Batch Config Desc"
+msgstr ""
+
+msgid "Confirm Generate All"
+msgstr ""
+
+msgid "No Videos"
+msgstr ""
+
+msgid "Download %{count} videos"
+msgstr ""
+
+msgid "Packing..."
+msgstr ""
+
+msgid "Download All"
+msgstr ""
+
+msgid "Enter Editor"
+msgstr ""
+
+msgid "Auto First-Last Frame"
+msgstr ""
+
+msgid "Auto FL Tooltip"
+msgstr ""
+
+## --- First/Last Frame ---
+
+msgid "First-Last Frame Settings"
+msgstr ""
+
+msgid "First Frame"
+msgstr ""
+
+msgid "Last Frame"
+msgstr ""
+
+msgid "Link"
+msgstr ""
+
+msgid "Unlink"
+msgstr ""
+
+msgid "Custom Prompt"
+msgstr ""
+
+msgid "Use Default"
+msgstr ""
+
+msgid "Generate First-Last Frame Video"
+msgstr ""
+
+msgid "Link to Next Shot"
+msgstr ""
+
+## --- Prompt Modal ---
+
+msgid "Edit Shot %{number} Video Prompt"
+msgstr ""
+
+msgid "Video Prompt Label"
+msgstr ""
+
+msgid "Video Prompt Placeholder"
+msgstr ""
+
+msgid "Video Prompt Tip"
+msgstr ""
+
+## --- Editor ---
+
+msgid "Material Library"
+msgstr ""
+
+msgid "Properties"
+msgstr ""
+
+msgid "Clip"
+msgstr ""
+
+msgid "Transition to Next"
+msgstr ""
+
+msgid "Delete Clip"
+msgstr ""
+
+msgid "Video Track"
+msgstr ""
+
+msgid "Audio Track"
+msgstr ""
+
+msgid "Zoom"
+msgstr ""
+
+## --- Capability ---
+
+msgid "Generation Mode"
+msgstr ""
+
+msgid "Duration"
+msgstr ""
+
+msgid "FPS"
+msgstr ""
+
+msgid "Resolution"
+msgstr ""
+
+msgid "Aspect Ratio"
+msgstr ""
+
+msgid "Reasoning Effort"
+msgstr ""
+
+msgid "Voice"
+msgstr ""
+
+msgid "Rate"
+msgstr ""
+
+msgid "Mode"
+msgstr ""
+
+## --- Transition ---
+
+msgid "Transition Effect"
+msgstr ""
+
+msgid "Transition Duration"
+msgstr ""
+
+msgid "Dissolve"
+msgstr ""
+
+msgid "Fade"
+msgstr ""
+
+msgid "Slide"
+msgstr ""

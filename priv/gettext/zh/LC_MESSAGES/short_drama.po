@@ -1,0 +1,189 @@
+## "short_drama" domain translations for zh locale.
+## Short drama creation workflow: topic, outline, characters, episodes, scripts.
+msgid ""
+msgstr ""
+"Language: zh\n"
+
+msgid "Short Drama Master"
+msgstr "短剧剧本大师"
+
+msgid "One-stop creation from topic to script"
+msgstr "从选题到剧本的一站式创作"
+
+## --- Steps ---
+
+msgid "Topic Selection"
+msgstr "选题立项"
+
+msgid "Story Outline"
+msgstr "故事大纲"
+
+msgid "Character Development"
+msgstr "角色开发"
+
+msgid "Episode Directory"
+msgstr "分集目录"
+
+msgid "Episode Script"
+msgstr "分集撰写"
+
+msgid "Quality Review"
+msgstr "质量自检"
+
+msgid "Compliance Check"
+msgstr "合规审核"
+
+msgid "Overseas Adaptation"
+msgstr "出海适配"
+
+## --- Topic Selection ---
+
+msgid "Topic Selection Title"
+msgstr "选题立项"
+
+msgid "Topic Selection Description"
+msgstr "选择题材、确定受众和平台，生成选题报告"
+
+msgid "Genre Label"
+msgstr "题材偏好"
+
+msgid "Genre Placeholder"
+msgstr "输入题材偏好，如：霸总甜宠、战神归来、重生复仇..."
+
+msgid "Audience Label"
+msgstr "目标受众"
+
+msgid "Audience Placeholder"
+msgstr "如：女频 18-35 岁"
+
+msgid "Platform Label"
+msgstr "目标平台"
+
+msgid "Platform Placeholder"
+msgstr "如：抖音、ReelShort、DramaBox"
+
+msgid "Generate Topic Report"
+msgstr "生成选题报告"
+
+## --- Story Outline ---
+
+msgid "Story Outline Title"
+msgstr "故事大纲"
+
+msgid "Story Outline Description"
+msgstr "基于选题报告，生成三幕式结构大纲"
+
+msgid "Episode Count Label"
+msgstr "总集数"
+
+msgid "Tone Label"
+msgstr "基调"
+
+msgid "Generate Outline"
+msgstr "生成大纲"
+
+## --- Character Development ---
+
+msgid "Character Dev Title"
+msgstr "角色开发"
+
+msgid "Character Dev Description"
+msgstr "基于大纲生成角色体系、关系图和弧线"
+
+msgid "Generate Character System"
+msgstr "生成角色体系"
+
+## --- Episode Directory ---
+
+msgid "Episode Directory Title"
+msgstr "分集目录"
+
+msgid "Episode Directory Description"
+msgstr "生成全剧分集目录，标注关键集和付费卡点"
+
+msgid "Generate Episode Directory"
+msgstr "生成分集目录"
+
+## --- Episode Script ---
+
+msgid "Episode Script Title"
+msgstr "分集撰写"
+
+msgid "Episode Script Description"
+msgstr "逐集生成专业格式剧本"
+
+msgid "Episode Number"
+msgstr "集数"
+
+msgid "Generate Script"
+msgstr "生成剧本"
+
+msgid "Generate Batch"
+msgstr "批量生成"
+
+## --- Quality Review ---
+
+msgid "Quality Review Title"
+msgstr "质量自检"
+
+msgid "Quality Review Description"
+msgstr "五维度质量评估和优化建议"
+
+msgid "Start Review"
+msgstr "开始自检"
+
+## --- Compliance Check ---
+
+msgid "Compliance Check Title"
+msgstr "合规审核"
+
+msgid "Compliance Check Description"
+msgstr "内容安全和法规合规检查"
+
+msgid "Target Market Label"
+msgstr "目标市场"
+
+msgid "Start Compliance Check"
+msgstr "开始审核"
+
+## --- Overseas Adaptation ---
+
+msgid "Overseas Adapt Title"
+msgstr "出海适配"
+
+msgid "Overseas Adapt Description"
+msgstr "将中文剧本转化为海外市场版本"
+
+msgid "Target Language Label"
+msgstr "目标语言"
+
+msgid "Start Adaptation"
+msgstr "开始适配"
+
+## --- Status ---
+
+msgid "Status Pending"
+msgstr "未开始"
+
+msgid "Status In Progress"
+msgstr "进行中"
+
+msgid "Status Completed"
+msgstr "已完成"
+
+msgid "Status Failed"
+msgstr "失败"
+
+## --- Actions ---
+
+msgid "Next Step"
+msgstr "下一步"
+
+msgid "Previous Step"
+msgstr "上一步"
+
+msgid "Regenerate"
+msgstr "重新生成"
+
+msgid "Export Script"
+msgstr "导出剧本"

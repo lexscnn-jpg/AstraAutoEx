@@ -21,6 +21,7 @@ defmodule AstraAutoEx.Production.Episode do
     field :composed_video_key, :string
     field :compose_status, :string
     field :compose_task_id, :binary_id
+    field :public_id, :string
 
     has_many :clips, AstraAutoEx.Production.Clip
     has_many :voice_lines, AstraAutoEx.Production.VoiceLine
@@ -44,7 +45,8 @@ defmodule AstraAutoEx.Production.Episode do
       :imported_script_meta,
       :composed_video_key,
       :compose_status,
-      :compose_task_id
+      :compose_task_id,
+      :public_id
     ])
     |> validate_required([:project_id, :user_id])
   end

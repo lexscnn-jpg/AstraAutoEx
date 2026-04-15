@@ -1,0 +1,211 @@
+## "progress" domain translations for en locale.
+## Progress indicators, task types, pipeline stage messages.
+msgid ""
+msgstr ""
+"Language: en\n"
+
+## --- Progress Messages ---
+
+msgid "Analyzing story structure..."
+msgstr ""
+
+msgid "Splitting clips..."
+msgstr ""
+
+msgid "Converting to screenplay..."
+msgstr ""
+
+msgid "Submitting storyboard..."
+msgstr ""
+
+msgid "Step %{current} of %{total}"
+msgstr ""
+
+## --- Status ---
+
+msgid "status.completed"
+msgstr ""
+
+msgid "status.failed"
+msgstr ""
+
+msgid "status.processing"
+msgstr ""
+
+msgid "status.queued"
+msgstr ""
+
+msgid "status.pending"
+msgstr ""
+
+## --- Stage Card ---
+
+msgid "Stage"
+msgstr ""
+
+msgid "Realtime Stream"
+msgstr ""
+
+msgid "Current Stage"
+msgstr ""
+
+msgid "AI Realtime Output"
+msgstr ""
+
+msgid "Waiting for model output..."
+msgstr ""
+
+## --- Runtime ---
+
+msgid "Waiting Execution"
+msgstr ""
+
+msgid "Task Created"
+msgstr ""
+
+msgid "Task Started"
+msgstr ""
+
+msgid "Task Completed"
+msgstr ""
+
+msgid "Task Failed"
+msgstr ""
+
+msgid "Task Processing"
+msgstr ""
+
+msgid "Model Processing"
+msgstr ""
+
+msgid "Model Outputting"
+msgstr ""
+
+msgid "Model Reasoning"
+msgstr ""
+
+msgid "Model Completed"
+msgstr ""
+
+msgid "Model Failed"
+msgstr ""
+
+## --- Task Type Labels ---
+
+msgid "task.generic"
+msgstr ""
+
+msgid "task.imagePanel"
+msgstr ""
+
+msgid "task.imageCharacter"
+msgstr ""
+
+msgid "task.imageLocation"
+msgstr ""
+
+msgid "task.videoPanel"
+msgstr ""
+
+msgid "task.lipSync"
+msgstr ""
+
+msgid "task.voiceLine"
+msgstr ""
+
+msgid "task.voiceDesign"
+msgstr ""
+
+msgid "task.regenerateStoryboardText"
+msgstr ""
+
+msgid "task.insertPanel"
+msgstr ""
+
+msgid "task.panelVariant"
+msgstr ""
+
+msgid "task.modifyAssetImage"
+msgstr ""
+
+msgid "task.regenerateGroup"
+msgstr ""
+
+msgid "task.analyzeNovel"
+msgstr ""
+
+msgid "task.storyToScriptRun"
+msgstr ""
+
+msgid "task.scriptToStoryboardRun"
+msgstr ""
+
+msgid "task.clipsBuild"
+msgstr ""
+
+msgid "task.screenplayConvert"
+msgstr ""
+
+msgid "task.voiceAnalyze"
+msgstr ""
+
+msgid "task.analyzeGlobal"
+msgstr ""
+
+msgid "task.aiStoryExpand"
+msgstr ""
+
+msgid "task.aiCreateCharacter"
+msgstr ""
+
+msgid "task.aiCreateLocation"
+msgstr ""
+
+msgid "task.episodeSplitLlm"
+msgstr ""
+
+## --- Stream Step Labels ---
+
+msgid "stream.analyzeCharacters"
+msgstr ""
+
+msgid "stream.analyzeLocations"
+msgstr ""
+
+msgid "stream.analyzeProps"
+msgstr ""
+
+msgid "stream.splitClips"
+msgstr ""
+
+msgid "stream.screenplayConversion"
+msgstr ""
+
+msgid "stream.storyboardPlan"
+msgstr ""
+
+msgid "stream.cinematographyRules"
+msgstr ""
+
+msgid "stream.actingDirection"
+msgstr ""
+
+msgid "stream.storyboardDetailRefine"
+msgstr ""
+
+msgid "stream.voiceAnalyze"
+msgstr ""
+
+## --- Run Console ---
+
+msgid "Story to Script"
+msgstr ""
+
+msgid "Script to Storyboard"
+msgstr ""
+
+msgid "Confirm Stop?"
+msgstr ""
+
+msgid "Minimize"
+msgstr ""

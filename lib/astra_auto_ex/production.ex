@@ -25,6 +25,32 @@ defmodule AstraAutoEx.Production do
   def update_episode(episode, attrs), do: episode |> Episode.changeset(attrs) |> Repo.update()
   def delete_episode(episode), do: Repo.delete(episode)
 
+  @doc "Find an episode by its public sharing ID."
+  @spec get_episode_by_public_id(String.t()) :: Episode.t() | nil
+  def get_episode_by_public_id(public_id) when is_binary(public_id) do
+    Repo.get_by(Episode, public_id: public_id)
+  end
+
+  @doc "Generate a short Base62-encoded random ID for public sharing."
+  @spec generate_public_id() :: String.t()
+  def generate_public_id do
+    alphabet = ~c"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
+
+    1..8
+    |> Enum.map(fn _ -> Enum.random(alphabet) end)
+    |> List.to_string()
+  end
+
+  @doc "Ensure an episode has a public_id; generate one if missing."
+  @spec ensure_public_id(Episode.t()) :: {:ok, Episode.t()} | {:error, Ecto.Changeset.t()}
+  def ensure_public_id(%Episode{public_id: pid} = episode) when is_binary(pid) and pid != "" do
+    {:ok, episode}
+  end
+
+  def ensure_public_id(%Episode{} = episode) do
+    update_episode(episode, %{public_id: generate_public_id()})
+  end
+
   # ── Clips ──
   def list_clips(episode_id) do
     from(c in Clip, where: c.episode_id == ^episode_id, order_by: [asc: c.clip_index])
@@ -60,6 +86,13 @@ defmodule AstraAutoEx.Production do
   def get_panel!(id), do: Repo.get!(Panel, id)
   def create_panel(attrs), do: %Panel{} |> Panel.changeset(attrs) |> Repo.insert()
   def update_panel(panel, attrs), do: panel |> Panel.changeset(attrs) |> Repo.update()
+
+  @doc "Update a panel's index for drag-and-drop reordering."
+  @spec update_panel_index(String.t(), integer()) ::
+          {:ok, Panel.t()} | {:error, Ecto.Changeset.t()}
+  def update_panel_index(panel_id, new_index) do
+    panel_id |> get_panel!() |> update_panel(%{panel_index: new_index})
+  end
 
   # ── Shots ──
   def list_shots(episode_id) do

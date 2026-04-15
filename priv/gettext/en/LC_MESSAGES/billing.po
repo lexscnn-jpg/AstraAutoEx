@@ -1,0 +1,74 @@
+## "billing" domain translations for en locale.
+## Billing, transaction history, cost details.
+msgid ""
+msgstr ""
+"Language: en\n"
+
+msgid "Transaction Type"
+msgstr ""
+
+msgid "Start Date"
+msgstr ""
+
+msgid "End Date"
+msgstr ""
+
+msgid "All"
+msgstr ""
+
+msgid "Income"
+msgstr ""
+
+msgid "Expense"
+msgstr ""
+
+msgid "Reset"
+msgstr ""
+
+msgid "Filter"
+msgstr ""
+
+msgid "No Records"
+msgstr ""
+
+msgid "Account Recharge"
+msgstr ""
+
+msgid "Service Consumption"
+msgstr ""
+
+msgid "Balance"
+msgstr ""
+
+msgid "All Types"
+msgstr ""
+
+msgid "Available"
+msgstr ""
+
+msgid "Frozen"
+msgstr ""
+
+msgid "Total Spent"
+msgstr ""
+
+msgid "Recent Usage"
+msgstr ""
+
+msgid "Usage Summary"
+msgstr ""
+
+msgid "Total Calls"
+msgstr ""
+
+msgid "Model Pricing"
+msgstr ""
+
+msgid "Price per Million Tokens"
+msgstr ""
+
+msgid "Price per Image"
+msgstr ""
+
+msgid "Price per Video"
+msgstr ""

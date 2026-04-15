@@ -1,0 +1,279 @@
+## "voice" domain translations for en locale.
+## Voice dubbing, TTS, voice design, line editing.
+msgid ""
+msgstr ""
+"Language: en\n"
+
+## --- Title ---
+
+msgid "Voice Dubbing"
+msgstr ""
+
+msgid "%{count} voice lines total"
+msgstr ""
+
+msgid "%{count} audio generated"
+msgstr ""
+
+## --- Emotion ---
+
+msgid "Emotion Prompt"
+msgstr ""
+
+msgid "Emotion Prompt Tip"
+msgstr ""
+
+msgid "Emotion Placeholder"
+msgstr ""
+
+msgid "Emotion Strength"
+msgstr ""
+
+msgid "Flat"
+msgstr ""
+
+msgid "Intense"
+msgstr ""
+
+## --- Toolbar ---
+
+msgid "Analyze Lines"
+msgstr ""
+
+msgid "Add Voice Line"
+msgstr ""
+
+msgid "Generate All Voices"
+msgstr ""
+
+msgid "Download All Voices"
+msgstr ""
+
+msgid "Generating (%{count})"
+msgstr ""
+
+msgid "Voice Stats"
+msgstr ""
+
+msgid "No Download Available"
+msgstr ""
+
+## --- Speaker Voice ---
+
+msgid "Speaker Voice Status"
+msgstr ""
+
+msgid "%{count} voice lines"
+msgstr ""
+
+msgid "No Reference Voice"
+msgstr ""
+
+msgid "Voice Configured"
+msgstr ""
+
+msgid "Play Current Voice"
+msgstr ""
+
+msgid "AI Design Voice"
+msgstr ""
+
+msgid "Redesign Voice"
+msgstr ""
+
+msgid "Upload Audio"
+msgstr ""
+
+msgid "Male Voices"
+msgstr ""
+
+msgid "Female Voices"
+msgstr ""
+
+msgid "Voice Library"
+msgstr ""
+
+msgid "Voice Settings"
+msgstr ""
+
+## --- Line Card ---
+
+msgid "Generating Voice"
+msgstr ""
+
+msgid "Speaker"
+msgstr ""
+
+msgid "Speaker Placeholder"
+msgstr ""
+
+msgid "Content"
+msgstr ""
+
+msgid "Content Placeholder"
+msgstr ""
+
+msgid "Emotion Configured"
+msgstr ""
+
+msgid "Emotion Settings"
+msgstr ""
+
+msgid "Need Voice"
+msgstr ""
+
+msgid "Locate Panel"
+msgstr ""
+
+msgid "Edit Line"
+msgstr ""
+
+msgid "Delete Line"
+msgstr ""
+
+msgid "Delete Audio"
+msgstr ""
+
+## --- Line Editor ---
+
+msgid "Add Voice Title"
+msgstr ""
+
+msgid "Edit Voice Title"
+msgstr ""
+
+msgid "Content Label"
+msgstr ""
+
+msgid "Speaker Label"
+msgstr ""
+
+msgid "Select Speaker"
+msgstr ""
+
+msgid "Bind Panel Label"
+msgstr ""
+
+msgid "Unbound Panel"
+msgstr ""
+
+msgid "Panel %{index}"
+msgstr ""
+
+## --- Empty ---
+
+msgid "No Voice Data"
+msgstr ""
+
+msgid "Extract from Script"
+msgstr ""
+
+## --- Confirm ---
+
+msgid "Confirm delete line"
+msgstr ""
+
+msgid "Confirm delete audio"
+msgstr ""
+
+## --- Voice Design ---
+
+msgid "MiniMax System Voices"
+msgstr ""
+
+msgid "AI Generated"
+msgstr ""
+
+msgid "Gender Filter"
+msgstr ""
+
+msgid "Language Filter"
+msgstr ""
+
+msgid "All"
+msgstr ""
+
+msgid "Male"
+msgstr ""
+
+msgid "Female"
+msgstr ""
+
+msgid "Child"
+msgstr ""
+
+msgid "Chinese"
+msgstr ""
+
+msgid "English"
+msgstr ""
+
+msgid "No Matching Voices"
+msgstr ""
+
+msgid "Selected"
+msgstr ""
+
+msgid "Select Style"
+msgstr ""
+
+msgid "Custom Description"
+msgstr ""
+
+msgid "Describe Placeholder"
+msgstr ""
+
+msgid "Generate %{count} schemes"
+msgstr ""
+
+msgid "Generating 3 schemes..."
+msgstr ""
+
+msgid "Estimated Time"
+msgstr ""
+
+msgid "Select Scheme"
+msgstr ""
+
+msgid "Confirm Use"
+msgstr ""
+
+## --- Voice Create ---
+
+msgid "AI Design Mode"
+msgstr ""
+
+msgid "Upload Mode"
+msgstr ""
+
+msgid "Drop or Click"
+msgstr ""
+
+msgid "Supported Formats"
+msgstr ""
+
+msgid "Preview Audio"
+msgstr ""
+
+msgid "Upload Success"
+msgstr ""
+
+## --- Presets ---
+
+msgid "Male Broadcaster"
+msgstr ""
+
+msgid "Gentle Female"
+msgstr ""
+
+msgid "Mature Male"
+msgstr ""
+
+msgid "Lively Female"
+msgstr ""
+
+msgid "Intellectual Female"
+msgstr ""
+
+msgid "Narrator"
+msgstr ""

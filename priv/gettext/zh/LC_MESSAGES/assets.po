@@ -1,0 +1,302 @@
+## "assets" domain translations for zh locale.
+## Asset management: characters, locations, props, images, TTS, profiles.
+msgid ""
+msgstr ""
+"Language: zh\n"
+
+## --- Stage ---
+
+msgid "Asset Confirmation"
+msgstr "资产确认"
+
+msgid "Analyze Assets"
+msgstr "分析资产"
+
+msgid "Analyzing..."
+msgstr "分析中..."
+
+msgid "Batch Generate All"
+msgstr "批量生成全部"
+
+msgid "No Characters"
+msgstr "暂无角色"
+
+msgid "No Locations"
+msgstr "暂无场景"
+
+msgid "Confirm All (%{count})"
+msgstr "全部确认 (%{count})"
+
+msgid "Character Assets"
+msgstr "角色资产"
+
+msgid "Location Assets"
+msgstr "场景资产"
+
+msgid "Prop Assets"
+msgstr "道具资产"
+
+msgid "%{character_count} characters, %{appearance_count} appearances"
+msgstr "%{character_count} 个角色，%{appearance_count} 个形象"
+
+msgid "%{count} locations"
+msgstr "%{count} 个场景"
+
+msgid "%{count} props"
+msgstr "%{count} 个道具"
+
+## --- Character ---
+
+msgid "Add Character"
+msgstr "添加角色"
+
+msgid "Edit Character"
+msgstr "编辑角色"
+
+msgid "Delete Character"
+msgstr "删除角色"
+
+msgid "Delete character confirm"
+msgstr "确定要删除这个角色吗？"
+
+msgid "Character Name"
+msgstr "角色名"
+
+msgid "Character Description"
+msgstr "外貌描述"
+
+msgid "Generate Image"
+msgstr "生成形象"
+
+msgid "Regenerate Image"
+msgstr "重新生成"
+
+msgid "Character Profile"
+msgstr "设定档案"
+
+msgid "Voice Settings"
+msgstr "配音设置"
+
+msgid "Speaker"
+msgstr "说话人"
+
+msgid "Select Speaker"
+msgstr "选择说话人"
+
+msgid "No Speaker"
+msgstr "未设置"
+
+msgid "Primary Appearance"
+msgstr "主形象"
+
+msgid "Secondary Appearance"
+msgstr "子状态"
+
+msgid "Generate from Primary"
+msgstr "基于主形象生成"
+
+msgid "Select Primary First"
+msgstr "请先选择主形象"
+
+msgid "%{count} appearances"
+msgstr "%{count} 个形象"
+
+msgid "Copy from Global"
+msgstr "从资产中心导入"
+
+## --- Location ---
+
+msgid "Add Location"
+msgstr "添加场景"
+
+msgid "Edit Location"
+msgstr "编辑场景"
+
+msgid "Delete Location"
+msgstr "删除场景"
+
+msgid "Location Name"
+msgstr "场景名"
+
+msgid "Location Summary"
+msgstr "简要描述"
+
+msgid "Location Description"
+msgstr "场景描述"
+
+## --- Prop ---
+
+msgid "Add Prop"
+msgstr "添加道具"
+
+msgid "Edit Prop"
+msgstr "编辑道具"
+
+msgid "Delete Prop"
+msgstr "删除道具"
+
+msgid "Prop Name"
+msgstr "道具名"
+
+msgid "Prop Summary"
+msgstr "简要说明"
+
+msgid "Prop Description"
+msgstr "图片描述"
+
+## --- Image ---
+
+msgid "Upload Image"
+msgstr "上传图片"
+
+msgid "Upload Replace Image"
+msgstr "上传替换图片"
+
+msgid "Edit Image"
+msgstr "编辑图片"
+
+msgid "Edit Prompt"
+msgstr "编辑提示词"
+
+msgid "Undo to Previous Version"
+msgstr "撤回到上一版本"
+
+msgid "Regenerate Group"
+msgstr "整组重新生成"
+
+msgid "Use This"
+msgstr "选择此方案"
+
+msgid "Generating"
+msgstr "生成中"
+
+msgid "Regenerating"
+msgstr "重新生成中"
+
+msgid "Generated %{generated}/%{total}"
+msgstr "已生成 %{generated}/%{total}"
+
+## --- TTS ---
+
+msgid "TTS Voice"
+msgstr "配音音色"
+
+msgid "No Voice"
+msgstr "无音色"
+
+msgid "Preview Voice"
+msgstr "试听音色"
+
+msgid "Upload Audio"
+msgstr "上传音频"
+
+msgid "Uploading..."
+msgstr "上传中..."
+
+msgid "Uploaded"
+msgstr "已上传"
+
+msgid "AI Designed Voice"
+msgstr "AI 音色"
+
+msgid "Voice Set"
+msgstr "已设置"
+
+msgid "Voice Unset"
+msgstr "未指定"
+
+## --- Character Profile ---
+
+msgid "Importance S"
+msgstr "S级 - 绝对主角"
+
+msgid "Importance A"
+msgstr "A级 - 核心配角"
+
+msgid "Importance B"
+msgstr "B级 - 重要配角"
+
+msgid "Importance C"
+msgstr "C级 - 次要角色"
+
+msgid "Importance D"
+msgstr "D级 - 群众演员"
+
+msgid "Importance Level"
+msgstr "角色重要性层级"
+
+msgid "Character Archetype"
+msgstr "角色原型"
+
+msgid "Personality Tags"
+msgstr "性格标签"
+
+msgid "Costume Level"
+msgstr "服装华丽度"
+
+msgid "Suggested Colors"
+msgstr "建议色彩"
+
+msgid "Primary Marker"
+msgstr "主要辨识标志"
+
+msgid "Visual Keywords"
+msgstr "视觉关键词"
+
+msgid "Confirm and Generate"
+msgstr "确认并生成"
+
+msgid "Use Existing"
+msgstr "使用已有形象"
+
+msgid "Edit Profile"
+msgstr "编辑档案"
+
+## --- Toolbar ---
+
+msgid "Filter"
+msgstr "筛选"
+
+msgid "View All"
+msgstr "查看全部"
+
+msgid "Show Generated"
+msgstr "已生成"
+
+msgid "Show Pending"
+msgstr "待生成"
+
+msgid "Asset Management"
+msgstr "资产管理"
+
+msgid "Global Analyze"
+msgstr "全局分析"
+
+msgid "Generate All Images"
+msgstr "生成全部图片"
+
+msgid "Regenerate All"
+msgstr "重新生成全部"
+
+msgid "Download All Images"
+msgstr "打包下载全部图片"
+
+## --- Modal ---
+
+msgid "New Character"
+msgstr "新增角色"
+
+msgid "AI Smart Design"
+msgstr "AI智能设计"
+
+msgid "AI Designing..."
+msgstr "AI设计中..."
+
+msgid "Smart Modify"
+msgstr "智能修改"
+
+msgid "Save and Generate"
+msgstr "保存并生成"
+
+msgid "Introduction"
+msgstr "角色介绍"

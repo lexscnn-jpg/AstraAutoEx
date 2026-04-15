@@ -1,0 +1,93 @@
+## "actions" domain translations for en locale.
+## Global action buttons and pipeline action types.
+msgid ""
+msgstr ""
+"Language: en\n"
+
+## --- Global Action Buttons ---
+
+msgid "Start Generate"
+msgstr ""
+
+msgid "Stop"
+msgstr ""
+
+msgid "Skip"
+msgstr ""
+
+msgid "Generate All"
+msgstr ""
+
+msgid "Batch Operation"
+msgstr ""
+
+msgid "Export"
+msgstr ""
+
+msgid "Import"
+msgstr ""
+
+msgid "Retry All"
+msgstr ""
+
+msgid "Clear All"
+msgstr ""
+
+msgid "Select All"
+msgstr ""
+
+msgid "Deselect All"
+msgstr ""
+
+msgid "Confirm & Start Drawing"
+msgstr ""
+
+## --- Pipeline Action Type Labels ---
+
+msgid "action.storyboard"
+msgstr ""
+
+msgid "action.storyboard_candidate"
+msgstr ""
+
+msgid "action.character"
+msgstr ""
+
+msgid "action.location"
+msgstr ""
+
+msgid "action.video"
+msgstr ""
+
+msgid "action.analyze"
+msgstr ""
+
+msgid "action.analyze_character"
+msgstr ""
+
+msgid "action.analyze_location"
+msgstr ""
+
+msgid "action.clips"
+msgstr ""
+
+msgid "action.storyboard_text_plan"
+msgstr ""
+
+msgid "action.storyboard_text_detail"
+msgstr ""
+
+msgid "action.tts"
+msgstr ""
+
+msgid "action.regenerate"
+msgstr ""
+
+msgid "action.voice_generate"
+msgstr ""
+
+msgid "action.voice_design"
+msgstr ""
+
+msgid "action.lip_sync"
+msgstr ""

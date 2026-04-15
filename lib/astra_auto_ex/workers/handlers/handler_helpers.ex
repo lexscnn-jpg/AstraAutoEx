@@ -181,6 +181,37 @@ defmodule AstraAutoEx.Workers.Handlers.Helpers do
     Storage.get_signed_url(storage_key)
   end
 
+  @doc "Replace double quotes inside text with Chinese quotation marks to prevent JSON parse failures from LLM output."
+  @spec sanitize_for_json(String.t()) :: String.t()
+  def sanitize_for_json(text) when is_binary(text) do
+    text
+    |> String.replace(~r/"([^"]*)"/, "\u300C\\1\u300D")
+  end
+
+  def sanitize_for_json(nil), do: ""
+
+  @doc "Safely decode JSON, falling back to extracting ```json ... ``` code blocks."
+  @spec safe_json_decode(String.t()) :: {:ok, term()} | {:error, term()}
+  def safe_json_decode(text) when is_binary(text) do
+    case Jason.decode(text) do
+      {:ok, result} ->
+        {:ok, result}
+
+      {:error, _} ->
+        cleaned = extract_json_block(text)
+        Jason.decode(cleaned)
+    end
+  end
+
+  def safe_json_decode(nil), do: {:error, :nil_input}
+
+  defp extract_json_block(text) do
+    case Regex.run(~r/```(?:json)?\s*\n?([\s\S]*?)\n?```/, text) do
+      [_, json] -> String.trim(json)
+      _ -> text
+    end
+  end
+
   @doc "Parse the provider:type:id format from external_id."
   def parse_external_id(external_id) do
     case String.split(external_id, ":", parts: 3) do

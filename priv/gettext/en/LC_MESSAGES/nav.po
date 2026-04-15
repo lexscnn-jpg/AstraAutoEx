@@ -1,0 +1,41 @@
+## "nav" domain translations for en locale.
+## Navigation bar and global links.
+msgid ""
+msgstr ""
+"Language: en\n"
+
+msgid "Workspace"
+msgstr ""
+
+msgid "Asset Hub"
+msgstr ""
+
+msgid "Profile"
+msgstr ""
+
+msgid "Download Logs"
+msgstr ""
+
+msgid "Sign In"
+msgstr ""
+
+msgid "Sign Up"
+msgstr ""
+
+msgid "Logout"
+msgstr ""
+
+msgid "Home"
+msgstr ""
+
+msgid "Guide"
+msgstr ""
+
+msgid "AI Assistant"
+msgstr ""
+
+msgid "Settings"
+msgstr ""
+
+msgid "User Guide"
+msgstr ""

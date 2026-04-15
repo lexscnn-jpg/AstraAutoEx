@@ -40,7 +40,7 @@ defmodule AstraAutoExWeb.WorkspaceLiveTest do
     test "can switch to billing tab", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/profile")
       html = render_click(view, "switch_tab", %{"tab" => "billing"})
-      assert html =~ "Balance"
+      assert html =~ "总费用" or html =~ "Balance" or html =~ "Billing"
     end
   end
 

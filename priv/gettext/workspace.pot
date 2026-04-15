@@ -1,0 +1,112 @@
+## "workspace" domain Template file.
+## Workspace project management, settings, quick actions.
+msgid ""
+msgstr ""
+
+msgid "My Projects"
+msgstr ""
+
+msgid "Manage your AI anime production projects"
+msgstr ""
+
+msgid "New Project"
+msgstr ""
+
+msgid "Search projects..."
+msgstr ""
+
+msgid "Search"
+msgstr ""
+
+msgid "Clear"
+msgstr ""
+
+msgid "Updated at"
+msgstr ""
+
+msgid "No projects"
+msgstr ""
+
+msgid "No projects description"
+msgstr ""
+
+msgid "No results"
+msgstr ""
+
+msgid "No results description"
+msgstr ""
+
+msgid "Create Project"
+msgstr ""
+
+msgid "Edit Project"
+msgstr ""
+
+msgid "Delete Project"
+msgstr ""
+
+msgid "Delete confirm"
+msgstr ""
+
+msgid "Project Name"
+msgstr ""
+
+msgid "Project Name Placeholder"
+msgstr ""
+
+msgid "Project Description"
+msgstr ""
+
+msgid "Project Description Placeholder"
+msgstr ""
+
+msgid "Creating..."
+msgstr ""
+
+msgid "Saving..."
+msgstr ""
+
+msgid "Create Failed"
+msgstr ""
+
+msgid "Update Failed"
+msgstr ""
+
+msgid "Delete Failed"
+msgstr ""
+
+msgid "Total %{count} projects"
+msgstr ""
+
+msgid "Episodes Count"
+msgstr ""
+
+msgid "Images Count"
+msgstr ""
+
+msgid "Videos Count"
+msgstr ""
+
+msgid "No Content"
+msgstr ""
+
+msgid "Name required"
+msgstr ""
+
+msgid "Name too long"
+msgstr ""
+
+msgid "Description too long"
+msgstr ""
+
+msgid "Auto Chain"
+msgstr ""
+
+msgid "Full Auto Chain"
+msgstr ""
+
+msgid "Art Style"
+msgstr ""
+
+msgid "Aspect Ratio"
+msgstr ""

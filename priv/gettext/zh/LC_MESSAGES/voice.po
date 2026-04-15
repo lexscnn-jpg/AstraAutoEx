@@ -1,0 +1,279 @@
+## "voice" domain translations for zh locale.
+## Voice dubbing, TTS, voice design, line editing.
+msgid ""
+msgstr ""
+"Language: zh\n"
+
+## --- Title ---
+
+msgid "Voice Dubbing"
+msgstr "台词配音"
+
+msgid "%{count} voice lines total"
+msgstr "共 %{count} 条台词"
+
+msgid "%{count} audio generated"
+msgstr "%{count} 条已生成音频"
+
+## --- Emotion ---
+
+msgid "Emotion Prompt"
+msgstr "情绪提示词"
+
+msgid "Emotion Prompt Tip"
+msgstr "(不填则使用台词自参考)"
+
+msgid "Emotion Placeholder"
+msgstr "如：laugh，仅支持英文..."
+
+msgid "Emotion Strength"
+msgstr "情绪强度"
+
+msgid "Flat"
+msgstr "平淡"
+
+msgid "Intense"
+msgstr "强烈"
+
+## --- Toolbar ---
+
+msgid "Analyze Lines"
+msgstr "分析台词"
+
+msgid "Add Voice Line"
+msgstr "添加语音"
+
+msgid "Generate All Voices"
+msgstr "一键生成所有配音"
+
+msgid "Download All Voices"
+msgstr "下载配音"
+
+msgid "Generating (%{count})"
+msgstr "生成中 (%{count})"
+
+msgid "Voice Stats"
+msgstr "共 %{total} 条台词 | 已设置音色 %{with_voice} 条 | 已生成配音 %{with_audio} 条"
+
+msgid "No Download Available"
+msgstr "没有可下载的配音"
+
+## --- Speaker Voice ---
+
+msgid "Speaker Voice Status"
+msgstr "发言人音色状态"
+
+msgid "%{count} voice lines"
+msgstr "%{count} 条台词"
+
+msgid "No Reference Voice"
+msgstr "无参考音色"
+
+msgid "Voice Configured"
+msgstr "已设置"
+
+msgid "Play Current Voice"
+msgstr "播放当前音色"
+
+msgid "AI Design Voice"
+msgstr "AI设计声音"
+
+msgid "Redesign Voice"
+msgstr "使用 AI 重新设计声音"
+
+msgid "Upload Audio"
+msgstr "上传音频"
+
+msgid "Male Voices"
+msgstr "男声"
+
+msgid "Female Voices"
+msgstr "女声"
+
+msgid "Voice Library"
+msgstr "资产库"
+
+msgid "Voice Settings"
+msgstr "音色设置"
+
+## --- Line Card ---
+
+msgid "Generating Voice"
+msgstr "生成中"
+
+msgid "Speaker"
+msgstr "发言人"
+
+msgid "Speaker Placeholder"
+msgstr "发言人名称"
+
+msgid "Content"
+msgstr "台词内容"
+
+msgid "Content Placeholder"
+msgstr "台词内容"
+
+msgid "Emotion Configured"
+msgstr "情绪已设置"
+
+msgid "Emotion Settings"
+msgstr "情绪设置"
+
+msgid "Need Voice"
+msgstr "请在上方设置音色"
+
+msgid "Locate Panel"
+msgstr "定位到绑定镜头"
+
+msgid "Edit Line"
+msgstr "编辑台词"
+
+msgid "Delete Line"
+msgstr "删除台词"
+
+msgid "Delete Audio"
+msgstr "删除配音"
+
+## --- Line Editor ---
+
+msgid "Add Voice Title"
+msgstr "添加语音"
+
+msgid "Edit Voice Title"
+msgstr "编辑语音"
+
+msgid "Content Label"
+msgstr "台词内容"
+
+msgid "Speaker Label"
+msgstr "发言人"
+
+msgid "Select Speaker"
+msgstr "请选择发言人"
+
+msgid "Bind Panel Label"
+msgstr "绑定镜头"
+
+msgid "Unbound Panel"
+msgstr "未绑定镜头"
+
+msgid "Panel %{index}"
+msgstr "镜头 %{index}"
+
+## --- Empty ---
+
+msgid "No Voice Data"
+msgstr "暂无台词数据"
+
+msgid "Extract from Script"
+msgstr "从剧本中提取台词和发言人"
+
+## --- Confirm ---
+
+msgid "Confirm delete line"
+msgstr "确定要删除这条台词吗？此操作不可撤销。"
+
+msgid "Confirm delete audio"
+msgstr "确定要删除这条台词的配音吗？此操作不可撤销。"
+
+## --- Voice Design ---
+
+msgid "MiniMax System Voices"
+msgstr "MiniMax 系统音色"
+
+msgid "AI Generated"
+msgstr "AI 生成"
+
+msgid "Gender Filter"
+msgstr "性别"
+
+msgid "Language Filter"
+msgstr "语言"
+
+msgid "All"
+msgstr "全部"
+
+msgid "Male"
+msgstr "男声"
+
+msgid "Female"
+msgstr "女声"
+
+msgid "Child"
+msgstr "童声"
+
+msgid "Chinese"
+msgstr "中文"
+
+msgid "English"
+msgstr "英文"
+
+msgid "No Matching Voices"
+msgstr "没有匹配的音色"
+
+msgid "Selected"
+msgstr "已选"
+
+msgid "Select Style"
+msgstr "选择声音风格"
+
+msgid "Custom Description"
+msgstr "或自定义描述"
+
+msgid "Describe Placeholder"
+msgstr "描述声音特征：年龄、性别、音色、语调..."
+
+msgid "Generate %{count} schemes"
+msgstr "生成%{count}个声音方案"
+
+msgid "Generating 3 schemes..."
+msgstr "正在生成 3 个声音方案..."
+
+msgid "Estimated Time"
+msgstr "预计 15-30 秒"
+
+msgid "Select Scheme"
+msgstr "选择声音方案"
+
+msgid "Confirm Use"
+msgstr "确认使用"
+
+## --- Voice Create ---
+
+msgid "AI Design Mode"
+msgstr "AI 设计音色"
+
+msgid "Upload Mode"
+msgstr "上传音频"
+
+msgid "Drop or Click"
+msgstr "拖放文件或点击选择"
+
+msgid "Supported Formats"
+msgstr "支持 MP3、WAV、OGG、M4A、AAC 格式"
+
+msgid "Preview Audio"
+msgstr "试听音频"
+
+msgid "Upload Success"
+msgstr "上传成功"
+
+## --- Presets ---
+
+msgid "Male Broadcaster"
+msgstr "男播音"
+
+msgid "Gentle Female"
+msgstr "温柔女"
+
+msgid "Mature Male"
+msgstr "成熟男"
+
+msgid "Lively Female"
+msgstr "活泼女"
+
+msgid "Intellectual Female"
+msgstr "知性女"
+
+msgid "Narrator"
+msgstr "旁白"

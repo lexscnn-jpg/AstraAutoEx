@@ -1,4 +1,5 @@
 defmodule AstraAutoExWeb.WorkspaceLive.ImportWizard do
+  @moduledoc "4-step import wizard: source selection -> parsing -> mapping -> confirm."
   use AstraAutoExWeb, :live_component
 
   @impl true
@@ -10,7 +11,15 @@ defmodule AstraAutoExWeb.WorkspaceLive.ImportWizard do
      |> assign(:raw_text, "")
      |> assign(:parsing, false)
      |> assign(:parsed_episodes, [])
-     |> assign(:error, nil)}
+     |> assign(:split_mode, "auto")
+     |> assign(:error, nil)
+     |> allow_upload(:import_file,
+       accept: ~w(.txt .md),
+       max_entries: 1,
+       max_file_size: 5_000_000,
+       auto_upload: true,
+       progress: &handle_upload_progress/3
+     )}
   end
 
   @impl true
@@ -126,20 +135,73 @@ defmodule AstraAutoExWeb.WorkspaceLive.ImportWizard do
           <div class="text-xs text-[var(--glass-text-tertiary)] mt-1">.txt / .md 文件</div>
         </button>
       </div>
-      <textarea
-        phx-change="update_raw_text"
-        phx-target={@myself}
-        name="raw_text"
-        rows="8"
-        class="glass-input w-full text-sm"
-        placeholder="在此粘贴你的故事文本..."
-      ><%= @raw_text %></textarea>
+
+      <%= if @source_type == "file" do %>
+        <form phx-change="validate_file" phx-target={@myself} class="space-y-3">
+          <div class="glass-surface rounded-xl p-6 border-2 border-dashed border-[var(--glass-stroke-base)] text-center">
+            <.live_file_input upload={@uploads.import_file} class="hidden" />
+            <label
+              for={@uploads.import_file.ref}
+              class="cursor-pointer block"
+            >
+              <svg
+                class="w-10 h-10 mx-auto text-[var(--glass-text-tertiary)] mb-2"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                viewBox="0 0 24 24"
+              >
+                <path d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+              </svg>
+              <p class="text-sm text-[var(--glass-text-secondary)]">点击选择 .txt / .md 文件</p>
+              <p class="text-xs text-[var(--glass-text-tertiary)] mt-1">最大 5MB</p>
+            </label>
+          </div>
+          <%= for entry <- @uploads.import_file.entries do %>
+            <div class="glass-surface rounded-lg px-4 py-2 flex items-center justify-between">
+              <span class="text-sm text-[var(--glass-text-primary)]">{entry.client_name}</span>
+              <span class="text-xs text-[var(--glass-text-tertiary)]">
+                {Float.round(entry.client_size / 1024, 1)} KB
+              </span>
+            </div>
+          <% end %>
+        </form>
+      <% else %>
+        <textarea
+          phx-change="update_raw_text"
+          phx-target={@myself}
+          name="raw_text"
+          rows="8"
+          class="glass-input w-full text-sm"
+          placeholder="在此粘贴你的故事文本..."
+        ><%= @raw_text %></textarea>
+      <% end %>
+
+      <%!-- Split mode selection --%>
+      <div class="space-y-2">
+        <p class="text-xs font-medium text-[var(--glass-text-secondary)]">章节拆分方式：</p>
+        <div class="flex gap-2">
+          <%= for {label, mode} <- [{"自动检测", "auto"}, {"按空行", "blank_lines"}, {"不拆分", "none"}] do %>
+            <button
+              type="button"
+              phx-click="set_split_mode"
+              phx-value-mode={mode}
+              phx-target={@myself}
+              class={"glass-chip text-xs px-3 py-1.5 cursor-pointer transition-all " <>
+                if(@split_mode == mode, do: "bg-[var(--glass-accent-from)]/20 text-[var(--glass-accent-from)] ring-1 ring-[var(--glass-accent-from)]/30", else: "hover:bg-[var(--glass-bg-muted)]")}
+            >
+              {label}
+            </button>
+          <% end %>
+        </div>
+      </div>
+
       <div class="flex justify-end">
         <button
           type="button"
           phx-click="next_step"
           phx-target={@myself}
-          disabled={@raw_text == ""}
+          disabled={@raw_text == "" and @uploads.import_file.entries == []}
           class="glass-btn glass-btn-primary px-6 py-2 disabled:opacity-50"
         >
           下一步 →
@@ -219,6 +281,9 @@ defmodule AstraAutoExWeb.WorkspaceLive.ImportWizard do
                   {String.slice(Map.get(ep, :content, ""), 0..120)}...
                 </div>
               </div>
+              <span class="text-xs text-[var(--glass-text-tertiary)] flex-shrink-0">
+                {String.length(Map.get(ep, :content, ""))} 字
+              </span>
             </div>
           </div>
         <% end %>
@@ -306,13 +371,23 @@ defmodule AstraAutoExWeb.WorkspaceLive.ImportWizard do
     """
   end
 
+  # ── Event Handlers ──
+
   @impl true
   def handle_event("set_source", %{"type" => type}, socket) do
     {:noreply, assign(socket, :source_type, type)}
   end
 
+  def handle_event("set_split_mode", %{"mode" => mode}, socket) do
+    {:noreply, assign(socket, :split_mode, mode)}
+  end
+
   def handle_event("update_raw_text", %{"raw_text" => text}, socket) do
     {:noreply, assign(socket, :raw_text, text)}
+  end
+
+  def handle_event("validate_file", _params, socket) do
+    {:noreply, socket}
   end
 
   def handle_event("next_step", _params, socket) do
@@ -320,11 +395,19 @@ defmodule AstraAutoExWeb.WorkspaceLive.ImportWizard do
 
     socket =
       cond do
-        step == 1 and socket.assigns.raw_text != "" ->
+        step == 1 ->
           socket
-          |> assign(:step, 2)
-          |> assign(:parsing, true)
-          |> start_parsing()
+          |> maybe_consume_upload()
+          |> then(fn s ->
+            if s.assigns.raw_text != "" do
+              s
+              |> assign(:step, 2)
+              |> assign(:parsing, true)
+              |> start_parsing()
+            else
+              s
+            end
+          end)
 
         step >= 2 and step < 4 ->
           assign(socket, :step, step + 1)
@@ -367,41 +450,113 @@ defmodule AstraAutoExWeb.WorkspaceLive.ImportWizard do
     {:noreply, socket}
   end
 
+  # ── File Upload ──
+
+  defp handle_upload_progress(:import_file, _entry, socket), do: {:noreply, socket}
+
+  defp maybe_consume_upload(socket) do
+    case socket.assigns.source_type do
+      "file" ->
+        entries = socket.assigns.uploads.import_file.entries
+
+        if entries != [] do
+          [text] =
+            consume_uploaded_entries(socket, :import_file, fn %{path: path}, _entry ->
+              {:ok, File.read!(path)}
+            end)
+
+          assign(socket, :raw_text, text)
+        else
+          socket
+        end
+
+      _ ->
+        socket
+    end
+  end
+
+  # ── Parsing ──
+
   defp start_parsing(socket) do
     text = socket.assigns.raw_text
+    split_mode = socket.assigns.split_mode
     myself = socket.assigns.myself
 
     Task.start(fn ->
-      episodes = split_episodes(text)
+      episodes = split_episodes(text, split_mode)
       send_update(myself, %{parsed_episodes: episodes, parsing_done: true})
     end)
 
     socket
   end
 
-  defp split_episodes(text) do
-    # Simple episode detection: split by "第X集", "Episode X", "EP X", etc.
+  @doc false
+  @spec split_episodes(String.t(), String.t()) :: [%{title: String.t(), content: String.t()}]
+  def split_episodes(text, mode \\ "auto")
+
+  def split_episodes(text, "none") do
+    [%{title: "第 1 集", content: String.trim(text)}]
+  end
+
+  def split_episodes(text, "blank_lines") do
+    text
+    |> String.split(~r/\n\s*\n\s*\n/, trim: true)
+    |> Enum.reject(&(String.trim(&1) == ""))
+    |> Enum.with_index(1)
+    |> Enum.map(fn {content, idx} ->
+      %{title: "第 #{idx} 集", content: String.trim(content)}
+    end)
+    |> case do
+      [] -> [%{title: "第 1 集", content: String.trim(text)}]
+      list -> list
+    end
+  end
+
+  def split_episodes(text, _auto) do
+    # Try chapter markers first: "第X集", "第X章", "Chapter X", "EP X"
     parts =
-      Regex.split(~r/(?=第\d+集|(?i)episode\s*\d+|(?i)ep\s*\d+)/u, text)
+      Regex.split(
+        ~r/(?=第\d+[集章]|(?i)chapter\s*\d+|(?i)episode\s*\d+|(?i)ep\s*\d+)/u,
+        text
+      )
       |> Enum.reject(&(String.trim(&1) == ""))
 
-    if length(parts) <= 1 do
-      [%{title: "第 1 集", content: text}]
-    else
+    if length(parts) > 1 do
       parts
       |> Enum.with_index(1)
       |> Enum.map(fn {content, idx} ->
-        title =
-          case Regex.run(
-                 ~r/^(第\d+集|(?i)episode\s*\d+|(?i)ep\s*\d+)[：:\s]*(.*)/u,
-                 String.trim(content)
-               ) do
-            [_, _marker, name] when name != "" -> "第 #{idx} 集：#{String.trim(name)}"
-            _ -> "第 #{idx} 集"
-          end
-
+        title = extract_title(content, idx)
         %{title: title, content: String.trim(content)}
       end)
+    else
+      # Fallback: try double-blank-line splits
+      blank_parts =
+        String.split(text, ~r/\n\s*\n\s*\n/, trim: true)
+        |> Enum.reject(&(String.trim(&1) == ""))
+
+      if length(blank_parts) > 1 do
+        blank_parts
+        |> Enum.with_index(1)
+        |> Enum.map(fn {content, idx} ->
+          %{title: "第 #{idx} 集", content: String.trim(content)}
+        end)
+      else
+        [%{title: "第 1 集", content: String.trim(text)}]
+      end
+    end
+  end
+
+  defp extract_title(content, idx) do
+    case Regex.run(
+           ~r/^(第\d+[集章]|(?i)chapter\s*\d+|(?i)episode\s*\d+|(?i)ep\s*\d+)[：:\s]*(.*)/u,
+           String.trim(content)
+         ) do
+      [_, _marker, name] when name != "" ->
+        name = name |> String.trim() |> String.slice(0..30)
+        "第 #{idx} 集：#{name}"
+
+      _ ->
+        "第 #{idx} 集"
     end
   end
 end

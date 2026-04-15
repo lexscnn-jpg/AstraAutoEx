@@ -1,0 +1,150 @@
+## "common" domain translations for zh locale.
+## Common operations shared across the application.
+msgid ""
+msgstr ""
+"Language: zh\n"
+
+## --- General Actions ---
+
+msgid "Generate"
+msgstr "生成"
+
+msgid "Regenerate"
+msgstr "重新生成"
+
+msgid "Preview"
+msgstr "预览"
+
+msgid "Download"
+msgstr "下载"
+
+msgid "Upload"
+msgstr "上传"
+
+msgid "Expand"
+msgstr "展开"
+
+msgid "Collapse"
+msgstr "收起"
+
+msgid "Copy"
+msgstr "复制"
+
+msgid "Paste"
+msgstr "粘贴"
+
+msgid "Reset"
+msgstr "重置"
+
+msgid "Retry"
+msgstr "重试"
+
+msgid "Previous"
+msgstr "上一步"
+
+msgid "Auto Save"
+msgstr "自动保存"
+
+msgid "Saved"
+msgstr "已保存"
+
+msgid "Info"
+msgstr "信息"
+
+msgid "All"
+msgstr "全部"
+
+msgid "Rename"
+msgstr "重命名"
+
+msgid "Optional"
+msgstr "（可选）"
+
+msgid "Recommended"
+msgstr "推荐"
+
+## --- Task Status ---
+
+msgid "Queued"
+msgstr "排队中"
+
+msgid "Processing"
+msgstr "处理中"
+
+msgid "Completed"
+msgstr "已完成"
+
+msgid "Failed"
+msgstr "失败"
+
+msgid "Pending"
+msgstr "未开始"
+
+msgid "Paused"
+msgstr "已暂停"
+
+msgid "Cancelled"
+msgstr "已取消"
+
+## --- Task Actions ---
+
+msgid "Confirm Cancel"
+msgstr "确认取消？"
+
+msgid "Cancelling"
+msgstr "取消中..."
+
+msgid "Pause"
+msgstr "暂停"
+
+msgid "Resume"
+msgstr "恢复"
+
+## --- Global Tasks ---
+
+msgid "Background Tasks"
+msgstr "后台任务"
+
+msgid "%{count} tasks running"
+msgstr "%{count} 个任务运行中"
+
+## --- Misc ---
+
+msgid "Insufficient Balance"
+msgstr "余额不足"
+
+msgid "Insufficient balance. Please recharge."
+msgstr "账户余额不足，请充值后继续使用"
+
+msgid "Operation Failed"
+msgstr "操作失败"
+
+msgid "Please Retry"
+msgstr "请重试"
+
+msgid "Unknown Error"
+msgstr "未知错误"
+
+msgid "Double-click to rename"
+msgstr "双击重命名"
+
+msgid "Drag to reorder"
+msgstr "拖动调整位置"
+
+msgid "Reference Image"
+msgstr "参考图"
+
+msgid "Preview Large"
+msgstr "预览大图"
+
+msgid "View Original"
+msgstr "查看原图"
+
+msgid "Scheme %{n}"
+msgstr "方案 %{n}"
+
+msgid "Episode"
+msgstr "剧集"
+
+msgid "Project"
+msgstr "项目"

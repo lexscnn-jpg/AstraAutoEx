@@ -1,0 +1,321 @@
+## "video" domain translations for zh locale.
+## Video generation, first/last frame, editor, toolbar.
+msgid ""
+msgstr ""
+"Language: zh\n"
+
+## --- Panel Card ---
+
+msgid "Play"
+msgstr "播放"
+
+msgid "Pause"
+msgstr "暂停"
+
+msgid "Retry"
+msgstr "重试"
+
+msgid "Regenerate"
+msgstr "重新生成"
+
+msgid "Download"
+msgstr "下载"
+
+msgid "Edit"
+msgstr "编辑"
+
+msgid "Generating..."
+msgstr "生成中..."
+
+msgid "Lip Sync"
+msgstr "口型同步"
+
+msgid "Lip Sync Video"
+msgstr "口型同步视频"
+
+msgid "Original"
+msgstr "原始"
+
+msgid "Synced"
+msgstr "同步"
+
+msgid "Image Preview"
+msgstr "图片预览"
+
+msgid "Play Voice"
+msgstr "播放配音"
+
+msgid "Stop Voice"
+msgstr "停止"
+
+msgid "No Voice"
+msgstr "暂无配音"
+
+msgid "Force Regenerate"
+msgstr "强制重新生成（卡住时使用）"
+
+msgid "Regenerate Video"
+msgstr "重新生成视频"
+
+msgid "Lip Sync Status"
+msgstr "口型同步中..."
+
+msgid "Generate Audio"
+msgstr "生成音频"
+
+msgid "Regenerate Lip Sync"
+msgstr "重新生成口型同步"
+
+msgid "Edit Prompt"
+msgstr "编辑提示词"
+
+msgid "Shot %{number}"
+msgstr "镜头 %{number}"
+
+msgid "Unknown Shot Type"
+msgstr "未知景别"
+
+msgid "Corresponding Text"
+msgstr "对应原文"
+
+msgid "Generate Video"
+msgstr "生成视频"
+
+msgid "Select Model"
+msgstr "选择视频模型"
+
+msgid "Select Voice"
+msgstr "选择要使用的配音："
+
+msgid "Batch Mode"
+msgstr "批量模式"
+
+msgid "Batch Mode Desc"
+msgstr "离线推理，价格便宜50%，24小时内完成"
+
+## --- Camera Move Names ---
+
+msgid "pan_left"
+msgstr "左移"
+
+msgid "pan_right"
+msgstr "右移"
+
+msgid "tilt_up"
+msgstr "上摇"
+
+msgid "tilt_down"
+msgstr "下摇"
+
+msgid "zoom_in"
+msgstr "推进"
+
+msgid "zoom_out"
+msgstr "拉远"
+
+msgid "dolly"
+msgstr "推轨"
+
+msgid "crane"
+msgstr "升降"
+
+msgid "static"
+msgstr "静止"
+
+msgid "tracking"
+msgstr "跟踪"
+
+msgid "orbit"
+msgstr "环绕"
+
+msgid "handheld"
+msgstr "手持"
+
+msgid "steady"
+msgstr "稳定"
+
+msgid "whip_pan"
+msgstr "甩镜"
+
+msgid "pull_focus"
+msgstr "变焦"
+
+## --- Toolbar ---
+
+msgid "Film Generation"
+msgstr "成片生成"
+
+msgid "Filter"
+msgstr "筛选"
+
+msgid "View All"
+msgstr "查看全部"
+
+msgid "Show Generated"
+msgstr "已生成"
+
+msgid "Show Pending"
+msgstr "待生成"
+
+msgid "Show Failed"
+msgstr "失败"
+
+msgid "Total %{count} shots"
+msgstr "共 %{count} 个镜头"
+
+msgid "%{count} generating"
+msgstr "%{count} 个生成中"
+
+msgid "%{count} completed"
+msgstr "%{count} 个已生成"
+
+msgid "%{count} failed"
+msgstr "%{count} 个失败"
+
+msgid "Generate All Videos"
+msgstr "生成所有视频"
+
+msgid "Batch Config Title"
+msgstr "批量生成参数"
+
+msgid "Batch Config Desc"
+msgstr "先选择模型与参数，再一键生成所有视频"
+
+msgid "Confirm Generate All"
+msgstr "确认并生成全部"
+
+msgid "No Videos"
+msgstr "没有可下载的视频"
+
+msgid "Download %{count} videos"
+msgstr "下载 %{count} 个视频"
+
+msgid "Packing..."
+msgstr "打包中..."
+
+msgid "Download All"
+msgstr "下载全部"
+
+msgid "Enter Editor"
+msgstr "进入视频剪辑器"
+
+msgid "Auto First-Last Frame"
+msgstr "自动首尾帧"
+
+msgid "Auto FL Tooltip"
+msgstr "开启后，批量和单面板生成都会自动使用首尾帧模式串联连续面板"
+
+## --- First/Last Frame ---
+
+msgid "First-Last Frame Settings"
+msgstr "首尾帧设置"
+
+msgid "First Frame"
+msgstr "首帧"
+
+msgid "Last Frame"
+msgstr "尾帧"
+
+msgid "Link"
+msgstr "链接"
+
+msgid "Unlink"
+msgstr "解除链接"
+
+msgid "Custom Prompt"
+msgstr "自定义提示词"
+
+msgid "Use Default"
+msgstr "使用默认"
+
+msgid "Generate First-Last Frame Video"
+msgstr "生成首尾帧视频"
+
+msgid "Link to Next Shot"
+msgstr "链接到下一镜头（首尾帧）"
+
+## --- Prompt Modal ---
+
+msgid "Edit Shot %{number} Video Prompt"
+msgstr "编辑镜头 #%{number} 视频提示词"
+
+msgid "Video Prompt Label"
+msgstr "视频提示词"
+
+msgid "Video Prompt Placeholder"
+msgstr "输入视频提示词..."
+
+msgid "Video Prompt Tip"
+msgstr "提示：视频模型不识别角色名字，请用外貌特征描述"
+
+## --- Editor ---
+
+msgid "Material Library"
+msgstr "素材库"
+
+msgid "Properties"
+msgstr "属性"
+
+msgid "Clip"
+msgstr "片段"
+
+msgid "Transition to Next"
+msgstr "转场到下一片段"
+
+msgid "Delete Clip"
+msgstr "删除片段"
+
+msgid "Video Track"
+msgstr "视频"
+
+msgid "Audio Track"
+msgstr "配音"
+
+msgid "Zoom"
+msgstr "缩放"
+
+## --- Capability ---
+
+msgid "Generation Mode"
+msgstr "生成模式"
+
+msgid "Duration"
+msgstr "时长"
+
+msgid "FPS"
+msgstr "帧率"
+
+msgid "Resolution"
+msgstr "分辨率"
+
+msgid "Aspect Ratio"
+msgstr "画幅比例"
+
+msgid "Reasoning Effort"
+msgstr "推理强度"
+
+msgid "Voice"
+msgstr "音色"
+
+msgid "Rate"
+msgstr "语速"
+
+msgid "Mode"
+msgstr "模式"
+
+## --- Transition ---
+
+msgid "Transition Effect"
+msgstr "转场效果"
+
+msgid "Transition Duration"
+msgstr "持续时间"
+
+msgid "Dissolve"
+msgstr "溶解"
+
+msgid "Fade"
+msgstr "淡入淡出"
+
+msgid "Slide"
+msgstr "滑动"

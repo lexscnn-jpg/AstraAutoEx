@@ -1,0 +1,302 @@
+## "assets" domain translations for en locale.
+## Asset management: characters, locations, props, images, TTS, profiles.
+msgid ""
+msgstr ""
+"Language: en\n"
+
+## --- Stage ---
+
+msgid "Asset Confirmation"
+msgstr ""
+
+msgid "Analyze Assets"
+msgstr ""
+
+msgid "Analyzing..."
+msgstr ""
+
+msgid "Batch Generate All"
+msgstr ""
+
+msgid "No Characters"
+msgstr ""
+
+msgid "No Locations"
+msgstr ""
+
+msgid "Confirm All (%{count})"
+msgstr ""
+
+msgid "Character Assets"
+msgstr ""
+
+msgid "Location Assets"
+msgstr ""
+
+msgid "Prop Assets"
+msgstr ""
+
+msgid "%{character_count} characters, %{appearance_count} appearances"
+msgstr ""
+
+msgid "%{count} locations"
+msgstr ""
+
+msgid "%{count} props"
+msgstr ""
+
+## --- Character ---
+
+msgid "Add Character"
+msgstr ""
+
+msgid "Edit Character"
+msgstr ""
+
+msgid "Delete Character"
+msgstr ""
+
+msgid "Delete character confirm"
+msgstr ""
+
+msgid "Character Name"
+msgstr ""
+
+msgid "Character Description"
+msgstr ""
+
+msgid "Generate Image"
+msgstr ""
+
+msgid "Regenerate Image"
+msgstr ""
+
+msgid "Character Profile"
+msgstr ""
+
+msgid "Voice Settings"
+msgstr ""
+
+msgid "Speaker"
+msgstr ""
+
+msgid "Select Speaker"
+msgstr ""
+
+msgid "No Speaker"
+msgstr ""
+
+msgid "Primary Appearance"
+msgstr ""
+
+msgid "Secondary Appearance"
+msgstr ""
+
+msgid "Generate from Primary"
+msgstr ""
+
+msgid "Select Primary First"
+msgstr ""
+
+msgid "%{count} appearances"
+msgstr ""
+
+msgid "Copy from Global"
+msgstr ""
+
+## --- Location ---
+
+msgid "Add Location"
+msgstr ""
+
+msgid "Edit Location"
+msgstr ""
+
+msgid "Delete Location"
+msgstr ""
+
+msgid "Location Name"
+msgstr ""
+
+msgid "Location Summary"
+msgstr ""
+
+msgid "Location Description"
+msgstr ""
+
+## --- Prop ---
+
+msgid "Add Prop"
+msgstr ""
+
+msgid "Edit Prop"
+msgstr ""
+
+msgid "Delete Prop"
+msgstr ""
+
+msgid "Prop Name"
+msgstr ""
+
+msgid "Prop Summary"
+msgstr ""
+
+msgid "Prop Description"
+msgstr ""
+
+## --- Image ---
+
+msgid "Upload Image"
+msgstr ""
+
+msgid "Upload Replace Image"
+msgstr ""
+
+msgid "Edit Image"
+msgstr ""
+
+msgid "Edit Prompt"
+msgstr ""
+
+msgid "Undo to Previous Version"
+msgstr ""
+
+msgid "Regenerate Group"
+msgstr ""
+
+msgid "Use This"
+msgstr ""
+
+msgid "Generating"
+msgstr ""
+
+msgid "Regenerating"
+msgstr ""
+
+msgid "Generated %{generated}/%{total}"
+msgstr ""
+
+## --- TTS ---
+
+msgid "TTS Voice"
+msgstr ""
+
+msgid "No Voice"
+msgstr ""
+
+msgid "Preview Voice"
+msgstr ""
+
+msgid "Upload Audio"
+msgstr ""
+
+msgid "Uploading..."
+msgstr ""
+
+msgid "Uploaded"
+msgstr ""
+
+msgid "AI Designed Voice"
+msgstr ""
+
+msgid "Voice Set"
+msgstr ""
+
+msgid "Voice Unset"
+msgstr ""
+
+## --- Character Profile ---
+
+msgid "Importance S"
+msgstr ""
+
+msgid "Importance A"
+msgstr ""
+
+msgid "Importance B"
+msgstr ""
+
+msgid "Importance C"
+msgstr ""
+
+msgid "Importance D"
+msgstr ""
+
+msgid "Importance Level"
+msgstr ""
+
+msgid "Character Archetype"
+msgstr ""
+
+msgid "Personality Tags"
+msgstr ""
+
+msgid "Costume Level"
+msgstr ""
+
+msgid "Suggested Colors"
+msgstr ""
+
+msgid "Primary Marker"
+msgstr ""
+
+msgid "Visual Keywords"
+msgstr ""
+
+msgid "Confirm and Generate"
+msgstr ""
+
+msgid "Use Existing"
+msgstr ""
+
+msgid "Edit Profile"
+msgstr ""
+
+## --- Toolbar ---
+
+msgid "Filter"
+msgstr ""
+
+msgid "View All"
+msgstr ""
+
+msgid "Show Generated"
+msgstr ""
+
+msgid "Show Pending"
+msgstr ""
+
+msgid "Asset Management"
+msgstr ""
+
+msgid "Global Analyze"
+msgstr ""
+
+msgid "Generate All Images"
+msgstr ""
+
+msgid "Regenerate All"
+msgstr ""
+
+msgid "Download All Images"
+msgstr ""
+
+## --- Modal ---
+
+msgid "New Character"
+msgstr ""
+
+msgid "AI Smart Design"
+msgstr ""
+
+msgid "AI Designing..."
+msgstr ""
+
+msgid "Smart Modify"
+msgstr ""
+
+msgid "Save and Generate"
+msgstr ""
+
+msgid "Introduction"
+msgstr ""

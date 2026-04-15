@@ -1,0 +1,80 @@
+## "model_section" domain translations for zh locale.
+## Model list management, pricing, selection.
+msgid ""
+msgstr ""
+"Language: zh\n"
+
+msgid "LLM Models"
+msgstr "文本模型列表"
+
+msgid "Image Models"
+msgstr "图片模型列表"
+
+msgid "Video Models"
+msgstr "视频模型列表"
+
+msgid "Price"
+msgstr "价格"
+
+msgid "Price per Million"
+msgstr "每百万token"
+
+msgid "Price per Image"
+msgstr "每张"
+
+msgid "Price per Video"
+msgstr "每条"
+
+msgid "Name"
+msgstr "名称"
+
+msgid "Model ID"
+msgstr "模型 ID"
+
+msgid "Model Name"
+msgstr "模型名称"
+
+msgid "Provider"
+msgstr "厂商"
+
+msgid "Resolution"
+msgstr "分辨率"
+
+msgid "Add"
+msgstr "添加"
+
+msgid "Add Model"
+msgstr "添加模型"
+
+msgid "Add New Model"
+msgstr "添加新模型"
+
+msgid "Select Preset"
+msgstr "选择预设模型"
+
+msgid "Custom Model"
+msgstr "自定义模型"
+
+msgid "Confirm Add"
+msgstr "确认添加"
+
+msgid "Cancel"
+msgstr "取消"
+
+msgid "Done"
+msgstr "完成"
+
+msgid "Fill Complete"
+msgstr "请填写完整信息"
+
+msgid "No Models"
+msgstr "暂无模型，点击上方按钮添加"
+
+msgid "No API Key"
+msgstr "请配置API Key"
+
+msgid "Batch Mode"
+msgstr "批量"
+
+msgid "Batch Mode Tooltip"
+msgstr "离线推理，价格便宜50%，24小时内完成"

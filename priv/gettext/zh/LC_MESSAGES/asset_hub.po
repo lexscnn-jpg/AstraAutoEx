@@ -1,0 +1,214 @@
+## "asset_hub" domain translations for zh locale.
+## Asset Hub center: global assets, folders, search, import/export.
+msgid ""
+msgstr ""
+"Language: zh\n"
+
+msgid "Asset Hub"
+msgstr "资产中心"
+
+msgid "Asset Hub Description"
+msgstr "管理您的全局角色和场景资产"
+
+msgid "Model Hint"
+msgstr "资产中心使用默认模型，如需修改请在"
+
+msgid "Model Hint Link"
+msgstr "API配置页面"
+
+msgid "Model Hint Suffix"
+msgstr "进行设置"
+
+## --- Navigation ---
+
+msgid "Folders"
+msgstr "文件夹"
+
+msgid "No Folders"
+msgstr "暂无文件夹"
+
+msgid "All Assets"
+msgstr "所有资产"
+
+msgid "Characters"
+msgstr "角色"
+
+msgid "Locations"
+msgstr "场景"
+
+msgid "Props"
+msgstr "道具"
+
+msgid "Voices"
+msgstr "音色"
+
+## --- Actions ---
+
+msgid "Add Character"
+msgstr "新建角色"
+
+msgid "Add Location"
+msgstr "新建场景"
+
+msgid "Add Prop"
+msgstr "新建道具"
+
+msgid "Add Voice"
+msgstr "新建音色"
+
+msgid "Add Asset"
+msgstr "新建资产"
+
+msgid "Download All"
+msgstr "打包下载"
+
+msgid "Download All Title"
+msgstr "下载全部图片资产"
+
+msgid "Downloading..."
+msgstr "打包中..."
+
+msgid "Download Success"
+msgstr "下载完成"
+
+msgid "Download Failed"
+msgstr "下载失败"
+
+msgid "Download Empty"
+msgstr "当前没有可下载的图片资产"
+
+## --- Folder ---
+
+msgid "New Folder"
+msgstr "新建文件夹"
+
+msgid "Edit Folder"
+msgstr "编辑文件夹"
+
+msgid "Delete Folder"
+msgstr "删除文件夹"
+
+msgid "Folder Name"
+msgstr "文件夹名称"
+
+msgid "Folder Name Placeholder"
+msgstr "请输入文件夹名称"
+
+msgid "Confirm Delete Folder"
+msgstr "确定删除此文件夹吗？文件夹内的资产将移至未分类。"
+
+## --- Empty State ---
+
+msgid "Empty State"
+msgstr "暂无资产"
+
+msgid "Empty State Hint"
+msgstr "点击上方按钮添加角色或场景"
+
+## --- Asset Operations ---
+
+msgid "Generate"
+msgstr "生成图片"
+
+msgid "Generating..."
+msgstr "生成中..."
+
+msgid "Regenerate"
+msgstr "重新生成"
+
+msgid "Undo"
+msgstr "撤回"
+
+msgid "Delete"
+msgstr "删除"
+
+msgid "Cancel"
+msgstr "取消"
+
+msgid "Save"
+msgstr "保存"
+
+msgid "Create"
+msgstr "创建"
+
+## --- Confirm Delete ---
+
+msgid "Confirm Delete Character"
+msgstr "确定删除此角色吗？此操作无法撤回。"
+
+msgid "Confirm Delete Location"
+msgstr "确定删除此场景吗？此操作无法撤回。"
+
+msgid "Confirm Delete Prop"
+msgstr "确定删除此道具吗？此操作无法撤回。"
+
+msgid "Confirm Delete Voice"
+msgstr "确定删除此音色吗？此操作无法撤回。"
+
+## --- Voice ---
+
+msgid "Voice Name"
+msgstr "音色名称"
+
+msgid "Voice Name Placeholder"
+msgstr "请输入音色名称"
+
+msgid "Voice Picker Title"
+msgstr "从音色库选择"
+
+## --- Pagination ---
+
+msgid "Previous Page"
+msgstr "上一页"
+
+msgid "Next Page"
+msgstr "下一页"
+
+## --- Modal ---
+
+msgid "New Character Modal"
+msgstr "新建角色"
+
+msgid "New Location Modal"
+msgstr "新建场景"
+
+msgid "AI Design"
+msgstr "AI 设计"
+
+msgid "AI Design Tip"
+msgstr "AI 将根据您的需求生成详细的描述，您可以在生成后编辑"
+
+msgid "Reference Upload"
+msgstr "上传参考图"
+
+msgid "Convert to Character"
+msgstr "转换三视图"
+
+msgid "Drop or Click Upload"
+msgstr "拖放图片或点击上传"
+
+msgid "Supported Image Formats"
+msgstr "支持 JPG、PNG 格式"
+
+## --- Voice Settings ---
+
+msgid "Voice Settings Title"
+msgstr "配音音色"
+
+msgid "No Voice"
+msgstr "无音色"
+
+msgid "Upload Audio"
+msgstr "上传音频"
+
+msgid "AI Design Voice"
+msgstr "AI设计"
+
+msgid "Voice Library"
+msgstr "音色库"
+
+msgid "Preview Voice"
+msgstr "试听音色"
+
+msgid "Appearance %{index}"
+msgstr "形象 %{index}"

@@ -1,0 +1,211 @@
+## "progress" domain translations for zh locale.
+## Progress indicators, task types, pipeline stage messages.
+msgid ""
+msgstr ""
+"Language: zh\n"
+
+## --- Progress Messages ---
+
+msgid "Analyzing story structure..."
+msgstr "正在分析故事结构..."
+
+msgid "Splitting clips..."
+msgstr "正在分割片段..."
+
+msgid "Converting to screenplay..."
+msgstr "正在转换为分镜脚本..."
+
+msgid "Submitting storyboard..."
+msgstr "正在提交分镜..."
+
+msgid "Step %{current} of %{total}"
+msgstr "第 %{current} 步，共 %{total} 步"
+
+## --- Status ---
+
+msgid "status.completed"
+msgstr "已完成"
+
+msgid "status.failed"
+msgstr "失败"
+
+msgid "status.processing"
+msgstr "进行中"
+
+msgid "status.queued"
+msgstr "排队中"
+
+msgid "status.pending"
+msgstr "未开始"
+
+## --- Stage Card ---
+
+msgid "Stage"
+msgstr "阶段"
+
+msgid "Realtime Stream"
+msgstr "实时流"
+
+msgid "Current Stage"
+msgstr "当前阶段"
+
+msgid "AI Realtime Output"
+msgstr "AI 实时输出"
+
+msgid "Waiting for model output..."
+msgstr "等待模型输出..."
+
+## --- Runtime ---
+
+msgid "Waiting Execution"
+msgstr "等待执行"
+
+msgid "Task Created"
+msgstr "任务已创建"
+
+msgid "Task Started"
+msgstr "任务开始处理"
+
+msgid "Task Completed"
+msgstr "任务已完成"
+
+msgid "Task Failed"
+msgstr "任务失败"
+
+msgid "Task Processing"
+msgstr "任务处理中..."
+
+msgid "Model Processing"
+msgstr "模型处理中..."
+
+msgid "Model Outputting"
+msgstr "模型正在输出..."
+
+msgid "Model Reasoning"
+msgstr "模型正在推理..."
+
+msgid "Model Completed"
+msgstr "模型输出完成"
+
+msgid "Model Failed"
+msgstr "模型输出失败"
+
+## --- Task Type Labels ---
+
+msgid "task.generic"
+msgstr "任务"
+
+msgid "task.imagePanel"
+msgstr "分镜图片"
+
+msgid "task.imageCharacter"
+msgstr "角色图片"
+
+msgid "task.imageLocation"
+msgstr "场景图片"
+
+msgid "task.videoPanel"
+msgstr "视频生成"
+
+msgid "task.lipSync"
+msgstr "口型同步"
+
+msgid "task.voiceLine"
+msgstr "配音生成"
+
+msgid "task.voiceDesign"
+msgstr "声音设计"
+
+msgid "task.regenerateStoryboardText"
+msgstr "重生成分镜文本"
+
+msgid "task.insertPanel"
+msgstr "插入分镜"
+
+msgid "task.panelVariant"
+msgstr "分镜变体"
+
+msgid "task.modifyAssetImage"
+msgstr "图片编辑"
+
+msgid "task.regenerateGroup"
+msgstr "批量重生成"
+
+msgid "task.analyzeNovel"
+msgstr "内容分析"
+
+msgid "task.storyToScriptRun"
+msgstr "剧本拆解"
+
+msgid "task.scriptToStoryboardRun"
+msgstr "分镜生成"
+
+msgid "task.clipsBuild"
+msgstr "片段生成"
+
+msgid "task.screenplayConvert"
+msgstr "剧本转换"
+
+msgid "task.voiceAnalyze"
+msgstr "台词分析"
+
+msgid "task.analyzeGlobal"
+msgstr "全局分析"
+
+msgid "task.aiStoryExpand"
+msgstr "AI 故事扩写"
+
+msgid "task.aiCreateCharacter"
+msgstr "项目角色设计"
+
+msgid "task.aiCreateLocation"
+msgstr "项目场景设计"
+
+msgid "task.episodeSplitLlm"
+msgstr "智能分集"
+
+## --- Stream Step Labels ---
+
+msgid "stream.analyzeCharacters"
+msgstr "角色分析"
+
+msgid "stream.analyzeLocations"
+msgstr "场景分析"
+
+msgid "stream.analyzeProps"
+msgstr "道具分析"
+
+msgid "stream.splitClips"
+msgstr "片段切分"
+
+msgid "stream.screenplayConversion"
+msgstr "剧本转换"
+
+msgid "stream.storyboardPlan"
+msgstr "分镜规划"
+
+msgid "stream.cinematographyRules"
+msgstr "摄影规则生成"
+
+msgid "stream.actingDirection"
+msgstr "演技指导生成"
+
+msgid "stream.storyboardDetailRefine"
+msgstr "分镜细节补全"
+
+msgid "stream.voiceAnalyze"
+msgstr "台词分析"
+
+## --- Run Console ---
+
+msgid "Story to Script"
+msgstr "内容到剧本"
+
+msgid "Script to Storyboard"
+msgstr "剧本到分镜"
+
+msgid "Confirm Stop?"
+msgstr "确认停止？"
+
+msgid "Minimize"
+msgstr "最小化"

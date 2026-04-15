@@ -1,0 +1,259 @@
+## "api_config" domain Template file.
+## API provider configuration, model management, tutorials.
+msgid ""
+msgstr ""
+
+msgid "API Configuration"
+msgstr ""
+
+msgid "Saving..."
+msgstr ""
+
+msgid "Saved"
+msgstr ""
+
+msgid "Save Failed"
+msgstr ""
+
+msgid "Connected"
+msgstr ""
+
+msgid "Not Configured"
+msgstr ""
+
+msgid "Configure"
+msgstr ""
+
+msgid "Connect"
+msgstr ""
+
+msgid "OpenAI Compatible"
+msgstr ""
+
+msgid "Gemini Compatible"
+msgstr ""
+
+msgid "Show"
+msgstr ""
+
+msgid "Hide"
+msgstr ""
+
+msgid "Capability"
+msgstr ""
+
+msgid "Default"
+msgstr ""
+
+msgid "Coming Soon"
+msgstr ""
+
+msgid "Fill Complete"
+msgstr ""
+
+msgid "Model ID Exists"
+msgstr ""
+
+msgid "Model Display Name"
+msgstr ""
+
+msgid "Model Actual ID"
+msgstr ""
+
+msgid "No Models for Provider"
+msgstr ""
+
+msgid "Default Model Config"
+msgstr ""
+
+msgid "Text Model"
+msgstr ""
+
+msgid "Character Model"
+msgstr ""
+
+msgid "Location Model"
+msgstr ""
+
+msgid "Storyboard Model"
+msgstr ""
+
+msgid "Edit Model"
+msgstr ""
+
+msgid "Video Model"
+msgstr ""
+
+msgid "Audio Model"
+msgstr ""
+
+msgid "Lip Sync Model"
+msgstr ""
+
+msgid "Provider Pool"
+msgstr ""
+
+msgid "Provider Pool Desc"
+msgstr ""
+
+msgid "Hide Provider"
+msgstr ""
+
+msgid "Show Provider"
+msgstr ""
+
+msgid "Add Model"
+msgstr ""
+
+msgid "Batch Mode Half Price"
+msgstr ""
+
+msgid "API Key Label"
+msgstr ""
+
+msgid "API Type"
+msgstr ""
+
+msgid "Configure API Key"
+msgstr ""
+
+msgid "Enter API Key"
+msgstr ""
+
+msgid "Test Connection"
+msgstr ""
+
+msgid "Testing..."
+msgstr ""
+
+msgid "Test Passed"
+msgstr ""
+
+msgid "Test Failed"
+msgstr ""
+
+msgid "Test Retry"
+msgstr ""
+
+msgid "Add Anyway"
+msgstr ""
+
+## --- Test Steps ---
+
+msgid "Test Step Models"
+msgstr ""
+
+msgid "Test Step Text Gen"
+msgstr ""
+
+msgid "Test Step Image Gen"
+msgstr ""
+
+msgid "Test Step Credits"
+msgstr ""
+
+msgid "Test Step Audio Gen"
+msgstr ""
+
+msgid "Test Step Skipped"
+msgstr ""
+
+## --- Tabs ---
+
+msgid "Tab LLM"
+msgstr ""
+
+msgid "Tab Image"
+msgstr ""
+
+msgid "Tab Video"
+msgstr ""
+
+msgid "Tab Audio"
+msgstr ""
+
+msgid "Tab Other"
+msgstr ""
+
+## --- Default Model Section ---
+
+msgid "Core Foundation"
+msgstr ""
+
+msgid "Creative Pipeline"
+msgstr ""
+
+msgid "Unified Override"
+msgstr ""
+
+msgid "Extensions"
+msgstr ""
+
+msgid "Core Text Title"
+msgstr ""
+
+msgid "Core Storyboard LLM"
+msgstr ""
+
+msgid "Core Video Title"
+msgstr ""
+
+msgid "Pipeline Character"
+msgstr ""
+
+msgid "Pipeline Location"
+msgstr ""
+
+msgid "Pipeline Storyboard"
+msgstr ""
+
+msgid "Pipeline Edit"
+msgstr ""
+
+msgid "Ext Lip Sync"
+msgstr ""
+
+msgid "Ext TTS"
+msgstr ""
+
+msgid "Ext Voice Design"
+msgstr ""
+
+msgid "Ext Music Design"
+msgstr ""
+
+## --- Tutorial ---
+
+msgid "View Tutorial"
+msgstr ""
+
+msgid "Tutorial Title"
+msgstr ""
+
+## --- AI Config Assistant ---
+
+msgid "AI Config Assistant"
+msgstr ""
+
+msgid "Assistant Welcome"
+msgstr ""
+
+msgid "Assistant Send"
+msgstr ""
+
+## --- Functional Test ---
+
+msgid "Functional Test"
+msgstr ""
+
+msgid "Functional Test Success"
+msgstr ""
+
+msgid "Functional Test Failed"
+msgstr ""
+
+msgid "Async Submitted"
+msgstr ""
+
+msgid "No Model Selected"
+msgstr ""

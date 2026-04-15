@@ -1,0 +1,95 @@
+## "stages" domain translations for en locale.
+## Pipeline stage names and descriptions.
+msgid ""
+msgstr ""
+"Language: en\n"
+
+## --- Stage Names ---
+
+msgid "1. Config"
+msgstr ""
+
+msgid "Short Drama"
+msgstr ""
+
+msgid "2. Assets"
+msgstr ""
+
+msgid "3. Storyboard"
+msgstr ""
+
+msgid "4. Videos"
+msgstr ""
+
+msgid "5. Voice"
+msgstr ""
+
+msgid "6. Compose"
+msgstr ""
+
+## --- Stage Descriptions ---
+
+msgid "Config Stage Description"
+msgstr ""
+
+msgid "Script Stage Description"
+msgstr ""
+
+msgid "Storyboard Stage Description"
+msgstr ""
+
+msgid "Film Stage Description"
+msgstr ""
+
+msgid "Compose Stage Description"
+msgstr ""
+
+## --- Action Type Labels ---
+
+msgid "storyboard"
+msgstr ""
+
+msgid "storyboard_candidate"
+msgstr ""
+
+msgid "character"
+msgstr ""
+
+msgid "location"
+msgstr ""
+
+msgid "video"
+msgstr ""
+
+msgid "analyze"
+msgstr ""
+
+msgid "analyze_character"
+msgstr ""
+
+msgid "analyze_location"
+msgstr ""
+
+msgid "clips"
+msgstr ""
+
+msgid "storyboard_text_plan"
+msgstr ""
+
+msgid "storyboard_text_detail"
+msgstr ""
+
+msgid "tts"
+msgstr ""
+
+msgid "regenerate"
+msgstr ""
+
+msgid "voice-generate"
+msgstr ""
+
+msgid "voice-design"
+msgstr ""
+
+msgid "lip-sync"
+msgstr ""

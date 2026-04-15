@@ -1,0 +1,283 @@
+## "storyboard" domain Template file.
+## Storyboard panel editing, shot types, camera moves, AI data.
+msgid ""
+msgstr ""
+
+## --- Header ---
+
+msgid "Storyboard Edit"
+msgstr ""
+
+msgid "%{count} shots"
+msgstr ""
+
+msgid "Submit for Generation"
+msgstr ""
+
+msgid "Storyboard Panel"
+msgstr ""
+
+msgid "%{count} segments"
+msgstr ""
+
+msgid "Generate All Panels"
+msgstr ""
+
+msgid "Generate %{count} pending panels"
+msgstr ""
+
+msgid "Download All"
+msgstr ""
+
+msgid "Concurrency Limit %{count}"
+msgstr ""
+
+## --- Panel Fields ---
+
+msgid "Shot Type"
+msgstr ""
+
+msgid "Camera Move"
+msgstr ""
+
+msgid "Source Text"
+msgstr ""
+
+msgid "Scene Description"
+msgstr ""
+
+msgid "Video Prompt"
+msgstr ""
+
+msgid "Video Prompt Hint"
+msgstr ""
+
+msgid "Duration (seconds)"
+msgstr ""
+
+msgid "Panel Location"
+msgstr ""
+
+msgid "Panel Characters"
+msgstr ""
+
+msgid "Panel Description"
+msgstr ""
+
+msgid "Panel Text"
+msgstr ""
+
+## --- Shot Type Names ---
+
+msgid "close_up"
+msgstr ""
+
+msgid "medium"
+msgstr ""
+
+msgid "wide"
+msgstr ""
+
+msgid "extreme_close_up"
+msgstr ""
+
+msgid "full"
+msgstr ""
+
+msgid "establishing"
+msgstr ""
+
+msgid "over_the_shoulder"
+msgstr ""
+
+msgid "low_angle"
+msgstr ""
+
+msgid "high_angle"
+msgstr ""
+
+msgid "bird_eye"
+msgstr ""
+
+msgid "dutch_angle"
+msgstr ""
+
+msgid "pov"
+msgstr ""
+
+## --- Panel Actions ---
+
+msgid "Regenerate Panel"
+msgstr ""
+
+msgid "Delete Panel"
+msgstr ""
+
+msgid "Insert Before"
+msgstr ""
+
+msgid "Insert After"
+msgstr ""
+
+msgid "Move Up"
+msgstr ""
+
+msgid "Move Down"
+msgstr ""
+
+msgid "Card View"
+msgstr ""
+
+msgid "Table View"
+msgstr ""
+
+## --- Group ---
+
+msgid "Group Generating"
+msgstr ""
+
+msgid "Group Generated"
+msgstr ""
+
+msgid "Group Failed"
+msgstr ""
+
+msgid "Group Retry"
+msgstr ""
+
+msgid "Regenerate All Panels"
+msgstr ""
+
+msgid "Add Panel"
+msgstr ""
+
+msgid "Segment"
+msgstr ""
+
+msgid "Add at Start"
+msgstr ""
+
+msgid "Insert Here"
+msgstr ""
+
+## --- Image ---
+
+msgid "Candidate Image"
+msgstr ""
+
+msgid "Select Candidate"
+msgstr ""
+
+msgid "Variants"
+msgstr ""
+
+msgid "Generate Variants"
+msgstr ""
+
+msgid "Force Regenerate"
+msgstr ""
+
+msgid "Click to Preview"
+msgstr ""
+
+msgid "Enlarge Preview"
+msgstr ""
+
+msgid "Candidate %{count}"
+msgstr ""
+
+msgid "Generate %{count} candidates"
+msgstr ""
+
+## --- AI Data Editor ---
+
+msgid "AI Data Editor"
+msgstr ""
+
+msgid "Basic Data"
+msgstr ""
+
+msgid "Visual Description"
+msgstr ""
+
+msgid "Negative Prompt"
+msgstr ""
+
+msgid "Lighting Direction"
+msgstr ""
+
+msgid "Lighting Quality"
+msgstr ""
+
+msgid "Depth of Field"
+msgstr ""
+
+msgid "Color Tone"
+msgstr ""
+
+msgid "Character Position"
+msgstr ""
+
+msgid "Photography Rules"
+msgstr ""
+
+msgid "Acting Notes"
+msgstr ""
+
+msgid "JSON Preview"
+msgstr ""
+
+## --- Insert Modal ---
+
+msgid "Insert New Shot"
+msgstr ""
+
+msgid "Insert Position"
+msgstr ""
+
+msgid "AI Auto Analyze"
+msgstr ""
+
+## --- Confirm ---
+
+msgid "Confirm delete panel?"
+msgstr ""
+
+msgid "Confirm delete group?"
+msgstr ""
+
+## --- Canvas ---
+
+msgid "No storyboard data"
+msgstr ""
+
+msgid "Generate clips and text storyboard first"
+msgstr ""
+
+## --- Prompts ---
+
+msgid "Image Prompt"
+msgstr ""
+
+msgid "AI Modify Instruction"
+msgstr ""
+
+msgid "AI Modify and Generate"
+msgstr ""
+
+msgid "Current Prompt"
+msgstr ""
+
+msgid "Custom Style"
+msgstr ""
+
+## --- First/Last Frame ---
+
+msgid "First/Last Frame Model"
+msgstr ""
+
+msgid "First Frame"
+msgstr ""
+
+msgid "Last Frame"
+msgstr ""

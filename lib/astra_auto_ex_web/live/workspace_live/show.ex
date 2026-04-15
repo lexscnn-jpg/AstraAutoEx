@@ -267,7 +267,9 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                   current_episode={@current_episode}
                   characters={@characters}
                   locations={@locations}
+                  clips={@clips}
                   extracting_entities={@extracting_entities}
+                  extracted_entities={@extracted_entities}
                 />
               <% "storyboard" -> %>
                 <.storyboard_stage
@@ -286,6 +288,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                   current_episode={@current_episode}
                   storyboards={@storyboards}
                   voice_lines={@voice_lines}
+                  skip_voice={@skip_voice}
                 />
               <% "compose" -> %>
                 <.compose_stage
@@ -298,6 +301,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                   compose_transition_ms={@compose_transition_ms}
                   compose_subtitle={@compose_subtitle}
                   compose_bgm={@compose_bgm}
+                  promo_copy={@promo_copy}
                 />
             <% end %>
           </div>
@@ -583,22 +587,22 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
               />
             </svg>
           </div>
+
           <div class="flex-1">
-            <p class="text-sm font-medium text-[var(--glass-text-primary)]">
-              管线正在执行...
-            </p>
+            <p class="text-sm font-medium text-[var(--glass-text-primary)]">管线正在执行...</p>
+
             <p class="text-xs text-[var(--glass-text-tertiary)] mt-0.5">
               <%= for task <- @active_tasks do %>
                 <span class="inline-flex items-center gap-1 mr-3">
-                  <span class="w-1.5 h-1.5 rounded-full bg-[var(--glass-accent-from)] animate-pulse" />
-                  {pipeline_step_label(task.type)}
+                  <span class="w-1.5 h-1.5 rounded-full bg-[var(--glass-accent-from)] animate-pulse" /> {pipeline_step_label(
+                    task.type
+                  )}
                 </span>
               <% end %>
             </p>
           </div>
-          <div class="text-xs text-[var(--glass-text-tertiary)]">
-            {length(@active_tasks)} 个任务执行中
-          </div>
+
+          <div class="text-xs text-[var(--glass-text-tertiary)]">{length(@active_tasks)} 个任务执行中</div>
         </div>
       </div>
       <%!-- Story Input Card --%>
@@ -888,6 +892,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                     {clip.title || "Clip #{idx + 1}"}
                   </span>
                 </div>
+
                 <div class="px-4 py-3 space-y-2">
                   <p
                     :if={clip.summary && clip.summary != ""}
@@ -895,6 +900,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                   >
                     {clip.summary}
                   </p>
+
                   <div
                     :if={clip.characters && clip.characters != ""}
                     class="flex items-center gap-1.5"
@@ -902,6 +908,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                     <span class="text-[10px] text-[var(--glass-text-tertiary)]">角色:</span>
                     <span class="text-[10px] text-[var(--glass-accent-from)]">{clip.characters}</span>
                   </div>
+
                   <div :if={clip.location && clip.location != ""} class="flex items-center gap-1.5">
                     <span class="text-[10px] text-[var(--glass-text-tertiary)]">场景:</span>
                     <span class="text-[10px] text-green-400">{clip.location}</span>
@@ -1313,12 +1320,19 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
       <%= if @storyboards && length(@storyboards) > 0 do %>
         <%= for sb <- @storyboards do %>
           <div class="glass-surface rounded-xl p-4">
-            <div class="grid grid-cols-4 gap-3">
+            <div
+              id={"panels-grid-#{sb.id}"}
+              class="grid grid-cols-4 gap-3"
+              phx-hook="DragSort"
+              data-sort-event="reorder_panels"
+            >
               <%= for panel <- (sb.panels || []) do %>
                 <div
                   class="glass-surface rounded-xl overflow-hidden cursor-pointer hover:shadow-lg hover:ring-1 hover:ring-[var(--glass-accent-from)]/30 transition-all duration-200 group"
                   phx-click="edit_panel"
                   phx-value-panel-id={panel.id}
+                  data-panel-id={panel.id}
+                  draggable="true"
                 >
                   <div class="aspect-video bg-[var(--glass-bg-muted)] flex items-center justify-center relative">
                     <%= if panel.image_url && panel.image_url != "" do %>
@@ -1373,7 +1387,6 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                           <% end %>
                         </svg>
                       </button>
-
                       <span class="glass-chip text-[10px] bg-black/60 text-[var(--glass-text-primary)] backdrop-blur-sm">
                         {dgettext("projects", "Edit")}
                       </span>
@@ -1493,12 +1506,11 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
               <path d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.41a2.25 2.25 0 013.182 0l2.909 2.91m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5z" />
             </svg>
           </div>
-          <p class="text-sm font-medium text-[var(--glass-text-secondary)] mb-2">
-            暂无分镜
-          </p>
-          <p class="text-xs text-[var(--glass-text-tertiary)] mb-4">
-            请先在「剧本」阶段生成剧本，然后点击「生成分镜」
-          </p>
+
+          <p class="text-sm font-medium text-[var(--glass-text-secondary)] mb-2">暂无分镜</p>
+
+          <p class="text-xs text-[var(--glass-text-tertiary)] mb-4">请先在「剧本」阶段生成剧本，然后点击「生成分镜」</p>
+
           <button
             phx-click="switch_stage"
             phx-value-stage="script"
@@ -2885,6 +2897,19 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
     {:noreply, assign(socket, show_voice_picker: false, voice_picker_target: nil)}
   end
 
+  def handle_event("reorder_panels", %{"order" => panel_ids}, socket)
+      when is_list(panel_ids) do
+    # Full reorder: update every panel to its new index position
+    panel_ids
+    |> Enum.with_index()
+    |> Enum.each(fn {id, index} ->
+      Production.update_panel_index(id, index)
+    end)
+
+    storyboards = load_storyboards(socket.assigns.current_episode)
+    {:noreply, assign(socket, :storyboards, storyboards)}
+  end
+
   def handle_event(
         "reorder_panels",
         %{"source_id" => source_id, "target_id" => target_id},
@@ -2893,7 +2918,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
     source = Production.get_panel!(source_id)
     target = Production.get_panel!(target_id)
 
-    # Swap panel_index
+    # Fallback: swap panel_index between two panels
     Production.update_panel(source, %{panel_index: target.panel_index})
     Production.update_panel(target, %{panel_index: source.panel_index})
 

@@ -1,0 +1,113 @@
+## "workspace" domain translations for zh locale.
+## Workspace project management, settings, quick actions.
+msgid ""
+msgstr ""
+"Language: zh\n"
+
+msgid "My Projects"
+msgstr "我的项目"
+
+msgid "Manage your AI anime production projects"
+msgstr "管理您的AI动漫制作项目"
+
+msgid "New Project"
+msgstr "新建项目"
+
+msgid "Search projects..."
+msgstr "搜索项目名称或描述..."
+
+msgid "Search"
+msgstr "搜索"
+
+msgid "Clear"
+msgstr "清除"
+
+msgid "Updated at"
+msgstr "更新于"
+
+msgid "No projects"
+msgstr "还没有项目"
+
+msgid "No projects description"
+msgstr "创建您的第一个AI动漫制作项目"
+
+msgid "No results"
+msgstr "没有找到匹配的项目"
+
+msgid "No results description"
+msgstr "尝试使用不同的搜索词"
+
+msgid "Create Project"
+msgstr "新建项目"
+
+msgid "Edit Project"
+msgstr "编辑项目"
+
+msgid "Delete Project"
+msgstr "删除项目"
+
+msgid "Delete confirm"
+msgstr "确定要删除项目吗？此操作无法撤销。"
+
+msgid "Project Name"
+msgstr "项目名称"
+
+msgid "Project Name Placeholder"
+msgstr "输入项目名称"
+
+msgid "Project Description"
+msgstr "项目描述（可选）"
+
+msgid "Project Description Placeholder"
+msgstr "输入项目描述"
+
+msgid "Creating..."
+msgstr "创建中..."
+
+msgid "Saving..."
+msgstr "保存中..."
+
+msgid "Create Failed"
+msgstr "创建项目失败"
+
+msgid "Update Failed"
+msgstr "更新项目失败"
+
+msgid "Delete Failed"
+msgstr "删除项目失败"
+
+msgid "Total %{count} projects"
+msgstr "共 %{count} 个项目"
+
+msgid "Episodes Count"
+msgstr "章节数"
+
+msgid "Images Count"
+msgstr "图片数"
+
+msgid "Videos Count"
+msgstr "视频数"
+
+msgid "No Content"
+msgstr "暂无内容"
+
+msgid "Name required"
+msgstr "项目名称不能为空。"
+
+msgid "Name too long"
+msgstr "项目名称不能超过 100 个字符。"
+
+msgid "Description too long"
+msgstr "项目描述不能超过 500 个字符。"
+
+msgid "Auto Chain"
+msgstr "自动链"
+
+msgid "Full Auto Chain"
+msgstr "全自动链"
+
+msgid "Art Style"
+msgstr "画面风格"
+
+msgid "Aspect Ratio"
+msgstr "画面比例"

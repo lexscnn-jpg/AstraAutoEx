@@ -1,0 +1,95 @@
+## "stages" domain translations for zh locale.
+## Pipeline stage names and descriptions.
+msgid ""
+msgstr ""
+"Language: zh\n"
+
+## --- Stage Names ---
+
+msgid "1. Config"
+msgstr "1. 配置"
+
+msgid "Short Drama"
+msgstr "剧本策划"
+
+msgid "2. Assets"
+msgstr "2. 资产分析"
+
+msgid "3. Storyboard"
+msgstr "3. 分镜编辑"
+
+msgid "4. Videos"
+msgstr "4. 视频生成"
+
+msgid "5. Voice"
+msgstr "5. 配音生成"
+
+msgid "6. Compose"
+msgstr "6. AI剪辑"
+
+## --- Stage Descriptions ---
+
+msgid "Config Stage Description"
+msgstr "故事输入、比例设置、画风选择、自动链开关"
+
+msgid "Script Stage Description"
+msgstr "剧本拆解、角色与场景列表"
+
+msgid "Storyboard Stage Description"
+msgstr "面板网格、图像生成、重试"
+
+msgid "Film Stage Description"
+msgstr "视频与配音生成、重试"
+
+msgid "Compose Stage Description"
+msgstr "左右分栏、面板选择与设置、预览与导出"
+
+## --- Action Type Labels ---
+
+msgid "storyboard"
+msgstr "分镜图"
+
+msgid "storyboard_candidate"
+msgstr "分镜候选"
+
+msgid "character"
+msgstr "角色图"
+
+msgid "location"
+msgstr "场景图"
+
+msgid "video"
+msgstr "视频"
+
+msgid "analyze"
+msgstr "分析"
+
+msgid "analyze_character"
+msgstr "角色分析"
+
+msgid "analyze_location"
+msgstr "场景分析"
+
+msgid "clips"
+msgstr "片段切割"
+
+msgid "storyboard_text_plan"
+msgstr "分镜规划"
+
+msgid "storyboard_text_detail"
+msgstr "分镜细节"
+
+msgid "tts"
+msgstr "语音合成"
+
+msgid "regenerate"
+msgstr "重生成"
+
+msgid "voice-generate"
+msgstr "配音生成"
+
+msgid "voice-design"
+msgstr "声音设计"
+
+msgid "lip-sync"
+msgstr "口型同步"

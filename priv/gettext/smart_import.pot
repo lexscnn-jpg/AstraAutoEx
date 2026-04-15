@@ -1,0 +1,185 @@
+## "smart_import" domain Template file.
+## Smart import wizard: file upload, AI analysis, episode splitting.
+msgid ""
+msgstr ""
+
+msgid "Start Your Creative Journey"
+msgstr ""
+
+msgid "Choose your creation method"
+msgstr ""
+
+## --- Manual Create ---
+
+msgid "Start from Episode 1"
+msgstr ""
+
+msgid "Manual Create Description"
+msgstr ""
+
+msgid "Start Creating"
+msgstr ""
+
+## --- Smart Import ---
+
+msgid "Smart Episode Split"
+msgstr ""
+
+msgid "Smart Import Description"
+msgstr ""
+
+msgid "Import Now"
+msgstr ""
+
+msgid "Recommended"
+msgstr ""
+
+## --- Upload ---
+
+msgid "Upload Raw Material"
+msgstr ""
+
+msgid "Upload Subtitle"
+msgstr ""
+
+msgid "Max 30000 Words"
+msgstr ""
+
+msgid "Text Input"
+msgstr ""
+
+msgid "Text Placeholder"
+msgstr ""
+
+msgid "Upload Document"
+msgstr ""
+
+msgid "Click to Upload"
+msgstr ""
+
+msgid "Clear Text First"
+msgstr ""
+
+msgid "Supported Formats"
+msgstr ""
+
+msgid "words"
+msgstr ""
+
+msgid "Start Analyzing"
+msgstr ""
+
+## --- Analyzing ---
+
+msgid "AI Analyzing Your Story"
+msgstr ""
+
+msgid "Identifying chapters..."
+msgstr ""
+
+msgid "Auto Save After Analysis"
+msgstr ""
+
+## --- Preview ---
+
+msgid "Smart Split Complete"
+msgstr ""
+
+msgid "Auto Split to %{count} episodes"
+msgstr ""
+
+msgid "Total %{words} words"
+msgstr ""
+
+msgid "Auto Saved"
+msgstr ""
+
+msgid "Reanalyze"
+msgstr ""
+
+msgid "Confirm Complete"
+msgstr ""
+
+msgid "Episode List"
+msgstr ""
+
+msgid "Add Episode"
+msgstr ""
+
+msgid "Average Words per Episode"
+msgstr ""
+
+msgid "Episode Content"
+msgstr ""
+
+msgid "Plot Summary"
+msgstr ""
+
+msgid "Enter Title..."
+msgstr ""
+
+msgid "Enter Summary..."
+msgstr ""
+
+msgid "New Episode"
+msgstr ""
+
+## --- Marker Detection ---
+
+msgid "Marker Detected"
+msgstr ""
+
+msgid "Marker Detected Desc"
+msgstr ""
+
+msgid "Use Marker Split"
+msgstr ""
+
+msgid "Use Marker Split Desc"
+msgstr ""
+
+msgid "Use AI Split"
+msgstr ""
+
+msgid "Use AI Split Desc"
+msgstr ""
+
+## --- Errors ---
+
+msgid "File Too Large"
+msgstr ""
+
+msgid "Doc Not Supported"
+msgstr ""
+
+msgid "File Empty"
+msgstr ""
+
+msgid "File Read Error"
+msgstr ""
+
+msgid "Upload First"
+msgstr ""
+
+msgid "Analyze Failed"
+msgstr ""
+
+msgid "Save Failed"
+msgstr ""
+
+## --- Global Analysis ---
+
+msgid "Global Asset Analysis"
+msgstr ""
+
+msgid "Global Analysis Description"
+msgstr ""
+
+msgid "Start Analysis"
+msgstr ""
+
+msgid "Global Analysis Success"
+msgstr ""
+
+msgid "Global Analysis Failed"
+msgstr ""

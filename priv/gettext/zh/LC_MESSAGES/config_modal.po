@@ -1,0 +1,92 @@
+## "config_modal" domain translations for zh locale.
+## Project configuration modal: models, visual settings, TTS.
+msgid ""
+msgstr ""
+"Language: zh\n"
+
+msgid "Project Configuration"
+msgstr "项目配置"
+
+msgid "Config Subtitle"
+msgstr "默认沿用设置中心的全局配置，也可为当前项目单独自定义，修改仅对本项目生效。"
+
+msgid "Saved"
+msgstr "已保存"
+
+msgid "Auto Save"
+msgstr "自动保存"
+
+## --- Visual Settings ---
+
+msgid "Visual Settings"
+msgstr "画面设置"
+
+msgid "Visual Style"
+msgstr "画面风格"
+
+msgid "Model Parameters"
+msgstr "模型参数"
+
+msgid "Aspect Ratio"
+msgstr "画面比例"
+
+## --- TTS Settings ---
+
+msgid "TTS Settings"
+msgstr "旁白配置"
+
+msgid "TTS Voice"
+msgstr "旁白音色"
+
+msgid "TTS Rate"
+msgstr "语速"
+
+## --- Model Config ---
+
+msgid "Loading Models..."
+msgstr "加载模型列表..."
+
+msgid "Analysis Model"
+msgstr "分析模型"
+
+msgid "Character Model"
+msgstr "人物生成模型"
+
+msgid "Location Model"
+msgstr "场景生成模型"
+
+msgid "Storyboard Model"
+msgstr "分镜图像模型"
+
+msgid "Edit Model"
+msgstr "修图/编辑模型"
+
+msgid "Video Model"
+msgstr "视频模型"
+
+msgid "Audio Model"
+msgstr "语音合成模型"
+
+msgid "Video Resolution"
+msgstr "视频分辨率"
+
+msgid "Fetch Models Failed"
+msgstr "获取用户模型列表失败"
+
+msgid "Select Model"
+msgstr "选择模型"
+
+msgid "Parameter Config"
+msgstr "参数配置"
+
+msgid "Fixed"
+msgstr "固定"
+
+msgid "No Params"
+msgstr "该模型无可配置参数"
+
+msgid "On"
+msgstr "开"
+
+msgid "Off"
+msgstr "关"

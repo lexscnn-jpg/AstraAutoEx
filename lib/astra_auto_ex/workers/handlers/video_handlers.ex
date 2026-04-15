@@ -3,6 +3,10 @@ defmodule AstraAutoEx.Workers.Handlers.VideoPanel do
   Generates video from panel image + prompt.
   Loads panel → fetches image → builds video prompt → calls provider.
   Auto-triggers compose when all panels have video.
+
+  Model name suffix rules (for API易 VEO models):
+  - Landscape (non-portrait ratio) → append `-landscape`
+  - Has reference/last-frame image → append `-fl`
   """
   require Logger
   alias AstraAutoEx.Workers.Handlers.Helpers
@@ -30,53 +34,75 @@ defmodule AstraAutoEx.Workers.Handlers.VideoPanel do
 
     model_config = Helpers.get_model_config(task.user_id, task.project_id, :video)
     provider = model_config["provider"]
+    aspect_ratio = payload["aspect_ratio"] || "16:9"
+
+    base_model = model_config["model"]
 
     request = %{
       image_url: panel.image_url,
       prompt: prompt,
-      model: model_config["model"],
-      model_id: model_config["model"],
-      aspect_ratio: payload["aspect_ratio"] || "16:9",
+      model: base_model,
+      model_id: base_model,
+      aspect_ratio: aspect_ratio,
       duration: payload["duration"] || 5
     }
 
     # First-Last Frame mode: use next panel's image as last frame
-    request =
+    {request, has_fl_ref} =
       cond do
         payload["last_frame_image_url"] ->
-          Map.put(request, :last_frame_image_url, payload["last_frame_image_url"])
+          {Map.put(request, :last_frame_image_url, payload["last_frame_image_url"]), true}
 
         payload["fl_mode"] && payload["next_panel_id"] ->
           next_panel = Production.get_panel!(payload["next_panel_id"])
 
           if next_panel.image_url && next_panel.image_url != "" do
-            # Optionally rewrite prompt with LLM for smoother transition
+            # Rewrite prompt with LLM for smoother transition
             fl_prompt =
               if payload["custom_prompt"] && payload["custom_prompt"] != "" do
                 payload["custom_prompt"]
               else
+                # Call FlPromptRewriter with correct signature
+                first_desc = panel.description || ""
+                last_desc = next_panel.description || ""
+                # Panels don't have a dialogue field; extract from voice_lines
+                first_dialogue = extract_dialogue(panel)
+                last_dialogue = extract_dialogue(next_panel)
+
                 case AstraAutoEx.AI.FlPromptRewriter.rewrite(
-                       task.user_id,
-                       panel,
-                       next_panel,
-                       prompt,
-                       "default"
+                       first_desc,
+                       last_desc,
+                       first_dialogue,
+                       last_dialogue,
+                       "default",
+                       user_id: task.user_id
                      ) do
                   {:ok, rewritten} -> rewritten
                   _ -> prompt
                 end
               end
 
-            request
-            |> Map.put(:last_frame_image_url, next_panel.image_url)
-            |> Map.put(:prompt, fl_prompt)
+            req =
+              request
+              |> Map.put(:last_frame_image_url, next_panel.image_url)
+              |> Map.put(:prompt, fl_prompt)
+
+            {req, true}
           else
-            request
+            {request, false}
           end
 
         true ->
-          request
+          {request, false}
       end
+
+    # Apply model name suffixes for API易 providers
+    model_with_suffix = apply_model_suffix(base_model, aspect_ratio, has_fl_ref)
+
+    request =
+      request
+      |> Map.put(:model, model_with_suffix)
+      |> Map.put(:model_id, model_with_suffix)
 
     Helpers.update_progress(task, 40)
 
@@ -93,6 +119,53 @@ defmodule AstraAutoEx.Workers.Handlers.VideoPanel do
 
       {:error, reason} ->
         {:error, reason}
+    end
+  end
+
+  # Apply model name suffixes based on aspect ratio and FL mode.
+  # Landscape ratios get `-landscape`; FL reference images get `-fl`.
+  defp apply_model_suffix(model, aspect_ratio, has_fl_ref) do
+    suffix =
+      cond do
+        has_fl_ref and landscape?(aspect_ratio) -> "-landscape-fl"
+        has_fl_ref -> "-fl"
+        landscape?(aspect_ratio) -> "-landscape"
+        true -> ""
+      end
+
+    # Only append suffix if not already present
+    if suffix != "" and not String.ends_with?(model, suffix) do
+      model <> suffix
+    else
+      model
+    end
+  end
+
+  defp landscape?(ratio) when is_binary(ratio) do
+    case String.split(ratio, ":") do
+      [w, h] ->
+        {w_int, _} = Integer.parse(w)
+        {h_int, _} = Integer.parse(h)
+        w_int > h_int
+
+      _ ->
+        false
+    end
+  end
+
+  defp landscape?(_), do: false
+
+  # Extract dialogue text from panel's voice_lines association (if loaded) or return empty.
+  defp extract_dialogue(panel) do
+    case Map.get(panel, :voice_lines) do
+      lines when is_list(lines) and length(lines) > 0 ->
+        lines
+        |> Enum.map(fn vl -> vl.content || "" end)
+        |> Enum.reject(&(&1 == ""))
+        |> Enum.join("; ")
+
+      _ ->
+        ""
     end
   end
 

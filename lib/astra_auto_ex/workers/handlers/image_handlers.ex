@@ -182,13 +182,22 @@ defmodule AstraAutoEx.Workers.Handlers.ImagePanel do
     # Also check description for character name mentions
     description = panel.description || ""
 
-    # Match characters by exact name in char_names OR name appearing in description
+    # Match characters using alias-aware matching
     matched_chars =
+      char_names
+      |> Enum.map(fn name -> find_character_by_name(characters, name) end)
+      |> Enum.reject(&is_nil/1)
+      |> Enum.uniq_by(& &1.id)
+
+    # Also match characters whose name appears directly in description
+    desc_matches =
       characters
       |> Enum.filter(fn c ->
         name = c.name || ""
-        name in char_names or String.contains?(description, name)
+        name != "" and String.contains?(description, name)
       end)
+
+    matched_chars = Enum.uniq_by(matched_chars ++ desc_matches, & &1.id)
 
     # Collect appearance images from matched characters
     char_images =
@@ -226,6 +235,27 @@ defmodule AstraAutoEx.Workers.Handlers.ImagePanel do
     (char_images ++ location_images) |> Enum.take(4)
   end
 
+  # Find a character by name with alias "/" splitting and case-insensitive matching.
+  defp find_character_by_name(characters, name) do
+    # 1. Exact match
+    exact = Enum.find(characters, &(&1.name == name))
+
+    if exact do
+      exact
+    else
+      # 2. Alias "/" split match (case-insensitive)
+      Enum.find(characters, fn char ->
+        aliases =
+          (char.name || "")
+          |> String.split("/")
+          |> Enum.map(&String.trim/1)
+          |> Enum.map(&String.downcase/1)
+
+        String.downcase(name || "") in aliases
+      end)
+    end
+  end
+
   defp maybe_auto_trigger_video_voice(task, episode) do
     payload = task.payload || %{}
 
@@ -258,6 +288,7 @@ defmodule AstraAutoEx.Workers.Handlers.ImageCharacter do
   @moduledoc "Generates character appearance image."
   alias AstraAutoEx.Workers.Handlers.Helpers
   alias AstraAutoEx.Characters
+  alias AstraAutoEx.AI.PromptCatalog
 
   def execute(task) do
     payload = task.payload || %{}
@@ -271,8 +302,18 @@ defmodule AstraAutoEx.Workers.Handlers.ImageCharacter do
     model_config = Helpers.get_model_config(task.user_id, task.project_id, :image)
     provider = model_config["provider"]
 
-    prompt =
+    base_prompt =
       "Character portrait: #{character.name}. #{character.introduction || ""}. #{appearance.description || ""}"
+
+    # Append character prompt suffix for three-view sheet generation
+    suffix = PromptCatalog.character_prompt_suffix()
+
+    prompt =
+      if suffix != "" do
+        "#{base_prompt}\uFF0C#{suffix}"
+      else
+        base_prompt
+      end
 
     # Get primary appearance for reference (style consistency)
     reference_images =
@@ -311,6 +352,7 @@ defmodule AstraAutoEx.Workers.Handlers.ImageLocation do
   @moduledoc "Generates location/prop image."
   alias AstraAutoEx.Workers.Handlers.Helpers
   alias AstraAutoEx.Locations
+  alias AstraAutoEx.AI.PromptCatalog
 
   def execute(task) do
     payload = task.payload || %{}
@@ -323,7 +365,17 @@ defmodule AstraAutoEx.Workers.Handlers.ImageLocation do
     model_config = Helpers.get_model_config(task.user_id, task.project_id, :image)
     provider = model_config["provider"]
 
-    prompt = "Scene location: #{location.name}. #{location.description || ""}"
+    base_prompt = "Scene location: #{location.name}. #{location.description || ""}"
+
+    # Append location prompt suffix (currently empty, but ready for future use)
+    suffix = PromptCatalog.location_prompt_suffix()
+
+    prompt =
+      if suffix != "" do
+        "#{base_prompt}\uFF0C#{suffix}"
+      else
+        base_prompt
+      end
 
     request = %{
       prompt: prompt,

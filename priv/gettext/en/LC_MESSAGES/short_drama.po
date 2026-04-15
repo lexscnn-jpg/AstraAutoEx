@@ -1,0 +1,189 @@
+## "short_drama" domain translations for en locale.
+## Short drama creation workflow: topic, outline, characters, episodes, scripts.
+msgid ""
+msgstr ""
+"Language: en\n"
+
+msgid "Short Drama Master"
+msgstr ""
+
+msgid "One-stop creation from topic to script"
+msgstr ""
+
+## --- Steps ---
+
+msgid "Topic Selection"
+msgstr ""
+
+msgid "Story Outline"
+msgstr ""
+
+msgid "Character Development"
+msgstr ""
+
+msgid "Episode Directory"
+msgstr ""
+
+msgid "Episode Script"
+msgstr ""
+
+msgid "Quality Review"
+msgstr ""
+
+msgid "Compliance Check"
+msgstr ""
+
+msgid "Overseas Adaptation"
+msgstr ""
+
+## --- Topic Selection ---
+
+msgid "Topic Selection Title"
+msgstr ""
+
+msgid "Topic Selection Description"
+msgstr ""
+
+msgid "Genre Label"
+msgstr ""
+
+msgid "Genre Placeholder"
+msgstr ""
+
+msgid "Audience Label"
+msgstr ""
+
+msgid "Audience Placeholder"
+msgstr ""
+
+msgid "Platform Label"
+msgstr ""
+
+msgid "Platform Placeholder"
+msgstr ""
+
+msgid "Generate Topic Report"
+msgstr ""
+
+## --- Story Outline ---
+
+msgid "Story Outline Title"
+msgstr ""
+
+msgid "Story Outline Description"
+msgstr ""
+
+msgid "Episode Count Label"
+msgstr ""
+
+msgid "Tone Label"
+msgstr ""
+
+msgid "Generate Outline"
+msgstr ""
+
+## --- Character Development ---
+
+msgid "Character Dev Title"
+msgstr ""
+
+msgid "Character Dev Description"
+msgstr ""
+
+msgid "Generate Character System"
+msgstr ""
+
+## --- Episode Directory ---
+
+msgid "Episode Directory Title"
+msgstr ""
+
+msgid "Episode Directory Description"
+msgstr ""
+
+msgid "Generate Episode Directory"
+msgstr ""
+
+## --- Episode Script ---
+
+msgid "Episode Script Title"
+msgstr ""
+
+msgid "Episode Script Description"
+msgstr ""
+
+msgid "Episode Number"
+msgstr ""
+
+msgid "Generate Script"
+msgstr ""
+
+msgid "Generate Batch"
+msgstr ""
+
+## --- Quality Review ---
+
+msgid "Quality Review Title"
+msgstr ""
+
+msgid "Quality Review Description"
+msgstr ""
+
+msgid "Start Review"
+msgstr ""
+
+## --- Compliance Check ---
+
+msgid "Compliance Check Title"
+msgstr ""
+
+msgid "Compliance Check Description"
+msgstr ""
+
+msgid "Target Market Label"
+msgstr ""
+
+msgid "Start Compliance Check"
+msgstr ""
+
+## --- Overseas Adaptation ---
+
+msgid "Overseas Adapt Title"
+msgstr ""
+
+msgid "Overseas Adapt Description"
+msgstr ""
+
+msgid "Target Language Label"
+msgstr ""
+
+msgid "Start Adaptation"
+msgstr ""
+
+## --- Status ---
+
+msgid "Status Pending"
+msgstr ""
+
+msgid "Status In Progress"
+msgstr ""
+
+msgid "Status Completed"
+msgstr ""
+
+msgid "Status Failed"
+msgstr ""
+
+## --- Actions ---
+
+msgid "Next Step"
+msgstr ""
+
+msgid "Previous Step"
+msgstr ""
+
+msgid "Regenerate"
+msgstr ""
+
+msgid "Export Script"
+msgstr ""
