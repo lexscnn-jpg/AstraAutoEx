@@ -1482,18 +1482,30 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
         <% end %>
       <% else %>
         <div class="glass-surface rounded-xl p-12 text-center">
-          <svg
-            class="w-12 h-12 mx-auto text-[var(--glass-text-tertiary)] opacity-30 mb-3"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1"
-            viewBox="0 0 24 24"
-          >
-            <path d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.41a2.25 2.25 0 013.182 0l2.909 2.91m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5z" />
-          </svg>
-          <p class="text-[var(--glass-text-tertiary)]">
-            {dgettext("projects", "No storyboards yet. Generate a script first.")}
+          <div class="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-[var(--glass-accent-from)]/10 to-[var(--glass-accent-to)]/10 flex items-center justify-center mb-4">
+            <svg
+              class="w-8 h-8 text-[var(--glass-accent-from)] opacity-50"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              viewBox="0 0 24 24"
+            >
+              <path d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.41a2.25 2.25 0 013.182 0l2.909 2.91m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5z" />
+            </svg>
+          </div>
+          <p class="text-sm font-medium text-[var(--glass-text-secondary)] mb-2">
+            暂无分镜
           </p>
+          <p class="text-xs text-[var(--glass-text-tertiary)] mb-4">
+            请先在「剧本」阶段生成剧本，然后点击「生成分镜」
+          </p>
+          <button
+            phx-click="switch_stage"
+            phx-value-stage="script"
+            class="glass-btn glass-btn-primary text-xs py-2 px-4 mx-auto"
+          >
+            前往剧本阶段 →
+          </button>
         </div>
       <% end %>
       <%!-- Panel Editor Modal --%>
