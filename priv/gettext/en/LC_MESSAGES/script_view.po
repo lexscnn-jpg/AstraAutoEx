@@ -1,0 +1,181 @@
+## "script_view" domain translations for en locale.
+## Script viewer: screenplay display, editing, formatting, clips and assets.
+msgid ""
+msgstr ""
+"Language: en\n"
+
+## --- Main ---
+
+msgid "Script View"
+msgstr ""
+
+msgid "Script Breakdown"
+msgstr ""
+
+msgid "Split into %{count} panels"
+msgstr ""
+
+msgid "No clips yet, generate in story view first"
+msgstr ""
+
+## --- Segments ---
+
+msgid "Segment %{index}"
+msgstr ""
+
+msgid "(Selected)"
+msgstr ""
+
+msgid "In-scene Assets"
+msgstr ""
+
+msgid "Currently selected: Segment %{number}"
+msgstr ""
+
+## --- Asset View ---
+
+msgid "All Clips"
+msgstr ""
+
+msgid "Viewing Clip %{number}"
+msgstr ""
+
+## --- Asset Actions ---
+
+msgid "Click to generate appearance"
+msgstr ""
+
+msgid "Click to generate location"
+msgstr ""
+
+msgid "Remove character from clip?"
+msgstr ""
+
+msgid "Remove location from clip?"
+msgstr ""
+
+msgid "Remove from clip"
+msgstr ""
+
+msgid "No audio"
+msgstr ""
+
+msgid "Playing"
+msgstr ""
+
+msgid "Listen"
+msgstr ""
+
+## --- Asset Lists ---
+
+msgid "Active Characters"
+msgstr ""
+
+msgid "Active Locations"
+msgstr ""
+
+msgid "Select character to add"
+msgstr ""
+
+msgid "Select location to add"
+msgstr ""
+
+msgid "Loading assets..."
+msgstr ""
+
+msgid "%{count} appearances"
+msgstr ""
+
+msgid "Added"
+msgstr ""
+
+msgid "Primary"
+msgstr ""
+
+msgid "Sub-appearance"
+msgstr ""
+
+msgid "Default Appearance"
+msgstr ""
+
+msgid "Click to remove %{name}"
+msgstr ""
+
+msgid "Click to add %{name}"
+msgstr ""
+
+## --- Screenplay ---
+
+msgid "Scene %{number}"
+msgstr ""
+
+msgid "Location:"
+msgstr ""
+
+msgid "Time:"
+msgstr ""
+
+msgid "Day"
+msgstr ""
+
+msgid "Night"
+msgstr ""
+
+msgid "Dawn"
+msgstr ""
+
+msgid "Dusk"
+msgstr ""
+
+msgid "Dialogue"
+msgstr ""
+
+msgid "Action"
+msgstr ""
+
+msgid "Narration"
+msgstr ""
+
+msgid "Original Content"
+msgstr ""
+
+msgid "No content"
+msgstr ""
+
+msgid "Click to edit"
+msgstr ""
+
+msgid "Interior"
+msgstr ""
+
+msgid "Exterior"
+msgstr ""
+
+msgid "Characters"
+msgstr ""
+
+msgid "No character info"
+msgstr ""
+
+msgid "No locations in clip"
+msgstr ""
+
+msgid "No characters in clip"
+msgstr ""
+
+## --- Generation ---
+
+msgid "%{count} assets missing generated images"
+msgstr ""
+
+msgid "Please first go to"
+msgstr ""
+
+msgid "to generate all character and location images"
+msgstr ""
+
+msgid "Generating images..."
+msgstr ""
+
+msgid "Confirm and start drawing"
+msgstr ""

@@ -20,9 +20,9 @@ defmodule AstraAutoEx.Workers.HandlerRegistry do
     "video_compose" => AstraAutoEx.Workers.Handlers.VideoCompose,
     # Voice handlers (Phase 6)
     "voice_line" => AstraAutoEx.Workers.Handlers.VoiceLine,
-    "voice_design" => AstraAutoEx.Workers.Handlers.VoiceDesign,
-    "asset_hub_voice_design" => AstraAutoEx.Workers.Handlers.VoiceDesign,
-    "music_generate" => AstraAutoEx.Workers.Handlers.MusicGenerate,
+    "voice_design" => AstraAutoEx.Workers.Handlers.VoiceDesignHandler,
+    "asset_hub_voice_design" => AstraAutoEx.Workers.Handlers.VoiceDesignHandler,
+    "music_generate" => AstraAutoEx.Workers.Handlers.MusicGenerateHandler,
     # Text handlers (Phase 5)
     "analyze_novel" => AstraAutoEx.Workers.Handlers.AnalyzeNovel,
     "story_to_script_run" => AstraAutoEx.Workers.Handlers.StoryToScript,
@@ -35,15 +35,20 @@ defmodule AstraAutoEx.Workers.HandlerRegistry do
     "ai_create_location" => AstraAutoEx.Workers.Handlers.AICreateLocation,
     "ai_modify_appearance" => AstraAutoEx.Workers.Handlers.AIModifyAppearance,
     "ai_modify_shot_prompt" => AstraAutoEx.Workers.Handlers.AIModifyShotPrompt,
-    # Short drama handlers (Phase 8)
-    "sd_topic_selection" => AstraAutoEx.Workers.Handlers.SDTopicSelection,
-    "sd_story_outline" => AstraAutoEx.Workers.Handlers.SDStoryOutline,
-    "sd_character_dev" => AstraAutoEx.Workers.Handlers.SDCharacterDev,
-    "sd_episode_directory" => AstraAutoEx.Workers.Handlers.SDEpisodeDirectory,
-    "sd_episode_script" => AstraAutoEx.Workers.Handlers.SDEpisodeScript,
-    "sd_quality_review" => AstraAutoEx.Workers.Handlers.SDQualityReview,
-    "sd_compliance_check" => AstraAutoEx.Workers.Handlers.SDComplianceCheck,
-    "sd_overseas_adapt" => AstraAutoEx.Workers.Handlers.SDOverseasAdapt
+    # Storyboard advanced handlers
+    "storyboard_insert" => AstraAutoEx.Workers.Handlers.StoryboardInsert,
+    "shot_variant" => AstraAutoEx.Workers.Handlers.ShotVariant,
+    # Watchdog
+    "watchdog" => AstraAutoEx.Workers.Handlers.Watchdog,
+    # Short drama handlers (Phase 8) — all dispatch through ShortDrama module
+    "sd_topic_selection" => AstraAutoEx.Workers.Handlers.ShortDrama,
+    "sd_story_outline" => AstraAutoEx.Workers.Handlers.ShortDrama,
+    "sd_character_dev" => AstraAutoEx.Workers.Handlers.ShortDrama,
+    "sd_episode_directory" => AstraAutoEx.Workers.Handlers.ShortDrama,
+    "sd_episode_script" => AstraAutoEx.Workers.Handlers.ShortDrama,
+    "sd_quality_review" => AstraAutoEx.Workers.Handlers.ShortDrama,
+    "sd_compliance_check" => AstraAutoEx.Workers.Handlers.ShortDrama,
+    "sd_overseas_adapt" => AstraAutoEx.Workers.Handlers.ShortDrama
   }
 
   @doc "Get the handler module for a task type, or nil if not registered."

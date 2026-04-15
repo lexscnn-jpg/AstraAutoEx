@@ -1,0 +1,288 @@
+## "profile" domain Template file.
+## Profile/Settings: API config, model selection, prompt tuning, billing tabs.
+msgid ""
+msgstr ""
+
+## --- User Info ---
+
+msgid "User"
+msgstr ""
+
+msgid "Personal Account"
+msgstr ""
+
+msgid "Available Balance"
+msgstr ""
+
+msgid "Open source, no billing"
+msgstr ""
+
+msgid "Frozen"
+msgstr ""
+
+msgid "Total Spent"
+msgstr ""
+
+## --- Tabs ---
+
+msgid "API Config"
+msgstr ""
+
+msgid "Recharge Records"
+msgstr ""
+
+msgid "Billing Records"
+msgstr ""
+
+msgid "Download Logs"
+msgstr ""
+
+## --- Billing ---
+
+msgid "Account Transactions"
+msgstr ""
+
+msgid "Project Details"
+msgstr ""
+
+msgid "Summary"
+msgstr ""
+
+msgid "Transactions"
+msgstr ""
+
+msgid "No transaction records"
+msgstr ""
+
+msgid "No project cost records"
+msgstr ""
+
+msgid "No details for this project"
+msgstr ""
+
+msgid "No records"
+msgstr ""
+
+## --- Filters ---
+
+msgid "By Type"
+msgstr ""
+
+msgid "By Action"
+msgstr ""
+
+msgid "times"
+msgstr ""
+
+msgid "Total"
+msgstr ""
+
+msgid "Filter"
+msgstr ""
+
+msgid "All Types"
+msgstr ""
+
+msgid "Account Recharge"
+msgstr ""
+
+msgid "Service Consumption"
+msgstr ""
+
+msgid "Balance %{amount}"
+msgstr ""
+
+msgid "%{count} records"
+msgstr ""
+
+msgid "Total %{amount}"
+msgstr ""
+
+## --- Pagination ---
+
+msgid "Previous Page"
+msgstr ""
+
+msgid "Next Page"
+msgstr ""
+
+msgid "Total %{total}, page %{page} / %{total_pages}"
+msgstr ""
+
+msgid "Episode %{number}"
+msgstr ""
+
+## --- Billing Detail ---
+
+msgid "%{count} images at %{resolution}"
+msgstr ""
+
+msgid "%{count} images"
+msgstr ""
+
+msgid "%{count} clips at %{resolution}"
+msgstr ""
+
+msgid "%{count} clips"
+msgstr ""
+
+msgid "%{count} tokens"
+msgstr ""
+
+msgid "%{count} seconds"
+msgstr ""
+
+msgid "%{count} calls"
+msgstr ""
+
+## --- Action Types ---
+
+msgid "Panel Image Generation"
+msgstr ""
+
+msgid "Character Image Generation"
+msgstr ""
+
+msgid "Location Image Generation"
+msgstr ""
+
+msgid "Video Generation"
+msgstr ""
+
+msgid "Lip Sync"
+msgstr ""
+
+msgid "Voice Line Synthesis"
+msgstr ""
+
+msgid "Voice Design"
+msgstr ""
+
+msgid "Asset Hub Voice Design"
+msgstr ""
+
+msgid "Regenerate Storyboard Text"
+msgstr ""
+
+msgid "Insert Panel"
+msgstr ""
+
+msgid "Panel Variant"
+msgstr ""
+
+msgid "Modify Asset Image"
+msgstr ""
+
+msgid "Batch Regenerate"
+msgstr ""
+
+msgid "Asset Hub Image"
+msgstr ""
+
+msgid "Asset Hub Modify"
+msgstr ""
+
+msgid "Novel Analysis"
+msgstr ""
+
+msgid "Story to Script"
+msgstr ""
+
+msgid "Script to Storyboard"
+msgstr ""
+
+msgid "Clip Build"
+msgstr ""
+
+msgid "Screenplay Convert"
+msgstr ""
+
+msgid "Voice Analyze"
+msgstr ""
+
+msgid "Global Analysis"
+msgstr ""
+
+## --- Prompt Tuning ---
+
+msgid "Prompt Tuning"
+msgstr ""
+
+msgid "Customize pipeline step prompts to fine-tune AI output"
+msgstr ""
+
+msgid "Loading..."
+msgstr ""
+
+msgid "Saving..."
+msgstr ""
+
+msgid "Saved"
+msgstr ""
+
+msgid "Save failed"
+msgstr ""
+
+msgid "Chinese Template"
+msgstr ""
+
+msgid "English Template"
+msgstr ""
+
+## --- Prompt Groups ---
+
+msgid "Story Creation"
+msgstr ""
+
+msgid "Story to Script"
+msgstr ""
+
+msgid "Script to Storyboard"
+msgstr ""
+
+msgid "Editing Helpers"
+msgstr ""
+
+msgid "Short Drama"
+msgstr ""
+
+## --- Prompt Card ---
+
+msgid "Default"
+msgstr ""
+
+msgid "Customized"
+msgstr ""
+
+msgid "Available Variables:"
+msgstr ""
+
+msgid "Reset to Default"
+msgstr ""
+
+msgid "Confirm reset to system default? Custom content will be lost."
+msgstr ""
+
+msgid "Edit prompt template..."
+msgstr ""
+
+msgid "Missing required variables: %{vars}"
+msgstr ""
+
+msgid "Expand"
+msgstr ""
+
+msgid "Collapse"
+msgstr ""
+
+msgid "Expand All"
+msgstr ""
+
+msgid "Collapse All"
+msgstr ""
+
+msgid "Reset All to Default"
+msgstr ""
+
+msgid "Confirm reset all prompts to system default?"
+msgstr ""

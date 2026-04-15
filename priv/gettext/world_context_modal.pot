@@ -1,0 +1,85 @@
+## "world_context_modal" domain Template file.
+## World context modal: world building, rules, constraints, character/scene settings.
+msgid ""
+msgstr ""
+
+## --- Modal Header ---
+
+msgid "World Setting & Characters"
+msgstr ""
+
+msgid "Define global character appearances, scene styles and environment descriptions"
+msgstr ""
+
+## --- Form ---
+
+msgid "World context placeholder"
+msgstr ""
+
+msgid "These settings will be inherited by all episodes as base reference for AI drawing."
+msgstr ""
+
+## --- Actions ---
+
+msgid "Save"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Saving..."
+msgstr ""
+
+msgid "Saved successfully"
+msgstr ""
+
+msgid "Save failed"
+msgstr ""
+
+## --- Sections ---
+
+msgid "Character Settings"
+msgstr ""
+
+msgid "Scene Settings"
+msgstr ""
+
+msgid "World Rules"
+msgstr ""
+
+msgid "Global Constraints"
+msgstr ""
+
+msgid "Art Direction"
+msgstr ""
+
+## --- Hints ---
+
+msgid "Define main character appearances and clothing"
+msgstr ""
+
+msgid "Describe recurring locations and atmosphere"
+msgstr ""
+
+msgid "Set world rules and magic systems"
+msgstr ""
+
+msgid "Constraints that apply to all episodes"
+msgstr ""
+
+msgid "Overall visual style and color palette"
+msgstr ""
+
+## --- Status ---
+
+msgid "No world context set"
+msgstr ""
+
+msgid "Edit World Context"
+msgstr ""
+
+msgid "Characters: %{count}"
+msgstr ""
+
+msgid "Locations: %{count}"
+msgstr ""

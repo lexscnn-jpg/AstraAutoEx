@@ -1,0 +1,75 @@
+## "asset_library" domain translations for en locale.
+## Asset library: search, filter, categories, import/export.
+msgid ""
+msgstr ""
+"Language: en\n"
+
+## --- Main ---
+
+msgid "Asset Library"
+msgstr ""
+
+msgid "Characters"
+msgstr ""
+
+msgid "Locations"
+msgstr ""
+
+msgid "Props"
+msgstr ""
+
+msgid "No Characters"
+msgstr ""
+
+msgid "No Locations"
+msgstr ""
+
+msgid "No Props"
+msgstr ""
+
+msgid "Add Character"
+msgstr ""
+
+msgid "Add Location"
+msgstr ""
+
+msgid "Add Prop"
+msgstr ""
+
+msgid "Generate Image"
+msgstr ""
+
+msgid "Regenerate Image"
+msgstr ""
+
+msgid "Analyze Assets"
+msgstr ""
+
+msgid "Analyzing..."
+msgstr ""
+
+## --- Search & Filter ---
+
+msgid "Search assets..."
+msgstr ""
+
+msgid "Filter by type"
+msgstr ""
+
+msgid "All Types"
+msgstr ""
+
+msgid "Sort by name"
+msgstr ""
+
+msgid "Sort by date"
+msgstr ""
+
+msgid "Import"
+msgstr ""
+
+msgid "Export"
+msgstr ""
+
+msgid "No results found"
+msgstr ""

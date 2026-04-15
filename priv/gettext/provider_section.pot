@@ -1,0 +1,87 @@
+## "provider_section" domain Template file.
+## Provider cards: status, actions, configuration forms.
+msgid ""
+msgstr ""
+
+## --- Provider Actions ---
+
+msgid "Add Provider"
+msgstr ""
+
+msgid "Name"
+msgstr ""
+
+msgid "Add"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
+msgid "Fill required fields"
+msgstr ""
+
+## --- Provider Status ---
+
+msgid "Connected"
+msgstr ""
+
+msgid "Disconnected"
+msgstr ""
+
+msgid "Testing..."
+msgstr ""
+
+msgid "Test Connection"
+msgstr ""
+
+msgid "Connection Success"
+msgstr ""
+
+msgid "Connection Failed"
+msgstr ""
+
+## --- Provider Config ---
+
+msgid "API Key"
+msgstr ""
+
+msgid "Enter API Key"
+msgstr ""
+
+msgid "Base URL"
+msgstr ""
+
+msgid "Enter Base URL"
+msgstr ""
+
+msgid "Group ID"
+msgstr ""
+
+msgid "Enter Group ID"
+msgstr ""
+
+msgid "Remove Provider"
+msgstr ""
+
+msgid "Confirm remove this provider?"
+msgstr ""
+
+## --- Provider Names ---
+
+msgid "API Yi"
+msgstr ""
+
+msgid "MiniMax"
+msgstr ""
+
+msgid "Google"
+msgstr ""
+
+msgid "ARK"
+msgstr ""
+
+msgid "FAL"
+msgstr ""
+
+msgid "RunningHub"
+msgstr ""

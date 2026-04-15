@@ -9,7 +9,7 @@ defmodule AstraAutoEx.Workers.TaskRunner do
 
   alias AstraAutoEx.Tasks
   alias AstraAutoEx.Tasks.Task
-  alias AstraAutoEx.Workers.{ConcurrencyLimiter, HandlerRegistry}
+  alias AstraAutoEx.Workers.{AutoChain, ConcurrencyLimiter, HandlerRegistry}
 
   @heartbeat_interval :timer.seconds(10)
 
@@ -41,6 +41,8 @@ defmodule AstraAutoEx.Workers.TaskRunner do
             Tasks.create_event!(task, "task.completed", result)
             broadcast_event(task, "task.completed", result)
             ConcurrencyLimiter.release(queue_type, task.id)
+            # AutoChain: trigger next pipeline step
+            maybe_auto_chain(task)
             {:stop, :normal, state}
 
           {:error, reason} ->
@@ -117,6 +119,18 @@ defmodule AstraAutoEx.Workers.TaskRunner do
 
     ConcurrencyLimiter.release(queue_type, task.id)
     {:stop, :normal, state}
+  end
+
+  defp maybe_auto_chain(task) do
+    case task.type do
+      "story_to_script_run" -> AutoChain.after_story_to_script(task)
+      "script_to_storyboard_run" -> AutoChain.after_script_to_storyboard(task)
+      t when t in ["image_panel", "image_character", "image_location"] -> AutoChain.after_image_complete(task)
+      t when t in ["video_panel", "voice_line", "lip_sync"] -> AutoChain.after_video_voice_complete(task)
+      _ -> :ok
+    end
+  rescue
+    e -> Logger.warning("AutoChain trigger failed for task #{task.id}: #{Exception.message(e)}")
   end
 
   defp broadcast_event(task, event_type, payload \\ nil) do

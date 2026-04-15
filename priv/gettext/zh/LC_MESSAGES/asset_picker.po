@@ -1,0 +1,61 @@
+## "asset_picker" domain translations for zh locale.
+## Asset picker: select characters, locations, props from asset hub for panels.
+msgid ""
+msgstr ""
+"Language: zh\n"
+
+## --- Picker Titles ---
+
+msgid "Select Character from Asset Hub"
+msgstr "从资产中心选择角色"
+
+msgid "Select Location from Asset Hub"
+msgstr "从资产中心选择场景"
+
+msgid "Select Prop from Asset Hub"
+msgstr "从资产中心选择道具"
+
+msgid "Select Voice from Asset Hub"
+msgstr "从资产中心选择音色"
+
+## --- Search & Status ---
+
+msgid "Search asset name or folder..."
+msgstr "搜索资产名称或文件夹..."
+
+msgid "No assets in Asset Hub"
+msgstr "资产中心暂无资产"
+
+msgid "Create characters/locations/voices in Asset Hub first"
+msgstr "请先在资产中心创建角色/场景/音色"
+
+msgid "No search results"
+msgstr "未找到匹配的资产"
+
+## --- Asset Info ---
+
+msgid "%{count} appearances"
+msgstr "%{count} 个形象"
+
+msgid "%{count} images"
+msgstr "%{count} 张图片"
+
+## --- Actions ---
+
+msgid "Confirm Import"
+msgstr "确认导入"
+
+msgid "Import from Asset Hub"
+msgstr "从资产中心导入"
+
+msgid "Import Success"
+msgstr "导入成功"
+
+msgid "Import Failed"
+msgstr "导入失败"
+
+msgid "Preview"
+msgstr "试听"
+
+msgid "Stop"
+msgstr "停止"

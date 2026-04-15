@@ -1,0 +1,112 @@
+## "home" domain translations for zh locale.
+## Home page: project list, creation, search, empty state, AI writing.
+msgid ""
+msgstr ""
+"Language: zh\n"
+
+## --- Hero Section ---
+
+msgid "From Inspiration to Screen"
+msgstr "从灵感到银幕"
+
+msgid "Describe your story, AI generates short drama for you"
+msgstr "描述你想要创作的故事，AI 为你智能生成影视短剧"
+
+msgid "Enter your story idea, novel excerpt or script outline..."
+msgstr "输入你的故事创意、小说片段或剧本大纲..."
+
+msgid "New Project %{timestamp}"
+msgstr "新项目 %{timestamp}"
+
+msgid "Start Creation"
+msgstr "开始创作"
+
+## --- Projects ---
+
+msgid "Recent Projects"
+msgstr "最近项目"
+
+msgid "View All Projects"
+msgstr "查看全部项目"
+
+msgid "No projects yet, start your first creation above"
+msgstr "还没有项目，从上方开始你的第一个创作吧"
+
+## --- Time Ago ---
+
+msgid "Just now"
+msgstr "刚刚"
+
+msgid "%{n} minutes ago"
+msgstr "%{n}分钟前"
+
+msgid "%{n} hours ago"
+msgstr "%{n}小时前"
+
+msgid "%{n} days ago"
+msgstr "%{n}天前"
+
+## --- AI Write ---
+
+msgid "AI Write for Me"
+msgstr "AI 帮我写"
+
+msgid "AI Writing Assistant"
+msgstr "AI 创作助手"
+
+msgid "Enter your idea, AI auto-generates 65-80 episode outline"
+msgstr "输入你的创意，AI 自动生成 65-80 集剧本大纲"
+
+msgid "Enter creative content"
+msgstr "输入你的创意内容"
+
+msgid "Enter keywords, IP name, story inspiration..."
+msgstr "输入关键词、IP名称、故事灵感..."
+
+msgid "AI will generate complete multi-episode outline (65-80 episodes)"
+msgstr "AI 将生成完整多集短剧大纲（65-80集），你可以审阅修改后再确认"
+
+msgid "Generate Script Outline"
+msgstr "生成剧本大纲"
+
+msgid "Preparing creation parameters..."
+msgstr "正在准备创作参数..."
+
+msgid "AI is crafting story framework..."
+msgstr "AI 正在构思故事框架..."
+
+msgid "Planning multi-episode storylines..."
+msgstr "正在规划多集剧情线..."
+
+msgid "Designing suspense and plot twists..."
+msgstr "正在设计悬念和反转..."
+
+msgid "Almost done, please wait..."
+msgstr "即将完成，请稍候..."
+
+msgid "Waited %{seconds} seconds"
+msgstr "已等待 %{seconds} 秒"
+
+msgid "Generation failed"
+msgstr "生成失败"
+
+msgid "Retry"
+msgstr "重试"
+
+msgid "Outline Preview"
+msgstr "大纲预览"
+
+msgid "Review and edit outline, confirm to fill input"
+msgstr "审阅并编辑大纲，确认后将填入输入框"
+
+msgid "Total %{count} episodes"
+msgstr "共 %{count} 集"
+
+msgid "Confirm and Use"
+msgstr "确认使用"
+
+msgid "Regenerate Outline"
+msgstr "重新生成"
+
+msgid "Edit outline content directly, modify episodes and plot then confirm"
+msgstr "可直接编辑大纲内容，修改集数、剧情后点击确认"

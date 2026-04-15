@@ -1,0 +1,88 @@
+## "layout" domain translations for en locale.
+## Layout: sidebar, topbar, breadcrumbs, footer, global navigation.
+msgid ""
+msgstr ""
+"Language: en\n"
+
+## --- App Title ---
+
+msgid "AstraAutoEx"
+msgstr ""
+
+msgid "AI-powered short drama production platform"
+msgstr ""
+
+## --- Navigation ---
+
+msgid "Home"
+msgstr ""
+
+msgid "Workspace"
+msgstr ""
+
+msgid "Asset Hub"
+msgstr ""
+
+msgid "Settings"
+msgstr ""
+
+msgid "Help"
+msgstr ""
+
+## --- Sidebar ---
+
+msgid "Collapse Sidebar"
+msgstr ""
+
+msgid "Expand Sidebar"
+msgstr ""
+
+msgid "Projects"
+msgstr ""
+
+msgid "Recent"
+msgstr ""
+
+## --- Topbar ---
+
+msgid "Search..."
+msgstr ""
+
+msgid "Notifications"
+msgstr ""
+
+msgid "No notifications"
+msgstr ""
+
+## --- Breadcrumbs ---
+
+msgid "Dashboard"
+msgstr ""
+
+## --- Footer ---
+
+msgid "Version"
+msgstr ""
+
+msgid "Documentation"
+msgstr ""
+
+msgid "Feedback"
+msgstr ""
+
+## --- User Menu ---
+
+msgid "Profile"
+msgstr ""
+
+msgid "Logout"
+msgstr ""
+
+msgid "Theme"
+msgstr ""
+
+msgid "Dark Mode"
+msgstr ""
+
+msgid "Light Mode"
+msgstr ""

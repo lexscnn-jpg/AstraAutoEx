@@ -1,0 +1,60 @@
+## "asset_picker" domain Template file.
+## Asset picker: select characters, locations, props from asset hub for panels.
+msgid ""
+msgstr ""
+
+## --- Picker Titles ---
+
+msgid "Select Character from Asset Hub"
+msgstr ""
+
+msgid "Select Location from Asset Hub"
+msgstr ""
+
+msgid "Select Prop from Asset Hub"
+msgstr ""
+
+msgid "Select Voice from Asset Hub"
+msgstr ""
+
+## --- Search & Status ---
+
+msgid "Search asset name or folder..."
+msgstr ""
+
+msgid "No assets in Asset Hub"
+msgstr ""
+
+msgid "Create characters/locations/voices in Asset Hub first"
+msgstr ""
+
+msgid "No search results"
+msgstr ""
+
+## --- Asset Info ---
+
+msgid "%{count} appearances"
+msgstr ""
+
+msgid "%{count} images"
+msgstr ""
+
+## --- Actions ---
+
+msgid "Confirm Import"
+msgstr ""
+
+msgid "Import from Asset Hub"
+msgstr ""
+
+msgid "Import Success"
+msgstr ""
+
+msgid "Import Failed"
+msgstr ""
+
+msgid "Preview"
+msgstr ""
+
+msgid "Stop"
+msgstr ""

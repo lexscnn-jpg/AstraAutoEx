@@ -1,0 +1,88 @@
+## "layout" domain translations for zh locale.
+## Layout: sidebar, topbar, breadcrumbs, footer, global navigation.
+msgid ""
+msgstr ""
+"Language: zh\n"
+
+## --- App Title ---
+
+msgid "AstraAutoEx"
+msgstr "星辰自动漫剧"
+
+msgid "AI-powered short drama production platform"
+msgstr "使用最先进的AI技术创建专业级动漫内容"
+
+## --- Navigation ---
+
+msgid "Home"
+msgstr "首页"
+
+msgid "Workspace"
+msgstr "工作区"
+
+msgid "Asset Hub"
+msgstr "素材库"
+
+msgid "Settings"
+msgstr "设置"
+
+msgid "Help"
+msgstr "帮助"
+
+## --- Sidebar ---
+
+msgid "Collapse Sidebar"
+msgstr "收起侧边栏"
+
+msgid "Expand Sidebar"
+msgstr "展开侧边栏"
+
+msgid "Projects"
+msgstr "项目"
+
+msgid "Recent"
+msgstr "最近"
+
+## --- Topbar ---
+
+msgid "Search..."
+msgstr "搜索..."
+
+msgid "Notifications"
+msgstr "通知"
+
+msgid "No notifications"
+msgstr "暂无通知"
+
+## --- Breadcrumbs ---
+
+msgid "Dashboard"
+msgstr "仪表盘"
+
+## --- Footer ---
+
+msgid "Version"
+msgstr "版本"
+
+msgid "Documentation"
+msgstr "文档"
+
+msgid "Feedback"
+msgstr "反馈"
+
+## --- User Menu ---
+
+msgid "Profile"
+msgstr "个人设置"
+
+msgid "Logout"
+msgstr "退出登录"
+
+msgid "Theme"
+msgstr "主题"
+
+msgid "Dark Mode"
+msgstr "暗色模式"
+
+msgid "Light Mode"
+msgstr "亮色模式"

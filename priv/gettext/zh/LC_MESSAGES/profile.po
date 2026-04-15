@@ -1,0 +1,273 @@
+## "profile" domain translations for zh locale.
+## Profile/Settings: API config, model selection, prompt tuning, billing tabs.
+msgid ""
+msgstr ""
+"Language: zh\n"
+
+## --- User Info ---
+msgid "User"
+msgstr "用户"
+
+msgid "Personal Account"
+msgstr "个人账户"
+
+msgid "Available Balance"
+msgstr "可用余额"
+
+msgid "Open source, no billing"
+msgstr "开源版本，无需计费"
+
+msgid "Frozen"
+msgstr "冻结"
+
+msgid "Total Spent"
+msgstr "已消费"
+
+## --- Tabs ---
+msgid "API Config"
+msgstr "API 配置"
+
+msgid "Recharge Records"
+msgstr "充值记录"
+
+msgid "Billing Records"
+msgstr "扣费记录"
+
+msgid "Download Logs"
+msgstr "下载日志"
+
+## --- Billing ---
+msgid "Account Transactions"
+msgstr "账户流水"
+
+msgid "Project Details"
+msgstr "项目明细"
+
+msgid "Summary"
+msgstr "汇总"
+
+msgid "Transactions"
+msgstr "流水"
+
+msgid "No transaction records"
+msgstr "暂无流水记录"
+
+msgid "No project cost records"
+msgstr "暂无项目费用记录"
+
+msgid "No details for this project"
+msgstr "该项目暂无费用明细"
+
+msgid "No records"
+msgstr "暂无记录"
+
+## --- Filters ---
+msgid "By Type"
+msgstr "按类型"
+
+msgid "By Action"
+msgstr "按操作"
+
+msgid "times"
+msgstr "次"
+
+msgid "Total"
+msgstr "总计"
+
+msgid "Filter"
+msgstr "筛选"
+
+msgid "All Types"
+msgstr "全部类型"
+
+msgid "Account Recharge"
+msgstr "账户充值"
+
+msgid "Service Consumption"
+msgstr "服务消费"
+
+msgid "Balance %{amount}"
+msgstr "余额 %{amount}"
+
+msgid "%{count} records"
+msgstr "%{count} 条记录"
+
+msgid "Total %{amount}"
+msgstr "总计 %{amount}"
+
+## --- Pagination ---
+msgid "Previous Page"
+msgstr "上一页"
+
+msgid "Next Page"
+msgstr "下一页"
+
+msgid "Total %{total}, page %{page} / %{total_pages}"
+msgstr "共 %{total} 条，第 %{page} / %{total_pages} 页"
+
+msgid "Episode %{number}"
+msgstr "第 %{number} 集"
+
+## --- Billing Detail ---
+msgid "%{count} images at %{resolution}"
+msgstr "%{count}张 · %{resolution}"
+
+msgid "%{count} images"
+msgstr "%{count}张"
+
+msgid "%{count} clips at %{resolution}"
+msgstr "%{count}段 · %{resolution}"
+
+msgid "%{count} clips"
+msgstr "%{count}段"
+
+msgid "%{count} tokens"
+msgstr "%{count} tokens"
+
+msgid "%{count} seconds"
+msgstr "%{count}秒"
+
+msgid "%{count} calls"
+msgstr "%{count}次"
+
+## --- Action Types ---
+msgid "Panel Image Generation"
+msgstr "分镜生图"
+
+msgid "Character Image Generation"
+msgstr "角色生图"
+
+msgid "Location Image Generation"
+msgstr "场景生图"
+
+msgid "Video Generation"
+msgstr "视频生成"
+
+msgid "Lip Sync"
+msgstr "口型同步"
+
+msgid "Voice Line Synthesis"
+msgstr "配音合成"
+
+msgid "Voice Design"
+msgstr "声音设计"
+
+msgid "Asset Hub Voice Design"
+msgstr "素材库声音设计"
+
+msgid "Regenerate Storyboard Text"
+msgstr "重生成分镜文案"
+
+msgid "Insert Panel"
+msgstr "插入面板"
+
+msgid "Panel Variant"
+msgstr "镜头变体"
+
+msgid "Modify Asset Image"
+msgstr "修图"
+
+msgid "Batch Regenerate"
+msgstr "批量重生成"
+
+msgid "Asset Hub Image"
+msgstr "素材库生图"
+
+msgid "Asset Hub Modify"
+msgstr "素材库修图"
+
+msgid "Novel Analysis"
+msgstr "小说分析"
+
+msgid "Story to Script"
+msgstr "故事转剧本"
+
+msgid "Script to Storyboard"
+msgstr "剧本转分镜"
+
+msgid "Clip Build"
+msgstr "片段合成"
+
+msgid "Screenplay Convert"
+msgstr "剧本转换"
+
+msgid "Voice Analyze"
+msgstr "声音分析"
+
+msgid "Global Analysis"
+msgstr "全局分析"
+
+## --- Prompt Tuning ---
+msgid "Prompt Tuning"
+msgstr "提示词微调"
+
+msgid "Customize pipeline step prompts to fine-tune AI output"
+msgstr "自定义管线各步骤的 Prompt 模板，微调 AI 生成效果"
+
+msgid "Loading..."
+msgstr "加载中..."
+
+msgid "Saving..."
+msgstr "保存中..."
+
+msgid "Saved"
+msgstr "已保存"
+
+msgid "Save failed"
+msgstr "保存失败"
+
+msgid "Chinese Template"
+msgstr "中文模板"
+
+msgid "English Template"
+msgstr "英文模板"
+
+## --- Prompt Groups ---
+msgid "Story Creation"
+msgstr "创作起步"
+
+msgid "Editing Helpers"
+msgstr "辅助编辑"
+
+msgid "Short Drama"
+msgstr "微短剧"
+
+## --- Prompt Card ---
+msgid "Default"
+msgstr "默认"
+
+msgid "Customized"
+msgstr "已自定义"
+
+msgid "Available Variables:"
+msgstr "可用变量："
+
+msgid "Reset to Default"
+msgstr "恢复默认"
+
+msgid "Confirm reset to system default? Custom content will be lost."
+msgstr "确定恢复为系统默认模板？自定义内容将丢失。"
+
+msgid "Edit prompt template..."
+msgstr "编辑提示词模板..."
+
+msgid "Missing required variables: %{vars}"
+msgstr "缺少必要变量：%{vars}"
+
+msgid "Expand"
+msgstr "展开编辑"
+
+msgid "Collapse"
+msgstr "收起"
+
+msgid "Expand All"
+msgstr "全部展开"
+
+msgid "Collapse All"
+msgstr "全部收起"
+
+msgid "Reset All to Default"
+msgstr "全部恢复默认"
+
+msgid "Confirm reset all prompts to system default?"
+msgstr "确定将所有提示词恢复为系统默认？"

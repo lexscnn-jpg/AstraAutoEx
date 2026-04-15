@@ -1,0 +1,86 @@
+## "world_context_modal" domain translations for zh locale.
+## World context modal: world building, rules, constraints, character/scene settings.
+msgid ""
+msgstr ""
+"Language: zh\n"
+
+## --- Modal Header ---
+
+msgid "World Setting & Characters"
+msgstr "世界观与人设"
+
+msgid "Define global character appearances, scene styles and environment descriptions"
+msgstr "定义全局通用的角色外貌、场景风格和环境描述"
+
+## --- Form ---
+
+msgid "World context placeholder"
+msgstr "例如：\n【男主】张三，25岁，黑色短发，总是穿着一件洗得发白的牛仔夹克，眼神忧郁。\n【女主】李四，22岁，红发双马尾，性格活泼，喜欢穿洛丽塔风格的裙子。\n【场景】2077年的赛博朋克城市，霓虹灯闪烁，终年下雨..."
+
+msgid "These settings will be inherited by all episodes as base reference for AI drawing."
+msgstr "这些设定将被所有剧集继承，作为AI绘画的基础参考。"
+
+## --- Actions ---
+
+msgid "Save"
+msgstr "保存"
+
+msgid "Cancel"
+msgstr "取消"
+
+msgid "Saving..."
+msgstr "保存中..."
+
+msgid "Saved successfully"
+msgstr "保存成功"
+
+msgid "Save failed"
+msgstr "保存失败"
+
+## --- Sections ---
+
+msgid "Character Settings"
+msgstr "角色设定"
+
+msgid "Scene Settings"
+msgstr "场景设定"
+
+msgid "World Rules"
+msgstr "世界规则"
+
+msgid "Global Constraints"
+msgstr "全局约束"
+
+msgid "Art Direction"
+msgstr "美术方向"
+
+## --- Hints ---
+
+msgid "Define main character appearances and clothing"
+msgstr "定义主要角色的外貌特征和服装"
+
+msgid "Describe recurring locations and atmosphere"
+msgstr "描述反复出现的场景和氛围"
+
+msgid "Set world rules and magic systems"
+msgstr "设定世界规则和魔法体系"
+
+msgid "Constraints that apply to all episodes"
+msgstr "适用于所有剧集的约束条件"
+
+msgid "Overall visual style and color palette"
+msgstr "整体视觉风格和色彩方案"
+
+## --- Status ---
+
+msgid "No world context set"
+msgstr "尚未设置世界观"
+
+msgid "Edit World Context"
+msgstr "编辑世界设定"
+
+msgid "Characters: %{count}"
+msgstr "角色：%{count} 个"
+
+msgid "Locations: %{count}"
+msgstr "场景：%{count} 个"

@@ -1,0 +1,242 @@
+## "asset_modal" domain Template file.
+## Asset creation/editing modal forms for characters, locations, and props.
+msgid ""
+msgstr ""
+
+## --- Character Modal ---
+
+msgid "New Character"
+msgstr ""
+
+msgid "Character Name"
+msgstr ""
+
+msgid "Enter character name"
+msgstr ""
+
+msgid "Reference Mode"
+msgstr ""
+
+msgid "Description Mode"
+msgstr ""
+
+msgid "This is a sub-appearance"
+msgstr ""
+
+msgid "Add new appearance state for existing character"
+msgstr ""
+
+msgid "Upload Reference Image"
+msgstr ""
+
+msgid "Ctrl+V to paste"
+msgstr ""
+
+msgid "Click to upload or drag image"
+msgstr ""
+
+msgid "Supported formats: JPG, PNG"
+msgstr ""
+
+msgid "Enter character name first to use reference conversion"
+msgstr ""
+
+msgid "Convert reference to standard character sheet"
+msgstr ""
+
+msgid "Character Description"
+msgstr ""
+
+msgid "Modify Description"
+msgstr ""
+
+msgid "Enter character appearance description..."
+msgstr ""
+
+msgid "Describe modifications to main appearance..."
+msgstr ""
+
+msgid "Select Main Character"
+msgstr ""
+
+msgid "Select character..."
+msgstr ""
+
+msgid "%{count} appearances"
+msgstr ""
+
+msgid "Appearance Change Reason"
+msgstr ""
+
+msgid "E.g. injured after battle, formal attire for banquet..."
+msgstr ""
+
+## --- Generation Mode ---
+
+msgid "Generation Mode"
+msgstr ""
+
+msgid "Direct Generate"
+msgstr ""
+
+msgid "Extract Prompt"
+msgstr ""
+
+msgid "Extract First"
+msgstr ""
+
+msgid "Generate from reference image directly (img2img)"
+msgstr ""
+
+msgid "Extract description from image, edit then generate (txt2img)"
+msgstr ""
+
+msgid "Max 5 reference images"
+msgstr ""
+
+msgid "Selected %{count}/5 references"
+msgstr ""
+
+msgid "Extract Description"
+msgstr ""
+
+msgid "Extracting..."
+msgstr ""
+
+msgid "Extracted description (editable)"
+msgstr ""
+
+msgid "Re-extract"
+msgstr ""
+
+msgid "Edit then click button below to generate"
+msgstr ""
+
+msgid "Generate from Description"
+msgstr ""
+
+msgid "Please extract description first"
+msgstr ""
+
+## --- Location Modal ---
+
+msgid "New Location"
+msgstr ""
+
+msgid "Location Name"
+msgstr ""
+
+msgid "Enter location name"
+msgstr ""
+
+msgid "Location Description"
+msgstr ""
+
+msgid "Enter location description..."
+msgstr ""
+
+## --- Prop Modal ---
+
+msgid "New Prop"
+msgstr ""
+
+msgid "Prop Name"
+msgstr ""
+
+msgid "Enter prop name"
+msgstr ""
+
+msgid "Brief Summary"
+msgstr ""
+
+msgid "One-line summary of what this prop is..."
+msgstr ""
+
+msgid "Image Description"
+msgstr ""
+
+msgid "Describe material, color, structure and decoration details..."
+msgstr ""
+
+## --- Art Style ---
+
+msgid "Art Style"
+msgstr ""
+
+## --- AI Design ---
+
+msgid "AI Design"
+msgstr ""
+
+msgid "Describe character features..."
+msgstr ""
+
+msgid "Describe scene atmosphere and environment..."
+msgstr ""
+
+msgid "Designing..."
+msgstr ""
+
+msgid "Generate"
+msgstr ""
+
+msgid "Enter a brief description, AI generates detailed settings"
+msgstr ""
+
+## --- Common ---
+
+msgid "Creating..."
+msgstr ""
+
+msgid "Create"
+msgstr ""
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Adding..."
+msgstr ""
+
+msgid "Add"
+msgstr ""
+
+msgid "Add character only"
+msgstr ""
+
+msgid "Add to asset hub only"
+msgstr ""
+
+msgid "Add location only"
+msgstr ""
+
+msgid "Add prop only"
+msgstr ""
+
+msgid "Add and generate %{count} images"
+msgstr ""
+
+msgid "Select generation count"
+msgstr ""
+
+msgid "Optional"
+msgstr ""
+
+## --- Errors ---
+
+msgid "Upload failed"
+msgstr ""
+
+msgid "Description extraction failed"
+msgstr ""
+
+msgid "Creation failed"
+msgstr ""
+
+msgid "AI design failed"
+msgstr ""
+
+msgid "Add sub-appearance failed"
+msgstr ""
+
+msgid "Insufficient balance"
+msgstr ""

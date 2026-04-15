@@ -1,0 +1,181 @@
+## "script_view" domain translations for zh locale.
+## Script viewer: screenplay display, editing, formatting, clips and assets.
+msgid ""
+msgstr ""
+"Language: zh\n"
+
+## --- Main ---
+
+msgid "Script View"
+msgstr "剧本视图"
+
+msgid "Script Breakdown"
+msgstr "剧本拆解"
+
+msgid "Split into %{count} panels"
+msgstr "已拆分 %{count} 个分镜"
+
+msgid "No clips yet, generate in story view first"
+msgstr "暂无分镜，请先在故事视图生成"
+
+## --- Segments ---
+
+msgid "Segment %{index}"
+msgstr "片段 %{index}"
+
+msgid "(Selected)"
+msgstr "（选中）"
+
+msgid "In-scene Assets"
+msgstr "剧中资产"
+
+msgid "Currently selected: Segment %{number}"
+msgstr "当前选中: 片段 %{number}"
+
+## --- Asset View ---
+
+msgid "All Clips"
+msgstr "全部片段"
+
+msgid "Viewing Clip %{number}"
+msgstr "查看片段 %{number}"
+
+## --- Asset Actions ---
+
+msgid "Click to generate appearance"
+msgstr "点击生成形象"
+
+msgid "Click to generate location"
+msgstr "点击生成场景"
+
+msgid "Remove character from clip?"
+msgstr "确定要从当前片段移除该角色吗？"
+
+msgid "Remove location from clip?"
+msgstr "确定要从当前片段移除该场景吗？"
+
+msgid "Remove from clip"
+msgstr "从当前片段移除"
+
+msgid "No audio"
+msgstr "无音频"
+
+msgid "Playing"
+msgstr "播放中"
+
+msgid "Listen"
+msgstr "试听"
+
+## --- Asset Lists ---
+
+msgid "Active Characters"
+msgstr "出场角色"
+
+msgid "Active Locations"
+msgstr "出场场景"
+
+msgid "Select character to add"
+msgstr "选择要添加的角色/形象"
+
+msgid "Select location to add"
+msgstr "选择要添加的场景"
+
+msgid "Loading assets..."
+msgstr "加载资产中..."
+
+msgid "%{count} appearances"
+msgstr "%{count} 个形象"
+
+msgid "Added"
+msgstr "已添加"
+
+msgid "Primary"
+msgstr "主形象"
+
+msgid "Sub-appearance"
+msgstr "子形象"
+
+msgid "Default Appearance"
+msgstr "初始形象"
+
+msgid "Click to remove %{name}"
+msgstr "点击移除 %{name}"
+
+msgid "Click to add %{name}"
+msgstr "点击添加 %{name}"
+
+## --- Screenplay ---
+
+msgid "Scene %{number}"
+msgstr "场景 %{number}"
+
+msgid "Location:"
+msgstr "场景："
+
+msgid "Time:"
+msgstr "时间："
+
+msgid "Day"
+msgstr "日"
+
+msgid "Night"
+msgstr "夜"
+
+msgid "Dawn"
+msgstr "晨"
+
+msgid "Dusk"
+msgstr "昏"
+
+msgid "Dialogue"
+msgstr "对白"
+
+msgid "Action"
+msgstr "动作"
+
+msgid "Narration"
+msgstr "旁白"
+
+msgid "Original Content"
+msgstr "原文内容"
+
+msgid "No content"
+msgstr "暂无内容"
+
+msgid "Click to edit"
+msgstr "点击编辑"
+
+msgid "Interior"
+msgstr "内景"
+
+msgid "Exterior"
+msgstr "外景"
+
+msgid "Characters"
+msgstr "出场角色"
+
+msgid "No character info"
+msgstr "暂无角色信息"
+
+msgid "No locations in clip"
+msgstr "暂无出场场景"
+
+msgid "No characters in clip"
+msgstr "暂无出场角色"
+
+## --- Generation ---
+
+msgid "%{count} assets missing generated images"
+msgstr "还有 %{count} 个资产未生成形象"
+
+msgid "Please first go to"
+msgstr "请先在"
+
+msgid "to generate all character and location images"
+msgstr "中生成所有出场角色和场景的形象"
+
+msgid "Generating images..."
+msgstr "正在生成画面..."
+
+msgid "Confirm and start drawing"
+msgstr "确认并开始绘制"

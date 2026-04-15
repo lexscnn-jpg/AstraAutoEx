@@ -1,0 +1,111 @@
+## "home" domain Template file.
+## Home page: project list, creation, search, empty state, AI writing.
+msgid ""
+msgstr ""
+
+## --- Hero Section ---
+
+msgid "From Inspiration to Screen"
+msgstr ""
+
+msgid "Describe your story, AI generates short drama for you"
+msgstr ""
+
+msgid "Enter your story idea, novel excerpt or script outline..."
+msgstr ""
+
+msgid "New Project %{timestamp}"
+msgstr ""
+
+msgid "Start Creation"
+msgstr ""
+
+## --- Projects ---
+
+msgid "Recent Projects"
+msgstr ""
+
+msgid "View All Projects"
+msgstr ""
+
+msgid "No projects yet, start your first creation above"
+msgstr ""
+
+## --- Time Ago ---
+
+msgid "Just now"
+msgstr ""
+
+msgid "%{n} minutes ago"
+msgstr ""
+
+msgid "%{n} hours ago"
+msgstr ""
+
+msgid "%{n} days ago"
+msgstr ""
+
+## --- AI Write ---
+
+msgid "AI Write for Me"
+msgstr ""
+
+msgid "AI Writing Assistant"
+msgstr ""
+
+msgid "Enter your idea, AI auto-generates 65-80 episode outline"
+msgstr ""
+
+msgid "Enter creative content"
+msgstr ""
+
+msgid "Enter keywords, IP name, story inspiration..."
+msgstr ""
+
+msgid "AI will generate complete multi-episode outline (65-80 episodes)"
+msgstr ""
+
+msgid "Generate Script Outline"
+msgstr ""
+
+msgid "Preparing creation parameters..."
+msgstr ""
+
+msgid "AI is crafting story framework..."
+msgstr ""
+
+msgid "Planning multi-episode storylines..."
+msgstr ""
+
+msgid "Designing suspense and plot twists..."
+msgstr ""
+
+msgid "Almost done, please wait..."
+msgstr ""
+
+msgid "Waited %{seconds} seconds"
+msgstr ""
+
+msgid "Generation failed"
+msgstr ""
+
+msgid "Retry"
+msgstr ""
+
+msgid "Outline Preview"
+msgstr ""
+
+msgid "Review and edit outline, confirm to fill input"
+msgstr ""
+
+msgid "Total %{count} episodes"
+msgstr ""
+
+msgid "Confirm and Use"
+msgstr ""
+
+msgid "Regenerate Outline"
+msgstr ""
+
+msgid "Edit outline content directly, modify episodes and plot then confirm"
+msgstr ""

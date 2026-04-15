@@ -1,0 +1,243 @@
+## "asset_modal" domain translations for zh locale.
+## Asset creation/editing modal forms for characters, locations, and props.
+msgid ""
+msgstr ""
+"Language: zh\n"
+
+## --- Character Modal ---
+
+msgid "New Character"
+msgstr "新建角色"
+
+msgid "Character Name"
+msgstr "角色名称"
+
+msgid "Enter character name"
+msgstr "请输入角色名称"
+
+msgid "Reference Mode"
+msgstr "参考图模式"
+
+msgid "Description Mode"
+msgstr "描述模式"
+
+msgid "This is a sub-appearance"
+msgstr "这是一个子形象"
+
+msgid "Add new appearance state for existing character"
+msgstr "为已有角色添加新的形象状态"
+
+msgid "Upload Reference Image"
+msgstr "上传参考图"
+
+msgid "Ctrl+V to paste"
+msgstr "Ctrl+V 粘贴"
+
+msgid "Click to upload or drag image"
+msgstr "点击上传或拖拽图片"
+
+msgid "Supported formats: JPG, PNG"
+msgstr "支持 JPG、PNG 等格式"
+
+msgid "Enter character name first to use reference conversion"
+msgstr "请先输入角色名称才能使用参考图转换"
+
+msgid "Convert reference to standard character sheet"
+msgstr "将参考图转换为标准三视图"
+
+msgid "Character Description"
+msgstr "角色描述"
+
+msgid "Modify Description"
+msgstr "修改描述"
+
+msgid "Enter character appearance description..."
+msgstr "请输入角色外貌描述..."
+
+msgid "Describe modifications to main appearance..."
+msgstr "描述要对主形象做什么修改..."
+
+msgid "Select Main Character"
+msgstr "选择主角色"
+
+msgid "Select character..."
+msgstr "请选择角色..."
+
+msgid "%{count} appearances"
+msgstr "%{count} 个形象"
+
+msgid "Appearance Change Reason"
+msgstr "形象变化原因"
+
+msgid "E.g. injured after battle, formal attire for banquet..."
+msgstr "例如：战斗后受伤、穿上正装参加宴会..."
+
+## --- Generation Mode ---
+
+msgid "Generation Mode"
+msgstr "生成方式"
+
+msgid "Direct Generate"
+msgstr "直接生成"
+
+msgid "Extract Prompt"
+msgstr "反推提示词"
+
+msgid "Extract First"
+msgstr "先提取描述"
+
+msgid "Generate from reference image directly (img2img)"
+msgstr "直接使用参考图生成角色设定图（图生图）"
+
+msgid "Extract description from image, edit then generate (txt2img)"
+msgstr "先从图片提取角色描述，可编辑后再生成（文生图）"
+
+msgid "Max 5 reference images"
+msgstr "最多上传 5 张参考图"
+
+msgid "Selected %{count}/5 references"
+msgstr "已选择 %{count}/5 张参考图"
+
+msgid "Extract Description"
+msgstr "提取角色描述"
+
+msgid "Extracting..."
+msgstr "提取中..."
+
+msgid "Extracted description (editable)"
+msgstr "提取的角色描述（可编辑）"
+
+msgid "Re-extract"
+msgstr "重新提取"
+
+msgid "Edit then click button below to generate"
+msgstr "编辑后点击下方按钮生成角色设定图"
+
+msgid "Generate from Description"
+msgstr "使用描述生成"
+
+msgid "Please extract description first"
+msgstr "请先提取角色描述"
+
+## --- Location Modal ---
+
+msgid "New Location"
+msgstr "新建场景"
+
+msgid "Location Name"
+msgstr "场景名称"
+
+msgid "Enter location name"
+msgstr "请输入场景名称"
+
+msgid "Location Description"
+msgstr "场景描述"
+
+msgid "Enter location description..."
+msgstr "请输入场景描述..."
+
+## --- Prop Modal ---
+
+msgid "New Prop"
+msgstr "新建道具"
+
+msgid "Prop Name"
+msgstr "道具名称"
+
+msgid "Enter prop name"
+msgstr "请输入道具名称"
+
+msgid "Brief Summary"
+msgstr "简要说明"
+
+msgid "One-line summary of what this prop is..."
+msgstr "一句话说明这是什么道具..."
+
+msgid "Image Description"
+msgstr "图片描述"
+
+msgid "Describe material, color, structure and decoration details..."
+msgstr "只写道具本体的材质、颜色、结构和装饰细节..."
+
+## --- Art Style ---
+
+msgid "Art Style"
+msgstr "画面风格"
+
+## --- AI Design ---
+
+msgid "AI Design"
+msgstr "AI 设计"
+
+msgid "Describe character features..."
+msgstr "描述你想要的角色特征..."
+
+msgid "Describe scene atmosphere and environment..."
+msgstr "描述场景氛围和环境..."
+
+msgid "Designing..."
+msgstr "设计中..."
+
+msgid "Generate"
+msgstr "生成"
+
+msgid "Enter a brief description, AI generates detailed settings"
+msgstr "输入简单描述，AI 帮你生成详细设定"
+
+## --- Common ---
+
+msgid "Creating..."
+msgstr "创建中..."
+
+msgid "Create"
+msgstr "创建"
+
+msgid "Cancel"
+msgstr "取消"
+
+msgid "Adding..."
+msgstr "添加中..."
+
+msgid "Add"
+msgstr "添加"
+
+msgid "Add character only"
+msgstr "仅添加角色"
+
+msgid "Add to asset hub only"
+msgstr "仅添加到资产库"
+
+msgid "Add location only"
+msgstr "仅添加场景"
+
+msgid "Add prop only"
+msgstr "仅添加道具"
+
+msgid "Add and generate %{count} images"
+msgstr "添加并生成 %{count} 张图片"
+
+msgid "Select generation count"
+msgstr "选择生成数量"
+
+msgid "Optional"
+msgstr "（可选）"
+
+## --- Errors ---
+
+msgid "Upload failed"
+msgstr "上传失败"
+
+msgid "Description extraction failed"
+msgstr "提取描述失败"
+
+msgid "Creation failed"
+msgstr "创建失败"
+
+msgid "AI design failed"
+msgstr "AI 设计失败"
+
+msgid "Add sub-appearance failed"
+msgstr "添加子形象失败"
+
+msgid "Insufficient balance"
+msgstr "账户余额不足"

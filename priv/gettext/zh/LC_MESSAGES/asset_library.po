@@ -1,0 +1,75 @@
+## "asset_library" domain translations for zh locale.
+## Asset library: search, filter, categories, import/export.
+msgid ""
+msgstr ""
+"Language: zh\n"
+
+## --- Main ---
+
+msgid "Asset Library"
+msgstr "资产库"
+
+msgid "Characters"
+msgstr "角色"
+
+msgid "Locations"
+msgstr "场景"
+
+msgid "Props"
+msgstr "道具"
+
+msgid "No Characters"
+msgstr "暂无角色"
+
+msgid "No Locations"
+msgstr "暂无场景"
+
+msgid "No Props"
+msgstr "暂无道具"
+
+msgid "Add Character"
+msgstr "添加角色"
+
+msgid "Add Location"
+msgstr "添加场景"
+
+msgid "Add Prop"
+msgstr "添加道具"
+
+msgid "Generate Image"
+msgstr "生成图片"
+
+msgid "Regenerate Image"
+msgstr "重新生成"
+
+msgid "Analyze Assets"
+msgstr "分析资产"
+
+msgid "Analyzing..."
+msgstr "分析中..."
+
+## --- Search & Filter ---
+
+msgid "Search assets..."
+msgstr "搜索资产..."
+
+msgid "Filter by type"
+msgstr "按类型筛选"
+
+msgid "All Types"
+msgstr "全部类型"
+
+msgid "Sort by name"
+msgstr "按名称排序"
+
+msgid "Sort by date"
+msgstr "按日期排序"
+
+msgid "Import"
+msgstr "导入"
+
+msgid "Export"
+msgstr "导出"
+
+msgid "No results found"
+msgstr "未找到结果"

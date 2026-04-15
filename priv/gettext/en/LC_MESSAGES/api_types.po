@@ -1,0 +1,63 @@
+## "api_types" domain translations for en locale.
+## API type labels for LLM, image, video, voice, and music generation.
+msgid ""
+msgstr ""
+"Language: en\n"
+
+## --- API Type Labels ---
+
+msgid "Image Generation"
+msgstr ""
+
+msgid "Video Generation"
+msgstr ""
+
+msgid "Text Analysis"
+msgstr ""
+
+msgid "TTS"
+msgstr ""
+
+msgid "Voice"
+msgstr ""
+
+msgid "Voice Design"
+msgstr ""
+
+msgid "Lip Sync"
+msgstr ""
+
+msgid "Music Generation"
+msgstr ""
+
+msgid "LLM"
+msgstr ""
+
+msgid "Chat Completion"
+msgstr ""
+
+## --- API Type Descriptions ---
+
+msgid "Generate images from text prompts"
+msgstr ""
+
+msgid "Generate videos from images or text"
+msgstr ""
+
+msgid "Analyze and process text content"
+msgstr ""
+
+msgid "Convert text to speech audio"
+msgstr ""
+
+msgid "Generate voice acting for characters"
+msgstr ""
+
+msgid "Design custom voice presets"
+msgstr ""
+
+msgid "Synchronize lip movements with audio"
+msgstr ""
+
+msgid "Generate background music"
+msgstr ""
