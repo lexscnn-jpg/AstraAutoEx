@@ -247,7 +247,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
           </p>
         </div>
         <%!-- Main content --%>
-        <main class="flex-1 overflow-y-auto">
+        <main class={"flex-1 overflow-y-auto transition-all duration-300 #{if @show_assistant, do: "mr-80"}"}>
           <div class="max-w-6xl mx-auto px-6 py-6">
             <%= case @stage do %>
               <% "story" -> %>
