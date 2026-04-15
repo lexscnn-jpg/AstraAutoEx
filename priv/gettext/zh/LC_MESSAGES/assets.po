@@ -300,3 +300,50 @@ msgstr "保存并生成"
 
 msgid "Introduction"
 msgstr "角色介绍"
+
+## --- Asset Library Modal ---
+
+msgid "Asset Library"
+msgstr "资产库"
+
+msgid "Total %{total} assets (%{chars} characters + %{locs} locations + 0 props)"
+msgstr "共 %{total} 个资产（%{chars} 角色 + %{locs} 场景 + 0 道具）"
+
+msgid "All (%{count})"
+msgstr "全部（%{count}）"
+
+msgid "Characters (%{count})"
+msgstr "角色（%{count}）"
+
+msgid "Locations (%{count})"
+msgstr "场景（%{count}）"
+
+msgid "Props (%{count})"
+msgstr "道具（%{count}）"
+
+msgid "AI Casting Complete"
+msgstr "AI 选角完成"
+
+msgid "Confirm profiles to auto-generate appearances"
+msgstr "确认档案后自动生成角色形象"
+
+msgid "Delete location confirm"
+msgstr "确定要删除这个场景吗？"
+
+msgid "Coming soon"
+msgstr "即将推出"
+
+msgid "Gender"
+msgstr "性别"
+
+msgid "Age"
+msgstr "年龄"
+
+msgid "Era"
+msgstr "时代"
+
+msgid "Social Class"
+msgstr "阶层"
+
+msgid "Occupation"
+msgstr "职业"
