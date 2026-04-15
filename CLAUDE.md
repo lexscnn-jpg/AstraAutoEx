@@ -83,8 +83,21 @@ AstraAutoEx 是 AI 驱动的短剧/漫画视频生产平台，从 Next.js 原项
 4. **制作 (film)** — video_stage: 视频/配音生成 + 重试
 5. **AI 剪辑 (compose)** — compose_stage: 左右分栏（面板选择+设置 | 预览+导出）
 
-## 当前项目状态 (v0.8.2)
-- 最后完成: v0.8.2 暗色主题 + 全局AI助手入口 + 内容不重叠 (2026-04-15)
+## 当前项目状态 (v0.9.0)
+- 最后完成: v0.9.0 灵魂补全 — 核心管线逻辑 + 缺失Handler + FFmpeg增强 + AutoChain DAG + 33翻译域 (2026-04-15)
+  - **v0.9.0 (2026-04-15) — 灵魂补全:**
+  - 新增 Handler: VoiceDesignHandler(语音克隆) + MusicGenerateHandler(BGM生成) + Watchdog(看门狗) + ShortDrama(短剧8任务) + StoryboardInsert(面板插入) + ShotVariant(镜头变体)
+  - FFmpeg: xfade转场滤镜图 + filter_complex动态构建 + 3轨音频混音(0.3/1.0/1.0) + FL尾帧跳过
+  - AutoChain: 统一DAG触发器(4触发点+dedupeKey+PubSub) + TaskRunner集成
+  - FL首尾帧: 模型名后缀(-landscape/-fl) + 智能配对评分
+  - JSON安全: 双引号→「」+ safe_json_decode
+  - 角色一致性: 别名"/"匹配 + CHARACTER_PROMPT_SUFFIX自动追加
+  - LipSync预处理: 2s最小填充 + 超长裁剪 + WAV块对齐
+  - Web: 视频分享页(/m/:public_id) + 脚本导入增强 + 面板拖拽排序 + 22种错误码
+  - i18n: 33翻译域完整匹配原项目, 1661条翻译
+  - HandlerRegistry: 36种任务类型注册, SD 8种统一路由
+  - 测试: 224 tests, 0 failures (+28个新测试)
+- 之前: v0.8.2 暗色主题 + 全局AI助手入口 + 内容不重叠 (2026-04-15)
   - **v0.7.0-v0.7.2:** 核心管线打通 + 配音 + 合成 + 一致性生图 + 首尾帧抽卡 + 集数选择器 + 管线动画
   - **v0.7.3:** 口型同步(FAL/Vidu/Bailian) + 素材库项目列表 + 翻译审计
   - **v0.7.4:** 异步轮询系统 + Vidu/Bailian Provider + 6项 Bug 修复
@@ -122,12 +135,16 @@ AstraAutoEx 是 AI 驱动的短剧/漫画视频生产平台，从 Next.js 原项
   - UI：快捷提问按钮（分析故事/建议镜头/生成文案）
   - 研究：Flova.ai 竞品研究报告（docs/flova-research-report.md）
 - 进行中: 无
+- 进行中: 无
 - 下一步:
-  - 端到端生成测试（MiniMax 生图 API 已配置）
+  - 端到端生成测试（真实 API 调用走完 故事→剧本→分镜→图像→视频→配音→合成 全流程）
+  - 运行 migration: `mix ecto.migrate`（public_id on episodes）
+  - 更新日志弹窗追加 v0.9.0 内容
   - 使用手册/用户引导页内容完善
-  - 完成剩余迭代需求
 - 已知问题:
   - 计费统计数据为空（需要实际 API 调用后才有记录）
+  - 部分 Handler 的底层 Provider API 调用尚未联调（VoiceDesign/MusicGenerate 依赖 MiniMax API）
+  - 剩余 ~17 种任务类型未单独注册（复用现有 Handler dispatch 或待 Provider 对接）
 
 ## 重要决策记录
 - 从 Next.js 迁移到 Phoenix LiveView：利用 OTP 并发处理 AI 任务，无需 Redis/BullMQ
