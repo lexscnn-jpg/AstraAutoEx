@@ -231,12 +231,61 @@
         </div>
 
         <div class="flex-1 overflow-y-auto px-6 py-4 space-y-6 text-sm">
-          <%!-- v0.8.0 --%>
+          <%!-- v0.9.0 --%>
           <div>
             <div class="flex items-center gap-2 mb-2">
               <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-500/20 text-green-400">
                 最新
               </span>
+              <span class="font-bold text-[var(--glass-text-primary)]">v0.9.0</span>
+              <span class="text-xs text-[var(--glass-text-tertiary)]">2026-04-16</span>
+            </div>
+            <p class="text-[10px] text-[var(--glass-text-tertiary)] mb-1.5 italic">
+              灵魂补全 — 核心管线逻辑 + 5阶段UI全面对齐原项目
+            </p>
+            <ul class="space-y-1 text-[var(--glass-text-secondary)] list-disc list-inside text-xs">
+              <li><strong>新增6个Handler</strong>：语音克隆/BGM生成/看门狗/短剧8任务/面板插入/镜头变体</li>
+              <li><strong>FFmpeg合成增强</strong>：xfade转场 + filter_complex + 3轨音频混音(0.3/1.0/1.0)</li>
+              <li><strong>AutoChain统一DAG</strong>：4个触发点 + dedupeKey防重 + TaskRunner集成</li>
+              <li><strong>FL首尾帧完善</strong>：模型名后缀(-landscape/-fl) + 智能配对评分</li>
+              <li><strong>JSON安全处理</strong>：双引号转「」+ safe_json_decode防LLM解析崩溃</li>
+              <li><strong>角色一致性</strong>：别名"/"匹配 + CHARACTER_PROMPT_SUFFIX自动追加</li>
+              <li><strong>LipSync预处理</strong>：2s最小填充 + 超长裁剪 + WAV块对齐</li>
+              <li><strong>视频分享页</strong>：/m/:public_id 公开链接播放（无需登录）</li>
+              <li><strong>统一资产库弹窗</strong>：角色/场景/道具管理 + 档案卡片 + 级别badge</li>
+              <li><strong>管线弹窗重写</strong>：双栏布局(步骤卡片|AI实时输出) + 停止/最小化</li>
+              <li><strong>剧本阶段</strong>：左右分栏(剧本拆解|剧中资产) + screenplay JSON解析</li>
+              <li><strong>分镜阶段</strong>：3列面板网格 + 镜头/运镜badge + 视频提示词 + 场景/角色tag</li>
+              <li><strong>成片阶段</strong>：3列视频卡片 + 播放覆盖层 + 配音折叠区 + FL toggle</li>
+              <li><strong>AI剪辑阶段</strong>：素材勾选 + 合成配置(转场/字幕/BGM) + 一键合成 + 视频预览</li>
+              <li><strong>脚本导入增强</strong>：文件上传 + 3种拆分模式(自动/空行/不拆)</li>
+              <li><strong>面板拖拽排序</strong>：DragSort hook + panel_index批量更新</li>
+              <li><strong>22种错误码</strong>：统一错误码体系，中英双语</li>
+              <li><strong>i18n扩充</strong>：6域→33域，351→1661条翻译，100%匹配原项目</li>
+              <li><strong>HandlerRegistry</strong>：36种任务类型注册</li>
+              <li><strong>测试</strong>：224 tests, 0 failures（+28个新测试）</li>
+            </ul>
+          </div>
+
+          <%!-- v0.8.2 --%>
+          <div>
+            <div class="flex items-center gap-2 mb-2">
+              <span class="font-bold text-[var(--glass-text-primary)]">v0.8.2</span>
+              <span class="text-xs text-[var(--glass-text-tertiary)]">2026-04-15</span>
+            </div>
+            <p class="text-[10px] text-[var(--glass-text-tertiary)] mb-1.5 italic">
+              暗色主题 + 全局AI助手入口 + 内容不重叠
+            </p>
+            <ul class="space-y-1 text-[var(--glass-text-secondary)] list-disc list-inside text-xs">
+              <li><strong>暗色主题</strong>：全站深色玻璃态设计</li>
+              <li><strong>AI助手全局入口</strong>：顶部导航栏+右下角浮动按钮</li>
+              <li><strong>内容不重叠</strong>：AI助手面板打开时主内容区右移</li>
+            </ul>
+          </div>
+
+          <%!-- v0.8.0 --%>
+          <div>
+            <div class="flex items-center gap-2 mb-2">
               <span class="font-bold text-[var(--glass-text-primary)]">v0.8.0</span>
               <span class="text-xs text-[var(--glass-text-tertiary)]">2026-04-15</span>
             </div>
