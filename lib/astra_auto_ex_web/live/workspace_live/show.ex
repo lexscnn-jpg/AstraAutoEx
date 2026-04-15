@@ -174,7 +174,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                       <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
                     </svg>
                   </span>
-                  {stage_label(stage)}
+                   {stage_label(stage)}
                 </span>
               </button>
             <% end %>
@@ -200,7 +200,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
               >
                 <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
               </svg>
-              {dgettext("projects", "Assets")}
+               {dgettext("projects", "Assets")}
             </button>
             <button
               phx-click="toggle_assistant"
@@ -282,6 +282,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                 <.storyboard_stage
                   current_episode={@current_episode}
                   storyboards={@storyboards}
+                  clips={@clips}
                   editing_panel={@editing_panel}
                   task_progress={@task_progress}
                   project={@project}
@@ -345,7 +346,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
           <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456z" />
         </svg>
       </button>
-      <%!-- Asset Library Modal --%>
+       <%!-- Asset Library Modal --%>
       <.live_component
         :if={@show_asset_library}
         module={AstraAutoExWeb.WorkspaceLive.AssetLibraryModal}
@@ -354,8 +355,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
         episode_id={@current_episode && @current_episode.id}
         characters={@characters}
         locations={@locations}
-      />
-      <%!-- Prompt Viewer Modal --%>
+      /> <%!-- Prompt Viewer Modal --%>
       <.prompt_viewer_modal :if={@viewing_prompt} prompt={@viewing_prompt} /> <%!-- Import Wizard --%>
       <.live_component
         :if={@show_wizard}
@@ -529,7 +529,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
           d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"
         />
       </svg>
-      {dgettext("projects", "Prompt")}
+       {dgettext("projects", "Prompt")}
     </button>
     """
   end
@@ -557,7 +557,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
           <label class="text-xs text-[var(--glass-text-tertiary)] mb-1 block">
             {dgettext("projects", "System Prompt Template")}
           </label>
-          <pre class="glass-input w-full text-xs font-mono whitespace-pre-wrap p-4 max-h-[55vh] overflow-y-auto"><%= @prompt.text %></pre>
+           <pre class="glass-input w-full text-xs font-mono whitespace-pre-wrap p-4 max-h-[55vh] overflow-y-auto"><%= @prompt.text %></pre>
         </div>
 
         <div class="flex justify-end mt-4 pt-3 border-t border-[var(--glass-stroke-base)]">
@@ -698,7 +698,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
               >
                 <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
               </svg>
-              {dgettext("projects", "AI Write")}
+               {dgettext("projects", "AI Write")}
             </button>
             <form phx-submit="start_pipeline" class="inline relative group/start">
               <input type="hidden" name="novel_text" value={@novel_text} />
@@ -895,7 +895,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
             >
               <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
-            {if @extracting_entities, do: "提取中...", else: "AI 提取实体"}
+             {if @extracting_entities, do: "提取中...", else: "AI 提取实体"}
           </button>
           <button
             phx-click="run_story_to_script"
@@ -1034,7 +1034,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
           >
             <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
           </svg>
-          {dgettext("projects", "Entity Actions")}
+           {dgettext("projects", "Entity Actions")}
           <span class="text-[10px] text-[var(--glass-text-tertiary)]">
             ({length(@extracted_entities.characters || [])} {dgettext("projects", "chars")} + {length(
               @extracted_entities.locations || []
@@ -1059,7 +1059,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
             >
               <path d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159" />
             </svg>
-            {dgettext("projects", "Generate All")}
+             {dgettext("projects", "Generate All")}
           </button>
           <button
             phx-click="retry_all_entity_images"
@@ -1074,7 +1074,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
             >
               <path d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182" />
             </svg>
-            {dgettext("projects", "Retry All")}
+             {dgettext("projects", "Retry All")}
           </button>
           <button
             phx-click="delete_all_entities"
@@ -1089,7 +1089,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
             >
               <path d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79" />
             </svg>
-            {dgettext("projects", "Clear All")}
+             {dgettext("projects", "Clear All")}
           </button>
         </div>
         <%!-- Per-entity actions (inline) --%>
@@ -1156,93 +1156,88 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
   end
 
   defp storyboard_stage(assigns) do
-    all_panels = (assigns.storyboards || []) |> Enum.flat_map(fn sb -> sb.panels || [] end)
-    image_count = Enum.count(all_panels, fn p -> p.image_url && p.image_url != "" end)
-    video_count = Enum.count(all_panels, fn p -> p.video_url && p.video_url != "" end)
+    clips = assigns.clips || []
+    storyboards = assigns.storyboards || []
+    all_panels = Enum.flat_map(storyboards, fn sb -> sb.panels || [] end)
+    clip_map = Enum.into(clips, %{}, fn c -> {c.id, c} end)
+
+    grouped =
+      storyboards
+      |> Enum.group_by(& &1.clip_id)
+      |> Enum.sort_by(fn {cid, _} ->
+        case Map.get(clip_map, cid) do
+          nil -> 999
+          c -> c.clip_index || 999
+        end
+      end)
 
     assigns =
       assigns
       |> Map.put(:all_panels, all_panels)
-      |> Map.put(:image_count, image_count)
-      |> Map.put(:sb_video_count, video_count)
-      |> Map.put(:total_count, length(all_panels))
+      |> Map.put(:clip_map, clip_map)
+      |> Map.put(:grouped, grouped)
+      |> Map.put(:clip_count, length(clips))
+      |> Map.put(:panel_count, length(all_panels))
 
     ~H"""
-    <div class="space-y-5 animate-slide-up">
-      <%!-- Header with accent bar --%>
+    <div class="space-y-4 animate-slide-up">
+      <%!-- Header toolbar --%>
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-3">
           <div class="w-1 h-6 rounded-full bg-gradient-to-b from-[var(--glass-accent-from)] to-[var(--glass-accent-to)]">
           </div>
 
-          <h2 class="text-lg font-bold text-[var(--glass-text-primary)]">
-            {dgettext("projects", "Storyboard")}
-          </h2>
+          <div>
+            <h2 class="text-lg font-bold text-[var(--glass-text-primary)]">
+              {dgettext("projects", "Storyboard")}
+            </h2>
+
+            <p class="text-xs text-[var(--glass-text-tertiary)] mt-0.5">
+              共{@clip_count}个片段, {@panel_count}个镜头
+            </p>
+          </div>
         </div>
 
         <div class="flex items-center gap-2">
           <.prompt_btn id="NP_AGENT_STORYBOARD_PLAN" /> <.prompt_btn id="NP_SINGLE_PANEL_IMAGE" />
           <button
             phx-click="generate_all_images"
-            class="glass-btn glass-btn-primary px-4 py-2 text-sm flex items-center gap-1.5"
+            class="glass-btn glass-btn-primary px-3 py-1.5 text-xs flex items-center gap-1.5"
           >
             <svg
-              class="w-4 h-4"
+              class="w-3.5 h-3.5"
               fill="none"
               stroke="currentColor"
               stroke-width="1.5"
               viewBox="0 0 24 24"
             >
-              <path d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.41a2.25 2.25 0 013.182 0l2.909 2.91m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
+              <path d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.41a2.25 2.25 0 013.182 0l2.909 2.91m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5z" />
             </svg>
-            {dgettext("projects", "Generate All Images")}
+             {dgettext("projects", "Generate All Images")}
+          </button>
+          <button
+            phx-click="switch_stage"
+            phx-value-stage="script"
+            class="glass-btn glass-btn-ghost px-3 py-1.5 text-xs flex items-center gap-1"
+          >
+            <svg
+              class="w-3.5 h-3.5"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M10.5 19.5L3 12m0 0l7.5-7.5M3 12h18"
+              />
+            </svg>
+            返回
           </button>
         </div>
       </div>
-      <%!-- Info bar with counts --%>
-      <div :if={@total_count > 0} class="glass-surface rounded-xl px-5 py-3 flex items-center gap-6">
-        <div class="flex items-center gap-2">
-          <span class="text-sm text-[var(--glass-text-tertiary)]">
-            {dgettext("projects", "Panels:")}
-          </span>
-          <span class="text-sm font-semibold text-[var(--glass-text-primary)]">{@total_count}</span>
-        </div>
-
-        <div class="w-px h-4 bg-[var(--glass-stroke-soft)]"></div>
-
-        <div class="flex items-center gap-2">
-          <span class="text-sm text-[var(--glass-text-tertiary)]">
-            {dgettext("projects", "Images:")}
-          </span>
-          <span class={[
-            "text-sm font-semibold",
-            if(@image_count == @total_count,
-              do: "text-green-500",
-              else: "text-[var(--glass-text-primary)]"
-            )
-          ]}>
-            {@image_count}/{@total_count}
-          </span>
-        </div>
-
-        <div class="w-px h-4 bg-[var(--glass-stroke-soft)]"></div>
-
-        <div class="flex items-center gap-2">
-          <span class="text-sm text-[var(--glass-text-tertiary)]">
-            {dgettext("projects", "Videos:")}
-          </span>
-          <span class={[
-            "text-sm font-semibold",
-            if(@sb_video_count == @total_count and @total_count > 0,
-              do: "text-green-500",
-              else: "text-[var(--glass-text-primary)]"
-            )
-          ]}>
-            {@sb_video_count}/{@total_count}
-          </span>
-        </div>
-      </div>
-      <%!-- Reference image upload for image-to-image --%>
+      <%!-- Reference image upload (collapsible) --%>
       <details class="glass-surface rounded-xl">
         <summary class="flex items-center gap-3 px-5 py-3 cursor-pointer select-none hover:bg-[var(--glass-bg-muted)] rounded-xl transition-colors">
           <svg
@@ -1271,7 +1266,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
               "Upload reference images (max 5) to guide AI image generation style and composition."
             )}
           </p>
-          <%!-- Uploaded images grid --%>
+
           <div class="flex flex-wrap gap-2">
             <%= for {url, idx} <- Enum.with_index(@ref_image_urls) do %>
               <div class="relative w-20 h-20 rounded-lg overflow-hidden group">
@@ -1285,7 +1280,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                 </button>
               </div>
             <% end %>
-            <%!-- Upload button --%>
+
             <div
               :if={length(@ref_image_urls) < 5}
               class="w-20 h-20 rounded-lg border-2 border-dashed border-[var(--glass-stroke-base)] flex items-center justify-center cursor-pointer hover:border-[var(--glass-accent-from)] hover:bg-[var(--glass-accent-from)]/5 transition-all"
@@ -1304,10 +1299,10 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                   {dgettext("projects", "Upload")}
                 </span>
               </label>
-              <.live_file_input upload={@uploads.ref_images} class="hidden" />
+               <.live_file_input upload={@uploads.ref_images} class="hidden" />
             </div>
           </div>
-          <%!-- Upload entries in progress --%>
+
           <%= for entry <- @uploads.ref_images.entries do %>
             <div class="flex items-center gap-2 text-xs text-[var(--glass-text-secondary)]">
               <span>{entry.client_name}</span>
@@ -1328,7 +1323,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
               </button>
             </div>
           <% end %>
-          <%!-- Reference prompt --%>
+
           <div>
             <label class="text-xs text-[var(--glass-text-tertiary)] mb-1 block">
               {dgettext("projects", "Style prompt (optional)")}
@@ -1347,182 +1342,59 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
           </div>
         </div>
       </details>
+      <%!-- Storyboard content (grouped by clip/segment) --%>
+      <%= if length(@grouped) > 0 do %>
+        <%= for {{clip_id, sbs}, seg_idx} <- Enum.with_index(@grouped) do %>
+          <% clip = Map.get(@clip_map, clip_id)
+          seg_panels = Enum.flat_map(sbs, fn sb -> sb.panels || [] end)
+          clip_summary = if(clip, do: clip.content || clip.summary || "", else: "")
+          truncated = truncate_text(clip_summary, 40) %>
+          <details class="glass-surface rounded-xl group/seg" open>
+            <summary class="flex items-center gap-3 px-5 py-3 cursor-pointer select-none hover:bg-[var(--glass-bg-muted)] rounded-t-xl transition-colors">
+              <svg
+                class="w-4 h-4 text-[var(--glass-text-tertiary)] transition-transform group-open/seg:rotate-90"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M8.25 4.5l7.5 7.5-7.5 7.5"
+                />
+              </svg>
+              <span class="text-sm font-bold text-[var(--glass-text-primary)]">{seg_idx + 1}</span>
+              <span class="text-sm font-semibold text-[var(--glass-text-primary)]">
+                片段【{truncated}】
+              </span>
+              <span class="text-xs text-[var(--glass-text-tertiary)] ml-auto">
+                {length(seg_panels)}个镜头
+              </span>
+            </summary>
 
-      <%= if @storyboards && length(@storyboards) > 0 do %>
-        <%= for sb <- @storyboards do %>
-          <div class="glass-surface rounded-xl p-4">
-            <div
-              id={"panels-grid-#{sb.id}"}
-              class="grid grid-cols-4 gap-3"
-              phx-hook="DragSort"
-              data-sort-event="reorder_panels"
-            >
-              <%= for panel <- (sb.panels || []) do %>
+            <div class="px-5 pb-4 pt-2 border-t border-[var(--glass-stroke-soft)] space-y-3">
+              <p
+                :if={clip_summary != ""}
+                class="text-xs text-[var(--glass-text-secondary)] leading-relaxed line-clamp-2"
+              >
+                {clip_summary}
+              </p>
+
+              <%= for sb <- sbs do %>
                 <div
-                  class="glass-surface rounded-xl overflow-hidden cursor-pointer hover:shadow-lg hover:ring-1 hover:ring-[var(--glass-accent-from)]/30 transition-all duration-200 group"
-                  phx-click="edit_panel"
-                  phx-value-panel-id={panel.id}
-                  data-panel-id={panel.id}
-                  draggable="true"
+                  id={"panels-grid-#{sb.id}"}
+                  class="grid grid-cols-3 gap-4"
+                  phx-hook="DragSort"
+                  data-sort-event="reorder_panels"
                 >
-                  <div class="aspect-video bg-[var(--glass-bg-muted)] flex items-center justify-center relative">
-                    <%= if panel.image_url && panel.image_url != "" do %>
-                      <img
-                        src={panel.image_url}
-                        class="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-300"
-                      />
-                    <% else %>
-                      <div class="flex flex-col items-center gap-1">
-                        <svg
-                          class="w-8 h-8 text-[var(--glass-text-tertiary)] opacity-30"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="1"
-                          viewBox="0 0 24 24"
-                        >
-                          <path d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.41a2.25 2.25 0 013.182 0l2.909 2.91m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5z" />
-                        </svg>
-                      </div>
-                    <% end %>
-                    <%!-- Task progress overlay --%>
-                    <div
-                      :if={task_progress_for(@task_progress, panel.id)}
-                      class="absolute bottom-0 left-0 right-0 bg-black/60 px-2 py-1"
-                    >
-                      <div class="h-1 bg-[var(--glass-bg-muted)] rounded-full overflow-hidden">
-                        <div
-                          class="h-full bg-gradient-to-r from-[var(--glass-accent-from)] to-[var(--glass-accent-to)] transition-all"
-                          style={"width: #{task_progress_for(@task_progress, panel.id)}%"}
-                        />
-                      </div>
-                    </div>
-                    <%!-- Action buttons on hover --%>
-                    <div class="absolute top-1.5 right-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex gap-1">
-                      <button
-                        phx-click="generate_panel_image"
-                        phx-value-panel-id={panel.id}
-                        class="glass-chip text-[10px] bg-[var(--glass-accent-from)]/80 text-white backdrop-blur-sm hover:bg-[var(--glass-accent-from)] px-1.5 py-0.5"
-                        title={if panel.image_url && panel.image_url != "", do: "重新生成", else: "生成图片"}
-                      >
-                        <svg
-                          class="w-3 h-3 inline"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          viewBox="0 0 24 24"
-                        >
-                          <%= if panel.image_url && panel.image_url != "" do %>
-                            <path d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182" />
-                          <% else %>
-                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                          <% end %>
-                        </svg>
-                      </button>
-                      <span class="glass-chip text-[10px] bg-black/60 text-[var(--glass-text-primary)] backdrop-blur-sm">
-                        {dgettext("projects", "Edit")}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div class="p-2.5">
-                    <p class="text-xs text-[var(--glass-text-secondary)] line-clamp-2 leading-relaxed">
-                      {panel.description}
-                    </p>
-
-                    <div class="flex flex-wrap items-center gap-1 mt-1.5">
-                      <%!-- Shot type chip --%>
-                      <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-[var(--glass-accent-from)]/10 text-[var(--glass-accent-from)]">
-                        {panel.shot_type || "MS"}
-                      </span>
-                      <%!-- Character tags (blue) --%>
-                      <%= for char <- parse_panel_characters(panel) do %>
-                        <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-blue-500/10 text-blue-400">
-                          {char}
-                        </span>
-                      <% end %>
-                      <%!-- Location tag (green) --%>
-                      <span
-                        :if={panel_location(panel)}
-                        class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-green-500/10 text-green-400"
-                      >
-                        {panel_location(panel)}
-                      </span>
-                      <%!-- Prop tags (orange) --%>
-                      <%= for prop <- parse_panel_props(panel) do %>
-                        <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-orange-500/10 text-orange-400">
-                          {prop}
-                        </span>
-                      <% end %>
-
-                      <span
-                        :if={panel.video_url && panel.video_url != ""}
-                        class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-medium bg-blue-500/10 text-blue-400"
-                      >
-                        <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 010 1.972l-11.54 6.347a1.125 1.125 0 01-1.667-.986V5.653z" />
-                        </svg>
-                        视频
-                      </span>
-                      <span
-                        :if={panel.audio_url && panel.audio_url != ""}
-                        class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-medium bg-purple-500/10 text-purple-400"
-                      >
-                        <svg
-                          class="w-2.5 h-2.5"
-                          fill="none"
-                          stroke="currentColor"
-                          stroke-width="2"
-                          viewBox="0 0 24 24"
-                        >
-                          <path d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4" />
-                        </svg>
-                        配音
-                      </span>
-                      <span
-                        :if={panel.lip_sync_video_url && panel.lip_sync_video_url != ""}
-                        class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-medium bg-amber-500/10 text-amber-400"
-                      >
-                        口型
-                      </span>
-                    </div>
-                    <%!-- Mini pipeline status bar --%>
-                    <div class="flex gap-0.5 mt-1.5">
-                      <div
-                        class={[
-                          "h-0.5 flex-1 rounded-full",
-                          if(panel.image_url && panel.image_url != "",
-                            do: "bg-green-500",
-                            else: "bg-[var(--glass-bg-muted)]"
-                          )
-                        ]}
-                        title="图片"
-                      />
-                      <div
-                        class={[
-                          "h-0.5 flex-1 rounded-full",
-                          if(panel.video_url && panel.video_url != "",
-                            do: "bg-blue-500",
-                            else: "bg-[var(--glass-bg-muted)]"
-                          )
-                        ]}
-                        title="视频"
-                      />
-                      <div
-                        class={[
-                          "h-0.5 flex-1 rounded-full",
-                          if(panel.audio_url && panel.audio_url != "",
-                            do: "bg-purple-500",
-                            else: "bg-[var(--glass-bg-muted)]"
-                          )
-                        ]}
-                        title="配音"
-                      />
-                    </div>
-                  </div>
+                  <%= for panel <- (sb.panels || []) do %>
+                    <.sb_panel_card panel={panel} task_progress={@task_progress} />
+                  <% end %>
                 </div>
               <% end %>
             </div>
-          </div>
+          </details>
         <% end %>
       <% else %>
         <div class="glass-surface rounded-xl p-12 text-center">
@@ -1560,6 +1432,225 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
         project={@project}
         current_scope={@current_scope}
       />
+    </div>
+    """
+  end
+
+  # ── Per-panel card component (3-col grid, matching original project design) ──
+  defp sb_panel_card(assigns) do
+    panel = assigns.panel
+    has_image = panel.image_url && panel.image_url != ""
+    has_video = panel.video_url && panel.video_url != ""
+    desc_short = truncate_text(panel.description, 50)
+    characters = parse_panel_characters(panel)
+
+    assigns =
+      assigns
+      |> Map.put(:has_image, has_image)
+      |> Map.put(:has_video, has_video)
+      |> Map.put(:desc_short, desc_short)
+      |> Map.put(:characters, characters)
+
+    ~H"""
+    <div
+      class="glass-surface rounded-xl overflow-hidden hover:shadow-lg hover:ring-1 hover:ring-[var(--glass-accent-from)]/30 transition-all duration-200 group"
+      data-panel-id={@panel.id}
+      draggable="true"
+    >
+      <%!-- Image area (4:3 aspect) --%>
+      <div
+        class="aspect-[4/3] bg-[var(--glass-bg-muted)] flex items-center justify-center relative cursor-pointer"
+        phx-click="edit_panel"
+        phx-value-panel-id={@panel.id}
+      >
+        <%= if @has_image do %>
+          <img
+            src={@panel.image_url}
+            class="w-full h-full object-cover group-hover:scale-[1.02] transition-transform duration-300"
+          />
+        <% else %>
+          <div class="flex flex-col items-center gap-1.5">
+            <svg
+              class="w-10 h-10 text-[var(--glass-text-tertiary)] opacity-20"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1"
+              viewBox="0 0 24 24"
+            >
+              <path d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.41a2.25 2.25 0 013.182 0l2.909 2.91m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5z" />
+            </svg>
+             <span class="text-[10px] text-[var(--glass-text-tertiary)] opacity-40">待生成</span>
+          </div>
+        <% end %>
+        <%!-- Video play overlay --%>
+        <div
+          :if={@has_video}
+          class="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity"
+        >
+          <div class="w-10 h-10 rounded-full bg-white/90 flex items-center justify-center shadow-lg">
+            <svg class="w-5 h-5 text-gray-800 ml-0.5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 010 1.972l-11.54 6.347a1.125 1.125 0 01-1.667-.986V5.653z" />
+            </svg>
+          </div>
+        </div>
+        <%!-- Task progress overlay --%>
+        <div
+          :if={task_progress_for(@task_progress, @panel.id)}
+          class="absolute bottom-0 left-0 right-0 bg-black/60 px-2 py-1"
+        >
+          <div class="h-1 bg-[var(--glass-bg-muted)] rounded-full overflow-hidden">
+            <div
+              class="h-full bg-gradient-to-r from-[var(--glass-accent-from)] to-[var(--glass-accent-to)] transition-all"
+              style={"width: #{task_progress_for(@task_progress, @panel.id)}%"}
+            />
+          </div>
+        </div>
+        <%!-- Hover action buttons --%>
+        <div class="absolute top-1.5 right-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex gap-1">
+          <button
+            phx-click="generate_panel_image"
+            phx-value-panel-id={@panel.id}
+            class="w-6 h-6 rounded-full bg-[var(--glass-accent-from)]/80 text-white backdrop-blur-sm hover:bg-[var(--glass-accent-from)] flex items-center justify-center"
+            title={if @has_image, do: "重新生成", else: "生成图片"}
+          >
+            <svg
+              class="w-3 h-3"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              viewBox="0 0 24 24"
+            >
+              <%= if @has_image do %>
+                <path d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182" />
+              <% else %>
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+              <% end %>
+            </svg>
+          </button>
+        </div>
+      </div>
+      <%!-- Shot type badge --%>
+      <div class="px-3 pt-2">
+        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold bg-blue-500/15 text-blue-400">
+          {(@panel.shot_type || "中景") |> String.slice(0..7)}
+        </span>
+      </div>
+      <%!-- Field grid (label: value pairs) --%>
+      <div class="px-3 pt-2 pb-3 space-y-1.5 text-[11px]">
+        <div class="flex items-start gap-1.5">
+          <span class="text-[var(--glass-text-tertiary)] shrink-0 w-14">镜头类型</span>
+          <span class="text-[var(--glass-text-secondary)] font-medium">
+            {@panel.shot_type || "--"}
+          </span>
+        </div>
+
+        <div class="flex items-start gap-1.5">
+          <span class="text-[var(--glass-text-tertiary)] shrink-0 w-14">镜头运动</span>
+          <span class="text-[var(--glass-text-secondary)] font-medium">
+            {@panel.camera_move || "--"}
+          </span>
+        </div>
+
+        <div class="flex items-start gap-1.5">
+          <span class="text-[var(--glass-text-tertiary)] shrink-0 w-14">对应原文</span>
+          <span class="text-[var(--glass-text-secondary)] leading-snug">
+            {if @desc_short && @desc_short != "", do: "\"#{@desc_short}\"", else: "--"}
+          </span>
+        </div>
+
+        <div class="flex items-start gap-1.5">
+          <span class="text-[var(--glass-text-tertiary)] shrink-0 w-14">画面描述</span>
+          <span class="text-[var(--glass-text-secondary)] leading-snug line-clamp-2">
+            {@panel.image_prompt || @panel.description || "--"}
+          </span>
+        </div>
+
+        <div class="flex items-start gap-1.5">
+          <span class="text-[var(--glass-text-tertiary)] shrink-0 w-14">视频提示词</span>
+          <div class="flex-1 flex items-start gap-1">
+            <span class="text-[var(--glass-text-secondary)] leading-snug line-clamp-2 flex-1">
+              {@panel.video_prompt || "--"}
+            </span>
+            <button
+              phx-click="edit_panel"
+              phx-value-panel-id={@panel.id}
+              class="shrink-0 text-[var(--glass-text-tertiary)] hover:text-[var(--glass-accent-from)] transition-colors"
+              title="编辑"
+            >
+              <svg
+                class="w-3 h-3"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+        <%!-- Bottom tags --%>
+        <div class="flex flex-wrap gap-1 pt-1 border-t border-[var(--glass-stroke-soft)]">
+          <span
+            :if={panel_location(@panel)}
+            class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-medium bg-red-500/10 text-red-400"
+          >
+            <span class="text-[var(--glass-text-tertiary)]">场景</span> {panel_location(@panel)}
+          </span>
+          <%= for char <- @characters do %>
+            <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-medium bg-blue-500/10 text-blue-400">
+              <span class="text-[var(--glass-text-tertiary)]">角色</span> {char}
+            </span>
+          <% end %>
+
+          <span
+            :if={@has_video}
+            class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-medium bg-blue-500/10 text-blue-400"
+          >
+            <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 010 1.972l-11.54 6.347a1.125 1.125 0 01-1.667-.986V5.653z" />
+            </svg>
+            视频
+          </span>
+          <span
+            :if={@panel.lip_sync_video_url && @panel.lip_sync_video_url != ""}
+            class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-medium bg-amber-500/10 text-amber-400"
+          >
+            口型
+          </span>
+        </div>
+        <%!-- Mini pipeline status bar --%>
+        <div class="flex gap-0.5 mt-1">
+          <div
+            class={[
+              "h-0.5 flex-1 rounded-full",
+              if(@has_image, do: "bg-green-500", else: "bg-[var(--glass-bg-muted)]")
+            ]}
+            title="图片"
+          />
+          <div
+            class={[
+              "h-0.5 flex-1 rounded-full",
+              if(@has_video, do: "bg-blue-500", else: "bg-[var(--glass-bg-muted)]")
+            ]}
+            title="视频"
+          />
+          <div
+            class={[
+              "h-0.5 flex-1 rounded-full",
+              if(Map.get(@panel, :audio_url, nil) && Map.get(@panel, :audio_url, nil) != "",
+                do: "bg-purple-500",
+                else: "bg-[var(--glass-bg-muted)]"
+              )
+            ]}
+            title="配音"
+          />
+        </div>
+      </div>
     </div>
     """
   end
@@ -1628,7 +1719,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
               {dgettext("projects", "Skip voice (dub later)")}
             </span>
           </label>
-          <.prompt_btn id="NP_VOICE_ANALYSIS" />
+           <.prompt_btn id="NP_VOICE_ANALYSIS" />
           <button
             phx-click="generate_all_voices"
             class={"glass-btn glass-btn-ghost text-xs py-1.5 px-3 flex items-center gap-1.5 #{if @skip_voice, do: "opacity-40 pointer-events-none"}"}
@@ -1643,7 +1734,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
             >
               <path d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m-4 0h8" />
             </svg>
-            {dgettext("projects", "Generate All Voices")}
+             {dgettext("projects", "Generate All Voices")}
           </button>
           <button
             phx-click="generate_all_videos"
@@ -1658,7 +1749,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
             >
               <path d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 010 1.972l-11.54 6.347a1.125 1.125 0 01-1.667-.986V5.653z" />
             </svg>
-            {dgettext("projects", "Generate All Videos")}
+             {dgettext("projects", "Generate All Videos")}
           </button>
           <button
             phx-click="generate_all_lip_sync"
@@ -1675,7 +1766,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
             >
               <path d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z" />
             </svg>
-            {dgettext("projects", "Lip Sync")}
+             {dgettext("projects", "Lip Sync")}
           </button>
         </div>
       </div>
@@ -1849,293 +1940,346 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
 
     video_count = Enum.count(all_panels, fn p -> p.video_url && p.video_url != "" end)
     total = length(all_panels)
-
-    voice_done =
-      Enum.count(assigns.voice_lines || [], fn vl -> vl.audio_url && vl.audio_url != "" end)
-
-    voice_total = length(assigns.voice_lines || [])
     compose_task = Enum.find(assigns.active_tasks, fn t -> t.type == "video_compose" end)
-
     selected_count = MapSet.size(assigns.selected_panels)
+
+    missing_count =
+      assigns.selected_panels
+      |> MapSet.to_list()
+      |> Enum.count(fn id ->
+        panel = Enum.find(all_panels, &(&1.id == id))
+        panel && (!panel.video_url || panel.video_url == "")
+      end)
+
+    episode = assigns.current_episode
+    composed_url = if episode, do: Map.get(episode, :video_url), else: nil
+    has_composed = is_binary(composed_url) and composed_url != ""
 
     assigns =
       assigns
       |> Map.put(:all_panels, all_panels)
       |> Map.put(:video_count, video_count)
       |> Map.put(:total, total)
-      |> Map.put(:voice_done, voice_done)
-      |> Map.put(:voice_total, voice_total)
       |> Map.put(:compose_task, compose_task)
-      |> Map.put(:ready, video_count > 0 and video_count == total)
       |> Map.put(:selected_count, selected_count)
+      |> Map.put(:missing_count, missing_count)
+      |> Map.put(:has_composed, has_composed)
+      |> Map.put(:composed_url, composed_url)
 
     ~H"""
-    <div class="max-w-6xl mx-auto space-y-6 animate-slide-up">
-      <%!-- Title centered --%>
-      <div class="text-center py-4">
+    <div class="max-w-3xl mx-auto space-y-6 animate-slide-up">
+      <%!-- Title area --%>
+      <div class="text-center py-6">
         <h1 class="text-2xl font-bold text-[var(--glass-text-primary)]">
           {dgettext("projects", "AI Edit")}
         </h1>
+
+        <p class="text-sm text-[var(--glass-text-tertiary)] mt-2">
+          {dgettext(
+            "projects",
+            "Auto-compose panel videos, voiceovers and subtitles into a complete short drama"
+          )}
+        </p>
       </div>
-
-      <div class="grid grid-cols-12 gap-4">
-        <%!-- Left: Panel checklist + settings --%>
-        <div class="col-span-5 space-y-3">
-          <div class="glass-surface rounded-xl overflow-hidden">
-            <div class="flex items-center justify-between px-5 py-3 border-b border-[var(--glass-stroke-soft)]">
-              <div class="flex items-center gap-2">
-                <h3 class="text-sm font-semibold text-[var(--glass-text-primary)]">
-                  {dgettext("projects", "Panel Clips")}
-                </h3>
-
-                <span class="text-xs text-[var(--glass-text-tertiary)]">
-                  ({@video_count}/{@total} {dgettext("projects", "ready")})
-                </span>
-              </div>
-
-              <button
-                phx-click="select_all_panels"
-                class="text-xs text-[var(--glass-accent-from)] hover:text-[var(--glass-accent-to)] transition-colors"
-              >
-                {dgettext("projects", "Select All")}
-              </button>
-            </div>
-
-            <div class="divide-y divide-[var(--glass-stroke-soft)] max-h-[40vh] overflow-y-auto">
-              <%= for {panel, idx} <- Enum.with_index(@all_panels) do %>
-                <div
-                  class="flex items-center gap-3 px-5 py-2.5 hover:bg-[var(--glass-bg-muted)] transition-colors cursor-pointer"
-                  phx-click="toggle_panel_select"
-                  phx-value-panel-id={panel.id}
-                >
-                  <%!-- Checkbox --%>
-                  <div class={[
-                    "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0 transition-colors",
-                    if(MapSet.member?(@selected_panels, panel.id),
-                      do: "bg-[var(--glass-accent-from)] border-[var(--glass-accent-from)]",
-                      else: "border-[var(--glass-stroke-base)]"
-                    )
-                  ]}>
-                    <svg
-                      :if={MapSet.member?(@selected_panels, panel.id)}
-                      class="w-3 h-3 text-[var(--glass-text-on-accent)]"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="3"
-                      viewBox="0 0 24 24"
-                    >
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                    </svg>
-                  </div>
-                  <%!-- Index --%>
-                  <span class="text-xs text-[var(--glass-text-tertiary)] w-6 text-center">
-                    {idx + 1}
-                  </span>
-                  <%!-- Thumbnail --%>
-                  <div class="w-12 h-8 rounded bg-[var(--glass-bg-muted)] flex-shrink-0 overflow-hidden">
-                    <img
-                      :if={panel.image_url && panel.image_url != ""}
-                      src={panel.image_url}
-                      class="w-full h-full object-cover"
-                    />
-                  </div>
-                  <%!-- Status chip --%>
-                  <%= if panel.video_url && panel.video_url != "" do %>
-                    <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-green-500/10 text-green-500 flex-shrink-0">
-                      {dgettext("projects", "Ready")}
-                    </span>
-                  <% else %>
-                    <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-yellow-500/10 text-yellow-500 flex-shrink-0">
-                      {dgettext("projects", "No Video")}
-                    </span>
-                  <% end %>
-                  <%!-- Description --%>
-                  <p class="text-xs text-[var(--glass-text-secondary)] flex-1 truncate">
-                    {panel.description}
-                  </p>
-                </div>
-              <% end %>
-            </div>
-          </div>
-          <%!-- Compose config --%>
-          <div class="glass-surface rounded-xl p-4 space-y-3">
-            <h3 class="text-xs font-semibold text-[var(--glass-text-primary)]">
-              {dgettext("projects", "Compose Settings")}
+      <%!-- Video material list card --%>
+      <div class="glass-surface rounded-xl overflow-hidden">
+        <%!-- Card header --%>
+        <div class="flex items-center justify-between px-5 py-3 border-b border-[var(--glass-stroke-soft)]">
+          <div class="flex items-center gap-2">
+            <h3 class="text-sm font-semibold text-[var(--glass-text-primary)]">
+              {dgettext("projects", "Video Materials")}
             </h3>
-            <%!-- Transition --%>
-            <div>
-              <label class="text-xs text-[var(--glass-text-tertiary)] mb-2 block">
-                {dgettext("projects", "Transition Effect")}
-              </label>
-              <div class="flex items-center gap-2">
-                <%= for {val, label} <- [{"crossfade", dgettext("projects", "Crossfade")}, {"fade-black", dgettext("projects", "Fade Black")}, {"none", dgettext("projects", "None")}] do %>
-                  <button
-                    phx-click="set_compose_transition"
-                    phx-value-value={val}
-                    class={[
-                      "px-3 py-1.5 rounded-lg text-xs font-medium transition-all",
-                      if(@compose_transition == val,
-                        do:
-                          "bg-[var(--glass-accent-from)]/20 text-[var(--glass-accent-from)] ring-1 ring-[var(--glass-accent-from)]/30",
-                        else:
-                          "bg-[var(--glass-bg-muted)] text-[var(--glass-text-secondary)] hover:text-[var(--glass-text-primary)]"
-                      )
-                    ]}
-                  >
-                    {label}
-                  </button>
-                <% end %>
 
-                <select
-                  phx-change="set_compose_transition_ms"
-                  name="value"
-                  class="glass-input text-xs py-1 pl-2 pr-6 ml-2"
-                >
-                  <option value="300" selected={@compose_transition_ms == "300"}>300ms</option>
-
-                  <option value="500" selected={@compose_transition_ms == "500"}>500ms</option>
-
-                  <option value="800" selected={@compose_transition_ms == "800"}>800ms</option>
-
-                  <option value="1000" selected={@compose_transition_ms == "1000"}>1000ms</option>
-                </select>
-              </div>
-            </div>
-            <%!-- Subtitles --%>
-            <div>
-              <label class="text-xs text-[var(--glass-text-tertiary)] mb-2 block">
-                {dgettext("projects", "Subtitle Mode")}
-              </label>
-              <div class="flex items-center gap-2">
-                <%= for {val, label} <- [{"burn-in", dgettext("projects", "Burn-in")}, {"soft", dgettext("projects", "Soft Sub")}, {"both", dgettext("projects", "Both")}, {"none", dgettext("projects", "None")}] do %>
-                  <button
-                    phx-click="set_compose_subtitle"
-                    phx-value-value={val}
-                    class={[
-                      "px-3 py-1.5 rounded-lg text-xs font-medium transition-all",
-                      if(@compose_subtitle == val,
-                        do:
-                          "bg-[var(--glass-accent-from)]/20 text-[var(--glass-accent-from)] ring-1 ring-[var(--glass-accent-from)]/30",
-                        else:
-                          "bg-[var(--glass-bg-muted)] text-[var(--glass-text-secondary)] hover:text-[var(--glass-text-primary)]"
-                      )
-                    ]}
-                  >
-                    {label}
-                  </button>
-                <% end %>
-              </div>
-            </div>
-            <%!-- BGM --%>
-            <div>
-              <label class="text-xs text-[var(--glass-text-tertiary)] mb-2 block">
-                {dgettext("projects", "Background Music")}
-              </label>
-              <div class="flex items-center gap-2">
-                <%= for {val, label} <- [{"none", dgettext("projects", "None")}, {"preset", dgettext("projects", "Preset")}] do %>
-                  <button
-                    phx-click="set_compose_bgm"
-                    phx-value-value={val}
-                    class={[
-                      "px-3 py-1.5 rounded-lg text-xs font-medium transition-all",
-                      if(@compose_bgm == val,
-                        do:
-                          "bg-[var(--glass-accent-from)]/20 text-[var(--glass-accent-from)] ring-1 ring-[var(--glass-accent-from)]/30",
-                        else:
-                          "bg-[var(--glass-bg-muted)] text-[var(--glass-text-secondary)] hover:text-[var(--glass-text-primary)]"
-                      )
-                    ]}
-                  >
-                    {label}
-                  </button>
-                <% end %>
-              </div>
-            </div>
+            <span class="text-xs text-[var(--glass-text-tertiary)]">
+              {@video_count}/{@total} {dgettext("projects", "ready")}
+            </span>
           </div>
-          <%!-- Compose progress (if running) --%>
-          <div :if={@compose_task} class="glass-surface rounded-xl p-5">
-            <div class="flex items-center gap-3 mb-3">
-              <div class="w-3 h-3 rounded-full bg-[var(--glass-accent-from)] animate-pulse" />
-              <h3 class="text-sm font-semibold text-[var(--glass-text-primary)]">
-                {dgettext("projects", "Composing...")}
-              </h3>
-            </div>
 
-            <div class="h-1.5 bg-[var(--glass-bg-muted)] rounded-full overflow-hidden">
+          <div class="flex items-center gap-3">
+            <button
+              phx-click="refresh_storyboards"
+              class="text-xs text-[var(--glass-text-secondary)] hover:text-[var(--glass-text-primary)] transition-colors flex items-center gap-1"
+            >
+              <svg
+                class="w-3.5 h-3.5"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182M20.016 4.66v4.993"
+                />
+              </svg>
+               {dgettext("projects", "Refresh")}
+            </button>
+            <label class="flex items-center gap-1.5 cursor-pointer text-xs text-[var(--glass-text-secondary)]">
               <div
-                class="h-full bg-gradient-to-r from-[var(--glass-accent-from)] to-[var(--glass-accent-to)] transition-all animate-pulse"
-                style="width: 60%"
-              />
-            </div>
-
-            <p class="text-xs text-[var(--glass-text-tertiary)] mt-2">
-              {dgettext("projects", "Processing video composition. This may take several minutes.")}
-            </p>
+                phx-click="select_all_panels"
+                class={[
+                  "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0 transition-colors cursor-pointer",
+                  if(@selected_count == @total and @total > 0,
+                    do: "bg-[var(--glass-accent-from)] border-[var(--glass-accent-from)]",
+                    else: "border-[var(--glass-stroke-base)]"
+                  )
+                ]}
+              >
+                <svg
+                  :if={@selected_count == @total and @total > 0}
+                  class="w-3 h-3 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="3"
+                  viewBox="0 0 24 24"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              {dgettext("projects", "Select All")}
+            </label>
           </div>
-          <%!-- One-click compose button --%>
-          <button
-            phx-click="compose_video"
-            class={[
-              "w-full py-3.5 rounded-xl text-base font-semibold flex items-center justify-center gap-2 transition-all",
-              if(@ready and @selected_count > 0,
-                do: "glass-btn glass-btn-primary hover:shadow-lg",
-                else: "glass-btn glass-btn-primary opacity-50 cursor-not-allowed"
-              )
-            ]}
-            disabled={!@ready or @selected_count == 0}
-          >
+        </div>
+        <%!-- Panel rows --%>
+        <div class="divide-y divide-[var(--glass-stroke-soft)] max-h-[45vh] overflow-y-auto">
+          <%= for {panel, idx} <- Enum.with_index(@all_panels) do %>
+            <% has_video = panel.video_url && panel.video_url != "" %>
+            <div
+              class="flex items-center gap-3 px-5 py-2.5 hover:bg-[var(--glass-bg-muted)] transition-colors cursor-pointer"
+              phx-click="toggle_panel_select"
+              phx-value-panel-id={panel.id}
+            >
+              <%!-- Checkbox --%>
+              <div class={[
+                "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0 transition-colors",
+                if(MapSet.member?(@selected_panels, panel.id),
+                  do: "bg-[var(--glass-accent-from)] border-[var(--glass-accent-from)]",
+                  else: "border-[var(--glass-stroke-base)]"
+                )
+              ]}>
+                <svg
+                  :if={MapSet.member?(@selected_panels, panel.id)}
+                  class="w-3 h-3 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="3"
+                  viewBox="0 0 24 24"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <%!-- Clip name --%>
+              <span class="text-xs font-medium text-[var(--glass-text-primary)] w-16 flex-shrink-0">
+                {dgettext("projects", "Clip")} {idx + 1}
+              </span>
+               <%!-- Status badge --%>
+              <%= if has_video do %>
+                <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-green-500/15 text-green-400 flex-shrink-0">
+                  {dgettext("projects", "Ready")}
+                </span>
+              <% else %>
+                <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-red-500/15 text-red-400 flex-shrink-0">
+                  {dgettext("projects", "No Video")}
+                </span>
+              <% end %>
+              <%!-- Source badge --%>
+              <span
+                :if={has_video}
+                class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-[var(--glass-bg-muted)] text-[var(--glass-text-tertiary)] flex-shrink-0"
+              >
+                {dgettext("projects", "Original")}
+              </span>
+               <%!-- Shot type + description --%>
+              <p class="text-xs text-[var(--glass-text-secondary)] flex-1 truncate">
+                <span :if={panel.shot_type} class="text-[var(--glass-text-tertiary)]">
+                  {panel.shot_type}:
+                </span>
+                 {panel.description}
+              </p>
+            </div>
+          <% end %>
+        </div>
+        <%!-- Footer stats --%>
+        <div class="px-5 py-2.5 border-t border-[var(--glass-stroke-soft)] text-xs text-[var(--glass-text-tertiary)]">
+          <%= if @missing_count > 0 do %>
+            {dgettext(
+              "projects",
+              "Selected %{count} panels (%{missing} files missing, will be skipped during compose)",
+              count: @selected_count,
+              missing: @missing_count
+            )}
+          <% else %>
+            {dgettext("projects", "Selected %{count} panels", count: @selected_count)}
+          <% end %>
+        </div>
+      </div>
+      <%!-- Compose config card --%>
+      <div class="glass-surface rounded-xl p-5 space-y-5">
+        <h3 class="text-sm font-semibold text-[var(--glass-text-primary)]">
+          {dgettext("projects", "Compose Settings")}
+        </h3>
+        <%!-- Transition effect --%>
+        <div>
+          <label class="text-xs text-[var(--glass-text-tertiary)] mb-2.5 block">
+            {dgettext("projects", "Transition Effect")}
+          </label>
+          <div class="flex items-center gap-2 flex-wrap">
+            <%= for {val, label} <- [{"crossfade", dgettext("projects", "Crossfade")}, {"dip_to_black", dgettext("projects", "Fade Black")}, {"none", dgettext("projects", "None")}] do %>
+              <button
+                phx-click="set_compose_transition"
+                phx-value-value={val}
+                class={[
+                  "px-4 py-2 rounded-lg text-xs font-medium transition-all border",
+                  if(@compose_transition == val,
+                    do: "bg-blue-600 text-white border-blue-600",
+                    else:
+                      "bg-transparent text-[var(--glass-text-secondary)] border-[var(--glass-stroke-base)] hover:border-[var(--glass-text-tertiary)] hover:text-[var(--glass-text-primary)]"
+                  )
+                ]}
+              >
+                {label}
+              </button>
+            <% end %>
+
+            <form phx-change="set_compose_transition_ms" class="ml-2">
+              <select name="value" class="glass-input text-xs py-2 pl-3 pr-7 rounded-lg">
+                <option value="300" selected={@compose_transition_ms == "300"}>300ms</option>
+
+                <option value="500" selected={@compose_transition_ms == "500"}>500ms</option>
+
+                <option value="800" selected={@compose_transition_ms == "800"}>800ms</option>
+
+                <option value="1000" selected={@compose_transition_ms == "1000"}>1000ms</option>
+              </select>
+            </form>
+          </div>
+        </div>
+        <%!-- Subtitle mode --%>
+        <div>
+          <label class="text-xs text-[var(--glass-text-tertiary)] mb-2.5 block">
+            {dgettext("projects", "Subtitle Mode")}
+          </label>
+          <div class="flex items-center gap-2 flex-wrap">
+            <%= for {val, label} <- [{"burn", dgettext("projects", "Burn-in")}, {"soft", dgettext("projects", "Soft Sub")}, {"both", dgettext("projects", "Both")}, {"none", dgettext("projects", "None")}] do %>
+              <button
+                phx-click="set_compose_subtitle"
+                phx-value-value={val}
+                class={[
+                  "px-4 py-2 rounded-lg text-xs font-medium transition-all border",
+                  if(@compose_subtitle == val,
+                    do: "bg-blue-600 text-white border-blue-600",
+                    else:
+                      "bg-transparent text-[var(--glass-text-secondary)] border-[var(--glass-stroke-base)] hover:border-[var(--glass-text-tertiary)] hover:text-[var(--glass-text-primary)]"
+                  )
+                ]}
+              >
+                {label}
+              </button>
+            <% end %>
+          </div>
+        </div>
+        <%!-- Background music --%>
+        <div>
+          <label class="text-xs text-[var(--glass-text-tertiary)] mb-2.5 block">
+            {dgettext("projects", "Background Music")}
+          </label>
+          <div class="flex items-center gap-2 flex-wrap">
+            <%= for {val, label} <- [{"none", dgettext("projects", "None")}, {"preset", dgettext("projects", "Preset BGM")}] do %>
+              <button
+                phx-click="set_compose_bgm"
+                phx-value-value={val}
+                class={[
+                  "px-4 py-2 rounded-lg text-xs font-medium transition-all border",
+                  if(@compose_bgm == val,
+                    do: "bg-blue-600 text-white border-blue-600",
+                    else:
+                      "bg-transparent text-[var(--glass-text-secondary)] border-[var(--glass-stroke-base)] hover:border-[var(--glass-text-tertiary)] hover:text-[var(--glass-text-primary)]"
+                  )
+                ]}
+              >
+                {label}
+              </button>
+            <% end %>
+          </div>
+        </div>
+      </div>
+      <%!-- Compose progress (if running) --%>
+      <div
+        :if={@compose_task && @compose_task.status != "completed"}
+        class="glass-surface rounded-xl p-5"
+      >
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-3 h-3 rounded-full bg-[var(--glass-accent-from)] animate-pulse" />
+          <h3 class="text-sm font-semibold text-[var(--glass-text-primary)]">
+            {dgettext("projects", "Composing...")}
+          </h3>
+        </div>
+
+        <div class="h-1.5 bg-[var(--glass-bg-muted)] rounded-full overflow-hidden">
+          <div
+            class="h-full bg-gradient-to-r from-[var(--glass-accent-from)] to-[var(--glass-accent-to)] transition-all animate-pulse"
+            style="width: 60%"
+          />
+        </div>
+
+        <p class="text-xs text-[var(--glass-text-tertiary)] mt-2">
+          {dgettext("projects", "Processing video composition. This may take several minutes.")}
+        </p>
+      </div>
+      <%!-- One-click compose button --%>
+      <button
+        phx-click="compose_video"
+        class={[
+          "w-full py-4 rounded-xl text-base font-semibold flex items-center justify-center gap-2 transition-all",
+          if(@selected_count > 0,
+            do: "bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl",
+            else: "bg-blue-600/50 text-white/60 cursor-not-allowed"
+          )
+        ]}
+        disabled={@selected_count == 0}
+      >
+        {dgettext("projects", "One-Click Compose")} ({@selected_count} {dgettext("projects", "panels")})
+      </button>
+       <%!-- Preview area (shown after compose or when episode has video_url) --%>
+      <div
+        :if={@has_composed || (@compose_task && @compose_task.status == "completed")}
+        class="glass-surface rounded-xl overflow-hidden"
+      >
+        <div class="aspect-video bg-black flex items-center justify-center relative">
+          <video
+            :if={@has_composed}
+            id="compose-preview"
+            src={@composed_url}
+            class="w-full h-full object-contain"
+            controls
+            phx-hook="VideoPlayer"
+          />
+          <div :if={!@has_composed} class="flex flex-col items-center gap-3">
             <svg
-              class="w-5 h-5"
+              class="w-16 h-16 text-white/20"
               fill="none"
               stroke="currentColor"
-              stroke-width="2"
+              stroke-width="0.5"
               viewBox="0 0 24 24"
             >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 010 1.972l-11.54 6.347a1.125 1.125 0 01-1.667-.986V5.653z"
-              />
+              <path d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 010 1.972l-11.54 6.347a1.125 1.125 0 01-1.667-.986V5.653z" />
             </svg>
-            {dgettext("projects", "Compose Video")} ({@selected_count} {dgettext(
-              "projects",
-              "panels"
-            )})
-          </button>
-        </div>
-        <%!-- Right: Preview + Export --%>
-        <div class="col-span-7 space-y-3">
-          <%!-- Video preview (enlarged) --%>
-          <div class="glass-surface rounded-xl overflow-hidden bg-black/20 sticky top-20">
-            <div class="aspect-video flex items-center justify-center relative">
-              <%= if @compose_task && @compose_task.status == "completed" do %>
-                <video
-                  id="compose-preview"
-                  class="w-full h-full object-contain"
-                  controls
-                  phx-hook="VideoPlayer"
-                />
-              <% else %>
-                <div class="flex flex-col items-center gap-3">
-                  <svg
-                    class="w-16 h-16 text-[var(--glass-text-tertiary)] opacity-20"
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="0.5"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 010 1.972l-11.54 6.347a1.125 1.125 0 01-1.667-.986V5.653z" />
-                  </svg>
-                  <p class="text-sm text-[var(--glass-text-tertiary)]">
-                    {dgettext("projects", "Composed video will appear here after processing.")}
-                  </p>
-                </div>
-              <% end %>
-            </div>
+            <p class="text-sm text-white/40">
+              {dgettext("projects", "Composed video will appear here after processing.")}
+            </p>
           </div>
-          <%!-- Export actions --%>
-          <div class="glass-surface rounded-xl p-4 space-y-3">
-            <h3 class="text-xs font-semibold text-[var(--glass-text-primary)] flex items-center gap-2">
+        </div>
+        <%!-- Compose complete info --%>
+        <div :if={@has_composed} class="p-5 text-center space-y-4">
+          <p class="text-sm font-medium text-green-400">{dgettext("projects", "Compose Complete")}</p>
+          <%!-- Action buttons --%>
+          <div class="flex items-center justify-center gap-3">
+            <a
+              href={@composed_url}
+              download
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium bg-blue-600 hover:bg-blue-700 text-white transition-colors"
+            >
               <svg
                 class="w-4 h-4"
                 fill="none"
@@ -2149,52 +2293,12 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                   d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"
                 />
               </svg>
-              {dgettext("projects", "Export")}
-            </h3>
-
-            <div class="grid grid-cols-2 gap-2">
-              <%!-- Download video --%>
-              <button class="glass-btn glass-btn-ghost text-xs py-2.5 px-3 flex items-center gap-2 justify-center">
-                <svg
-                  class="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"
-                  />
-                </svg>
-                {dgettext("projects", "Download MP4")}
-              </button>
-              <%!-- Export to CapCut/JianYing --%>
-              <button
-                phx-click="export_capcut"
-                class="glass-btn glass-btn-primary text-xs py-2.5 px-3 flex items-center gap-2 justify-center"
-              >
-                <svg
-                  class="w-4 h-4"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
-                  />
-                </svg>
-                {dgettext("projects", "Export to CapCut")}
-              </button>
-            </div>
-          </div>
-          <%!-- Promo copy generator --%>
-          <div class="glass-surface rounded-xl p-4 space-y-3">
-            <h3 class="text-xs font-semibold text-[var(--glass-text-primary)] flex items-center gap-2">
+               {dgettext("projects", "Download Video")}
+            </a>
+            <button
+              phx-click="export_capcut"
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium border border-[var(--glass-stroke-base)] text-[var(--glass-text-secondary)] hover:text-[var(--glass-text-primary)] hover:border-[var(--glass-text-tertiary)] transition-colors"
+            >
               <svg
                 class="w-4 h-4"
                 fill="none"
@@ -2205,44 +2309,15 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"
+                  d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z"
                 />
               </svg>
-              {dgettext("projects", "Promo Copy")}
-            </h3>
-            <textarea
-              id="promo-copy"
-              class="glass-input w-full text-xs h-20 resize-none"
-              placeholder={
-                dgettext("projects", "Click generate to create promotional copy for your video...")
-              }
-              phx-change="update_promo_copy"
-              name="promo_copy"
-            ><%= @promo_copy %></textarea>
-            <div class="flex items-center gap-2">
-              <button
-                phx-click="generate_promo_copy"
-                class="glass-btn glass-btn-ghost text-xs py-1.5 px-3 flex items-center gap-1.5"
-              >
-                <svg
-                  class="w-3.5 h-3.5"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.5"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
-                </svg>
-                {dgettext("projects", "AI Generate")}
-              </button>
-              <button class="glass-btn glass-btn-ghost text-xs py-1.5 px-3">
-                {dgettext("projects", "Copy to clipboard")}
-              </button>
-            </div>
-          </div>
-          <%!-- Open location selector --%>
-          <div class="glass-surface rounded-xl p-4">
-            <h3 class="text-xs font-semibold text-[var(--glass-text-primary)] mb-2 flex items-center gap-2">
+               {dgettext("projects", "Open File Location")}
+            </button>
+            <button
+              phx-click="compose_video"
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium border border-[var(--glass-stroke-base)] text-[var(--glass-text-secondary)] hover:text-[var(--glass-text-primary)] hover:border-[var(--glass-text-tertiary)] transition-colors"
+            >
               <svg
                 class="w-4 h-4"
                 fill="none"
@@ -2253,27 +2328,43 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
-                  d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"
-                />
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
+                  d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182M20.016 4.66v4.993"
                 />
               </svg>
-              {dgettext("projects", "Publish Location")}
-            </h3>
-
-            <div class="flex flex-wrap gap-2">
-              <%= for platform <- ["Douyin", "Kuaishou", "Bilibili", "YouTube", "TikTok", "RedNote"] do %>
-                <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs bg-[var(--glass-bg-muted)] text-[var(--glass-text-secondary)] hover:text-[var(--glass-text-primary)] hover:bg-[var(--glass-accent-from)]/10 cursor-pointer transition-colors">
-                  {platform}
-                </span>
-              <% end %>
-            </div>
+               {dgettext("projects", "Recompose")}
+            </button>
           </div>
         </div>
       </div>
+      <%!-- Placeholder when no composed video --%>
+      <div
+        :if={!@has_composed && !(@compose_task && @compose_task.status == "completed")}
+        class="glass-surface rounded-xl overflow-hidden"
+      >
+        <div class="aspect-video bg-black/20 flex items-center justify-center">
+          <div class="flex flex-col items-center gap-3">
+            <svg
+              class="w-16 h-16 text-[var(--glass-text-tertiary)] opacity-20"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="0.5"
+              viewBox="0 0 24 24"
+            >
+              <path d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.347a1.125 1.125 0 010 1.972l-11.54 6.347a1.125 1.125 0 01-1.667-.986V5.653z" />
+            </svg>
+            <p class="text-sm text-[var(--glass-text-tertiary)]">
+              {dgettext("projects", "Composed video will appear here after processing.")}
+            </p>
+          </div>
+        </div>
+      </div>
+      <%!-- Bottom tip --%>
+      <p class="text-center text-xs text-[var(--glass-text-tertiary)] pb-4">
+        {dgettext(
+          "projects",
+          "Need to edit in CapCut? Use the Export ZIP feature on the Video Production page to download all raw materials."
+        )}
+      </p>
     </div>
     """
   end
@@ -3156,6 +3247,16 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
     {:noreply, assign(socket, :selected_panels, all_ids)}
   end
 
+  def handle_event("refresh_storyboards", _, socket) do
+    storyboards = load_storyboards(socket.assigns.current_episode)
+    voice_lines = load_voice_lines(socket.assigns.current_episode)
+
+    {:noreply,
+     socket
+     |> assign(:storyboards, storyboards)
+     |> assign(:voice_lines, voice_lines)}
+  end
+
   @impl true
   def handle_info({:ai_write_result, text}, socket) do
     {:noreply,
@@ -3445,6 +3546,13 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
 
   defp task_progress_for(progress_map, panel_id) do
     Map.get(progress_map, panel_id)
+  end
+
+  defp truncate_text(nil, _max), do: ""
+  defp truncate_text("", _max), do: ""
+
+  defp truncate_text(text, max) when is_binary(text) do
+    if String.length(text) > max, do: String.slice(text, 0, max) <> "...", else: text
   end
 
   defp create_default_episode(project, user_id) do

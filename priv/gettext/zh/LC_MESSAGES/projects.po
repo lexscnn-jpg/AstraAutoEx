@@ -860,3 +860,42 @@ msgstr "集数已删除"
 
 msgid "Cannot delete the last episode"
 msgstr "无法删除最后一集"
+
+msgid "Auto-compose panel videos, voiceovers and subtitles into a complete short drama"
+msgstr "自动合成面板视频、配音和字幕为完整短剧"
+
+msgid "Video Materials"
+msgstr "视频素材"
+
+msgid "Clip"
+msgstr "片段"
+
+msgid "Original"
+msgstr "原始"
+
+msgid "Selected %{count} panels (%{missing} files missing, will be skipped during compose)"
+msgstr "已选 %{count} 个面板（%{missing}个文件缺失，合成时会跳过）"
+
+msgid "Selected %{count} panels"
+msgstr "已选 %{count} 个面板"
+
+msgid "One-Click Compose"
+msgstr "一键合成"
+
+msgid "Compose Complete"
+msgstr "合成完成"
+
+msgid "Download Video"
+msgstr "下载视频"
+
+msgid "Open File Location"
+msgstr "打开文件位置"
+
+msgid "Recompose"
+msgstr "重新合成"
+
+msgid "Preset BGM"
+msgstr "预设 BGM"
+
+msgid "Need to edit in CapCut? Use the Export ZIP feature on the Video Production page to download all raw materials."
+msgstr "需要在剪映中编辑？可在「视频生成」页面使用「导出ZIP」功能下载所有原始素材。"
