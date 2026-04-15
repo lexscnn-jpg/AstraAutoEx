@@ -366,7 +366,7 @@ defmodule AstraAutoEx.Workers.Handlers.ScriptToStoryboard do
               Production.update_panel(panel, %{
                 description: Map.get(data, "description", panel.description),
                 shot_type: Map.get(data, "shot_type", panel.shot_type),
-                camera_movement: Map.get(data, "camera_movement", panel.camera_movement)
+                camera_move: Map.get(data, "camera_movement", panel.camera_move)
               })
 
             _ ->
