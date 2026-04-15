@@ -111,12 +111,12 @@ defmodule AstraAutoExWeb.WorkspaceLive.FirstLastFrame do
         </button>
       </div>
       <%!-- FL video result --%>
-      <%= if @current_panel.fl_video_url do %>
+      <%= if @current_panel.video_url do %>
         <div class="mt-2">
           <div class="text-xs text-green-400 mb-1">过渡视频已生成</div>
 
           <video
-            src={@current_panel.fl_video_url}
+            src={@current_panel.video_url}
             controls
             class="w-full rounded-lg aspect-video bg-black"
           />

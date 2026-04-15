@@ -11,7 +11,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.LocationModal do
 
     form_data =
       if location do
-        %{name: location.name, description: location.description}
+        %{name: location.name, description: location.summary || ""}
       else
         %{name: "", description: ""}
       end

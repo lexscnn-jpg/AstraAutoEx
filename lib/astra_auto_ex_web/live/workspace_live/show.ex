@@ -889,7 +889,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                     {idx + 1}
                   </span>
                   <span class="text-sm font-medium text-[var(--glass-text-primary)]">
-                    {clip.title || "Clip #{idx + 1}"}
+                    {Map.get(clip, :title, nil) || "Clip #{idx + 1}"}
                   </span>
                 </div>
 
@@ -938,8 +938,9 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
               <%= for char <- @characters do %>
                 <div class="flex items-center gap-2 p-2 rounded-lg hover:bg-[var(--glass-bg-muted)] transition-colors">
                   <div class="w-10 h-10 rounded-lg bg-[var(--glass-bg-muted)] flex items-center justify-center overflow-hidden flex-shrink-0">
-                    <%= if char.image_url && char.image_url != "" do %>
-                      <img src={char.image_url} class="w-full h-full object-cover" />
+                    <% first_app = List.first(char.appearances || []) %>
+                    <%= if first_app && first_app.image_url && first_app.image_url != "" do %>
+                      <img src={first_app.image_url} class="w-full h-full object-cover" />
                     <% else %>
                       <span class="text-sm text-[var(--glass-text-tertiary)]">
                         {String.first(char.name || "?")}
@@ -953,7 +954,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                     </p>
 
                     <p class="text-[10px] text-[var(--glass-text-tertiary)] truncate">
-                      {char.description || char.introduction || ""}
+                      {char.introduction || ""}
                     </p>
                   </div>
                 </div>
@@ -977,8 +978,9 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
               <%= for loc <- @locations do %>
                 <div class="flex items-center gap-2 p-2 rounded-lg hover:bg-[var(--glass-bg-muted)] transition-colors">
                   <div class="w-10 h-7 rounded bg-[var(--glass-bg-muted)] flex items-center justify-center overflow-hidden flex-shrink-0">
-                    <%= if loc.image_url && loc.image_url != "" do %>
-                      <img src={loc.image_url} class="w-full h-full object-cover" />
+                    <% first_img = List.first(loc.images || []) %>
+                    <%= if first_img && first_img.image_url && first_img.image_url != "" do %>
+                      <img src={first_img.image_url} class="w-full h-full object-cover" />
                     <% else %>
                       <span class="text-[10px] text-[var(--glass-text-tertiary)]">L</span>
                     <% end %>
@@ -1433,7 +1435,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                         视频
                       </span>
                       <span
-                        :if={panel.audio_url && panel.audio_url != ""}
+                        :if={Map.get(panel, :audio_url, nil) && Map.get(panel, :audio_url, nil) != ""}
                         class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-medium bg-purple-500/10 text-purple-400"
                       >
                         <svg
@@ -1479,7 +1481,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                       <div
                         class={[
                           "h-0.5 flex-1 rounded-full",
-                          if(panel.audio_url && panel.audio_url != "",
+                          if(Map.get(panel, :audio_url, nil) && Map.get(panel, :audio_url, nil) != "",
                             do: "bg-purple-500",
                             else: "bg-[var(--glass-bg-muted)]"
                           )
