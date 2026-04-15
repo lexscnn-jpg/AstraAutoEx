@@ -3450,6 +3450,17 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
      |> put_flash(:info, "Location saved.")}
   end
 
+  # PipelineModal timer tick — forward to the component
+  def handle_info({:pipeline_tick, id}, socket) do
+    send_update(AstraAutoExWeb.WorkspaceLive.PipelineModal, id: id, tick: true)
+    {:noreply, socket}
+  end
+
+  # Catch-all for unhandled messages (prevent crash)
+  def handle_info(_msg, socket) do
+    {:noreply, socket}
+  end
+
   def handle_info(:open_character_modal, socket) do
     {:noreply, assign(socket, show_character_modal: true, editing_character: nil)}
   end

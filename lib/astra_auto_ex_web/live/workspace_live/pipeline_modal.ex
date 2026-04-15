@@ -25,6 +25,23 @@ defmodule AstraAutoExWeb.WorkspaceLive.PipelineModal do
 
   @impl true
   @spec update(map(), Phoenix.LiveView.Socket.t()) :: {:ok, Phoenix.LiveView.Socket.t()}
+  # Handle tick from parent's handle_info forwarding
+  def update(%{tick: true}, socket) do
+    elapsed = (socket.assigns[:elapsed_seconds] || 0) + 1
+    steps = socket.assigns[:steps] || []
+    current_step = min(div(elapsed, 10), max(length(steps) - 1, 0))
+    progress = min(elapsed * 2, 95)
+    status_msgs = socket.assigns[:status_messages] || []
+    status_idx = if status_msgs != [], do: rem(div(elapsed, 3), length(status_msgs)), else: 0
+
+    {:ok,
+     socket
+     |> assign(:elapsed_seconds, elapsed)
+     |> assign(:current_step, current_step)
+     |> assign(:progress, progress)
+     |> assign(:status_idx, status_idx)}
+  end
+
   def update(%{active: true} = assigns, socket) do
     socket = assign(socket, assigns)
 
