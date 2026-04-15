@@ -17,7 +17,8 @@ defmodule AstraAutoExWeb.WorkspaceLive.PipelineModal do
      |> assign(:current_step, 0)
      |> assign(:steps, @pipeline_steps)
      |> assign(:elapsed_seconds, 0)
-     |> assign(:timer_ref, nil)}
+     |> assign(:timer_ref, nil)
+     |> assign(:status_idx, 0)}
   end
 
   @impl true
@@ -46,7 +47,8 @@ defmodule AstraAutoExWeb.WorkspaceLive.PipelineModal do
      |> assign(:timer_ref, nil)
      |> assign(:progress, 0)
      |> assign(:current_step, 0)
-     |> assign(:elapsed_seconds, 0)}
+     |> assign(:elapsed_seconds, 0)
+     |> assign(:status_idx, 0)}
   end
 
   @impl true
@@ -171,6 +173,15 @@ defmodule AstraAutoExWeb.WorkspaceLive.PipelineModal do
               />
             </div>
 
+            <%!-- Status message --%>
+            <div
+              :if={@status_messages != []}
+              class="text-center mb-4"
+            >
+              <p class="text-xs text-[var(--glass-accent-from)] animate-pulse font-medium">
+                {Enum.at(@status_messages, @status_idx, "")}
+              </p>
+            </div>
             <%!-- Footer --%>
             <div class="flex items-center justify-between">
               <p class="text-xs text-[var(--glass-text-tertiary)]">
@@ -190,15 +201,24 @@ defmodule AstraAutoExWeb.WorkspaceLive.PipelineModal do
   @impl true
   def handle_event("pipeline_tick", _, socket) do
     elapsed = socket.assigns.elapsed_seconds + 1
-    # Advance step every ~12 seconds, cap progress
-    current_step = min(div(elapsed, 12), length(socket.assigns.steps) - 1)
+    # Advance step every ~10 seconds, cap progress
+    current_step = min(div(elapsed, 10), length(socket.assigns.steps) - 1)
     progress = min(elapsed * 2, 95)
+
+    # Cycle through status messages for current step
+    status_msgs = socket.assigns.status_messages || []
+
+    status_idx =
+      if status_msgs != [],
+        do: rem(div(elapsed, 3), length(status_msgs)),
+        else: 0
 
     {:noreply,
      socket
      |> assign(:elapsed_seconds, elapsed)
      |> assign(:current_step, current_step)
-     |> assign(:progress, progress)}
+     |> assign(:progress, progress)
+     |> assign(:status_idx, status_idx)}
   end
 
   defp format_elapsed(seconds) do
