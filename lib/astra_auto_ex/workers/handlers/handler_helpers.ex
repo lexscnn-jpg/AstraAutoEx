@@ -68,9 +68,18 @@ defmodule AstraAutoEx.Workers.Handlers.Helpers do
       with {:ok, config} <- get_provider_config(user_id, provider_name),
            mod when not is_nil(mod) <- provider_module(provider_name) do
         case mod.chat(request, config) do
-          {:ok, %{content: content}} -> {:ok, content}
-          {:ok, text} when is_binary(text) -> {:ok, text}
-          other -> other
+          {:ok, %{content: content} = meta} ->
+            {:ok, content,
+             %{
+               input_tokens: Map.get(meta, :input_tokens, 0),
+               output_tokens: Map.get(meta, :output_tokens, 0)
+             }}
+
+          {:ok, text} when is_binary(text) ->
+            {:ok, text, %{input_tokens: 0, output_tokens: 0}}
+
+          other ->
+            other
         end
       else
         nil -> {:error, "Unknown provider: #{provider_name}"}
@@ -79,7 +88,14 @@ defmodule AstraAutoEx.Workers.Handlers.Helpers do
 
     # Track API call cost
     duration = System.monotonic_time(:millisecond) - start
-    status = if match?({:ok, _}, result), do: "success", else: "failed"
+
+    status =
+      case result do
+        {:ok, _, _} -> "success"
+        {:ok, _} -> "success"
+        _ -> "failed"
+      end
+
     pipeline_step = Map.get(request, "action") || Map.get(request, :action) || "chat"
 
     try do
@@ -95,7 +111,42 @@ defmodule AstraAutoEx.Workers.Handlers.Helpers do
       _ -> :ok
     end
 
-    result
+    # Return {:ok, text} for backward compat (strip metadata)
+    case result do
+      {:ok, text, _meta} -> {:ok, text}
+      other -> other
+    end
+  end
+
+  @doc "Chat with metadata — returns {:ok, text, %{input_tokens, output_tokens}} or {:error, reason}."
+  def chat_with_meta(user_id, provider_name, request) do
+    start = System.monotonic_time(:millisecond)
+    request = normalize_chat_request(request)
+
+    with {:ok, config} <- get_provider_config(user_id, provider_name),
+         mod when not is_nil(mod) <- provider_module(provider_name) do
+      case mod.chat(request, config) do
+        {:ok, %{content: content} = meta} ->
+          duration = System.monotonic_time(:millisecond) - start
+
+          {:ok, content,
+           %{
+             input_tokens: Map.get(meta, :input_tokens, 0),
+             output_tokens: Map.get(meta, :output_tokens, 0),
+             duration_ms: duration
+           }}
+
+        {:ok, text} when is_binary(text) ->
+          duration = System.monotonic_time(:millisecond) - start
+          {:ok, text, %{input_tokens: 0, output_tokens: 0, duration_ms: duration}}
+
+        {:error, reason} ->
+          {:error, reason}
+      end
+    else
+      nil -> {:error, "Unknown provider: #{provider_name}"}
+      error -> error
+    end
   end
 
   @doc "Poll an async task."

@@ -17,8 +17,12 @@ defmodule AstraAutoExWeb.AssistantLive.Panel do
   end
 
   @impl true
-  def update(%{ai_response: response} = _assigns, socket) when is_binary(response) do
-    ai_msg = %{role: "assistant", content: response}
+  def update(%{ai_response: response} = assigns, socket) when is_binary(response) do
+    meta = Map.get(assigns, :ai_meta, %{})
+    tokens = Map.get(meta, :input_tokens, 0) + Map.get(meta, :output_tokens, 0)
+    duration = Map.get(meta, :duration_ms, 0)
+
+    ai_msg = %{role: "assistant", content: response, tokens: tokens, duration_ms: duration}
     messages = socket.assigns.messages ++ [ai_msg]
     {:ok, assign(socket, messages: messages, loading: false)}
   end
@@ -111,6 +115,26 @@ defmodule AstraAutoExWeb.AssistantLive.Panel do
               )
             ]}>
               <div class="whitespace-pre-wrap text-xs leading-relaxed">{msg.content}</div>
+              <div
+                :if={msg.role == "assistant" && Map.get(msg, :tokens, 0) > 0}
+                class="flex items-center gap-2 mt-1.5 pt-1.5 border-t border-[var(--glass-stroke-soft)]"
+              >
+                <span class="text-[9px] text-[var(--glass-text-tertiary)] flex items-center gap-0.5">
+                  <svg
+                    class="w-2.5 h-2.5"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  {Map.get(msg, :duration_ms, 0)}ms
+                </span>
+                <span class="text-[9px] px-1.5 py-0.5 rounded-full bg-[var(--glass-accent-from)]/10 text-[var(--glass-accent-from)]">
+                  {Map.get(msg, :tokens, 0)} tokens
+                </span>
+              </div>
             </div>
           <% end %>
 
@@ -214,13 +238,17 @@ defmodule AstraAutoExWeb.AssistantLive.Panel do
         "max_tokens" => 2000
       }
 
-      response =
-        case Helpers.chat(user_id, provider, request) do
-          {:ok, text} -> text
-          {:error, reason} -> "抱歉，出现了错误：#{inspect(reason)}"
+      {response, meta} =
+        case Helpers.chat_with_meta(user_id, provider, request) do
+          {:ok, text, meta} -> {text, meta}
+          {:error, reason} -> {"抱歉，出现了错误：#{inspect(reason)}", %{}}
         end
 
-      send_update(__MODULE__, id: component_id, ai_response: response)
+      send_update(__MODULE__,
+        id: component_id,
+        ai_response: response,
+        ai_meta: meta
+      )
     end)
   end
 
