@@ -32,6 +32,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
      |> assign(:novel_text, (current_episode && current_episode.novel_text) || "")
      |> assign(:show_assistant, false)
      |> assign(:editing_panel, nil)
+     |> assign(:show_asset_library, false)
      |> assign(:show_character_modal, false)
      |> assign(:show_location_modal, false)
      |> assign(:show_voice_picker, false)
@@ -180,9 +181,15 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
           </div>
           <%!-- Right: Action buttons --%>
           <div class="flex items-center gap-2">
-            <a
-              href={~p"/asset-hub"}
-              class="glass-btn glass-btn-ghost text-xs py-1.5 px-3 flex items-center gap-1.5"
+            <button
+              phx-click="toggle_asset_library"
+              class={[
+                "glass-btn text-xs py-1.5 px-3 flex items-center gap-1.5 transition-all",
+                if(@show_asset_library,
+                  do: "bg-blue-500/15 text-blue-500 ring-1 ring-blue-500/30",
+                  else: "glass-btn-ghost"
+                )
+              ]}
             >
               <svg
                 class="w-4 h-4"
@@ -194,7 +201,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                 <path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
               </svg>
               {dgettext("projects", "Assets")}
-            </a>
+            </button>
             <button
               phx-click="toggle_assistant"
               class={[
@@ -338,6 +345,16 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
           <path d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 00-2.455 2.456z" />
         </svg>
       </button>
+      <%!-- Asset Library Modal --%>
+      <.live_component
+        :if={@show_asset_library}
+        module={AstraAutoExWeb.WorkspaceLive.AssetLibraryModal}
+        id="asset-library-modal"
+        project_id={@project.id}
+        episode_id={@current_episode && @current_episode.id}
+        characters={@characters}
+        locations={@locations}
+      />
       <%!-- Prompt Viewer Modal --%>
       <.prompt_viewer_modal :if={@viewing_prompt} prompt={@viewing_prompt} /> <%!-- Import Wizard --%>
       <.live_component
@@ -349,6 +366,9 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
         module={AstraAutoExWeb.WorkspaceLive.PipelineModal}
         id="pipeline-modal"
         active={@pipeline_state == :running}
+        pipeline_name="AI 创作管线"
+        streaming_output=""
+        active_task_count={length(@active_tasks)}
         status_messages={["准备中...", "思考中...", "写作中...", "润色中...", "即将完成..."]}
       /> <%!-- Voice Picker --%>
       <.live_component
@@ -782,7 +802,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
         </div>
         <%!-- Pipeline control bar --%>
         <div
-          :if={@pipeline_state in [:running, :paused]}
+          :if={@pipeline_state in [:running, :paused, :minimized]}
           class="flex items-center gap-2 pt-2 border-t border-[var(--glass-stroke-soft)]"
         >
           <button
@@ -800,13 +820,24 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
             ▶ 恢复
           </button>
           <button
+            :if={@pipeline_state == :minimized}
+            phx-click="resume_pipeline"
+            class="glass-btn glass-btn-primary text-xs py-1 px-3 flex items-center gap-1"
+          >
+            ▶ 展开管线
+          </button>
+          <button
             phx-click="stop_pipeline"
             class="glass-btn text-xs py-1 px-3 text-red-400 hover:text-red-300"
           >
             ⏹ 停止
           </button>
           <span class="text-xs text-[var(--glass-text-tertiary)] ml-auto">
-            {if @pipeline_state == :paused, do: "已暂停", else: "运行中..."}
+            {cond do
+              @pipeline_state == :paused -> "已暂停"
+              @pipeline_state == :minimized -> "已最小化"
+              true -> "运行中..."
+            end}
           </span>
         </div>
       </div>
@@ -2380,6 +2411,10 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
      |> put_flash(:info, "管线已停止，已完成的结果已保留。")}
   end
 
+  def handle_event("minimize_pipeline", _, socket) do
+    {:noreply, assign(socket, :pipeline_state, :minimized)}
+  end
+
   def handle_event("open_ai_write", _, socket) do
     {:noreply,
      socket
@@ -2868,6 +2903,14 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
     {:noreply, assign(socket, :promo_copy, text)}
   end
 
+  def handle_event("toggle_asset_library", _, socket) do
+    {:noreply, assign(socket, :show_asset_library, !socket.assigns.show_asset_library)}
+  end
+
+  def handle_event("close_asset_library", _, socket) do
+    {:noreply, assign(socket, :show_asset_library, false)}
+  end
+
   def handle_event("add_character", _, socket) do
     {:noreply, assign(socket, show_character_modal: true, editing_character: nil)}
   end
@@ -3306,6 +3349,24 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
      |> assign(:locations, locations)
      |> assign(:show_location_modal, false)
      |> put_flash(:info, "Location saved.")}
+  end
+
+  def handle_info(:open_character_modal, socket) do
+    {:noreply, assign(socket, show_character_modal: true, editing_character: nil)}
+  end
+
+  def handle_info(:open_location_modal, socket) do
+    {:noreply, assign(socket, show_location_modal: true, editing_location: nil)}
+  end
+
+  def handle_info(:reload_characters, socket) do
+    characters = Characters.list_characters(socket.assigns.project.id)
+    {:noreply, assign(socket, :characters, characters)}
+  end
+
+  def handle_info(:reload_locations, socket) do
+    locations = Locations.list_locations(socket.assigns.project.id)
+    {:noreply, assign(socket, :locations, locations)}
   end
 
   def handle_info(

@@ -123,11 +123,20 @@ defmodule AstraAutoEx.Workers.TaskRunner do
 
   defp maybe_auto_chain(task) do
     case task.type do
-      "story_to_script_run" -> AutoChain.after_story_to_script(task)
-      "script_to_storyboard_run" -> AutoChain.after_script_to_storyboard(task)
-      t when t in ["image_panel", "image_character", "image_location"] -> AutoChain.after_image_complete(task)
-      t when t in ["video_panel", "voice_line", "lip_sync"] -> AutoChain.after_video_voice_complete(task)
-      _ -> :ok
+      "story_to_script_run" ->
+        AutoChain.after_story_to_script(task)
+
+      "script_to_storyboard_run" ->
+        AutoChain.after_script_to_storyboard(task)
+
+      t when t in ["image_panel", "image_character", "image_location"] ->
+        AutoChain.after_image_complete(task)
+
+      t when t in ["video_panel", "voice_line", "lip_sync"] ->
+        AutoChain.after_video_voice_complete(task)
+
+      _ ->
+        :ok
     end
   rescue
     e -> Logger.warning("AutoChain trigger failed for task #{task.id}: #{Exception.message(e)}")

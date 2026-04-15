@@ -300,3 +300,50 @@ msgstr ""
 
 msgid "Introduction"
 msgstr ""
+
+## --- Asset Library Modal ---
+
+msgid "Asset Library"
+msgstr ""
+
+msgid "Total %{total} assets (%{chars} characters + %{locs} locations + 0 props)"
+msgstr ""
+
+msgid "All (%{count})"
+msgstr ""
+
+msgid "Characters (%{count})"
+msgstr ""
+
+msgid "Locations (%{count})"
+msgstr ""
+
+msgid "Props (%{count})"
+msgstr ""
+
+msgid "AI Casting Complete"
+msgstr ""
+
+msgid "Confirm profiles to auto-generate appearances"
+msgstr ""
+
+msgid "Delete location confirm"
+msgstr ""
+
+msgid "Coming soon"
+msgstr ""
+
+msgid "Gender"
+msgstr ""
+
+msgid "Age"
+msgstr ""
+
+msgid "Era"
+msgstr ""
+
+msgid "Social Class"
+msgstr ""
+
+msgid "Occupation"
+msgstr ""
