@@ -13,7 +13,10 @@ defmodule AstraAutoEx.AI.AsyncPoller do
   def poll(external_id, user_config \\ %{}) do
     case parse_external_id(external_id) do
       {:ok, {provider, _type, _rest} = parsed} ->
-        config = Map.get(user_config, provider, %{})
+        # The external_id prefix may be a legacy alias (e.g. "OPENAI" for apiyi);
+        # map to the actual provider_config key first, THEN fetch config.
+        config_key = provider_key_from_prefix(provider)
+        config = Map.get(user_config, config_key, Map.get(user_config, provider, %{}))
         do_poll(parsed, config)
 
       {:error, reason} ->
@@ -33,7 +36,23 @@ defmodule AstraAutoEx.AI.AsyncPoller do
 
   defp do_poll({provider, _type, rest}, config) do
     provider_key = provider_key_from_prefix(provider)
-    Gateway.poll_task(provider_key, rest, config)
+
+    # Some providers (apiyi) prepend a base64-encoded "provider_token" to the
+    # video_id, separated by ":". Strip it so the real video_id is passed to
+    # poll_task.
+    real_id =
+      case String.split(rest, ":", parts: 2) do
+        [token, id] ->
+          case Base.url_decode64(token, padding: false) do
+            {:ok, _} -> id
+            :error -> rest
+          end
+
+        _ ->
+          rest
+      end
+
+    Gateway.poll_task(provider_key, real_id, config)
   end
 
   defp provider_key_from_prefix("fal"), do: "fal"

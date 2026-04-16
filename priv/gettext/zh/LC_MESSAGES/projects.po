@@ -899,3 +899,15 @@ msgstr "预设 BGM"
 
 msgid "Need to edit in CapCut? Use the Export ZIP feature on the Video Production page to download all raw materials."
 msgstr "需要在剪映中编辑？可在「视频生成」页面使用「导出ZIP」功能下载所有原始素材。"
+
+msgid "Clip #%{n}"
+msgstr "片段 #%{n}"
+
+msgid "AI Generation Failed"
+msgstr "AI 生成失败"
+
+msgid "Retry"
+msgstr "重试"
+
+msgid "Cancel"
+msgstr "取消"

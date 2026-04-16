@@ -45,6 +45,13 @@ defmodule AstraAutoEx.Workers.TaskRunner do
             maybe_auto_chain(task)
             {:stop, :normal, state}
 
+          {:async, _result} ->
+            # Async task: handler has submitted external work and set external_id.
+            # Leave status as "processing" so AsyncPollWorker picks it up.
+            # Release concurrency slot now (the external system holds the resource).
+            ConcurrencyLimiter.release(queue_type, task.id)
+            {:stop, :normal, state}
+
           {:error, reason} ->
             handle_failure(task, reason, state)
         end

@@ -37,6 +37,7 @@ defmodule AstraAutoExWeb.HomeLive do
      |> assign(:ai_episode_count, 0)
      |> assign(:ai_status_index, 0)
      |> assign(:ai_timer_ref, nil)
+     |> assign(:ai_error_message, nil)
      |> assign(:creating, false)
      # File upload
      |> allow_upload(:story_file,
@@ -95,12 +96,7 @@ defmodule AstraAutoExWeb.HomeLive do
               <p
                 id="hero-typewriter"
                 phx-hook="TypewriterHero"
-                data-text={
-                  dgettext(
-                    "projects",
-                    "Describe your story and let AI generate cinematic short dramas"
-                  )
-                }
+                data-texts="描述你想要创作的故事，AI 为你智能生成影视短剧|一个雨夜，特警发现少女的诡异刺青…|古代宫廷，替嫁皇妃意外穿越时空|未来都市，AI 觉醒后第一个拨通的电话|沙漠星球，失忆的机甲驾驶员找回记忆"
                 class="text-sm text-[var(--glass-text-tertiary)] mt-2 font-mono"
               >
                 >_ <span data-typewriter-target></span><span class="animate-pulse">|</span>
@@ -168,6 +164,23 @@ defmodule AstraAutoExWeb.HomeLive do
                 <%= for err <- upload_errors(@uploads.story_file) do %>
                   <p class="text-xs text-red-400 mt-1">{upload_error_to_string(err)}</p>
                 <% end %>
+                <%!-- Long-text hint: suggest smart episode split when > 1000 chars and still 1 episode --%>
+                <div
+                  :if={String.length(@story_input) > 1000 and @episode_count == 1}
+                  class="mt-3 flex items-start gap-2.5 p-3 rounded-xl bg-gradient-to-br from-amber-500/10 to-orange-500/5 border border-amber-500/30"
+                >
+                  <svg class="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
+                  </svg>
+                  <div class="flex-1 min-w-0 text-xs">
+                    <p class="font-semibold text-amber-400 mb-0.5">
+                      检测到长文本（{String.length(@story_input)} 字）
+                    </p>
+                    <p class="text-[var(--glass-text-secondary)] leading-relaxed">
+                      建议使用右侧「集数」下拉选择 2-10 集，系统会自动把故事切分为多集剧情。或直接提交按单集处理。
+                    </p>
+                  </div>
+                </div>
                 <%!-- Bottom toolbar --%>
                 <div class="flex items-center justify-between pt-3 mt-3 border-t border-[var(--glass-stroke-soft)]">
                   <div class="flex items-center gap-3">
@@ -501,6 +514,45 @@ defmodule AstraAutoExWeb.HomeLive do
                 {Enum.at(@ai_status_messages, @ai_status_index)}
               </p>
             </div>
+            <%!-- Phase: Error --%>
+            <div :if={@ai_phase == :error} class="space-y-4">
+              <div class="flex items-start gap-3 p-4 rounded-xl bg-red-500/10 border border-red-500/30">
+                <svg
+                  class="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-semibold text-red-400">
+                    {dgettext("projects", "AI Generation Failed")}
+                  </p>
+                  <p class="text-xs text-[var(--glass-text-secondary)] mt-1 break-words">
+                    {@ai_error_message}
+                  </p>
+                </div>
+              </div>
+
+              <div class="flex justify-end gap-2">
+                <button
+                  type="button"
+                  phx-click="close_ai_modal"
+                  class="glass-btn glass-btn-ghost px-4 py-2 text-sm"
+                >
+                  {dgettext("projects", "Cancel")}
+                </button>
+                <button
+                  type="button"
+                  phx-click="regenerate_ai_outline"
+                  class="glass-btn glass-btn-primary px-6 py-2 text-sm"
+                >
+                  {dgettext("projects", "Retry")}
+                </button>
+              </div>
+            </div>
             <%!-- Phase: Outline --%>
             <div :if={@ai_phase == :outline} class="space-y-4">
               <div class="flex items-center justify-between">
@@ -793,12 +845,13 @@ defmodule AstraAutoExWeb.HomeLive do
 
     {:noreply,
      socket
-     |> assign(:ai_phase, :input)
-     |> put_flash(
-       :error,
-       dgettext("projects", "AI generation failed: %{reason}", reason: inspect(reason))
-     )}
+     |> assign(:ai_phase, :error)
+     |> assign(:ai_error_message, format_ai_error(reason))}
   end
+
+  defp format_ai_error(reason) when is_binary(reason), do: reason
+  defp format_ai_error(%{message: msg}) when is_binary(msg), do: msg
+  defp format_ai_error(reason), do: inspect(reason)
 
   # ── File upload consume callback ───────────────────────────────────────
 

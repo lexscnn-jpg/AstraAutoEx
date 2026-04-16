@@ -219,21 +219,17 @@ defmodule AstraAutoEx.AI.Providers.Apiyi do
       {"accept", "application/json"}
     ]
 
-    # Build multipart form parts
-    form_parts = [
-      {"model", model},
-      {"prompt", prompt},
-      build_file_part("input_reference", input_ref, "input-reference.png")
-    ]
-
-    # Append last frame reference if provided
+    # Build multipart form parts; filter out nils from failed image resolution
     form_parts =
-      if last_frame_ref do
-        form_parts ++
-          [build_file_part("input_reference", last_frame_ref, "last-frame-reference.png")]
-      else
-        form_parts
-      end
+      [
+        {"model", model},
+        {"prompt", prompt},
+        build_file_part("input_reference", input_ref, "input-reference.png"),
+        if(last_frame_ref,
+          do: build_file_part("input_reference", last_frame_ref, "last-frame-reference.png")
+        )
+      ]
+      |> Enum.reject(&is_nil/1)
 
     case Req.post(url,
            headers: headers,
@@ -448,8 +444,15 @@ defmodule AstraAutoEx.AI.Providers.Apiyi do
         content_type =
           headers
           |> Enum.find_value("image/png", fn
-            {"content-type", ct} -> ct |> String.split(";") |> List.first()
-            _ -> nil
+            {"content-type", ct} when is_binary(ct) ->
+              ct |> String.split(";") |> List.first()
+
+            {"content-type", [ct | _]} when is_binary(ct) ->
+              # Finch/Req on newer versions returns header values as list
+              ct |> String.split(";") |> List.first()
+
+            _ ->
+              nil
           end)
 
         {:binary, body, content_type}
@@ -464,10 +467,14 @@ defmodule AstraAutoEx.AI.Providers.Apiyi do
     end
   end
 
-  # Build a Req form_multipart file part from resolved image data
+  # Build a Req form_multipart file part from resolved image data.
+  # Req's form_multipart format: {name, {body, [filename: ..., content_type: ...]}}
   defp build_file_part(field_name, {:binary, data, content_type}, default_filename) do
-    {field_name, {default_filename, data, content_type: content_type}}
+    {field_name, {data, filename: default_filename, content_type: content_type}}
   end
+
+  # Return nil when the image resolution failed — caller filters these out.
+  defp build_file_part(_field_name, nil, _default_filename), do: nil
 
   # ══════════════════════════════════════════
   # Helpers

@@ -920,7 +920,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                     {idx + 1}
                   </span>
                   <span class="text-sm font-medium text-[var(--glass-text-primary)]">
-                    {clip.title || "Clip #{idx + 1}"}
+                    {dgettext("projects", "Clip #%{n}", n: idx + 1)}
                   </span>
                 </div>
 
@@ -967,10 +967,11 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
 
             <div class="space-y-2">
               <%= for char <- @characters do %>
+                <% thumb = character_thumb(char) %>
                 <div class="flex items-center gap-2 p-2 rounded-lg hover:bg-[var(--glass-bg-muted)] transition-colors">
                   <div class="w-10 h-10 rounded-lg bg-[var(--glass-bg-muted)] flex items-center justify-center overflow-hidden flex-shrink-0">
-                    <%= if char.image_url && char.image_url != "" do %>
-                      <img src={char.image_url} class="w-full h-full object-cover" />
+                    <%= if thumb do %>
+                      <img src={thumb} class="w-full h-full object-cover" />
                     <% else %>
                       <span class="text-sm text-[var(--glass-text-tertiary)]">
                         {String.first(char.name || "?")}
@@ -984,7 +985,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
                     </p>
 
                     <p class="text-[10px] text-[var(--glass-text-tertiary)] truncate">
-                      {char.description || char.introduction || ""}
+                      {char.introduction || ""}
                     </p>
                   </div>
                 </div>
@@ -1006,10 +1007,11 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
 
             <div class="space-y-2">
               <%= for loc <- @locations do %>
+                <% loc_thumb = location_thumb(loc) %>
                 <div class="flex items-center gap-2 p-2 rounded-lg hover:bg-[var(--glass-bg-muted)] transition-colors">
                   <div class="w-10 h-7 rounded bg-[var(--glass-bg-muted)] flex items-center justify-center overflow-hidden flex-shrink-0">
-                    <%= if loc.image_url && loc.image_url != "" do %>
-                      <img src={loc.image_url} class="w-full h-full object-cover" />
+                    <%= if loc_thumb do %>
+                      <img src={loc_thumb} class="w-full h-full object-cover" />
                     <% else %>
                       <span class="text-[10px] text-[var(--glass-text-tertiary)]">L</span>
                     <% end %>
@@ -1443,6 +1445,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
     has_video = panel.video_url && panel.video_url != ""
     desc_short = truncate_text(panel.description, 50)
     characters = parse_panel_characters(panel)
+    props = parse_panel_props(panel)
 
     assigns =
       assigns
@@ -1450,6 +1453,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
       |> Map.put(:has_video, has_video)
       |> Map.put(:desc_short, desc_short)
       |> Map.put(:characters, characters)
+      |> Map.put(:props, props)
 
     ~H"""
     <div
@@ -1505,7 +1509,7 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
             />
           </div>
         </div>
-        <%!-- Hover action buttons --%>
+        <%!-- Hover action buttons (generate / edit / delete) --%>
         <div class="absolute top-1.5 right-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 flex gap-1">
           <button
             phx-click="generate_panel_image"
@@ -1525,6 +1529,27 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
               <% else %>
                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
               <% end %>
+            </svg>
+          </button>
+          <button
+            phx-click="edit_panel"
+            phx-value-panel-id={@panel.id}
+            class="w-6 h-6 rounded-full bg-gray-500/70 text-white backdrop-blur-sm hover:bg-gray-600 flex items-center justify-center"
+            title="编辑面板"
+          >
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931z" />
+            </svg>
+          </button>
+          <button
+            phx-click="delete_panel"
+            phx-value-panel-id={@panel.id}
+            data-confirm="确定删除此面板吗？"
+            class="w-6 h-6 rounded-full bg-red-500/70 text-white backdrop-blur-sm hover:bg-red-600 flex items-center justify-center"
+            title="删除"
+          >
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
             </svg>
           </button>
         </div>
@@ -1604,6 +1629,11 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
           <%= for char <- @characters do %>
             <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-medium bg-blue-500/10 text-blue-400">
               <span class="text-[var(--glass-text-tertiary)]">角色</span> {char}
+            </span>
+          <% end %>
+          <%= for prop <- @props do %>
+            <span class="inline-flex items-center gap-0.5 px-1.5 py-0.5 rounded text-[10px] font-medium bg-emerald-500/10 text-emerald-400">
+              <span class="text-[var(--glass-text-tertiary)]">道具</span> {prop}
             </span>
           <% end %>
 
@@ -2376,6 +2406,22 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
   @impl true
   def handle_event("switch_stage", %{"stage" => stage}, socket) when stage in @stages do
     {:noreply, assign(socket, :stage, stage)}
+  end
+
+  def handle_event("delete_panel", %{"panel-id" => panel_id}, socket) do
+    case Production.get_panel!(panel_id) do
+      %{} = panel ->
+        {:ok, _} = Production.delete_panel(panel)
+        storyboards = load_storyboards(socket.assigns.current_episode)
+
+        {:noreply,
+         socket
+         |> assign(:storyboards, storyboards)
+         |> put_flash(:info, "已删除面板")}
+    end
+  rescue
+    Ecto.NoResultsError ->
+      {:noreply, put_flash(socket, :error, "面板不存在")}
   end
 
   def handle_event("select_episode", %{"_target" => _, "value" => episode_id}, socket) do
@@ -3635,6 +3681,35 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
   defp panel_location(panel) do
     loc = Map.get(panel, :location)
     if loc && loc != "", do: loc, else: nil
+  end
+
+  # ── Schema-safe thumbnail helpers ──
+  # Character has_many appearances; image lives on appearance, not on Character
+  defp character_thumb(char) do
+    case char do
+      %{appearances: apps} when is_list(apps) ->
+        case Enum.find(apps, &(&1.is_selected || &1.image_index == 0)) || List.first(apps) do
+          %{image_url: url} when is_binary(url) and url != "" -> url
+          _ -> nil
+        end
+
+      _ ->
+        nil
+    end
+  end
+
+  # Location has_many images; image_url lives on LocationImage
+  defp location_thumb(loc) do
+    case loc do
+      %{images: imgs} when is_list(imgs) ->
+        case List.first(imgs) do
+          %{image_url: url} when is_binary(url) and url != "" -> url
+          _ -> nil
+        end
+
+      _ ->
+        nil
+    end
   end
 
   defp parse_panel_props(panel) do

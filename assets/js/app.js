@@ -28,20 +28,33 @@ import topbar from "../vendor/topbar"
 // ── Custom Hooks ──
 
 const Hooks = {
-  // TypewriterHero — subtitle typing + delete loop
+  // TypewriterHero — subtitle typing, cycles through multiple inspirational
+  // scene prompts. Uses `data-texts` (| separated) if present, else falls back
+  // to single `data-text` for back-compat.
   TypewriterHero: {
     mounted() {
       const el = this.el
-      const text = el.dataset.text || ""
+      const multi = el.dataset.texts || ""
+      const single = el.dataset.text || ""
+      const texts = multi
+        ? multi.split("|").map(s => s.trim()).filter(Boolean)
+        : (single ? [single] : [])
+
+      if (texts.length === 0) return
+
       const TYPE_SPEED = 55
       const DELETE_SPEED = 20
-      const PAUSE = 3200
-      let i = 0, deleting = false
+      const PAUSE = 2600      // pause after full sentence
+      const BETWEEN = 300     // pause before typing the next sentence
+      let idx = 0             // which sentence
+      let i = 0               // char position within current sentence
+      let deleting = false
 
       const span = el.querySelector("[data-typewriter-target]")
       if (!span) return
 
       const tick = () => {
+        const text = texts[idx]
         if (!deleting) {
           span.textContent = text.slice(0, i + 1)
           i++
@@ -56,7 +69,9 @@ const Hooks = {
           i--
           if (i <= 0) {
             deleting = false
-            this._timer = setTimeout(tick, 500)
+            // advance to next sentence (loop)
+            idx = (idx + 1) % texts.length
+            this._timer = setTimeout(tick, BETWEEN)
             return
           }
           this._timer = setTimeout(tick, DELETE_SPEED)

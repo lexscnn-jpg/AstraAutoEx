@@ -68,10 +68,155 @@ defmodule AstraAutoEx.Media.FFmpeg do
   @spec compose(list(clip()), String.t(), compose_opts()) ::
           {:ok, String.t()} | {:error, String.t()}
   def compose(clips, output_path, opts \\ []) do
-    if ffmpeg_available?() do
-      do_compose(clips, output_path, opts)
-    else
-      {:error, "FFmpeg not found. Install FFmpeg to enable video composition."}
+    cond do
+      not ffmpeg_available?() ->
+        {:error, "FFmpeg not found. Install FFmpeg to enable video composition."}
+
+      # Force simple concat when explicitly requested, OR as a fallback after
+      # filter_complex fails (caller can retry with this option).
+      Keyword.get(opts, :mode) == :simple_concat ->
+        simple_concat(clips, output_path, opts)
+
+      true ->
+        case do_compose(clips, output_path, opts) do
+          {:ok, path} ->
+            {:ok, path}
+
+          {:error, reason} ->
+            Logger.warning("[FFmpeg] filter_complex failed (#{reason}), retrying with simple concat")
+            simple_concat(clips, output_path, opts)
+        end
+    end
+  end
+
+  @doc """
+  Simple concat composition using the ffmpeg concat demuxer.
+  No transitions. Optional subtitle burn-in via opts[:subtitle_path].
+  Used as a fallback when filter_complex (xfade) fails.
+  """
+  @spec simple_concat(list(map()), String.t(), compose_opts()) :: {:ok, String.t()} | {:error, String.t()}
+  def simple_concat(clips, output_path, opts \\ []) do
+    work_dir = Path.join(System.tmp_dir!(), "astra_concat_#{System.system_time(:millisecond)}")
+    File.mkdir_p!(work_dir)
+
+    try do
+      # Download/copy all clip sources to local files
+      local =
+        clips
+        |> Enum.with_index()
+        |> Enum.map(fn {c, idx} ->
+          dest = Path.join(work_dir, "clip_#{idx}.mp4")
+
+          case ensure_local_file(c.video_url, ".mp4") do
+            {:ok, src_path} ->
+              if src_path != dest, do: File.cp!(src_path, dest)
+              dest
+
+            {:error, _} ->
+              nil
+          end
+        end)
+        |> Enum.reject(&is_nil/1)
+
+      if Enum.empty?(local) do
+        {:error, "No clips available for concat"}
+      else
+        # Write concat list file (ffmpeg concat demuxer format)
+        list_path = Path.join(work_dir, "list.txt")
+
+        list_content =
+          local
+          |> Enum.map(fn p -> "file '#{String.replace(p, "'", "\\''")}'" end)
+          |> Enum.join("\n")
+
+        File.write!(list_path, list_content)
+
+        subtitle_path = Keyword.get(opts, :subtitle_path)
+
+        # With subtitles we MUST re-encode (filter can't run on -c copy).
+        if is_binary(subtitle_path) and File.exists?(subtitle_path) do
+          reencode_concat(list_path, output_path, subtitle_path: subtitle_path)
+        else
+          args = [
+            "-y",
+            "-f",
+            "concat",
+            "-safe",
+            "0",
+            "-i",
+            list_path,
+            "-c",
+            "copy",
+            output_path
+          ]
+
+          case System.cmd("ffmpeg", args, stderr_to_stdout: true) do
+            {_, 0} ->
+              if File.exists?(output_path) do
+                {:ok, output_path}
+              else
+                # codec copy can fail silently on mixed streams — re-encode
+                reencode_concat(list_path, output_path)
+              end
+
+            {out, _code} ->
+              Logger.warning("[FFmpeg] concat -c copy failed, retrying with re-encode: #{String.slice(out, -300, 300)}")
+              reencode_concat(list_path, output_path)
+          end
+        end
+      end
+    after
+      File.rm_rf!(work_dir)
+    end
+  end
+
+  defp reencode_concat(list_path, output_path, opts \\ []) do
+    subtitle_path = Keyword.get(opts, :subtitle_path)
+
+    # ffmpeg subtitles filter needs forward-slashes even on Windows, and single
+    # quotes around any path containing special chars.
+    vf_arg =
+      if subtitle_path do
+        # Escape backslashes & colons for Windows paths inside filter strings
+        escaped = subtitle_path |> String.replace("\\", "/") |> String.replace(":", "\\:")
+        "subtitles='#{escaped}':force_style='Fontsize=22,PrimaryColour=&Hffffff&,Outline=2,BorderStyle=1'"
+      else
+        nil
+      end
+
+    base = [
+      "-y",
+      "-f",
+      "concat",
+      "-safe",
+      "0",
+      "-i",
+      list_path,
+      "-c:v",
+      "libx264",
+      "-pix_fmt",
+      "yuv420p",
+      "-c:a",
+      "aac"
+    ]
+
+    args =
+      if vf_arg do
+        base ++ ["-vf", vf_arg, output_path]
+      else
+        base ++ [output_path]
+      end
+
+    case System.cmd("ffmpeg", args, stderr_to_stdout: true) do
+      {_, 0} ->
+        if File.exists?(output_path) do
+          {:ok, output_path}
+        else
+          {:error, "concat re-encode produced no output"}
+        end
+
+      {out, code} ->
+        {:error, "concat re-encode exited #{code}: #{String.slice(out, -400, 400)}"}
     end
   end
 
@@ -110,6 +255,77 @@ defmodule AstraAutoEx.Media.FFmpeg do
   rescue
     _ -> false
   end
+
+  @doc """
+  Convert a still image (local path or http(s) URL) into an mp4 video clip
+  of the given duration. Used by VideoCompose as a fallback when panels have
+  images but no generated video yet.
+  """
+  @spec image_to_video(String.t(), number(), String.t()) :: {:ok, String.t()} | {:error, String.t()}
+  def image_to_video(image_source, duration_seconds, output_path) do
+    with {:ok, local_image} <- ensure_local_file(image_source, ".jpg") do
+      args = [
+        "-y",
+        # loop the single image as source
+        "-loop",
+        "1",
+        "-i",
+        local_image,
+        # silent audio so the clip has an audio track compatible with later concat/mixing
+        "-f",
+        "lavfi",
+        "-i",
+        "anullsrc=channel_layout=stereo:sample_rate=44100",
+        "-t",
+        to_string(duration_seconds),
+        "-c:v",
+        "libx264",
+        "-tune",
+        "stillimage",
+        "-pix_fmt",
+        "yuv420p",
+        # pad to even dimensions (libx264 requires)
+        "-vf",
+        "scale=trunc(iw/2)*2:trunc(ih/2)*2",
+        "-c:a",
+        "aac",
+        "-shortest",
+        output_path
+      ]
+
+      case System.cmd("ffmpeg", args, stderr_to_stdout: true) do
+        {_, 0} -> {:ok, output_path}
+        {out, code} -> {:error, "ffmpeg image→video exited #{code}: #{String.slice(out, -400, 400)}"}
+      end
+    end
+  end
+
+  # If the source is an http(s) URL, download it to a temp file.
+  # If it's a local file, return as-is.
+  defp ensure_local_file("http" <> _ = url, default_ext) do
+    ext =
+      case Path.extname(URI.parse(url).path || "") do
+        e when byte_size(e) > 0 and byte_size(e) <= 5 -> e
+        _ -> default_ext
+      end
+
+    tmp = Path.join(System.tmp_dir!(), "astra-img-#{:erlang.unique_integer([:positive])}#{ext}")
+
+    case Req.get(url, receive_timeout: 30_000, retry: false) do
+      {:ok, %{status: 200, body: body}} ->
+        File.write!(tmp, body)
+        {:ok, tmp}
+
+      {:ok, %{status: status}} ->
+        {:error, "download failed: HTTP #{status}"}
+
+      {:error, reason} ->
+        {:error, "download error: #{inspect(reason)}"}
+    end
+  end
+
+  defp ensure_local_file(path, _default_ext) when is_binary(path), do: {:ok, path}
+  defp ensure_local_file(_, _), do: {:error, "invalid image source"}
 
   @doc "Generate SRT subtitle file from voice line maps."
   @spec generate_srt([map()], String.t()) :: :ok | {:error, any()}
@@ -275,11 +491,20 @@ defmodule AstraAutoEx.Media.FFmpeg do
       )
 
     Logger.info("[FFmpeg] filter_complex: #{length(filters)} rules")
-    run_ffmpeg(args)
 
-    case File.exists?(output_path) do
-      true -> {:ok, output_path}
-      false -> {:error, "FFmpeg completed but output file not found"}
+    case run_ffmpeg(args) do
+      {:ok, _} ->
+        case File.exists?(output_path) do
+          true ->
+            {:ok, output_path}
+
+          false ->
+            {:error, "FFmpeg exited 0 but output file not created (no-op filter graph?)"}
+        end
+
+      {:error, reason} ->
+        Logger.error("[FFmpeg] #{reason}")
+        {:error, reason}
     end
   end
 

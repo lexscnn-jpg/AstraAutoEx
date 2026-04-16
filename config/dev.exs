@@ -73,6 +73,9 @@ config :astra_auto_ex, dev_routes: true
 # Do not include metadata nor timestamps in development logs
 config :logger, :default_formatter, format: "[$level] $message\n"
 
+# 抑制 Ecto 高频 SQL 日志（TaskScheduler 轮询会刷屏），仅保留 :info 及以上
+config :logger, level: :info
+
 # Set a higher stacktrace during development. Avoid configuring such
 # in production as building large stacktraces may be expensive.
 config :phoenix, :stacktrace_depth, 20

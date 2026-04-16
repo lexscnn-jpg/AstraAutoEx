@@ -39,7 +39,10 @@ defmodule AstraAutoEx.Workers.Handlers.VideoPanel do
     base_model = model_config["model"]
 
     request = %{
+      # MiniMax reads :first_frame_image; API易/ARK might use :image_url.
+      # Set both so whichever provider runs picks the right one.
       image_url: panel.image_url,
+      first_frame_image: panel.image_url,
       prompt: prompt,
       model: base_model,
       model_id: base_model,
@@ -51,7 +54,9 @@ defmodule AstraAutoEx.Workers.Handlers.VideoPanel do
     {request, has_fl_ref} =
       cond do
         payload["last_frame_image_url"] ->
-          {Map.put(request, :last_frame_image_url, payload["last_frame_image_url"]), true}
+          {request
+           |> Map.put(:last_frame_image_url, payload["last_frame_image_url"])
+           |> Map.put(:last_frame_image, payload["last_frame_image_url"]), true}
 
         payload["fl_mode"] && payload["next_panel_id"] ->
           next_panel = Production.get_panel!(payload["next_panel_id"])
@@ -85,6 +90,7 @@ defmodule AstraAutoEx.Workers.Handlers.VideoPanel do
             req =
               request
               |> Map.put(:last_frame_image_url, next_panel.image_url)
+              |> Map.put(:last_frame_image, next_panel.image_url)
               |> Map.put(:prompt, fl_prompt)
 
             {req, true}
@@ -93,16 +99,37 @@ defmodule AstraAutoEx.Workers.Handlers.VideoPanel do
           end
 
         true ->
-          {request, false}
+          # Auto-FL: if this panel has a neighbor in the same storyboard, use its
+          # image as the last frame. This enables veo-3.1-fl first-last-frame mode
+          # without the caller explicitly setting fl_mode.
+          case find_next_panel_image(panel) do
+            nil ->
+              {request, false}
+
+            next_image ->
+              req =
+                request
+                |> Map.put(:last_frame_image_url, next_image)
+                |> Map.put(:last_frame_image, next_image)
+
+              {req, true}
+          end
       end
 
-    # Apply model name suffixes for API易 providers
-    model_with_suffix = apply_model_suffix(base_model, aspect_ratio, has_fl_ref)
+    # Model name stays as base_model. Each provider is responsible for its own
+    # transformations:
+    #   - apiyi.ex transform_veo_model/1 inserts -landscape (for 16:9 etc) AND
+    #     -fl (when reference image present), in the correct order
+    #     ("veo-3.1-landscape-fast-fl" not "veo-3.1-fast-landscape-fl").
+    #   - MiniMax/ARK don't need suffixes.
+    # Silence unused-var warnings for aspect_ratio / has_fl_ref:
+    _ = aspect_ratio
+    _ = has_fl_ref
 
     request =
       request
-      |> Map.put(:model, model_with_suffix)
-      |> Map.put(:model_id, model_with_suffix)
+      |> Map.put(:model, base_model)
+      |> Map.put(:model_id, base_model)
 
     Helpers.update_progress(task, 40)
 
@@ -114,12 +141,29 @@ defmodule AstraAutoEx.Workers.Handlers.VideoPanel do
         {:ok, %{video_url: url}}
 
       {:ok, %{external_id: ext_id} = result} ->
+        # Async MiniMax video task — stay in processing state.
+        # AsyncPollWorker will poll external_id until completion and then
+        # call complete_video/3 which writes panel.video_url.
         Tasks.update_task(task, %{external_id: ext_id})
-        {:ok, result}
+        {:async, result}
 
       {:error, reason} ->
         {:error, reason}
     end
+  end
+
+  # Find the panel after this one (in panel_index order, same storyboard) with
+  # a valid image_url. Used for auto first-last-frame mode: VEO 3.1 -fl variants
+  # need a last-frame reference, and using the next panel's image gives smooth
+  # transitions "for free".
+  defp find_next_panel_image(panel) do
+    Production.list_panels(panel.storyboard_id)
+    |> Enum.sort_by(& &1.panel_index)
+    |> Enum.drop_while(&(&1.id != panel.id))
+    |> Enum.drop(1)
+    |> Enum.find_value(fn p ->
+      if is_binary(p.image_url) and p.image_url != "", do: p.image_url, else: nil
+    end)
   end
 
   # Apply model name suffixes based on aspect ratio and FL mode.
@@ -230,9 +274,17 @@ defmodule AstraAutoEx.Workers.Handlers.LipSync do
 
     panel = Production.get_panel!(panel_id)
 
-    # Resolve video and audio URLs
+    # Resolve video and audio URLs.
+    # NOTE: Panel has no :audio_url column — audio lives on VoiceLine (panel has_one VoiceLine
+    # via panel_id or matched_panel_id). Resolve it explicitly.
     video_url = payload["video_url"] || panel.video_url
-    audio_url = payload["audio_url"] || panel.audio_url
+
+    audio_url =
+      payload["audio_url"] ||
+        case Production.voice_line_for_panel(panel.id) do
+          %{audio_url: url} when is_binary(url) and url != "" -> url
+          _ -> nil
+        end
 
     unless video_url && video_url != "" do
       {:error, "Panel has no video. Generate video first."}
@@ -309,27 +361,67 @@ defmodule AstraAutoEx.Workers.Handlers.VideoCompose do
 
     Helpers.update_progress(task, 10)
 
-    # Collect all panel videos in order
-    panel_videos =
+    # Collect all panel media (video preferred, image as fallback for static clip).
+    # Storyboard has no explicit order field → use inserted_at.
+    # Panel uses :panel_index (not :sort_order).
+    # Panel has no :audio_url or :duration — audio comes from voice_lines, duration is a fixed default.
+    panel_media =
       storyboards
-      |> Enum.sort_by(& &1.sort_order)
+      |> Enum.sort_by(& &1.inserted_at, NaiveDateTime)
       |> Enum.flat_map(fn sb ->
         Production.list_panels(sb.id)
-        |> Enum.sort_by(& &1.sort_order)
+        |> Enum.sort_by(& &1.panel_index)
         |> Enum.map(fn panel ->
           %{
             panel_id: panel.id,
             video_url: panel.video_url,
-            audio_url: panel.audio_url,
-            duration: panel.duration || 5.0
+            image_url: panel.image_url,
+            duration: 4.0
           }
         end)
       end)
-      |> Enum.filter(fn p -> p.video_url && p.video_url != "" end)
+      |> Enum.filter(fn p ->
+        has_video = is_binary(p.video_url) and p.video_url != ""
+        has_image = is_binary(p.image_url) and p.image_url != ""
+        has_video or has_image
+      end)
 
-    if Enum.empty?(panel_videos) do
-      {:error, "No panel videos available for composition"}
+    if Enum.empty?(panel_media) do
+      {:error, "No panel images or videos available for composition"}
     else
+      # For panels without video, render a still-image clip on the fly
+      upload_dir_tmp = Application.get_env(:astra_auto_ex, :upload_dir, "priv/uploads")
+      static_dir = Path.join(upload_dir_tmp, "compose_static")
+      File.mkdir_p!(static_dir)
+
+      panel_videos =
+        panel_media
+        |> Enum.map(fn p ->
+          cond do
+            p.video_url && p.video_url != "" ->
+              %{video_url: p.video_url, duration: p.duration}
+
+            p.image_url && p.image_url != "" ->
+              still_path = Path.join(static_dir, "#{p.panel_id}.mp4")
+
+              case AstraAutoEx.Media.FFmpeg.image_to_video(p.image_url, p.duration, still_path) do
+                {:ok, path} ->
+                  %{video_url: path, duration: p.duration}
+
+                {:error, reason} ->
+                  Logger.warning(
+                    "[VideoCompose] Skipping panel #{p.panel_id} — image→video failed: #{inspect(reason)}"
+                  )
+
+                  nil
+              end
+
+            true ->
+              nil
+          end
+        end)
+        |> Enum.reject(&is_nil/1)
+
       Helpers.update_progress(task, 30)
 
       # Generate concat file for FFmpeg
@@ -356,13 +448,30 @@ defmodule AstraAutoEx.Workers.Handlers.VideoCompose do
           compose_opts
         end
 
+      # Collect voice segments (TTS audio files) to mix into the video.
+      # Each voice_line with a local upload path becomes a voice_segment with
+      # computed start_time (accumulating previous durations).
+      voice_segments = build_voice_segments(episode_id)
+
+      compose_opts =
+        if voice_segments != [] do
+          Keyword.put(compose_opts, :voice_segments, voice_segments)
+        else
+          compose_opts
+        end
+
       Helpers.update_progress(task, 50)
 
-      # Attempt real FFmpeg compose
+      # Attempt real FFmpeg compose.
+      # storage_key from Provider.generate_key contains nested subdirs (e.g.
+      # "projects/13/video/compose-..."), so we must mkdir_p on the full dirname
+      # of output_path, not just on the top-level compose/ directory.
       upload_dir = Application.get_env(:astra_auto_ex, :upload_dir, "priv/uploads")
-      output_dir = Path.join(upload_dir, "compose")
-      File.mkdir_p!(output_dir)
-      output_path = Path.join(output_dir, "#{storage_key}.mp4")
+      # storage_key already ends with ".mp4" (Provider.generate_key was called with
+      # ext: "mp4"), so don't append another extension.
+      filename = if String.ends_with?(storage_key, ".mp4"), do: storage_key, else: "#{storage_key}.mp4"
+      output_path = Path.join([upload_dir, "compose", filename])
+      File.mkdir_p!(Path.dirname(output_path))
 
       clips = Enum.map(panel_videos, fn p -> %{video_url: p.video_url, duration: p.duration} end)
 
@@ -417,4 +526,36 @@ defmodule AstraAutoEx.Workers.Handlers.VideoCompose do
       {:ok, compose_result}
     end
   end
+
+  # Convert voice_lines into %{audio_path, start_time} segments for FFmpeg.
+  # Resolves web URLs (/uploads/...) to local filesystem paths so FFmpeg can
+  # consume them directly.
+  defp build_voice_segments(episode_id) do
+    upload_dir = Application.get_env(:astra_auto_ex, :upload_dir, "priv/uploads")
+
+    Production.list_voice_lines(episode_id)
+    |> Enum.filter(fn v ->
+      is_binary(v.audio_url) and v.audio_url != "" and
+        not String.starts_with?(v.audio_url, "placeholder://")
+    end)
+    |> Enum.sort_by(& &1.line_index)
+    |> Enum.reduce({[], 0.0}, fn vl, {acc, cursor} ->
+      local_path = resolve_local_audio(vl.audio_url, upload_dir)
+
+      if File.exists?(local_path) do
+        duration = vl.audio_duration || 4.0
+        seg = %{audio_path: local_path, start_time: cursor}
+        {[seg | acc], cursor + duration}
+      else
+        # File missing (network URL or deleted) — skip but still advance cursor
+        {acc, cursor + (vl.audio_duration || 0.0)}
+      end
+    end)
+    |> elem(0)
+    |> Enum.reverse()
+  end
+
+  defp resolve_local_audio("/uploads/" <> rel, upload_dir), do: Path.join(upload_dir, rel)
+  defp resolve_local_audio("http" <> _ = url, _upload_dir), do: url
+  defp resolve_local_audio(path, _upload_dir) when is_binary(path), do: path
 end

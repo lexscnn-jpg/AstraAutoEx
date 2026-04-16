@@ -151,6 +151,9 @@ defmodule AstraAutoEx.Workers.AsyncPollWorker do
     _ -> Map.new(map, fn {k, v} -> {String.to_atom(k), v} end)
   end
 
+  # Fallback for non-map values (strings, ints, etc. — leave as-is)
+  defp atomize_keys(other), do: other
+
   defp broadcast(task, event_type, payload) do
     Phoenix.PubSub.broadcast(
       AstraAutoEx.PubSub,

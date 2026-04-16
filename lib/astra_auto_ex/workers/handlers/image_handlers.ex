@@ -102,28 +102,89 @@ defmodule AstraAutoEx.Workers.Handlers.ImagePanel do
       end
     else
       # Single image mode (default)
-      case Helpers.generate_image(task.user_id, provider, request) do
-        {:ok, %{status: :completed, image_urls: [url | _]}} ->
-          Production.update_panel(panel, %{image_url: url})
-          Helpers.update_progress(task, 95)
-          maybe_auto_trigger_video_voice(task, episode)
-          {:ok, %{image_url: url}}
-
-        {:ok, %{status: :completed, image_url: url}} when is_binary(url) ->
-          Production.update_panel(panel, %{image_url: url})
-          Helpers.update_progress(task, 95)
-          maybe_auto_trigger_video_voice(task, episode)
-          {:ok, %{image_url: url}}
-
-        {:ok, %{external_id: ext_id} = result} ->
-          Tasks.update_task(task, %{external_id: ext_id, status: "processing"})
-          {:ok, result}
-
-        {:error, reason} ->
-          {:error, reason}
-      end
+      single_image_attempt(task, request, provider, panel, episode)
     end
   end
+
+  # Attempt a single image generation. On sensitive-word failure, sanitize prompt
+  # and retry ONCE (providers like MiniMax return "new_sensitive" / "sensitive" /
+  # content policy errors — we try to recover without losing the task).
+  defp single_image_attempt(task, request, provider, panel, episode, retried? \\ false) do
+    case Helpers.generate_image(task.user_id, provider, request) do
+      {:ok, %{status: :completed, image_urls: [url | _]}} ->
+        Production.update_panel(panel, %{image_url: url})
+        Helpers.update_progress(task, 95)
+        maybe_auto_trigger_video_voice(task, episode)
+        {:ok, %{image_url: url}}
+
+      {:ok, %{status: :completed, image_url: url}} when is_binary(url) ->
+        Production.update_panel(panel, %{image_url: url})
+        Helpers.update_progress(task, 95)
+        maybe_auto_trigger_video_voice(task, episode)
+        {:ok, %{image_url: url}}
+
+      {:ok, %{external_id: ext_id} = result} ->
+        Tasks.update_task(task, %{external_id: ext_id, status: "processing"})
+        {:ok, result}
+
+      {:error, reason} ->
+        if not retried? and sensitive_error?(reason) do
+          Logger.warning("[ImagePanel] sensitive word in prompt, sanitizing and retrying once. reason=#{inspect(reason)}")
+          sanitized = sanitize_prompt(request.prompt)
+
+          if sanitized == request.prompt do
+            # nothing to sanitize, give up
+            {:error, reason}
+          else
+            new_req = Map.put(request, :prompt, sanitized)
+            single_image_attempt(task, new_req, provider, panel, episode, true)
+          end
+        else
+          {:error, reason}
+        end
+    end
+  end
+
+  # Detect provider responses that indicate content moderation rejection.
+  defp sensitive_error?(reason) do
+    msg = to_string_safe(reason) |> String.downcase()
+    String.contains?(msg, "sensitive") or
+      String.contains?(msg, "content_policy") or
+      String.contains?(msg, "敏感") or
+      String.contains?(msg, "violat")
+  end
+
+  defp to_string_safe(val) when is_binary(val), do: val
+  defp to_string_safe(val), do: inspect(val)
+
+  # Best-effort keyword rewriter for common flagged Chinese/English terms.
+  # Goal: keep scene intent while replacing words that tend to trigger MiniMax
+  # content policy. NOT a real NSFW filter — just a pragmatic recovery layer.
+  @sensitive_replacements [
+    # Body/marking (刺青 variants trigger "new_sensitive")
+    {~r/刺青|纹身/, "手腕花纹"},
+    # Violence / death / trauma
+    {~r/尸体|死尸/, "昏迷的人"},
+    {~r/血迹斑斑|鲜血淋漓/, "身受轻伤"},
+    {~r/鲜血/, "汗水"},
+    {~r/血/, ""},
+    {~r/杀|刺死|刺伤/, "制服"},
+    {~r/威胁|恐吓/, "严肃警告"},
+    # Weapons
+    {~r/\b(gun|knife|blade|weapon|sword)\b/, "tool"},
+    # English body/violence
+    {~r/\b(blood|corpse|dead|murder|kill|wound)\b/i, ""}
+  ]
+
+  defp sanitize_prompt(prompt) when is_binary(prompt) do
+    @sensitive_replacements
+    |> Enum.reduce(prompt, fn {pattern, replacement}, acc ->
+      String.replace(acc, pattern, replacement)
+    end)
+    |> String.trim()
+  end
+
+  defp sanitize_prompt(other), do: other
 
   defp build_panel_prompt(panel, storyboard, characters, _locations) do
     description = panel.description || ""

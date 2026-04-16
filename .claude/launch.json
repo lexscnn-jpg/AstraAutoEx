@@ -3,8 +3,8 @@
   "configurations": [
     {
       "name": "phoenix",
-      "runtimeExecutable": "mix",
-      "runtimeArgs": ["phx.server"],
+      "runtimeExecutable": "cmd.exe",
+      "runtimeArgs": ["/c", ".claude\\phx-wrapper.bat", "phx.server"],
       "port": 4000
     }
   ]

@@ -86,6 +86,7 @@ defmodule AstraAutoEx.Production do
   def get_panel!(id), do: Repo.get!(Panel, id)
   def create_panel(attrs), do: %Panel{} |> Panel.changeset(attrs) |> Repo.insert()
   def update_panel(panel, attrs), do: panel |> Panel.changeset(attrs) |> Repo.update()
+  def delete_panel(panel), do: Repo.delete(panel)
 
   @doc "Update a panel's index for drag-and-drop reordering."
   @spec update_panel_index(String.t(), integer()) ::
@@ -111,4 +112,22 @@ defmodule AstraAutoEx.Production do
   def get_voice_line!(id), do: Repo.get!(VoiceLine, id)
   def create_voice_line(attrs), do: %VoiceLine{} |> VoiceLine.changeset(attrs) |> Repo.insert()
   def update_voice_line(vl, attrs), do: vl |> VoiceLine.changeset(attrs) |> Repo.update()
+
+  @doc """
+  Return the most relevant voice line for a panel.
+  Priority:
+    1. VoiceLine where `panel_id == panel.id`
+    2. VoiceLine where `matched_panel_id == panel.id`
+  Returns nil if none found.
+  """
+  def voice_line_for_panel(panel_id) do
+    q =
+      from(v in VoiceLine,
+        where: v.panel_id == ^panel_id or v.matched_panel_id == ^panel_id,
+        order_by: [asc: v.line_index],
+        limit: 1
+      )
+
+    Repo.one(q)
+  end
 end

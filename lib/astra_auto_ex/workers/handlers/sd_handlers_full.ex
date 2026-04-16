@@ -89,6 +89,7 @@ defmodule AstraAutoEx.Workers.Handlers.ShortDrama do
   defp build_bindings("sd_topic_selection", payload) do
     {:ok,
      %{
+       topic_keyword: payload["topic_keyword"] || payload["input_text"] || "",
        genre_preferences: payload["genre_preferences"] || "all",
        target_audience: payload["target_audience"] || "18-35 female",
        platform: payload["platform"] || "douyin"
@@ -98,7 +99,9 @@ defmodule AstraAutoEx.Workers.Handlers.ShortDrama do
   defp build_bindings("sd_story_outline", payload) do
     {:ok,
      %{
-       topic_report: payload["topic_report"] || payload["input_text"] || "",
+       topic_report:
+         payload["topic_report"] || payload["input_text"] ||
+           load_previous_result(payload["project_id"], "sd_topic_selection"),
        episode_count: payload["episode_count"] || "80",
        tone: payload["tone"] || "emotional"
      }}
@@ -107,7 +110,9 @@ defmodule AstraAutoEx.Workers.Handlers.ShortDrama do
   defp build_bindings("sd_character_dev", payload) do
     {:ok,
      %{
-       story_outline: payload["story_outline"] || payload["input_text"] || "",
+       story_outline:
+         payload["story_outline"] || payload["input_text"] ||
+           load_previous_result(payload["project_id"], "sd_story_outline"),
        genre: payload["genre"] || "romance"
      }}
   end
@@ -115,8 +120,11 @@ defmodule AstraAutoEx.Workers.Handlers.ShortDrama do
   defp build_bindings("sd_episode_directory", payload) do
     {:ok,
      %{
-       story_outline: payload["story_outline"] || payload["input_text"] || "",
-       characters: payload["characters"] || "",
+       story_outline:
+         payload["story_outline"] || payload["input_text"] ||
+           load_previous_result(payload["project_id"], "sd_story_outline"),
+       characters:
+         payload["characters"] || load_previous_result(payload["project_id"], "sd_character_dev"),
        episode_count: payload["episode_count"] || "80"
      }}
   end
@@ -161,6 +169,36 @@ defmodule AstraAutoEx.Workers.Handlers.ShortDrama do
   defp build_bindings(unknown, _payload) do
     {:error, "No bindings builder for step: #{unknown}"}
   end
+
+  # Look up the most recent completed task of a given type within a project,
+  # return its raw LLM output (or "" if none). Used for auto-chaining so
+  # step N can read step N-1's output without the caller having to pass it.
+  defp load_previous_result(nil, _type), do: ""
+
+  defp load_previous_result(project_id, prev_type) when is_binary(project_id) do
+    load_previous_result(String.to_integer(project_id), prev_type)
+  rescue
+    _ -> ""
+  end
+
+  defp load_previous_result(project_id, prev_type) when is_integer(project_id) do
+    import Ecto.Query, only: [from: 2]
+
+    q =
+      from(t in AstraAutoEx.Tasks.Task,
+        where:
+          t.project_id == ^project_id and t.type == ^prev_type and t.status == "completed",
+        order_by: [desc: t.finished_at],
+        limit: 1
+      )
+
+    case AstraAutoEx.Repo.one(q) do
+      %{result: %{"raw" => raw}} when is_binary(raw) -> raw |> String.slice(0..5999)
+      _ -> ""
+    end
+  end
+
+  defp load_previous_result(_, _), do: ""
 
   # --------------------------------------------------------------------------
   # Prompt loading

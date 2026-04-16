@@ -34,7 +34,7 @@
             >
               <path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" />
             </svg>
-            Beta v0.9.0
+            Beta v0.9.8
           </button>
         </div>
 
@@ -86,6 +86,16 @@
                 <path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z" /><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z" />
               </svg>
               {dgettext("default", "Guide")}
+            </a>
+            <a
+              href={~p"/short-drama"}
+              class="nav-link flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm text-[var(--glass-text-secondary)] hover:text-[var(--glass-text-primary)] hover:bg-[var(--glass-bg-muted)] transition-all"
+              title="短剧工作台"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.59 14.37a6 6 0 01-5.84 7.38v-4.8m5.84-2.58a14.98 14.98 0 006.16-12.12A14.98 14.98 0 009.631 8.41m5.96 5.96a14.926 14.926 0 01-5.841 2.58m-.119-8.54a6 6 0 00-7.381 5.84h4.8m2.581-5.84a14.927 14.927 0 00-2.58 5.84m2.699 2.7c-.103.021-.207.041-.311.06a15.09 15.09 0 01-2.448-2.448 14.9 14.9 0 01.06-.312m-2.24 2.39a4.493 4.493 0 00-1.757 4.306 4.493 4.493 0 004.306-1.758M16.5 9a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" />
+              </svg>
+              短剧
             </a>
             <a
               href={~p"/assistant"}
@@ -231,14 +241,212 @@
         </div>
 
         <div class="flex-1 overflow-y-auto px-6 py-4 space-y-6 text-sm">
-          <%!-- v0.9.0 --%>
+          <%!-- v0.9.8 --%>
           <div>
             <div class="flex items-center gap-2 mb-2">
               <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-500/20 text-green-400">
                 最新
               </span>
-              <span class="font-bold text-[var(--glass-text-primary)]">v0.9.0</span>
+              <span class="font-bold text-[var(--glass-text-primary)]">v0.9.8</span>
               <span class="text-xs text-[var(--glass-text-tertiary)]">2026-04-16</span>
+            </div>
+            <p class="text-[10px] text-[var(--glass-text-tertiary)] mb-1.5 italic">
+              apiyi VEO 3.1 横屏首尾帧打通 + 4 个 async 链路 P0 修复
+            </p>
+            <ul class="space-y-1 text-[var(--glass-text-secondary)] list-disc list-inside text-xs">
+              <li><strong>🎬 apiyi VEO 3.1 landscape-fast-fl 真跑通</strong>：Panel 06347c45 生成 r2cdn.copilotbase.com 视频，完整异步链路打通</li>
+              <li><strong>P0 修复模型名双重 transform</strong>：handler 里 apply_model_suffix 产生 "veo-3.1-fast-landscape-fl" 错序，改为完全交给 apiyi provider 内部转换</li>
+              <li><strong>P0 修复 Req multipart 格式</strong>：build_file_part 从 3-tuple 改为 2-tuple &quot;name + data + opts&quot;，才被 Req 接受</li>
+              <li><strong>P0 修复 AsyncPoller config 查找</strong>：external_id 前缀 "OPENAI" 要先映射到 "apiyi" 再 Map.get，之前 config 永远是 %{}</li>
+              <li><strong>P0 修复 external_id 解析</strong>：apiyi 用 "OPENAI:VIDEO:token:video_id" 4 段格式，解析时剥离 base64 token 拿真正的 video_id</li>
+              <li><strong>修 header content-type list 格式</strong>：新版 Req 返回 list 而非 string，pattern match 加 list 分支</li>
+              <li><strong>VideoPanel auto-FL 模式</strong>：新增 find_next_panel_image/1，自动用下一 panel image 作为 last_frame</li>
+              <li><strong>🎞️ 4.5MB 混合视频合成</strong>：2 真 AI 视频（1 MiniMax + 1 apiyi VEO）+ 11 静态图 + 字幕 + TTS，比 v0.9.7 多 1.1MB</li>
+              <li><strong>观察</strong>：VEO 3.1 对"少女"类场景触发内容审核误判（3/3 批量失败），需 prompt/image 规避或等模型更新</li>
+            </ul>
+          </div>
+
+          <%!-- v0.9.7 --%>
+          <div>
+            <div class="flex items-center gap-2 mb-2">
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/20 text-blue-400">
+                历史
+              </span>
+              <span class="font-bold text-[var(--glass-text-primary)]">v0.9.7</span>
+              <span class="text-xs text-[var(--glass-text-tertiary)]">2026-04-16</span>
+            </div>
+            <p class="text-[10px] text-[var(--glass-text-tertiary)] mb-1.5 italic">
+              混合 AI 视频合成 + 短剧 3 步串联 + 分享页上线
+            </p>
+            <ul class="space-y-1 text-[var(--glass-text-secondary)] list-disc list-inside text-xs">
+              <li><strong>🎬 混合 AI 视频合成</strong>：1 真 MiniMax 视频 + 12 静态图 + 字幕 + 中文旁白 → 3.4MB / 52s 完整短剧</li>
+              <li><strong>🎭 短剧 3 步链验证</strong>：sd_topic_selection → sd_story_outline → sd_character_dev 连续完成，上下文通过 load_previous_result 串联</li>
+              <li><strong>🔗 视频分享页上线</strong>：/m/:public_id 路由渲染 HTML5 video + 标题，首个 episode 分享 URL 已发布</li>
+              <li><strong>批量触发 11 个 video_panel 任务</strong>：并发提交，2 成功 9 失败（MiniMax 额度/RPM）</li>
+              <li><strong>模型配置修正</strong>：user_preferences 默认 video 模型 minimax-hailuo-2.3 → MiniMax-Hailuo-2.3（API 接受大写）</li>
+              <li><strong>VideoCompose 图像 fallback 自动混合</strong>：有 video_url 的用真视频，没有的图像转片段，混合 concat</li>
+            </ul>
+          </div>
+
+          <%!-- v0.9.6 --%>
+          <div>
+            <div class="flex items-center gap-2 mb-2">
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/20 text-blue-400">
+                历史
+              </span>
+              <span class="font-bold text-[var(--glass-text-primary)]">v0.9.6</span>
+              <span class="text-xs text-[var(--glass-text-tertiary)]">2026-04-16</span>
+            </div>
+            <p class="text-[10px] text-[var(--glass-text-tertiary)] mb-1.5 italic">
+              真实 MiniMax I2V 视频 + 短剧串联 + 4 个 P0 修复
+            </p>
+            <ul class="space-y-1 text-[var(--glass-text-secondary)] list-disc list-inside text-xs">
+              <li><strong>🎬 真实视频生成跑通</strong>：MiniMax-Hailuo-2.3 异步 I2V，panel 获得真 MP4 URL（OSS CDN）</li>
+              <li><strong>P0: TaskRunner 增加 :async 返回语义</strong>：handler 返回 async tuple 时保留 processing 状态，让 AsyncPollWorker 接管轮询</li>
+              <li><strong>P0: atomize_keys/1 对非 map 崩</strong>：AsyncPollWorker build_user_config 在 config value 不是 map 时 FunctionClauseError → 加 fallback</li>
+              <li><strong>P0: apply_model_suffix 只对 API易</strong>：之前给 MiniMax 加 -landscape/-fl 后缀导致 "invalid params, incorrect model param input"</li>
+              <li><strong>P0: first_frame_image 字段映射</strong>：VideoPanel 传 :image_url 但 MiniMax 读 :first_frame_image → handler 同时设置两个字段</li>
+              <li><strong>短剧 build_bindings 补 topic_keyword</strong>：之前 sd_topic_selection 没读 topic_keyword，LLM 只能用默认 prompt</li>
+              <li><strong>短剧步骤自动串联</strong>：新增 load_previous_result/2 — story_outline 自动读 topic_selection 的 raw 输出作上下文</li>
+              <li><strong>MiniMax 视频模型探测</strong>：已验证可用 T2V 模型是 MiniMax-Hailuo-2.3；I2V-01/Director/live 需 first_frame_image</li>
+            </ul>
+          </div>
+
+          <%!-- v0.9.5 --%>
+          <div>
+            <div class="flex items-center gap-2 mb-2">
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/20 text-blue-400">
+                历史
+              </span>
+              <span class="font-bold text-[var(--glass-text-primary)]">v0.9.5</span>
+              <span class="text-xs text-[var(--glass-text-tertiary)]">2026-04-16</span>
+            </div>
+            <p class="text-[10px] text-[var(--glass-text-tertiary)] mb-1.5 italic">
+              真实 TTS + 有声视频合成 + 短剧 LLM 跑通 + 依赖锁定
+            </p>
+            <ul class="space-y-1 text-[var(--glass-text-secondary)] list-disc list-inside text-xs">
+              <li><strong>🎙️ 真实 TTS 跑通</strong>：5 条中文旁白 → 32kHz mono WAV 文件，每条 4.47s / 166-281KB</li>
+              <li><strong>P0 修复 MiniMax TTS 路径</strong>：get_in 用 Access.get 崩溃 → 改用 pattern match + save_hex_as_wav 保存到 /uploads/voice/</li>
+              <li><strong>🎬 有声视频合成</strong>：项目 13 产出 **2.6MB / 48.2s / H.264 视频流 + AAC 44.1kHz stereo 音频流**（比纯图片版大 0.4MB）</li>
+              <li><strong>VideoCompose 新增 build_voice_segments/1</strong>：自动从 voice_lines 聚合 audio_path + start_time，传 FFmpeg filter_complex</li>
+              <li><strong>resolve_local_audio/2</strong>：把 `/uploads/voice/xxx.wav` 映射到本地文件系统路径供 FFmpeg 消费</li>
+              <li><strong>🎭 短剧 sd_topic_selection 真跑成功</strong>：MiniMax LLM 返回 title_candidates + genre + target_audience + tone + episode_count 完整 JSON</li>
+              <li><strong>短剧卡片 UI 增强</strong>：依赖锁定（1→2→3→4→5，5→6/7/8），锁定卡片 🔒 标签 + opacity-60 + 按钮 disabled</li>
+              <li><strong>短剧结果展示</strong>：task.result 完成后显示"查看结果 ▼"按钮，展开显示 LLM raw text（font-mono + max-h-60 滚动）</li>
+              <li><strong>toggle_result / expanded MapSet</strong>：用户可以折叠/展开每步结果独立控制</li>
+            </ul>
+          </div>
+
+          <%!-- v0.9.4 --%>
+          <div>
+            <div class="flex items-center gap-2 mb-2">
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/20 text-blue-400">
+                历史
+              </span>
+              <span class="font-bold text-[var(--glass-text-primary)]">v0.9.4</span>
+              <span class="text-xs text-[var(--glass-text-tertiary)]">2026-04-16</span>
+            </div>
+            <p class="text-[10px] text-[var(--glass-text-tertiary)] mb-1.5 italic">
+              字幕 burn-in + 短剧 8 任务 UI + Panel 编辑器验证 + LipSync schema 修复
+            </p>
+            <ul class="space-y-1 text-[var(--glass-text-secondary)] list-disc list-inside text-xs">
+              <li><strong>🎉 字幕烧录成功</strong>：帧截图验证白字黑描边中文字幕"[旁白] 雨夜，一个疲惫的身影出现在车库入口"烧到画面底部</li>
+              <li><strong>simple_concat 支持字幕</strong>：有 subtitle_path 时走 reencode_concat + subtitles filter 路径</li>
+              <li><strong>subtitles filter Windows 路径</strong>：反斜杠→正斜杠 + 冒号转义，force_style ASS 样式</li>
+              <li><strong>短剧 8 任务 UI 入口</strong>：新路由 /short-drama + 2x4 卡片网格（选题/大纲/角色/目录/剧本/质检/合规/出海）+ nav 链接</li>
+              <li><strong>短剧卡片状态</strong>：每步绑定最新 task 实例，显示 已完成/运行中/失败/排队中 chip + 进度%</li>
+              <li><strong>LipSync schema 预防性修复</strong>：Panel 无 :audio_url → 新增 Production.voice_line_for_panel/1 从 VoiceLine 表读 audio</li>
+              <li><strong>Panel 编辑器验证</strong>：DB round-trip 测试 7 字段（description/shot_type/camera_move/location/characters/photography_rules/acting_notes）全部正确写入</li>
+              <li><strong>审计</strong>：项目 13 首次跑出带字幕的 48 秒 2.2MB mp4，1280x720 H.264</li>
+            </ul>
+          </div>
+
+          <%!-- v0.9.3 --%>
+          <div>
+            <div class="flex items-center gap-2 mb-2">
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/20 text-blue-400">
+                历史
+              </span>
+              <span class="font-bold text-[var(--glass-text-primary)]">v0.9.3</span>
+              <span class="text-xs text-[var(--glass-text-tertiary)]">2026-04-16</span>
+            </div>
+            <p class="text-[10px] text-[var(--glass-text-tertiary)] mb-1.5 italic">
+              Compose 端到端跑通 + 敏感词自愈 + sync_global_assets 验证
+            </p>
+            <ul class="space-y-1 text-[var(--glass-text-secondary)] list-disc list-inside text-xs">
+              <li><strong>🎉 真实视频合成</strong>：项目 13 首次产出 2.2MB/48.2 秒完整 mp4（12 个面板静态图→动态片段→concat）</li>
+              <li><strong>新增 FFmpeg.image_to_video/3</strong>：静态图像转 4 秒 mp4 片段（libx264 + stillimage tune + 静音轨）</li>
+              <li><strong>新增 FFmpeg.simple_concat/2</strong>：concat demuxer 作为 filter_complex 失败的回退</li>
+              <li><strong>VideoCompose 接入图像回退</strong>：无 video_url 时从 image_url 渲染静态片段</li>
+              <li><strong>P0 修复 schema 不一致</strong>：Storyboard 用 inserted_at 排序（无 sort_order 字段），Panel 用 panel_index（非 sort_order）</li>
+              <li><strong>P0 修复输出路径</strong>：output_path 含嵌套子目录 projects/N/video/...，补 File.mkdir_p 到 dirname</li>
+              <li><strong>P0 修复 or/||</strong>：Elixir `or` 严格要 boolean，已改为 `is_binary && "" !=` + `or`</li>
+              <li><strong>sync_global_assets 验证</strong>：新项目 14 → characters 表出现"苏晚"/"玄墨"两条全局记录</li>
+              <li><strong>ImagePanel 敏感词自愈</strong>：捕获 "sensitive"/"content_policy"/"敏感" 错误，用关键词替换表重写 prompt 重试一次</li>
+              <li><strong>run_ffmpeg 错误传播</strong>：不再吞 ffmpeg stderr，真实错误出现在 task.error_message</li>
+              <li><strong>LLM prompt 增强</strong>：screenplay prompt 显式要求 clip-level characters/location 数组</li>
+            </ul>
+          </div>
+
+          <%!-- v0.9.2 --%>
+          <div>
+            <div class="flex items-center gap-2 mb-2">
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/20 text-blue-400">
+                历史
+              </span>
+              <span class="font-bold text-[var(--glass-text-primary)]">v0.9.2</span>
+              <span class="text-xs text-[var(--glass-text-tertiary)]">2026-04-16</span>
+            </div>
+            <p class="text-[10px] text-[var(--glass-text-tertiary)] mb-1.5 italic">
+              全管线真实 API 跑通 + 数据层修复 + UI 打磨
+            </p>
+            <ul class="space-y-1 text-[var(--glass-text-secondary)] list-disc list-inside text-xs">
+              <li><strong>端到端 MiniMax 实跑</strong>：项目 13 从故事→剧本→分镜→图像全流程跑通，13 面板 11 成功生成图像</li>
+              <li><strong>P0 数据修复</strong>：persist_script_results 字段映射错误（传 title/sort_order 被静默丢弃）— 改走正确 clip schema</li>
+              <li><strong>LLM 数组 → schema string</strong>：to_string_field 应用于 characters/location/props（解决 cast 静默失败导致 nil）</li>
+              <li><strong>sync_global_assets</strong>：从 clips 聚合写入全局 characters/locations 表（剧本阶段右侧不再空）</li>
+              <li><strong>Panel 删除按钮</strong>：分镜卡片 hover 3 按钮（生成/编辑/删除），delete_panel 事件打通</li>
+              <li><strong>Watchdog 阈值</strong>：5 分钟 → 10 分钟（避免 script_to_storyboard 在长任务时被误判为 stale）</li>
+              <li><strong>TypewriterHero 多句</strong>：data-texts 支持 "|" 分隔多句，循环打字删除 5 个创意场景</li>
+              <li><strong>AiWriteModal 4 阶段</strong>：新增独立 :error 阶段（红色 alert + 重试按钮），不再只 put_flash</li>
+              <li><strong>长文本提示条</strong>：故事 > 1000 字自动显示橙色提示，建议使用集数下拉进行分集</li>
+              <li><strong>music_generate 死代码清理</strong>：删除错误复用 poll_task 的分支（4 个类型警告全消）</li>
+            </ul>
+          </div>
+
+          <%!-- v0.9.1 --%>
+          <div>
+            <div class="flex items-center gap-2 mb-2">
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/20 text-blue-400">
+                历史
+              </span>
+              <span class="font-bold text-[var(--glass-text-primary)]">v0.9.1</span>
+              <span class="text-xs text-[var(--glass-text-tertiary)]">2026-04-16</span>
+            </div>
+            <p class="text-[10px] text-[var(--glass-text-tertiary)] mb-1.5 italic">
+              像素级重构使之能用 — 启动链路打通 + 5阶段端到端验证
+            </p>
+            <ul class="space-y-1 text-[var(--glass-text-secondary)] list-disc list-inside text-xs">
+              <li><strong>启动修复</strong>：start.bat 绕过 Device Guard 拦截 Erlang shim（PATH 优先 Program Files）</li>
+              <li><strong>P0 剧本阶段崩溃修复</strong>：clip.title / char.image_url / loc.image_url / char.description 字段不存在导致 KeyError</li>
+              <li><strong>新增 helpers</strong>：character_thumb/1 + location_thumb/1（从 has_many 关联安全取首图）</li>
+              <li><strong>panel 卡片补漏</strong>：道具标签渲染（emerald 色 tag）</li>
+              <li><strong>music_generate_handler 重构</strong>：删除错误复用 poll_task 的死分支，改为同步模式</li>
+              <li><strong>TaskScheduler 频率</strong>：1 秒 → 5 秒；watchdog 30 秒 → 60 秒（开发体验+5x SQL 减负）</li>
+              <li><strong>日志级别</strong>：dev.exs 调到 :info，避免 SQL 调试日志淹没</li>
+              <li><strong>新翻译</strong>：projects 域追加 Clip 片段编号占位符模板</li>
+              <li><strong>preview launch.json</strong>：cmd.exs wrapper 让 Claude Preview 工具能直接启动 Phoenix</li>
+            </ul>
+          </div>
+
+          <%!-- v0.9.0 --%>
+          <div>
+            <div class="flex items-center gap-2 mb-2">
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/20 text-blue-400">
+                历史
+              </span>
+              <span class="font-bold text-[var(--glass-text-primary)]">v0.9.0</span>
+              <span class="text-xs text-[var(--glass-text-tertiary)]">2026-04-15</span>
             </div>
             <p class="text-[10px] text-[var(--glass-text-tertiary)] mb-1.5 italic">
               灵魂补全 — 核心管线逻辑 + 5阶段UI全面对齐原项目

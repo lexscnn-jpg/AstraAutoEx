@@ -83,8 +83,100 @@ AstraAutoEx 是 AI 驱动的短剧/漫画视频生产平台，从 Next.js 原项
 4. **制作 (film)** — video_stage: 视频/配音生成 + 重试
 5. **AI 剪辑 (compose)** — compose_stage: 左右分栏（面板选择+设置 | 预览+导出）
 
-## 当前项目状态 (v0.9.0)
-- 最后完成: v0.9.0 灵魂补全 — 核心管线逻辑 + 缺失Handler + FFmpeg增强 + AutoChain DAG + 33翻译域 (2026-04-15)
+## 当前项目状态 (v0.9.8)
+- 最后完成: **v0.9.8 apiyi VEO 3.1 横屏首尾帧打通 + 4 个 async 链路 P0 修复** (2026-04-16)
+  - **v0.9.8 (2026-04-16) — 第二个视频 provider 全链路跑通**:
+  - 🎬 **apiyi VEO 3.1 真跑通**：Panel 06347c45 产出 `https://r2cdn.copilotbase.com/r2cdn2/59638cab-5a70-4a0b-9445-4c2af4d17d9a.mp4`，apiyi 横屏首尾帧异步完整链路打通
+  - 🔴 P0 模型名双重 transform：handler 里 apply_model_suffix 产生错序 `veo-3.1-fast-landscape-fl`，改为完全让 apiyi provider 内部 `transform_veo_model/1` 处理（生成正确的 `veo-3.1-landscape-fast-fl`）
+  - 🔴 P0 Req multipart 2-tuple 格式：`build_file_part` 从 `{field, filename, data, opts}` 改为 `{field, {data, [filename:, content_type:]}}`
+  - 🔴 P0 AsyncPoller config 查找：external_id prefix "OPENAI" 要先 `provider_key_from_prefix` 映射到 "apiyi" 再 `Map.get(user_config, key, %{})`，之前 config 永远空崩 api_key fetch
+  - 🔴 P0 external_id 4 段解析：apiyi 格式 `OPENAI:VIDEO:base64_token:video_id`，AsyncPoller 新增 token 剥离逻辑（Base.url_decode64 确认是 token 才剥）
+  - 🟢 header content-type list pattern：Req 新版 header value 可能是 list，加 `{"content-type", [ct | _]} when is_binary(ct)` 分支
+  - 🟢 VideoPanel auto-FL：新增 `find_next_panel_image/1`，默认找下一 panel image 作为 last_frame 启用 VEO -fl 模式
+  - 🟢 VideoCompose 第 4 版：**4.5MB / 52s** 混合视频（2 真视频 + 11 静态图 + 字幕 + TTS），比 v0.9.7 多 1.1MB
+  - 🔍 **观察**：VEO 3.1 对"少女/young woman"类场景触发内容审核（3/3 批量失败），需要 prompt 规避策略
+- 历史: v0.9.7 混合 AI 视频合成 + 短剧 3 步串联 + 视频分享页上线 (2026-04-16)
+  - **v0.9.7 (2026-04-16) — 端到端 AI 短剧链路验证完成**:
+  - 🎬 **混合 AI 视频合成**：1 真 MiniMax I2V 视频 + 12 静态图像片段 + 字幕 + 中文 TTS 旁白 → **3.4MB / 52s 完整短剧** mp4
+  - 🎭 **短剧 3 步串联实测**：sd_topic_selection 已完成（"闪婚后，傅总真香了"等）→ sd_story_outline 通过 load_previous_result 获取上下文生成 "消失的丈夫" 悬疑大纲 → sd_character_dev 生成"陆景琛"角色卡
+  - 🔗 **视频分享页发布**：/m/dueS9TfqTgA 渲染 HTML5 video + 剧集标题，可无需登录访问
+  - 📊 **V1 批量 11 个 video_panel 任务实测**：2 completed / 15 failed（7 "usage limit exceeded" / 4 "invalid params" 遗留 / 4 "rate limit exceeded"）— MiniMax 视频生成额度有限
+  - 🔧 user_preferences 默认 video 模型：`minimax-hailuo-2.3` → `MiniMax-Hailuo-2.3`（大写接受）
+  - ✅ V3 AutoChain 确认已实现：image_panel 全部完成后，若 `full_auto_chain=true` 自动触发 video_panel（[image_handlers.ex:320](lib/astra_auto_ex/workers/handlers/image_handlers.ex:320)）
+- 历史: v0.9.6 真实 MiniMax I2V 视频 + 短剧串联 + 4 个 P0 修复 (2026-04-16)
+  - **v0.9.6 (2026-04-16) — 真实视频生成打通 + 异步轮询流畅**:
+  - 🎬 **真实视频生成跑通**：Panel 8a88fe20 获得 MiniMax Hailuo-2.3 生成的 MP4 URL（OSS CDN）
+  - 🔴 P0 TaskRunner 加 `{:async, _}` 返回语义：handler 返回 :async 时保留 processing 状态，不走 mark_completed，让 AsyncPollWorker 接管
+  - 🔴 P0 VideoPanel 异步分支改走 `{:async, result}` 而不是 `{:ok, result}`
+  - 🔴 P0 AsyncPollWorker.atomize_keys/1 对非 map config value 崩（FunctionClauseError）→ 加 catch-all
+  - 🔴 P0 apply_model_suffix 只对 API易（VEO 模型）应用 -landscape/-fl 后缀，MiniMax/ARK 跳过（之前导致 "invalid params, incorrect model param input"）
+  - 🔴 P0 VideoPanel request 同时设 `:image_url` + `:first_frame_image`（MiniMax 读后者）
+  - 🟢 ShortDrama.build_bindings 补 `topic_keyword`（之前 sd_topic_selection 完全没读 UI 传入的关键词）
+  - 🟢 新增 `load_previous_result/2`：下游 sd_story_outline / sd_character_dev / sd_episode_directory 自动读上游 task.result.raw 作上下文
+  - 🔍 MiniMax 视频模型可用性实测：T2V 可用 `MiniMax-Hailuo-2.3`；I2V-01/Director/live 需 first_frame_image；Hailuo-02 当前 token 不支持
+- 历史: v0.9.5 真实 TTS + 有声视频合成 + 短剧 LLM 跑通 + 依赖锁定 (2026-04-16)
+  - **v0.9.5 (2026-04-16) — 视频从静音变有声、短剧从空入口到真实跑通:**
+  - 🎙️ **真实 TTS 跑通**：voice_line handler 调 MiniMax t2a_v2，5 条中文旁白→32kHz mono PCM_S16LE WAV
+  - 🔴 P0 修复 Access.get/3 崩溃：MiniMax TTS response body 用 get_in 抓 hex audio 时遇非 map 崩，改 pattern match
+  - 🆕 新增 `save_hex_as_wav/2`：Base.decode16 hex 数据 → 写 `/uploads/voice/tts-<id>.wav` → 返回 download_url
+  - 🎬 **有声视频合成**：项目 13 compose 产出 **2.6MB / 48.2s / H.264 视频 + AAC 44.1kHz stereo 音频双流**（纯图片版 2.2MB 相比多出 0.4MB 就是 TTS 音频）
+  - 🆕 VideoCompose 新增 `build_voice_segments/1`：从 voice_lines 聚合 audio_path/start_time 传 FFmpeg filter_complex
+  - 🆕 `resolve_local_audio/2`：`/uploads/voice/xxx.wav` → `priv/uploads/voice/xxx.wav` 本地路径映射
+  - 🎭 **短剧 sd_topic_selection LLM 跑通**：MiniMax 返回 `{title_candidates, genre, sub_genres, target_audience, tone, episode_count, episode_duration...}` 完整 JSON
+  - 🆕 短剧卡片依赖锁定：`@prerequisites` map 定义 1→2→3→4→5 线性依赖 + 5→6/7/8 分支；前置未完成时卡片 opacity-60 + 🔒 标签 + 按钮 disabled
+  - 🆕 短剧结果展示：完成后"查看结果 ▼" 按钮展开 LLM raw text（font-mono + max-h-60 滚动 + MapSet expanded 控制每步独立折叠）
+- 历史: v0.9.4 字幕 burn-in + 短剧 8 任务 UI + Panel 编辑器验证 + LipSync schema (2026-04-16)
+  - **v0.9.4 (2026-04-16) — 字幕烧录成功 + 短剧入口上线:**
+  - ✅ **字幕 burn-in 真实成功**：帧截图验证 "[旁白] 雨夜，一个疲惫的身影出现在车库入口" 白字黑描边烧到画面底部
+  - 🆕 `FFmpeg.simple_concat/3` 支持 subtitle_path：有字幕时走 reencode_concat + `subtitles='...':force_style='...'` filter
+  - 🆕 Windows 路径字幕 filter 适配：反斜杠→正斜杠 + 冒号转义（`C:/path` → `C\:/path`）
+  - 🆕 **短剧 8 任务 UI**：/short-drama LiveView + 2x4 卡片网格 + nav "短剧" 链接 + 项目选择器 + 选题关键词输入 + PubSub 订阅实时状态
+  - 🆕 步骤状态 chip：已完成(绿) / 运行中(蓝) / 失败(红) / 排队中(灰) + 进度%
+  - 🔴 P1 预防性: LipSync handler 用 `panel.audio_url` 字段不存在 → 新增 `Production.voice_line_for_panel/1` 从关联 VoiceLine 表读 audio_url
+  - ✅ Panel 编辑器验证: DB round-trip 测试 7 字段（description/shot_type/camera_move/location/characters/photography_rules/acting_notes）全正确写入
+  - ✅ SubtitleGenerator 需要 audio_url 非空：为测试补 placeholder audio_url，字幕路径才会触发
+- 历史: v0.9.3 Compose 端到端跑通 + 敏感词自愈 + sync_global_assets 验证 (2026-04-16)
+  - **v0.9.3 (2026-04-16) — 🎉 首个真实合成视频产出:**
+  - ✅ **真实视频合成成功**：项目 13 产出 `priv/uploads/compose/projects/13/video/compose-*.mp4`，**2.2MB / 48.2 秒 / 12 个面板**
+  - 🆕 新增 `AstraAutoEx.Media.FFmpeg.image_to_video/3`：静态图像 → libx264 视频片段（tune=stillimage + 静音轨方便后续混音）
+  - 🆕 新增 `AstraAutoEx.Media.FFmpeg.simple_concat/2`：concat demuxer 作为 filter_complex 失败的自动回退
+  - 🆕 VideoCompose 接入图像回退：无 `panel.video_url` 时从 `panel.image_url` 渲染静态片段后再 concat
+  - 🔴 P0 修复 schema 不一致：Storyboard 无 `:sort_order` / Panel 用 `:panel_index` / Panel 无 `:audio_url` 与 `:duration`
+  - 🔴 P0 修复输出路径：storage_key 含 `projects/N/video/...` 嵌套，compose handler 补 `File.mkdir_p(Path.dirname(output_path))`
+  - 🔴 P0 修复 Elixir `or` 严格类型：`p.video_url && p.video_url != ""` 返回 nil 导致 `or` 崩溃，改为 `is_binary && != ""` + `or`
+  - 🟢 `run_ffmpeg` 错误传播：不再吞 stderr，真实错误进 task.error_message（之前全报 "output file not found"）
+  - 🟢 ImagePanel 敏感词自愈：捕获 "sensitive"/"content_policy"/"敏感"/"violat"，用关键词替换表（刺青→手腕花纹等）重写 prompt 重试一次
+  - 🟢 sync_global_assets 实测生效：新项目 14 → characters 表出现 "苏晚"/"玄墨"（之前项目 12 的是 0 角色状态）
+  - 🟢 LLM prompt 增强：screenplay prompt 显式要求 clip-level + panel-level `characters`/`location` 数组
+  - 🟢 .mp4.mp4 重复后缀 bug 修复：Provider.generate_key 已带 ".mp4"，compose 不再重复添加
+- 历史: v0.9.2 全管线真实 API 跑通 + 数据修复 + UI 打磨 (2026-04-16)
+  - **v0.9.2 (2026-04-16) — 端到端真实验证 + P0 数据修复:**
+  - ✅ **真实 MiniMax API 端到端跑通**：创建项目 13 "雨夜特警"，story→script 2分32秒 / script→storyboard 生成 3 storyboards + 13 panels / image_panel 11/13 成功（85%）
+  - 🔴 P0 修复: persist_script_results 传了 `title`/`sort_order`/`project_id` 等**不在 clip schema cast 列表**的字段，全部被静默丢弃。改走 `clip_index` / `characters` / `location` / `screenplay` 等正确字段
+  - 🔴 P0 修复: LLM 返回的 `characters` 常是 JSON array（如 `["林岳","神秘少女"]`），schema 要 `:string` → cast 静默失败 → 存为 nil。加 `to_string_field/1` 强制 list→"A, B" 连接
+  - 🔴 P0 修复: 剧本阶段右侧 characters/locations 面板始终 0 — `parse_and_persist_analysis` 只在 `analyze_novel` 路径调用，但 StoryToScript 流程跳过它。新增 `sync_global_assets/4` 在 persist_script_results 内聚合 clip/panel 级角色地点，upsert 到全局表
+  - 🟡 P1 修复: Watchdog `@stale_threshold` 5 分钟 → 10 分钟，避免 ScriptToStoryboard 长任务（13 panels 顺序生成约 6 分钟）被误判为 stale
+  - 🟢 新增: panel 卡片 hover 操作条从 1 按钮扩展为 3 按钮（生成/编辑/删除）+ Production.delete_panel/1 + handle_event("delete_panel") + data-confirm
+  - 🟢 新增: TypewriterHero hook 支持 `data-texts` 多句轮播（"|" 分隔），5 个创意场景循环打字删除
+  - 🟢 新增: AiWriteModal 增加独立 :error 阶段（红色 alert + 重试按钮 + 取消），取代 put_flash 单一处理
+  - 🟢 新增: 首页长文本提示条（> 1000 字），橙色警告 + 引导用集数下拉分集
+  - 🟢 清理: music_generate_handler 删除错误复用 poll_task 的死代码分支，消除 4 个类型不匹配警告
+  - 🟢 翻译: projects 域追加 Clip 片段编号占位符 / AI Generation Failed / Retry / Cancel
+- 历史: v0.9.1 像素级重构使之能用 — 启动链路打通 + 5 阶段端到端 LiveView 渲染验证 (2026-04-16)
+  - **v0.9.1 (2026-04-16) — 像素级重构使之能用:**
+  - 启动: start.bat 修复 Device Guard 拦截（PATH 优先 `C:\Program Files\Erlang OTP\bin`）
+  - 启动: 新增 .claude/phx-wrapper.bat + 修改 .claude/launch.json 让 preview 工具能启动 Phoenix
+  - P0 修复: 剧本阶段切换崩溃 — clip.title / char.image_url / loc.image_url / char.description 字段不存在
+  - P0 修复: 新增 character_thumb/1 + location_thumb/1 helper（从 has_many 关联安全取首图）
+  - 新增: panel 卡片补漏的道具标签渲染（emerald 色 tag）
+  - 清理: music_generate_handler 删除错误复用 poll_task 的死分支（4 个类型不匹配警告全消）
+  - P1 优化: TaskScheduler 频率 1 秒 → 5 秒；Watchdog 30 秒 → 60 秒
+  - P1 优化: dev.exs logger 级别 → :info（SQL 调试日志不再淹没）
+  - i18n: projects 域追加 `Clip #%{n}` → "片段 #%{n}"
+  - 验证: 5 阶段 LiveView 全部正常渲染（故事/剧本/分镜/成片/AI 剪辑）
+  - 验证: 设置页 (9 厂商 + 4 Tab) / 素材库 / 使用手册 / 项目列表 全部 OK
+  - 数据: 项目 12 已实跑过完整管线（124 个面板生成图像，多张电影感截图）
+- 历史: v0.9.0 灵魂补全 — 核心管线逻辑 + 缺失Handler + FFmpeg增强 + AutoChain DAG + 33翻译域 (2026-04-15)
   - **v0.9.0 (2026-04-15) — 灵魂补全:**
   - 新增 Handler: VoiceDesignHandler(语音克隆) + MusicGenerateHandler(BGM生成) + Watchdog(看门狗) + ShortDrama(短剧8任务) + StoryboardInsert(面板插入) + ShotVariant(镜头变体)
   - FFmpeg: xfade转场滤镜图 + filter_complex动态构建 + 3轨音频混音(0.3/1.0/1.0) + FL尾帧跳过
@@ -138,13 +230,19 @@ AstraAutoEx 是 AI 驱动的短剧/漫画视频生产平台，从 Next.js 原项
 - 进行中: 无
 - 下一步:
   - 端到端生成测试（真实 API 调用走完 故事→剧本→分镜→图像→视频→配音→合成 全流程）
-  - 运行 migration: `mix ecto.migrate`（public_id on episodes）
-  - 更新日志弹窗追加 v0.9.0 内容
-  - 使用手册/用户引导页内容完善
+  - 真实 API 调用端到端测试（用 MiniMax 跑一个新项目从故事 → 成片）
+  - 像素级 UI 对齐细节（hover 卡片操作条、AI 写作模态框 4 阶段、首页 Hero 打字机效果）
+  - 短剧 8 任务系统的真实场景验证
 - 已知问题:
   - 计费统计数据为空（需要实际 API 调用后才有记录）
-  - 部分 Handler 的底层 Provider API 调用尚未联调（VoiceDesign/MusicGenerate 依赖 MiniMax API）
-  - 剩余 ~17 种任务类型未单独注册（复用现有 Handler dispatch 或待 Provider 对接）
+  - VoiceDesign/MusicGenerate 仅同步 API 验证，异步路径未实现（设计上 MiniMax 无异步音乐 API）
+  - LiveView 热重载偶尔不生效（已知 :econnaborted），改 LiveView 模板时需手动重启 phx.server
+  - 项目 12 中部分剧本字段（characters）为 nil，剧本阶段右侧角色卡为空
+- 启动方法:
+  - **方式 1（推荐）**：双击 `start.bat`（已修复 PATH 自动绕过 Device Guard）
+  - **方式 2（开发）**：在 bash 里 `export PATH="/c/Program Files/Erlang OTP/bin:$PATH"` 后执行 `mix phx.server`
+  - **方式 3（Claude Code）**：使用 preview_start "phoenix"（自动走 .claude/phx-wrapper.bat）
+  - 测试账号: 5078534@qq.com / Test1234!@（已重置）
 
 ## 重要决策记录
 - 从 Next.js 迁移到 Phoenix LiveView：利用 OTP 并发处理 AI 任务，无需 Redis/BullMQ

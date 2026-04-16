@@ -38,6 +38,15 @@ npm-debug.log
 # Local dev toolchain (Elixir + Erlang copies)
 /tools/
 
-upload.bat 
-upload.bat 
-upload.bat 
+upload.bat
+upload.bat
+upload.bat
+
+# User-generated media (images/videos/audio produced at runtime)
+/priv/uploads/
+
+# Claude Code local settings (contains per-machine paths / permissions)
+.claude/settings.local.json
+
+# Claude Code worktrees (ephemeral branches for isolated agents)
+.claude/worktrees/

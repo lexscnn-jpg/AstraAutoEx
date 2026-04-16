@@ -12,8 +12,8 @@ defmodule AstraAutoEx.Workers.TaskScheduler do
   alias AstraAutoEx.Tasks.Task
   alias AstraAutoEx.Workers.{ConcurrencyLimiter, TaskRunner}
 
-  @poll_interval :timer.seconds(1)
-  @watchdog_interval :timer.seconds(30)
+  @poll_interval :timer.seconds(5)
+  @watchdog_interval :timer.seconds(60)
 
   def start_link(opts) do
     GenServer.start_link(__MODULE__, opts, name: __MODULE__)
@@ -69,8 +69,14 @@ defmodule AstraAutoEx.Workers.TaskScheduler do
     end)
   end
 
+  # Watchdog threshold: 10 minutes of no heartbeat → mark failed.
+  # Must comfortably exceed the slowest synchronous handler (ScriptToStoryboard
+  # doing N panel generations sequentially ~ 6+ min). Handlers that do long
+  # work are expected to call Tasks.touch_heartbeat/1 between steps.
+  @stale_threshold_seconds 600
+
   defp run_watchdog do
-    stale_tasks = Tasks.list_stale_processing(300)
+    stale_tasks = Tasks.list_stale_processing(@stale_threshold_seconds)
 
     Enum.each(stale_tasks, fn task ->
       Logger.warning(

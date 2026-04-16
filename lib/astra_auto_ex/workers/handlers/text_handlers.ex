@@ -180,7 +180,7 @@ defmodule AstraAutoEx.Workers.Handlers.StoryToScript do
           sb_provider,
           sb_model,
           novel_text,
-          "将以下故事转换为分镜剧本格式。每个clip包含3-6个panels。每个panel需要：description(画面描述), shot_type(镜头类型: wide/medium/close_up), camera_move(运镜: static/pan/dolly), dialogue(对白), characters(出场角色)。返回JSON数组: [{\"title\":\"\", \"panels\":[{...}]}]"
+          "将以下故事转换为分镜剧本格式。每个clip包含3-6个panels。每个clip顶层需要：title(标题), summary(概要), characters(角色数组), location(主场景)。每个panel需要：description(画面描述), shot_type(镜头类型: wide/medium/close_up), camera_move(运镜: static/pan/dolly), dialogue(对白), characters(出场角色数组), location(场景名)。返回JSON数组: [{\"title\":\"\",\"summary\":\"\",\"characters\":[],\"location\":\"\",\"panels\":[{...}]}]"
         )
 
       # Persist results
@@ -220,35 +220,48 @@ defmodule AstraAutoEx.Workers.Handlers.StoryToScript do
     # Create clips and panels from screenplay
     case extract_json(screenplay) do
       {:ok, clips} when is_list(clips) ->
+        # Collect all characters + locations across clips, write to global tables
+        sync_global_assets(task.user_id, task.project_id, episode.id, clips)
+
         Enum.with_index(clips, fn clip_data, idx ->
+          panels = Map.get(clip_data, "panels", [])
+
+          # Derive clip-level aggregates from panels if not explicit
+          clip_characters =
+            Map.get(clip_data, "characters") ||
+              panels |> Enum.flat_map(&list_of_strings(Map.get(&1, "characters"))) |> Enum.uniq()
+
+          clip_location =
+            Map.get(clip_data, "location") ||
+              panels |> Enum.map(&Map.get(&1, "location")) |> Enum.reject(&is_nil/1) |> List.first()
+
           {:ok, clip} =
             Production.create_clip(%{
               episode_id: episode.id,
-              project_id: task.project_id,
-              title: Map.get(clip_data, "title", "Clip #{idx + 1}"),
-              summary: Map.get(clip_data, "summary", ""),
-              sort_order: idx
+              clip_index: idx,
+              summary: to_string_field(Map.get(clip_data, "summary", Map.get(clip_data, "title", ""))),
+              content: to_string_field(Map.get(clip_data, "content", "")),
+              characters: to_string_field(clip_characters),
+              location: to_string_field(clip_location || ""),
+              screenplay: Jason.encode!(clip_data)
             })
 
           # Create storyboard for this clip
           {:ok, sb} =
             Production.create_storyboard(%{
               episode_id: episode.id,
-              clip_id: clip.id,
-              sort_order: idx
+              clip_id: clip.id
             })
 
           # Create panels
-          panels = Map.get(clip_data, "panels", [])
-
           Enum.with_index(panels, fn panel_data, pidx ->
             Production.create_panel(%{
               storyboard_id: sb.id,
               episode_id: episode.id,
               description: Map.get(panel_data, "description", ""),
               shot_type: Map.get(panel_data, "shot_type", "medium shot"),
-              camera_move: Map.get(panel_data, "camera", ""),
-              characters: Map.get(panel_data, "characters", "") |> to_string_field(),
+              camera_move: Map.get(panel_data, "camera", Map.get(panel_data, "camera_move", "")),
+              characters: to_string_field(Map.get(panel_data, "characters", "")),
               location: Map.get(panel_data, "location", ""),
               acting_notes: Map.get(panel_data, "dialogue", ""),
               panel_index: pidx
@@ -260,6 +273,76 @@ defmodule AstraAutoEx.Workers.Handlers.StoryToScript do
         :ok
     end
   end
+
+  defp list_of_strings(val) when is_list(val), do: Enum.map(val, &to_string/1)
+  defp list_of_strings(val) when is_binary(val), do: String.split(val, ~r/[,，、]\s*/, trim: true)
+  defp list_of_strings(_), do: []
+
+  # Aggregate characters/locations across clips → upsert to global tables.
+  # Without this, the assets panel on the Script stage stays empty even though
+  # individual clips have character names (the schemas are populated per-clip only).
+  defp sync_global_assets(user_id, project_id, episode_id, clips) when is_list(clips) do
+    existing_char_names =
+      project_id
+      |> Characters.list_characters()
+      |> Enum.map(& &1.name)
+      |> MapSet.new()
+
+    existing_loc_names =
+      project_id
+      |> Locations.list_locations()
+      |> Enum.map(& &1.name)
+      |> MapSet.new()
+
+    # Characters: flatten clip-level + panel-level
+    char_names =
+      clips
+      |> Enum.flat_map(fn c ->
+        top = list_of_strings(Map.get(c, "characters"))
+        panel_chars = Map.get(c, "panels", []) |> Enum.flat_map(&list_of_strings(Map.get(&1, "characters")))
+        top ++ panel_chars
+      end)
+      |> Enum.map(&String.trim/1)
+      |> Enum.reject(&(&1 == ""))
+      |> Enum.uniq()
+
+    for name <- char_names, not MapSet.member?(existing_char_names, name) do
+      Characters.create_character(%{
+        user_id: user_id,
+        project_id: project_id,
+        episode_id: episode_id,
+        name: name,
+        introduction: ""
+      })
+    end
+
+    # Locations: similar
+    loc_names =
+      clips
+      |> Enum.flat_map(fn c ->
+        top = list_of_strings(Map.get(c, "location"))
+        panel_locs = Map.get(c, "panels", []) |> Enum.map(&Map.get(&1, "location")) |> Enum.reject(&is_nil/1)
+        top ++ panel_locs
+      end)
+      |> Enum.map(&to_string/1)
+      |> Enum.map(&String.trim/1)
+      |> Enum.reject(&(&1 == ""))
+      |> Enum.uniq()
+
+    for name <- loc_names, not MapSet.member?(existing_loc_names, name) do
+      Locations.create_location(%{
+        user_id: user_id,
+        project_id: project_id,
+        episode_id: episode_id,
+        name: name,
+        summary: ""
+      })
+    end
+
+    :ok
+  end
+
+  defp sync_global_assets(_user_id, _project_id, _episode_id, _other), do: :ok
 
   defp to_string_field(val) when is_list(val), do: Enum.join(val, ", ")
   defp to_string_field(val) when is_binary(val), do: val
@@ -437,13 +520,13 @@ defmodule AstraAutoEx.Workers.Handlers.ClipsBuild do
               Enum.with_index(clips_data, fn clip, idx ->
                 Production.create_clip(%{
                   episode_id: episode.id,
-                  project_id: task.project_id,
                   clip_index: idx,
-                  content: Map.get(clip, "dialogue", ""),
-                  summary: Map.get(clip, "summary", ""),
-                  location: Map.get(clip, "location", ""),
-                  characters: Map.get(clip, "characters", ""),
-                  duration: Map.get(clip, "duration_estimate", 30) / 1.0
+                  content: to_string_field(Map.get(clip, "dialogue") || Map.get(clip, "content") || ""),
+                  summary: to_string_field(Map.get(clip, "summary", "")),
+                  location: to_string_field(Map.get(clip, "location", "")),
+                  characters: to_string_field(Map.get(clip, "characters", "")),
+                  props: to_string_field(Map.get(clip, "props", "")),
+                  duration: (Map.get(clip, "duration_estimate") || Map.get(clip, "duration") || 30) / 1.0
                 })
               end)
 
@@ -479,6 +562,12 @@ defmodule AstraAutoEx.Workers.Handlers.ClipsBuild do
       err -> err
     end
   end
+
+  # Local helper: normalize LLM-returned field to a schema-friendly string.
+  # LLM often returns arrays for characters/props; schema column is :string.
+  defp to_string_field(val) when is_list(val), do: Enum.join(val, ", ")
+  defp to_string_field(val) when is_binary(val), do: val
+  defp to_string_field(_), do: ""
 end
 
 defmodule AstraAutoEx.Workers.Handlers.ScreenplayConvert do

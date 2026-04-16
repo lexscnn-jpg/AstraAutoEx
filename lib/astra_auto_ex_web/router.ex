@@ -51,6 +51,7 @@ defmodule AstraAutoExWeb.Router do
       live "/guide", GuideLive
       live "/projects", ProjectsLive.Index
       live "/assistant", AssistantLive.Standalone
+      live "/short-drama", ShortDramaLive
     end
   end
 

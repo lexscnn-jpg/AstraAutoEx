@@ -194,13 +194,20 @@ defmodule AstraAutoEx.AI.Providers.Minimax do
         retrieve_file(file_id, config)
 
       {:ok, %{status: 200, body: %{"base_resp" => %{"status_code" => 0}} = resp}} ->
-        # Direct hex audio in response
-        audio_hex = get_in(resp, ["data", "audio", "data"])
+        # Direct hex audio in response — MiniMax v2 returns hex-encoded payload
+        audio_hex =
+          case resp do
+            %{"data" => %{"audio" => %{"data" => h}}} when is_binary(h) -> h
+            %{"data" => %{"audio" => h}} when is_binary(h) -> h
+            _ -> nil
+          end
 
-        if audio_hex do
-          {:ok, %{status: :completed, audio_hex: audio_hex, format: "wav"}}
-        else
-          {:ok, %{status: :completed, result: resp}}
+        cond do
+          audio_hex ->
+            save_hex_as_wav(audio_hex, resp)
+
+          true ->
+            {:ok, %{status: :completed, result: resp}}
         end
 
       {:ok, %{status: 200, body: %{"base_resp" => %{"status_msg" => msg}}}} ->
@@ -397,6 +404,29 @@ defmodule AstraAutoEx.AI.Providers.Minimax do
   end
 
   # ── File Retrieval ──
+
+  # MiniMax v2 TTS returns audio hex-encoded in the JSON response.
+  # Decode + write to a local .wav under priv/uploads/voice/, return URL as
+  # download_url so VoiceLine handler persists a playable path.
+  defp save_hex_as_wav(hex, _resp) do
+    try do
+      bin = Base.decode16!(hex, case: :lower)
+      upload_dir = Application.get_env(:astra_auto_ex, :upload_dir, "priv/uploads")
+      voice_dir = Path.join(upload_dir, "voice")
+      File.mkdir_p!(voice_dir)
+
+      filename = "tts-#{:erlang.unique_integer([:positive])}.wav"
+      path = Path.join(voice_dir, filename)
+      File.write!(path, bin)
+
+      # Return download_url pointing to the served upload path.
+      url = "/uploads/voice/#{filename}"
+      {:ok, %{status: :completed, download_url: url, audio_url: url, format: "wav"}}
+    rescue
+      e ->
+        {:error, "hex decode/write failed: #{Exception.message(e)}"}
+    end
+  end
 
   defp retrieve_file(file_id, config) do
     api_key = Map.fetch!(config, :api_key)
