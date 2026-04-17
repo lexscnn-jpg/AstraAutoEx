@@ -59,6 +59,24 @@ defmodule AstraAutoEx.Workers.Handlers.Helpers do
     end)
   end
 
+  @doc """
+  Streaming chat — returns `{:ok, Enumerable.t()}` where each chunk is a binary.
+  Falls back to `{:error, :not_supported}` when the provider lacks chat_stream/2.
+  """
+  def chat_stream(user_id, provider_name, request) do
+    request = normalize_chat_request(request)
+
+    with {:ok, config} <- get_provider_config(user_id, provider_name),
+         mod when not is_nil(mod) <- provider_module(provider_name),
+         true <- function_exported?(mod, :chat_stream, 2) do
+      mod.chat_stream(request, config)
+    else
+      nil -> {:error, "Unknown provider: #{provider_name}"}
+      false -> {:error, :not_supported}
+      error -> error
+    end
+  end
+
   @doc "Dispatch a chat/LLM request with automatic cost tracking."
   def chat(user_id, provider_name, request) do
     start = System.monotonic_time(:millisecond)
@@ -285,34 +303,59 @@ defmodule AstraAutoEx.Workers.Handlers.Helpers do
 
   # Tracked API call wrapper — logs to billing
   defp tracked_call(user_id, provider_name, model_type, pipeline_step, fun) do
-    start = System.monotonic_time(:millisecond)
+    provider_str = to_string(provider_name)
 
-    result =
-      with {:ok, config} <- get_provider_config(user_id, provider_name),
-           mod when not is_nil(mod) <- provider_module(provider_name) do
-        fun.(mod, config)
-      else
-        nil -> {:error, "Unknown provider: #{provider_name}"}
-        error -> error
-      end
+    # CircuitBreaker pre-check: if this provider+capability is tripped,
+    # fail fast without spending an API call. The error `:circuit_open` is
+    # recognized by ProviderFallback.fallback_worthy?/1 → triggers next provider.
+    case AstraAutoEx.AI.CircuitBreaker.allow?(provider_str, model_type) do
+      {:deny, reason} ->
+        Logger.warning(
+          "[tracked_call] circuit open for #{provider_str}/#{model_type} " <>
+            "(reason: #{inspect(reason)}), skipping API call"
+        )
 
-    duration = System.monotonic_time(:millisecond) - start
-    status = if match?({:ok, _}, result), do: "success", else: "failed"
+        _ = log_cost(user_id, provider_str, model_type, pipeline_step, "failed", 0)
+        {:error, :circuit_open}
 
+      allow when allow in [:allow, :allow_probe] ->
+        start = System.monotonic_time(:millisecond)
+
+        result =
+          with {:ok, config} <- get_provider_config(user_id, provider_name),
+               mod when not is_nil(mod) <- provider_module(provider_name) do
+            fun.(mod, config)
+          else
+            nil -> {:error, "Unknown provider: #{provider_name}"}
+            error -> error
+          end
+
+        duration = System.monotonic_time(:millisecond) - start
+        status = if match?({:ok, _}, result), do: "success", else: "failed"
+
+        # Update breaker state based on outcome (success clears counters).
+        outcome = if status == "success", do: :success, else: :failure
+        AstraAutoEx.AI.CircuitBreaker.record(provider_str, model_type, outcome)
+
+        _ = log_cost(user_id, provider_str, model_type, pipeline_step, status, duration)
+
+        result
+    end
+  end
+
+  defp log_cost(user_id, model_key, model_type, pipeline_step, status, duration_ms) do
     try do
       AstraAutoEx.Billing.CostTracker.log_call(%{
         user_id: user_id,
-        model_key: to_string(provider_name),
+        model_key: model_key,
         model_type: model_type,
         pipeline_step: pipeline_step,
         status: status,
-        duration_ms: duration
+        duration_ms: duration_ms
       })
     rescue
       _ -> :ok
     end
-
-    result
   end
 
   # Normalize chat request: convert Google's `contents` format to OpenAI's `messages` format

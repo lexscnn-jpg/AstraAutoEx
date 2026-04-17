@@ -112,13 +112,13 @@ defmodule AstraAutoEx.Workers.Handlers.ImagePanel do
   defp single_image_attempt(task, request, provider, panel, episode, retried? \\ false) do
     case Helpers.generate_image(task.user_id, provider, request) do
       {:ok, %{status: :completed, image_urls: [url | _]}} ->
-        Production.update_panel(panel, %{image_url: url})
+        Production.update_panel_image_with_history(panel, url)
         Helpers.update_progress(task, 95)
         maybe_auto_trigger_video_voice(task, episode)
         {:ok, %{image_url: url}}
 
       {:ok, %{status: :completed, image_url: url}} when is_binary(url) ->
-        Production.update_panel(panel, %{image_url: url})
+        Production.update_panel_image_with_history(panel, url)
         Helpers.update_progress(task, 95)
         maybe_auto_trigger_video_voice(task, episode)
         {:ok, %{image_url: url}}

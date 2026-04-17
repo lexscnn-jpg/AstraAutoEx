@@ -13,6 +13,8 @@ defmodule AstraAutoEx.Application do
       {DNSCluster, query: Application.get_env(:astra_auto_ex, :dns_cluster_query) || :ignore},
       {Phoenix.PubSub, name: AstraAutoEx.PubSub},
       AstraAutoEx.Storage.Server,
+      AstraAutoEx.AI.CircuitBreaker,
+      AstraAutoEx.AI.LLMStreamer.task_supervisor_child_spec(),
       AstraAutoEx.Workers.Supervisor,
       # Start to serve requests, typically the last entry
       AstraAutoExWeb.Endpoint

@@ -86,6 +86,62 @@ defmodule AstraAutoEx.Production do
   def get_panel!(id), do: Repo.get!(Panel, id)
   def create_panel(attrs), do: %Panel{} |> Panel.changeset(attrs) |> Repo.insert()
   def update_panel(panel, attrs), do: panel |> Panel.changeset(attrs) |> Repo.update()
+
+  @doc """
+  Update panel.image_url while preserving the previous URL into image_history
+  as a revision. Returns `{:ok, updated_panel}`.
+
+  `image_history` is a map with key `"revisions"` holding a list of past URLs:
+      %{"revisions" => [%{"url" => "...", "replaced_at" => "2026-04-17T..."}, ...]}
+
+  Limits history to last 10 entries.
+  """
+  @spec update_panel_image_with_history(any(), String.t() | nil) ::
+          {:ok, any()} | {:error, Ecto.Changeset.t()}
+  def update_panel_image_with_history(panel, new_url) do
+    prev = panel.image_url
+
+    new_history =
+      if is_binary(prev) and prev != "" and prev != new_url do
+        entry = %{"url" => prev, "replaced_at" => DateTime.utc_now() |> DateTime.to_iso8601()}
+        existing = (panel.image_history || %{})["revisions"] || []
+        revisions = [entry | existing] |> Enum.take(10)
+        Map.put(panel.image_history || %{}, "revisions", revisions)
+      else
+        panel.image_history || %{}
+      end
+
+    update_panel(panel, %{image_url: new_url, image_history: new_history})
+  end
+
+  @doc """
+  Undo the last image_url change on a panel. Pops the most recent revision
+  from image_history back into image_url.
+
+  Returns:
+    - `{:ok, panel}` on successful rollback
+    - `{:error, :no_history}` when there's nothing to undo
+  """
+  @spec undo_panel_image(any()) :: {:ok, any()} | {:error, :no_history}
+  def undo_panel_image(panel) do
+    revisions = (panel.image_history || %{})["revisions"] || []
+
+    case revisions do
+      [] ->
+        {:error, :no_history}
+
+      [latest | rest] ->
+        # The user's CURRENT image_url also goes back to history as "undone"
+        # so they can redo by calling again... but for simplicity we just
+        # swap in the previous one and keep the rest.
+        previous_url = Map.get(latest, "url")
+
+        new_history =
+          Map.put(panel.image_history || %{}, "revisions", rest)
+
+        update_panel(panel, %{image_url: previous_url, image_history: new_history})
+    end
+  end
   def delete_panel(panel), do: Repo.delete(panel)
 
   @doc "Update a panel's index for drag-and-drop reordering."

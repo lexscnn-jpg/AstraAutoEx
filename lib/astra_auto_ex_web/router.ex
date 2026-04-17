@@ -52,6 +52,10 @@ defmodule AstraAutoExWeb.Router do
       live "/projects", ProjectsLive.Index
       live "/assistant", AssistantLive.Standalone
       live "/short-drama", ShortDramaLive
+      live "/observability", ObservabilityLive
+
+      # Bulk ZIP export endpoints (images/videos/voices)
+      get "/projects/:project_id/download/:kind", ExportController, :project_download
     end
   end
 

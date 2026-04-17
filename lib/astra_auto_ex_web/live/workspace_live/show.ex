@@ -2363,6 +2363,29 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
               </svg>
                {dgettext("projects", "Recompose")}
             </button>
+
+            <%!-- Bulk ZIP export — v1.3.0 --%>
+            <a
+              href={~p"/projects/#{@project.id}/download/images"}
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium border border-[var(--glass-stroke-base)] text-[var(--glass-text-secondary)] hover:text-[var(--glass-text-primary)] hover:border-[var(--glass-text-tertiary)] transition-colors"
+              title="下载所有图片 ZIP"
+            >
+              📷 图片 ZIP
+            </a>
+            <a
+              href={~p"/projects/#{@project.id}/download/videos"}
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium border border-[var(--glass-stroke-base)] text-[var(--glass-text-secondary)] hover:text-[var(--glass-text-primary)] hover:border-[var(--glass-text-tertiary)] transition-colors"
+              title="下载所有视频 ZIP"
+            >
+              🎬 视频 ZIP
+            </a>
+            <a
+              href={~p"/projects/#{@project.id}/download/voices"}
+              class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium border border-[var(--glass-stroke-base)] text-[var(--glass-text-secondary)] hover:text-[var(--glass-text-primary)] hover:border-[var(--glass-text-tertiary)] transition-colors"
+              title="下载所有配音 ZIP"
+            >
+              🎙️ 配音 ZIP
+            </a>
           </div>
         </div>
       </div>
@@ -2406,6 +2429,23 @@ defmodule AstraAutoExWeb.WorkspaceLive.Show do
   @impl true
   def handle_event("switch_stage", %{"stage" => stage}, socket) when stage in @stages do
     {:noreply, assign(socket, :stage, stage)}
+  end
+
+  def handle_event("undo_panel_image", %{"panel-id" => panel_id}, socket) do
+    panel = Production.get_panel!(panel_id)
+
+    case Production.undo_panel_image(panel) do
+      {:ok, _updated} ->
+        storyboards = load_storyboards(socket.assigns.current_episode)
+
+        {:noreply,
+         socket
+         |> assign(:storyboards, storyboards)
+         |> put_flash(:info, "已回退到上一版图像")}
+
+      {:error, :no_history} ->
+        {:noreply, put_flash(socket, :error, "没有可回退的历史版本")}
+    end
   end
 
   def handle_event("delete_panel", %{"panel-id" => panel_id}, socket) do

@@ -849,6 +849,34 @@ defmodule AstraAutoExWeb.HomeLive do
      |> assign(:ai_error_message, format_ai_error(reason))}
   end
 
+  # v1.3.0 streaming LLM output — LLMStreamer emits these
+  def handle_info({:llm_chunk, _stream_id, chunk}, socket) do
+    current = socket.assigns[:ai_outline] || ""
+    {:noreply,
+     socket
+     |> assign(:ai_phase, :streaming)
+     |> assign(:ai_outline, current <> chunk)}
+  end
+
+  def handle_info({:llm_done, _stream_id, full_text}, socket) do
+    cancel_ai_timer(socket)
+
+    {:noreply,
+     socket
+     |> assign(:ai_phase, :outline)
+     |> assign(:ai_outline, full_text)
+     |> assign(:ai_episode_count, count_episodes(full_text))}
+  end
+
+  def handle_info({:llm_error, _stream_id, reason}, socket) do
+    cancel_ai_timer(socket)
+
+    {:noreply,
+     socket
+     |> assign(:ai_phase, :error)
+     |> assign(:ai_error_message, format_ai_error(reason))}
+  end
+
   defp format_ai_error(reason) when is_binary(reason), do: reason
   defp format_ai_error(%{message: msg}) when is_binary(msg), do: msg
   defp format_ai_error(reason), do: inspect(reason)
@@ -895,9 +923,21 @@ defmodule AstraAutoExWeb.HomeLive do
       contents: [%{"parts" => [%{"text" => instruction}]}]
     }
 
-    case Helpers.chat(user_id, provider, request) do
-      {:ok, text} -> send(pid, {:ai_write_result, text})
-      {:error, reason} -> send(pid, {:ai_write_error, reason})
+    # v1.3.0: try streaming first; fall back to blocking chat.
+    # LLMStreamer handles provider capability detection automatically and
+    # simulates streaming even when the provider can't stream natively.
+    stream_id = "ai-write-" <> Ecto.UUID.generate()
+
+    case AstraAutoEx.AI.LLMStreamer.stream_to(pid, stream_id, user_id, provider, request) do
+      {:ok, _task_pid} ->
+        :ok
+
+      {:error, _reason} ->
+        # Hard fallback: synchronous chat (legacy path)
+        case Helpers.chat(user_id, provider, request) do
+          {:ok, text} -> send(pid, {:ai_write_result, text})
+          {:error, reason} -> send(pid, {:ai_write_error, reason})
+        end
     end
   end
 
