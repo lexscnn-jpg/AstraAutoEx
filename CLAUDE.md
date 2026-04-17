@@ -83,8 +83,128 @@ AstraAutoEx 是 AI 驱动的短剧/漫画视频生产平台，从 Next.js 原项
 4. **制作 (film)** — video_stage: 视频/配音生成 + 重试
 5. **AI 剪辑 (compose)** — compose_stage: 左右分栏（面板选择+设置 | 预览+导出）
 
-## 当前项目状态 (v0.9.8)
-- 最后完成: **v0.9.8 apiyi VEO 3.1 横屏首尾帧打通 + 4 个 async 链路 P0 修复** (2026-04-16)
+## 当前项目状态 (v1.3.0)
+- 最后完成: **v1.3.0 — 5 特性并行（流式 LLM + 撤销 + ZIP + Billing + OAuth）** (2026-04-17)
+  - **v1.3.0 (2026-04-17) — 最大并行轮，一次性补 5 项原 Next.js 能力:**
+  - 🌊 **流式 LLM 输出** (`lib/astra_auto_ex/ai/llm_streamer.ex`)
+    - LLMStreamer Task.Supervisor 后台 stream，消息契约 `{:llm_chunk|:llm_done|:llm_error, stream_id, ...}`
+    - `Helpers.chat_stream/3` dispatch — apiyi/google 原生 SSE，无流 provider 自动回退 chunk
+    - home_live AI 写作弹窗接入，token 实时展示
+  - ⏪ **撤销/撤回机制**
+    - `Production.update_panel_image_with_history/2` 保留最近 10 版 revision
+    - `Production.undo_panel_image/1` 一键回滚
+    - image_handlers 全部改走 with_history 版本自动追踪
+    - workspace_live `handle_event("undo_panel_image")` UI 入口
+  - 📦 **批量 ZIP 导出** (`lib/astra_auto_ex_web/controllers/export_controller.ex`)
+    - 内存 / tempfile 双路径（100MB 阈值）
+    - 支持 http(s) 和 /uploads/ 两种源
+    - 用户权限校验（get_project!/2）
+    - route `/projects/:project_id/download/:kind` (images/videos/voices)
+    - compose 阶段 UI 加 3 个下载按钮
+  - 💳 **Billing Ledger 结算闭环** (`lib/astra_auto_ex/billing/ledger.ex`) — agent worktree 产出
+    - `freeze/3`, `claim/2`, `release/1`, `topup/3` 核心 API
+    - Ecto.Multi + SELECT FOR UPDATE 行锁保证并发安全
+    - claim 按实付封顶，多余回补 balance
+    - 全审计流水（balance_transactions 表）
+    - 32 tests，Ledger 覆盖率 84.76%
+    - 并发竞争测试通过（2 个 7 单位 freeze 对 10 余额只 1 个成功）
+  - 🔐 **OAuth 第三方登录** (Google + GitHub) — agent worktree 产出
+    - assent 库集成
+    - `find_or_create_user_from_oauth/2` 支持邮箱 link 到已有 password 用户
+    - 新 migration 加 oauth_provider/oauth_uid 字段 + 部分唯一索引
+    - OauthController.request/callback，routes 在 /auth/:provider
+    - login 页加 Google + GitHub 品牌按钮
+    - auto-confirm OAuth 用户（provider 已验证邮箱）
+    - 13 tests
+  - 📈 **测试规模**：308 tests 0 failures (6 excluded)
+  - 🏗️ **开发模式**：用户请求"全部都做，能并行的并行" → 2 agent worktree 并行 + 3 件主分支串行 = 一轮做 5 件 P0/P1
+  - 📦 **commits**: 002d919 (A+B+C 我做), edaaa98 (D Billing agent), 22064b6 (E OAuth agent)
+- 历史: v1.2.0 Circuit Breaker (2026-04-17)
+  - **v1.2.0 (2026-04-17) — 从 retry-浪费 到 智能熔断:**
+  - ⚡ **CircuitBreaker GenServer** (`lib/astra_auto_ex/ai/circuit_breaker.ex` · 280 行)
+    - per-provider+capability 状态机：closed / open / half_open 三态
+    - 3 连败自动熔断（configurable @consecutive_failure_threshold）
+    - 5 分钟冷却（@cool_down_ms）后 half_open 探针
+    - 探针成功 → closed 重置；探针失败 → open 重新计时
+    - ETS public 表存状态，GenServer cast 序列化写，读走 :ets.lookup 零等待
+  - 🔗 **tracked_call 集成** (`handler_helpers.ex`)
+    - Call 前 `CircuitBreaker.allow?(provider, capability)`：若 `{:deny, _}` 立即返回 `{:error, :circuit_open}`，零 API 成本
+    - Call 后 `CircuitBreaker.record(provider, capability, :success | :failure)`
+    - 零侵入：所有 generate_image/video/text/tts 自动受保护
+  - 🏁 **ProviderFallback 扩展**：@fallback_triggers 新增 "circuit_open" / "circuit open"，:circuit_open 错误自动触发跨 provider fallback
+  - 🛡️ **Supervisor 注册**：`application.ex` children 加入 `AstraAutoEx.AI.CircuitBreaker`，随应用启动
+  - 📊 **Observability UI 新区段** "⚡ Circuit Breaker 实时状态"：
+    - grid 3-col 卡片布局
+    - 彩色 border + background：open 红 / half_open 琥珀 / closed 绿
+    - 每卡显示：provider/capability + 状态 chip + 连败数 + 累计失败/总调用
+  - ✅ **测试**：10 unit tests (初始状态 / closed→open 阈值 / 独立熔断 / reset / 计数累积 / config 合理性)
+  - 📈 **总测试规模**：42 tests (19 Guard + 10 Fallback + 3 Regen + 10 Breaker)
+  - 🏗️ **架构演进**：v0.9.9=主动重写 / v1.0.0=重生 image / v1.1.0=可见 / **v1.2.0=会节流**
+- 历史: v1.1.0 Observability 面板 (2026-04-17)
+  - **v1.1.0 (2026-04-17) — 首次把 5218+ 次 API 调用数据可视化:**
+  - 📊 **/observability 新 LiveView**：`lib/astra_auto_ex_web/live/observability_live.ex` (320 行)
+  - 🎯 **数据层发现**：`api_call_logs` 表 + `CostTracker.log_call` + `tracked_call` wrapper 早已存在但无 UI，5218 条真实数据被埋没
+  - 📈 **6 个展示区**：
+    1. 4 KPI 卡（API 总数/成功/失败/成功率，动态着色 ≥90%绿/≥60%琥珀/≥30%橙/红）
+    2. Provider × 能力矩阵表（provider×model_type 分组，total/succ/fail/rate/avg_latency）
+    3. 🧬 Tier 2 Regen 事件区（purple ring 视觉强调，展示所有 image_regen 触发的任务）
+    4. 🏁 Fallback 链区（最近 20 次跨 provider 切换的 billing_info 审计）
+    5. Top 10 失败原因（error_message 前 60 字聚合）
+    6. 最近 30 个有 billing 记录的任务（inline billing 摘要 + 状态 chip）
+  - 🧭 顶部 nav 新增 **"观测"** 链接（bar-chart icon，介于短剧和 AI 助手之间）
+  - 💡 **实际数据洞察**：
+    - minimax/image: 4009 calls, 158 success (3.9%) — 审核大量 failed
+    - minimax/text: 1017 calls, 1009 success (99.2%) — LLM 稳
+    - apiyi/video: 39 calls, 16 success (41%) — 横屏首尾帧部分成功
+    - google/text: 52 calls, 0 success — 用户未配 Google key
+    - minimax/voice: 8 calls, 5 success (62.5%) — TTS 基本 ok
+  - 🎨 响应式：grid 1-col mobile, 4-col desktop；KPI 卡 glass-surface 风格
+  - 🔧 Ecto queries: group_by provider+type / fragment CASE WHEN for success counts / 按 billing_info JSONB 键筛选
+- 历史: v1.0.0 正式版 — Tier 2 Image Regeneration，从"规避"到"治愈" (2026-04-17)
+  - **v1.0.0 (2026-04-17) — Image-level rejection 的治愈级方案:**
+  - 🧬 **ImageRegenerator 模块** (`lib/astra_auto_ex/ai/image_regenerator.ex`)
+    - 当 Tier 1 provider chain 耗尽且错误是 image-level（未成年/minor/nsfw），自动用 LLM 重写 prompt 并重生 image
+    - 双层 prompt 强化：sanitize_strict + 专用 image regen anchor（"专业成年角色肖像，30 岁以上职业装，纪实摄影风格"）
+    - 默认走 MiniMax image-01（比 Gemini/apiyi 更宽松的审核策略）
+    - 不污染 panel.image_url — 新 URL 通过 payload.override_image_url + billing_info.image_regen_new_url 传递
+  - 📊 **ProviderFallback Tier 2 escalation**
+    - 新决策类型 `{:image_regen, task}` 加入 maybe_trigger_fallback/1 返回值
+    - `image_level_rejection?/1` 判定函数（patterns: 未成年/minor/underage/child/nsfw）
+    - `_image_regenerated` 循环防护（一次性触发，第二次直接 :chain_exhausted）
+  - 🔗 **VideoPanel 接入** `maybe_regenerate_image/3` helper
+    - 检查 payload._image_regen_requested → 调 ImageRegenerator → 用 new_url 当 first_frame
+    - effective_image_url 优先于 panel.image_url
+  - 🔄 **AsyncPollWorker 处理 `{:image_regen, new_task}`** 与 `{:fallback, ...}` 对等
+  - 📝 **Observability bug 修复**：error 分支 stale billing_info 快照会覆盖 image_regen report，改为 Tasks.get_task! 重读
+  - ✅ **端到端验证**：Panel b7d96e1b
+    - 原 prompt 871 字 → sanitize_strict + regen anchor 后 1411 字
+    - MiniMax image-01 返回全新 `hailuo-image-algeng-data.oss-cn-wulanchabu.aliyuncs.com/...` URL
+    - 新 image 传入 apiyi VEO（后续 transport timeout 非 Tier 2 bug）
+  - 🏗️ **系统演进跨越**：v0.9.9 fallback 只能"切 provider 用同一 image"；v1.0.0 能"改 image 再跑"。质的突破
+  - 📊 **测试**：32 unit (19 Guard + 10 Fallback + 3 Regen) + 端到端日志验证
+- 历史: v0.9.9 超越原项目 — SafePromptGuard + ProviderFallback + Capability Matrix (2026-04-17)
+  - **v0.9.9 (2026-04-17) — 用 Elixir/OTP 做原 Next.js 从未做的两件事:**
+  - 🛡️ **SafePromptGuard 模块** (`lib/astra_auto_ex/ai/safe_prompt_guard.ex`)
+    - 主动 prompt 重写防审核误判：关键词替换表（少女/young girl/young woman → 成年女性 / adult woman in late 20s）
+    - 自动 age/context anchor 追加：`All characters are adults (over 25). Fully-clothed cinematic film still.`
+    - 中英文检测自动选对应 anchor
+    - sanitize_with_report 返回观测报告写入 task.billing_info
+    - sanitize_strict 作为二次重试的"documentary-grade"版本
+    - **19 个 unit tests 全通过**
+  - 🏁 **ProviderFallback 模块** (`lib/astra_auto_ex/ai/provider_fallback.ex`)
+    - 任务失败自动创建 fallback task 切换 provider（apiyi → minimax → ark）
+    - @fallback_triggers 识别：包含未成年/sensitive/rate limit/usage limit/无可用渠道
+    - effective_chain_for/2 动态按用户 api_key 过滤 chain（无 key 的 provider 从链里剥离）
+    - billing_info 持久化 fallback_chain_tried 历史
+    - **10 个 unit tests 全通过**
+  - 📊 **Capability Matrix**（VideoPanel handler 内嵌）
+    - `provider_supports_fl?(provider, model)`：apiyi VEO 3.1 → true，MiniMax Hailuo-2.3 → false
+    - MiniMax provider 内部也加了 duration gate：Hailuo-2.3 固定 6s 不接受 duration 参数
+    - 自动剥离不兼容参数，避免 "invalid params" 错误
+  - 🔗 **AsyncPollWorker 集成 Fallback**：async task 失败时也调用 `maybe_trigger_fallback/1`，不限 sync handler
+  - ✅ **端到端验证**：panel `df8df708` (apiyi 失败) → ProviderFallback 自动创建 `d6b5d42a` (minimax) → billing_info 链记录完整
+  - 🎯 **超越原 Next.js 项目**：探索报告确认原项目对这两个方向**完全没做**（ERROR_CATALOG 有 SENSITIVE_CONTENT 定义但无实际处理；provider router 只是 3 行 if-else）
+- 历史: v0.9.8 apiyi VEO 3.1 横屏首尾帧打通 + 4 个 async 链路 P0 修复 (2026-04-16)
   - **v0.9.8 (2026-04-16) — 第二个视频 provider 全链路跑通**:
   - 🎬 **apiyi VEO 3.1 真跑通**：Panel 06347c45 产出 `https://r2cdn.copilotbase.com/r2cdn2/59638cab-5a70-4a0b-9445-4c2af4d17d9a.mp4`，apiyi 横屏首尾帧异步完整链路打通
   - 🔴 P0 模型名双重 transform：handler 里 apply_model_suffix 产生错序 `veo-3.1-fast-landscape-fl`，改为完全让 apiyi provider 内部 `transform_veo_model/1` 处理（生成正确的 `veo-3.1-landscape-fast-fl`）

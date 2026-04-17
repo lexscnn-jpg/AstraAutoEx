@@ -34,7 +34,7 @@
             >
               <path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" />
             </svg>
-            Beta v0.9.8
+            v1.3.0
           </button>
         </div>
 
@@ -86,6 +86,16 @@
                 <path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z" /><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z" />
               </svg>
               {dgettext("default", "Guide")}
+            </a>
+            <a
+              href={~p"/observability"}
+              class="nav-link flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm text-[var(--glass-text-secondary)] hover:text-[var(--glass-text-primary)] hover:bg-[var(--glass-bg-muted)] transition-all"
+              title="可观测性面板"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+              </svg>
+              观测
             </a>
             <a
               href={~p"/short-drama"}
@@ -241,11 +251,126 @@
         </div>
 
         <div class="flex-1 overflow-y-auto px-6 py-4 space-y-6 text-sm">
-          <%!-- v0.9.8 --%>
+          <%!-- v1.3.0 --%>
           <div>
             <div class="flex items-center gap-2 mb-2">
               <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-green-500/20 text-green-400">
                 最新
+              </span>
+              <span class="font-bold text-[var(--glass-text-primary)]">v1.3.0</span>
+              <span class="text-xs text-[var(--glass-text-tertiary)]">2026-04-17</span>
+            </div>
+            <p class="text-[10px] text-[var(--glass-text-tertiary)] mb-1.5 italic">
+              5 特性并行 — 流式 LLM + 撤销 + ZIP 导出 + Billing 结算 + OAuth 登录
+            </p>
+            <ul class="space-y-1 text-[var(--glass-text-secondary)] list-disc list-inside text-xs">
+              <li><strong>🌊 流式 LLM 输出</strong>：新 LLMStreamer 模块 + Task.Supervisor 后台 stream；apiyi/google 原生 SSE，其他 provider 自动回退 chunk；home_live AI 写作弹窗 token 实时吐出，不再 2 分钟黑屏</li>
+              <li><strong>⏪ 撤销/撤回机制</strong>：image_history.revisions 保留最近 10 版；image_handlers 自动追踪；workspace_live undo_panel_image 一键回滚上一版</li>
+              <li><strong>📦 批量 ZIP 导出</strong>：新 ExportController 内存/tempfile 双路径；支持 http + /uploads/ 源；route /projects/:id/download/:kind；compose 阶段 UI 加 📷图片ZIP/🎬视频ZIP/🎙️配音ZIP 3 按钮</li>
+              <li><strong>💳 Billing Ledger 结算闭环</strong>：freeze/claim/release/topup API；Ecto.Multi + SELECT FOR UPDATE 原子性；claim 按实付封顶多余回补；32 tests 覆盖率 84.76%；并发 freeze 竞争测试通过</li>
+              <li><strong>🔐 OAuth 第三方登录</strong>：assent 库集成 Google + GitHub；auto-confirm 跳过邮箱验证；email 匹配 password 用户自动 link 不重复建号；login 页加 2 个品牌按钮；13 tests</li>
+              <li><strong>总测试</strong>：308 tests 0 failures (6 excluded)</li>
+              <li><strong>架构模式</strong>：2 件 worktree-agent 并行 + 3 件主分支串行 = 一轮实现 5 大特性</li>
+            </ul>
+          </div>
+
+          <%!-- v1.2.0 --%>
+          <div>
+            <div class="flex items-center gap-2 mb-2">
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/20 text-blue-400">
+                历史
+              </span>
+              <span class="font-bold text-[var(--glass-text-primary)]">v1.2.0</span>
+              <span class="text-xs text-[var(--glass-text-tertiary)]">2026-04-17</span>
+            </div>
+            <p class="text-[10px] text-[var(--glass-text-tertiary)] mb-1.5 italic">
+              Circuit Breaker — 止血 v1.1.0 发现的 96% 失败浪费
+            </p>
+            <ul class="space-y-1 text-[var(--glass-text-secondary)] list-disc list-inside text-xs">
+              <li><strong>⚡ CircuitBreaker GenServer</strong>：per-provider×capability 状态机，closed/open/half_open 三态</li>
+              <li><strong>3 连败自动熔断</strong>：不再盲目 retry，直接 fail-fast 返回 :circuit_open</li>
+              <li><strong>5 分钟冷却 + half_open 探针</strong>：自动恢复，单飞探针避免 thundering herd</li>
+              <li><strong>ETS 公共读 + GenServer 串行写</strong>：快速 allow? 判定不阻塞 hot path</li>
+              <li><strong>Independent 熔断</strong>：minimax/image 熔断不影响 minimax/text — 按 capability 细粒度</li>
+              <li><strong>tracked_call 集成</strong>：每次 call 前 allow? check，call 后 record。零侵入现有 handler</li>
+              <li><strong>ProviderFallback 衔接</strong>：:circuit_open 触发 trigger，自动切 provider</li>
+              <li><strong>Observability 新增 "⚡ Circuit Breaker 实时状态" 区</strong>：彩色 per-breaker 卡片（open 红/half_open 琥珀/closed 绿）</li>
+              <li><strong>测试</strong>：10 个 unit tests — 状态转换/独立熔断/reset/计数累积全覆盖</li>
+              <li><strong>总测试</strong>：42 tests (19 Guard + 10 Fallback + 3 Regen + 10 Breaker)</li>
+              <li><strong>架构升级</strong>：项目从"retry 浪费" → "智能熔断"。节省每月大量 API 额度</li>
+            </ul>
+          </div>
+
+          <%!-- v1.1.0 --%>
+          <div>
+            <div class="flex items-center gap-2 mb-2">
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/20 text-blue-400">
+                历史
+              </span>
+              <span class="font-bold text-[var(--glass-text-primary)]">v1.1.0</span>
+              <span class="text-xs text-[var(--glass-text-tertiary)]">2026-04-17</span>
+            </div>
+            <p class="text-[10px] text-[var(--glass-text-tertiary)] mb-1.5 italic">
+              Observability 面板 — 让 v0.9.9+v1.0.0 超越可见
+            </p>
+            <ul class="space-y-1 text-[var(--glass-text-secondary)] list-disc list-inside text-xs">
+              <li><strong>/observability 新 LiveView</strong>：5218+ 条 api_call_logs 首次可视化</li>
+              <li><strong>6 区段</strong>：4 KPI / Provider 矩阵 / Tier 2 Regen / Fallback 链 / Top 错误 / 最近 30 任务</li>
+              <li><strong>洞察</strong>：minimax/image 96% 失败，text 99.2% 稳，apiyi/video 41%</li>
+            </ul>
+          </div>
+
+          <%!-- v1.0.0 --%>
+          <div>
+            <div class="flex items-center gap-2 mb-2">
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-500/20 text-amber-400">
+                历史
+              </span>
+              <span class="font-bold text-[var(--glass-text-primary)]">v1.0.0</span>
+              <span class="text-xs text-[var(--glass-text-tertiary)]">2026-04-17</span>
+            </div>
+            <p class="text-[10px] text-[var(--glass-text-tertiary)] mb-1.5 italic">
+              Tier 2 Image Regeneration — 从"规避"到"治愈"
+            </p>
+            <ul class="space-y-1 text-[var(--glass-text-secondary)] list-disc list-inside text-xs">
+              <li><strong>🧬 ImageRegenerator 模块</strong>：当所有 provider 都拒同一 image 时，用 LLM 重写 prompt + 调 image provider 生成替代图。原 Next.js 完全做不到</li>
+              <li><strong>📊 Tier 2 Escalation</strong>：ProviderFallback chain 耗尽 + 错误是 image-level rejection（未成年/minor/nsfw）→ 自动触发 image 重生任务，不是放弃</li>
+              <li><strong>🔁 循环防护</strong>：`_image_regenerated` flag 确保只重生一次，避免无限递归</li>
+              <li><strong>🔒 不污染主数据</strong>：重生的 image 通过 payload.override_image_url 传递，panel.image_url 保持原样</li>
+              <li><strong>🌡️ 双层 prompt 强化</strong>：sanitize_strict + 专用 image regen anchor</li>
+              <li><strong>✅ 端到端验证</strong>：Panel b7d96e1b 原 prompt 871 字 → 重写后 1411 字 → MiniMax image-01 返回新 hailuo-image-algeng URL</li>
+              <li><strong>🏗️ 系统演进</strong>：v0.9.9 只能切 provider；v1.0.0 能主动改输入 image。质的突破</li>
+            </ul>
+          </div>
+
+          <%!-- v0.9.9 --%>
+          <div>
+            <div class="flex items-center gap-2 mb-2">
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/20 text-blue-400">
+                历史
+              </span>
+              <span class="font-bold text-[var(--glass-text-primary)]">v0.9.9</span>
+              <span class="text-xs text-[var(--glass-text-tertiary)]">2026-04-17</span>
+            </div>
+            <p class="text-[10px] text-[var(--glass-text-tertiary)] mb-1.5 italic">
+              超越原项目 — SafePromptGuard + ProviderFallback + Capability Matrix
+            </p>
+            <ul class="space-y-1 text-[var(--glass-text-secondary)] list-disc list-inside text-xs">
+              <li><strong>🛡️ SafePromptGuard 模块</strong>：主动 prompt 重写防审核误判（原 Next.js 完全没做）。关键词替换表（少女→年轻女性 成年 / young girl→adult woman）+ 安全 anchor 自动追加 + 中英文识别 + 严格模式</li>
+              <li><strong>🏁 ProviderFallback 模块</strong>：任务失败自动切 provider（apiyi→minimax→ark），原项目只有同 provider 重试。实时日志验证链路触发完整</li>
+              <li><strong>📊 Capability Matrix</strong>：FL 模式 + duration 参数 provider gate。MiniMax Hailuo-2.3 不支持 FL/duration，自动剥离；apiyi VEO 3.1 -fl 自动启用</li>
+              <li><strong>🧠 动态 chain by api_key</strong>：effective_chain_for/2 按用户配过的 api_key 过滤 chain，ark 无 key 自动从链里剥离</li>
+              <li><strong>观测性</strong>：safe_prompt_guard report 和 fallback_chain_tried 都持久化到 task.billing_info，可回放分析</li>
+              <li><strong>测试</strong>：SafePromptGuard 19 tests + ProviderFallback 10 tests，共 29 unit 全通过</li>
+              <li><strong>深度突破</strong>：用 Elixir OTP 模式实现原 Next.js 项目未做的两个方向（prompt 预审 + 跨 provider 路由）</li>
+            </ul>
+          </div>
+
+          <%!-- v0.9.8 --%>
+          <div>
+            <div class="flex items-center gap-2 mb-2">
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-blue-500/20 text-blue-400">
+                历史
               </span>
               <span class="font-bold text-[var(--glass-text-primary)]">v0.9.8</span>
               <span class="text-xs text-[var(--glass-text-tertiary)]">2026-04-16</span>
