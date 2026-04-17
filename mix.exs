@@ -76,6 +76,8 @@ defmodule AstraAutoEx.MixProject do
       {:hammer, "~> 6.2"},
       # API key encryption
       {:cloak_ecto, "~> 1.3"},
+      # OAuth 2.0 third-party authentication (Google / GitHub)
+      {:assent, "~> 0.3"},
       # Browser automation testing
       {:wallaby, "~> 0.30", only: :test, runtime: false}
     ]

@@ -79,6 +79,22 @@ config :astra_auto_ex, AstraAutoExWeb.Gettext,
   default_locale: "en",
   locales: ~w(en zh)
 
+# Third-party OAuth sign-in (Google / GitHub).
+# Real credentials are populated from env vars at runtime — see config/runtime.exs.
+# This block keeps the keys present so controller lookups don't crash in dev/test
+# when env vars are absent (client_id will be nil → "missing_config" error flash).
+config :astra_auto_ex, :oauth,
+  google: [
+    client_id: nil,
+    client_secret: nil,
+    redirect_uri: "http://localhost:4000/auth/google/callback"
+  ],
+  github: [
+    client_id: nil,
+    client_secret: nil,
+    redirect_uri: "http://localhost:4000/auth/github/callback"
+  ]
+
 # Suppress LiveView colocated JS symlink warning on Windows
 config :phoenix_live_view, :colocated_js, disable_symlink_warning: true
 

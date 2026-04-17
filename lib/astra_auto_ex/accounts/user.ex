@@ -2,6 +2,8 @@ defmodule AstraAutoEx.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @type t :: %__MODULE__{}
+
   schema "users" do
     field :email, :string
     field :password, :string, virtual: true, redact: true
@@ -12,6 +14,9 @@ defmodule AstraAutoEx.Accounts.User do
     field :role, :string, default: "user"
     field :avatar_url, :string
     field :locale, :string, default: "zh"
+    # Third-party OAuth identity (Google / GitHub). NULL for password-only users.
+    field :oauth_provider, :string
+    field :oauth_uid, :string
 
     has_one :preference, AstraAutoEx.Accounts.UserPreference
     has_one :balance, AstraAutoEx.Accounts.UserBalance
@@ -150,6 +155,45 @@ defmodule AstraAutoEx.Accounts.User do
   def confirm_changeset(user) do
     now = DateTime.utc_now(:second)
     change(user, confirmed_at: now)
+  end
+
+  @doc """
+  Changeset for registering a new user from OAuth provider data.
+
+  * `email` is validated but password is NOT required (OAuth-only user)
+  * `oauth_provider` + `oauth_uid` must be present
+  * Email is auto-confirmed (provider verified it for us)
+  """
+  @spec oauth_registration_changeset(t(), map()) :: Ecto.Changeset.t()
+  def oauth_registration_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:email, :username, :oauth_provider, :oauth_uid, :avatar_url])
+    |> validate_required([:email, :username, :oauth_provider, :oauth_uid])
+    |> validate_email(validate_unique: true)
+    |> validate_length(:username, min: 2, max: 30)
+    |> validate_format(:username, ~r/^[a-zA-Z0-9_]+$/,
+      message: "only letters, numbers, and underscores"
+    )
+    |> unsafe_validate_unique(:username, AstraAutoEx.Repo)
+    |> unique_constraint(:username)
+    |> unique_constraint([:oauth_provider, :oauth_uid],
+      name: :users_oauth_provider_uid_index
+    )
+    |> put_change(:confirmed_at, DateTime.utc_now(:second))
+  end
+
+  @doc """
+  Changeset for linking OAuth identity to an already-existing local user.
+  Only writes oauth_provider + oauth_uid (and optional avatar).
+  """
+  @spec oauth_link_changeset(t(), map()) :: Ecto.Changeset.t()
+  def oauth_link_changeset(user, attrs) do
+    user
+    |> cast(attrs, [:oauth_provider, :oauth_uid, :avatar_url])
+    |> validate_required([:oauth_provider, :oauth_uid])
+    |> unique_constraint([:oauth_provider, :oauth_uid],
+      name: :users_oauth_provider_uid_index
+    )
   end
 
   @doc """
