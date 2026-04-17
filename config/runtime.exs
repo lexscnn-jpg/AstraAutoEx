@@ -25,6 +25,29 @@ if config_env() != :test do
     http: [port: String.to_integer(System.get_env("PORT", "4000"))]
 end
 
+# ── OAuth (Google / GitHub) credentials from env at runtime ──
+# Override compile-time nils in config.exs so the same binary can be deployed
+# with different creds per environment. Leave redirect_uri configurable via
+# OAUTH_BASE_URL (falls back to the Endpoint host).
+oauth_base_url =
+  System.get_env("OAUTH_BASE_URL") ||
+    case config_env() do
+      :prod -> "https://#{System.get_env("PHX_HOST", "localhost")}"
+      _ -> "http://localhost:4000"
+    end
+
+config :astra_auto_ex, :oauth,
+  google: [
+    client_id: System.get_env("GOOGLE_CLIENT_ID"),
+    client_secret: System.get_env("GOOGLE_CLIENT_SECRET"),
+    redirect_uri: "#{oauth_base_url}/auth/google/callback"
+  ],
+  github: [
+    client_id: System.get_env("GITHUB_CLIENT_ID"),
+    client_secret: System.get_env("GITHUB_CLIENT_SECRET"),
+    redirect_uri: "#{oauth_base_url}/auth/github/callback"
+  ]
+
 if config_env() == :prod do
   database_url =
     System.get_env("DATABASE_URL") ||

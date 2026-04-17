@@ -10,6 +10,7 @@ defmodule AstraAutoExWeb.Plugs.SetupRedirect do
 
   def call(%Plug.Conn{request_path: "/setup" <> _} = conn, _opts), do: conn
   def call(%Plug.Conn{request_path: "/users/" <> _} = conn, _opts), do: conn
+  def call(%Plug.Conn{request_path: "/auth/" <> _} = conn, _opts), do: conn
   def call(%Plug.Conn{request_path: "/dev/" <> _} = conn, _opts), do: conn
   def call(%Plug.Conn{request_path: "/assets/" <> _} = conn, _opts), do: conn
 

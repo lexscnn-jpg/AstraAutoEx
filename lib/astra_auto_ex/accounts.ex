@@ -80,6 +80,136 @@ defmodule AstraAutoEx.Accounts do
     |> Repo.insert()
   end
 
+  ## OAuth (Google / GitHub) sign-in
+
+  @type oauth_data :: %{
+          required(:email) => String.t(),
+          required(:sub) => String.t(),
+          optional(:name) => String.t() | nil,
+          optional(:picture) => String.t() | nil
+        }
+
+  @doc """
+  Finds or creates a user from OAuth provider data.
+
+  Resolution order:
+
+    1. If a user with this `(provider, oauth_uid)` already exists → return it.
+    2. Else if a user with the same email exists → link OAuth to it
+       (updates oauth_provider + oauth_uid, keeps any existing password).
+    3. Else → create a new OAuth-only user (no password, auto-confirmed).
+
+  `oauth_data` must include `:email` and `:sub`. `:name` is used to derive a
+  username. `:picture` is optional and will be stored as avatar_url.
+
+  Returns `{:ok, user}` or `{:error, changeset}`.
+  """
+  @spec find_or_create_user_from_oauth(String.t(), oauth_data()) ::
+          {:ok, User.t()} | {:error, Ecto.Changeset.t() | atom()}
+  def find_or_create_user_from_oauth(provider, oauth_data)
+      when is_binary(provider) and is_map(oauth_data) do
+    with {:ok, email} <- fetch_oauth_field(oauth_data, :email),
+         {:ok, sub} <- fetch_oauth_field(oauth_data, :sub) do
+      uid = to_string(sub)
+
+      case Repo.get_by(User, oauth_provider: provider, oauth_uid: uid) do
+        %User{} = user ->
+          {:ok, user}
+
+        nil ->
+          find_by_email_or_create(provider, uid, email, oauth_data)
+      end
+    end
+  end
+
+  defp fetch_oauth_field(data, key) do
+    case Map.get(data, key) || Map.get(data, to_string(key)) do
+      nil -> {:error, :"missing_#{key}"}
+      "" -> {:error, :"missing_#{key}"}
+      value -> {:ok, value}
+    end
+  end
+
+  defp find_by_email_or_create(provider, uid, email, oauth_data) do
+    case get_user_by_email(email) do
+      %User{} = existing_user ->
+        link_oauth_to_user(existing_user, provider, uid, oauth_data)
+
+      nil ->
+        create_oauth_user(provider, uid, email, oauth_data)
+    end
+  end
+
+  defp link_oauth_to_user(user, provider, uid, oauth_data) do
+    user
+    |> User.oauth_link_changeset(%{
+      oauth_provider: provider,
+      oauth_uid: uid,
+      avatar_url: user.avatar_url || Map.get(oauth_data, :picture)
+    })
+    |> Repo.update()
+  end
+
+  defp create_oauth_user(provider, uid, email, oauth_data) do
+    %User{}
+    |> User.oauth_registration_changeset(%{
+      email: email,
+      username: derive_username(oauth_data, email),
+      oauth_provider: provider,
+      oauth_uid: uid,
+      avatar_url: Map.get(oauth_data, :picture)
+    })
+    |> Repo.insert()
+  end
+
+  # Derive a valid username (regex ^[a-zA-Z0-9_]+$, 2-30 chars).
+  # Strategy: sanitize `name` first; if empty, fall back to email local-part;
+  # if still empty/conflicting, append a short random suffix.
+  defp derive_username(oauth_data, email) do
+    base =
+      oauth_data
+      |> Map.get(:name, "")
+      |> to_string()
+      |> sanitize_username()
+      |> fallback_to_email_local(email)
+
+    ensure_unique_username(base)
+  end
+
+  defp sanitize_username(s) do
+    s
+    |> String.replace(~r/[^a-zA-Z0-9_]+/, "_")
+    |> String.trim("_")
+    |> String.slice(0, 24)
+  end
+
+  defp fallback_to_email_local("", email) do
+    email
+    |> String.split("@", parts: 2)
+    |> List.first()
+    |> to_string()
+    |> sanitize_username()
+    |> case do
+      "" -> "user"
+      short when byte_size(short) < 2 -> short <> "_" <> random_suffix()
+      ok -> ok
+    end
+  end
+
+  defp fallback_to_email_local(base, _email) when byte_size(base) < 2 do
+    base <> "_" <> random_suffix()
+  end
+
+  defp fallback_to_email_local(base, _email), do: base
+
+  defp ensure_unique_username(base) do
+    if Repo.get_by(User, username: base), do: base <> "_" <> random_suffix(), else: base
+  end
+
+  defp random_suffix do
+    :crypto.strong_rand_bytes(4) |> Base.url_encode64(padding: false) |> String.slice(0, 6)
+  end
+
   def register_admin(attrs) do
     Ecto.Multi.new()
     |> Ecto.Multi.insert(

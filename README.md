@@ -288,6 +288,66 @@ config :astra_auto_ex, :s3,
   secret_access_key: "..."
 ```
 
+### 第三方 OAuth 登录 (Google / GitHub)
+
+除了邮箱+密码和魔法链接，系统支持通过 Google 和 GitHub 第三方登录。路由：
+
+- `GET /auth/google` → 跳转 Google 授权页
+- `GET /auth/google/callback` → 处理回调并登录
+- `GET /auth/github` → 跳转 GitHub 授权页
+- `GET /auth/github/callback` → 处理回调并登录
+
+#### 1. 配置 Google OAuth
+
+1. 打开 [Google Cloud Console](https://console.cloud.google.com/)
+2. 创建或选择一个项目
+3. **API 与服务 → OAuth 同意屏幕**：选择外部或内部，填写应用名/邮箱等必填信息
+4. **API 与服务 → 凭据 → 创建凭据 → OAuth 2.0 客户端 ID**
+   - 应用类型：**Web 应用**
+   - 已授权的重定向 URI 添加：
+     - 开发：`http://localhost:4000/auth/google/callback`
+     - 生产：`https://yourdomain.com/auth/google/callback`
+5. 复制 Client ID 和 Client Secret
+
+然后设置环境变量：
+
+```bash
+export GOOGLE_CLIENT_ID="123456789-abc.apps.googleusercontent.com"
+export GOOGLE_CLIENT_SECRET="GOCSPX-xxxxx"
+# 可选，默认根据 PHX_HOST 构造
+export OAUTH_BASE_URL="http://localhost:4000"
+```
+
+#### 2. 配置 GitHub OAuth
+
+1. 打开 GitHub → **Settings → Developer settings → OAuth Apps → New OAuth App**
+2. 填写：
+   - Application name: 任意
+   - Homepage URL: `http://localhost:4000`
+   - Authorization callback URL: `http://localhost:4000/auth/github/callback`
+3. 创建后点 **Generate a new client secret**，记录 Client ID 和 Secret
+
+然后设置环境变量：
+
+```bash
+export GITHUB_CLIENT_ID="Ov23lixxxxx"
+export GITHUB_CLIENT_SECRET="xxxxxxxxxxxxx"
+```
+
+#### 3. 重启服务
+
+`config/runtime.exs` 会在启动时读取这两组环境变量。重启 `mix phx.server`
+后，登录页将自动显示 "Sign in with Google" 和 "Sign in with GitHub" 按钮。
+
+#### 注意事项
+
+- 未设置环境变量时按钮仍可点击，但会 flash "OAuth provider X is not configured"，
+  不会崩溃。
+- 如果 OAuth 回调时的邮箱与已有邮箱+密码用户匹配，系统会自动把 OAuth 身份
+  关联到已有用户（保留密码不变），不会创建新账号。
+- OAuth 新用户会自动确认邮箱（不需要邮箱验证链接）。
+- 数据库表 `users` 新增 `oauth_provider` + `oauth_uid` 两列，建有联合唯一索引。
+
 ## 许可证
 
 [Business Source License 1.1](LICENSE)

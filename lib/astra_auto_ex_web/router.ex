@@ -104,4 +104,12 @@ defmodule AstraAutoExWeb.Router do
     post "/users/log-in", UserSessionController, :create
     delete "/users/log-out", UserSessionController, :delete
   end
+
+  ## Third-party OAuth (Google / GitHub) — no authentication required
+  scope "/auth", AstraAutoExWeb do
+    pipe_through [:browser]
+
+    get "/:provider", OauthController, :request
+    get "/:provider/callback", OauthController, :callback
+  end
 end
