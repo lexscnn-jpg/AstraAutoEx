@@ -16,10 +16,12 @@ defmodule AstraAutoEx.Billing.BalanceTransaction do
     timestamps(updated_at: false)
   end
 
+  @valid_types ~w(freeze release charge topup recharge consume adjust shadow_consume)
+
   def changeset(tx, attrs) do
     tx
     |> cast(attrs, [:user_id, :type, :amount, :balance_after, :freeze_id, :description, :metadata])
     |> validate_required([:user_id, :type, :amount])
-    |> validate_inclusion(:type, ~w(recharge consume adjust shadow_consume))
+    |> validate_inclusion(:type, @valid_types)
   end
 end
